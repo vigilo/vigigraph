@@ -14,6 +14,7 @@ setup(
     author_email='',
     #url='',
     install_requires=[
+        "tg.devtools",
         "TurboGears2 >= 2.0b7",
         "Catwalk >= 2.0.2",
         "Babel >=0.9.4",
