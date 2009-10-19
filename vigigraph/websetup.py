@@ -13,45 +13,55 @@ __all__ = ['setup_app']
 log = logging.getLogger(__name__)
 
 
-def setup_app(command, conf, vars):
+def setup_app(command, conf, variables):
     """Place any commands to setup vigigraph here"""
     load_environment(conf.global_conf, conf.local_conf)
+
     # Load the models
     from vigigraph import model
-    print "Creating tables"
-    model.metadata.create_all(bind=config['pylons.app_globals'].sa_engine)
+    from vigilo.models import Version
 
+    # Create tables
+    print "Creating tables"
+    model.metadata.create_all()
+
+    # Create the default user for TG, must be changed
+    # for real tests and production
     manager = model.User()
     manager.user_name = u'manager'
-    manager.display_name = u'Example manager'
-    manager.email_address = u'manager@somedomain.com'
-    manager.password = u'managepass'
-
+    manager.email = u'manager@somedomain.com'
     model.DBSession.add(manager)
 
-    group = model.Group()
+    group = model.UserGroup()
     group.group_name = u'managers'
-    group.display_name = u'Managers Group'
-
     group.users.append(manager)
-
     model.DBSession.add(group)
 
     permission = model.Permission()
     permission.permission_name = u'manage'
-    permission.description = u'This permission give an administrative right to the bearer'
-    permission.groups.append(group)
-
+    permission.usergroups.append(group)
     model.DBSession.add(permission)
 
     editor = model.User()
     editor.user_name = u'editor'
-    editor.display_name = u'Example editor'
-    editor.email_address = u'editor@somedomain.com'
-    editor.password = u'editpass'
-
+    editor.email = u'editor@somedomain.com'
     model.DBSession.add(editor)
-    model.DBSession.flush()
 
+    group = model.UserGroup()
+    group.group_name = u'editors'
+    group.users.append(editor)
+    model.DBSession.add(group)
+
+    permission = model.Permission()
+    permission.permission_name = u'edit'
+    permission.usergroups.append(group)
+    model.DBSession.add(permission)
+
+    version = Version()
+    version.name = u'vigigraph'
+    version.version = config['vigigraph_version']
+    model.DBSession.add(version)
+
+    model.DBSession.flush()
     transaction.commit()
     print "Successfully setup"

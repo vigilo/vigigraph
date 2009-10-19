@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# vim:set expandtab tabstop=4 shiftwidth=4:
 try:
     from setuptools import setup, find_packages
 except ImportError:
@@ -22,9 +23,15 @@ setup(
         "ToscaWidgets >= 0.9.7.1",
         "zope.sqlalchemy >= 0.4 ",
         "repoze.tm2 >= 1.0a4",
-        
         "repoze.what-quickstart >= 1.0",
-                ],
+        "psycopg2",
+        "vigilo-models",
+        "vigilo-themes-default",
+        "PasteScript >= 1.7", # setup_requires has issues
+        "PasteDeploy",
+        "Paste",
+        "decorator != 3.1.0", # Blacklist bad version
+        ],
     paster_plugins=['PasteScript', 'Pylons', 'TurboGears2', 'tg.devtools'],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
