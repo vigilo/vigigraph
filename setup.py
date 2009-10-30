@@ -27,6 +27,7 @@ setup(
         "psycopg2",
         "vigilo-models",
         "vigilo-themes-default",
+        "vigilo-turbogears",
         "PasteScript >= 1.7", # setup_requires has issues
         "PasteDeploy",
         "Paste",

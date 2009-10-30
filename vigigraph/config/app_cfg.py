@@ -14,10 +14,10 @@ convert them into boolean, for example, you should use the
  
 """
 
-from tg.configuration import AppConfig
+from vigilo.turbogears import VigiloAppConfig
 
-class MyAppConfig(AppConfig):
-    """We overload AppConfig for our needs."""
+class MyAppConfig(VigiloAppConfig):
+    """We overload VigiloAppConfig for our needs."""
 
     def __init__(self, app_name):
         super(MyAppConfig, self).__init__()
@@ -91,7 +91,7 @@ import vigigraph
 from vigigraph import model
 from vigigraph.lib import app_globals, helpers
 
-base_config = MyAppConfig('vigigraph')
+base_config = VigiloAppConfig('vigigraph')
 base_config.renderers = []
 
 # Pour gérer les thèmes, la notation "pointée" n'est pas utilisée.
@@ -104,6 +104,7 @@ base_config.use_dotted_templatenames = False
 # met en place les middlewares nous même pour pouvoir gérer les
 # thèmes (cf. ./middleware.py).
 base_config.serve_static = False
+base_config.use_toscawidgets = True
 
 base_config.package = vigigraph
 
