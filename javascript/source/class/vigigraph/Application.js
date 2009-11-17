@@ -42,7 +42,7 @@ var urls = {
     "hostgroups": "/rpc/hostgroups",
     "hosts": "/rpc/hosts",
     "graphgroups": "/rpc/graphgroups",
-    "graphname": "/rpc/graphname",
+    "graphs": "/rpc/graphs",
     "reports": "/rpc/reports"
 };
 
@@ -79,32 +79,13 @@ qx.Class.define("vigigraph.Application",
 
       // Host picker
       var w1 = new qx.ui.window.Window(this.tr("Host Picker"), "icon/16/devices/network-wired.png");
-      var combo1 = new qx.ui.form.ComboBox;
-      var combo2 = new qx.ui.form.ComboBox;
-      var combo3 = new qx.ui.form.ComboBox;
-      var combo4 = new qx.ui.form.ComboBox;
-      var combo5 = new qx.ui.form.ComboBox;
-      var combo6 = new qx.ui.form.ComboBox; 	//Combobox for Reports
-      var gl = new qx.ui.layout.GridLayout;
-      var b1=new qx.ui.form.Button("","icon/16/actions/go-right.png");
-      b1.setToolTip(new qx.ui.popup.ToolTip(this.tr("Show Nagios page")));
-      var b2=new qx.ui.form.Button("","icon/16/actions/go-right.png");
-      var b6=new qx.ui.form.Button("","icon/16/actions/go-right.png"); 	//Icon for reports
-      b2.setToolTip(new qx.ui.popup.ToolTip(this.tr("Show graph")));
-      var r1=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
-      var r2=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
-      var r3=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
-      var r4=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
-      var r5=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
-      var r6=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");	//Refresh icon for Reports
-      var b3=new qx.ui.form.Button("","icon/16/actions/zoom.png");
-      b3.setToolTip(new qx.ui.popup.ToolTip(this.tr("Search")));
       w1.setSpace(20, 250, 48, 102);
       w1.setShowClose(false);
       w1.setShowMinimize(false);
       w1.setShowMaximize(false);
       w1.setResizable(false, false, false, false);
 
+      var gl = new qx.ui.layout.GridLayout;
       gl.setDimension("auto", "auto");
       gl.setColumnCount(4);
       gl.setRowCount(6);			//Number of rows in the main window
@@ -131,8 +112,38 @@ qx.Class.define("vigigraph.Application",
       gl.add(new qx.ui.basic.Label(this.tr("Host Name")), 0, 2);
       gl.add(new qx.ui.basic.Label(this.tr("Graph Group")), 0, 3);
       gl.add(new qx.ui.basic.Label(this.tr("Graph Name")), 0, 4);
-	  gl.add(new qx.ui.basic.Label(this.tr("Reports")), 0, 5);	//Write the name of the row 5
+	    gl.add(new qx.ui.basic.Label(this.tr("Reports")), 0, 5);	//Write the name of the row 5
 
+      var combo1 = new qx.ui.form.ComboBox;
+      var combo2 = new qx.ui.form.ComboBox;
+      var combo3 = new qx.ui.form.ComboBox;
+      var combo4 = new qx.ui.form.ComboBox;
+      var combo5 = new qx.ui.form.ComboBox;
+      var combo6 = new qx.ui.form.ComboBox; 	//Combobox for Reports
+
+      var r1=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
+      r1.setToolTip(new qx.ui.popup.ToolTip(this.tr("Refresh")));
+      var r2=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
+      r2.setToolTip(new qx.ui.popup.ToolTip(this.tr("Refresh")));
+      var r3=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
+      r3.setToolTip(new qx.ui.popup.ToolTip(this.tr("Refresh")));
+      var r4=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
+      r4.setToolTip(new qx.ui.popup.ToolTip(this.tr("Refresh")));
+      var r5=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
+      r5.setToolTip(new qx.ui.popup.ToolTip(this.tr("Refresh")));
+      var r6=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");	//Refresh icon for Reports
+      r6.setToolTip(new qx.ui.popup.ToolTip(this.tr("Refresh")));
+      var s1=new qx.ui.form.Button("","icon/16/actions/zoom.png");
+      s1.setToolTip(new qx.ui.popup.ToolTip(this.tr("Search")));
+      var b3=new qx.ui.form.Button("","icon/16/actions/go-right.png");
+      b3.setToolTip(new qx.ui.popup.ToolTip(this.tr("Show Nagios page")));
+      b3.setEnabled(false);
+      var b5=new qx.ui.form.Button("","icon/16/actions/go-right.png");
+      b5.setToolTip(new qx.ui.popup.ToolTip(this.tr("Show graph")));
+      b5.setEnabled(false);
+      var b6=new qx.ui.form.Button("","icon/16/actions/go-right.png"); 	//Icon for reports
+      b6.setToolTip(new qx.ui.popup.ToolTip(this.tr("Show report")));
+      b6.setEnabled(false);
 
       gl.add(r1,2,0);
       gl.add(r2,2,1);
@@ -141,23 +152,19 @@ qx.Class.define("vigigraph.Application",
       gl.add(r5,2,4);
       gl.add(r6,2,5);	//Draw the refresh icon on the screen for reports
       
-      
-      b1.setEnabled(false);
-      b2.setEnabled(false);
-      b6.setEnabled(false);
-      gl.add(b1,3,2);
-      gl.add(b2,3,4);
-      gl.add(b3,3,0);
+      gl.add(s1,3,0);
+      gl.add(b3,3,2);
+      gl.add(b5,3,4);
       gl.add(b6,3,5);	//Draw the arrow for reports
 
       // Buttons
-      b1.addEventListener("execute",function(e) {
+      b3.addEventListener("execute",function(e) {
         var win = new qx.client.NativeWindow("Vigigraph.py/supPage?host="+combo3.getSelected().getLabel());
         win.setDimension(800,600);
         win.setDependent(false);
         win.open();
       });
-      b2.addEventListener("execute",function(e) { 
+      b5.addEventListener("execute",function(e) { 
         var host=combo3.getSelected().getLabel();
         var graph=combo5.getSelected().getLabel();
         this.openGraph(host, graph, null, null, true);
@@ -169,15 +176,14 @@ qx.Class.define("vigigraph.Application",
         var report=combo6.getSelected().getLabel();
         var startdate=0;
         var enddate=0;
-       
         var win = new qx.client.NativeWindow("Vigigraph.py/getReport?host="+host+"&name="+report);
-	    win.setDimension(800,600);
-	    win.setDependent(false);
-	    win.open();
+	      win.setDimension(800,600);
+	      win.setDependent(false);
+	      win.open();
       }, this);
       
       
-      b3.addEventListener("execute",function(e) { 
+      s1.addEventListener("execute",function(e) { 
         var w_search = new qx.ui.window.Window(this.tr("Search"), "icon/16/actions/zoom.png");
         w_search.addToDocument();
         w_search.set({
@@ -367,6 +373,10 @@ qx.Class.define("vigigraph.Application",
         // centerToBrowser does not work on window objects (breaks the buttons in the title bar)
         //w_search.centerToBrowser()
       }, this);
+      // end of s1
+      //////////////////////////////////////
+
+
       gl.add(combo1, 1, 0);
       gl.add(combo2, 1, 1);
       gl.add(combo3, 1, 2);
@@ -407,8 +417,8 @@ qx.Class.define("vigigraph.Application",
         combo5.setSelected(null);
         combo6.getList().removeAll();
         combo6.setSelected(null);
-        b1.setEnabled(false);
-        b2.setEnabled(false);
+        b3.setEnabled(false);
+        b5.setEnabled(false);
         b6.setEnabled(false);
         r2.setEnabled(false);
         r3.setEnabled(false);
@@ -416,9 +426,9 @@ qx.Class.define("vigigraph.Application",
         r5.setEnabled(false);
         r6.setEnabled(false);
       }
-      function _updateHostGroupList(v)
+      function _updateHostGroupList(maingroupid)
       {
-        _genericListUpdater(urls.hostgroups+"?maingroupid="+v,combo2);
+        _genericListUpdater(urls.hostgroups+"?maingroupid="+maingroupid,combo2);
         combo3.getList().removeAll();
         combo3.setSelected(null);
         combo4.getList().removeAll();
@@ -427,8 +437,8 @@ qx.Class.define("vigigraph.Application",
         combo5.setSelected(null);
         combo6.getList().removeAll();
         combo6.setSelected(null);
-        b1.setEnabled(false);
-        b2.setEnabled(false);
+        b3.setEnabled(false);
+        b5.setEnabled(false);
         b6.setEnabled(false);
         r2.setEnabled(true);
         r3.setEnabled(false);
@@ -436,38 +446,38 @@ qx.Class.define("vigigraph.Application",
         r5.setEnabled(false);
         r6.setEnabled(false);
       }
-      function _updateHostList(v)
+      function _updateHostList(othergroupid)
       {
-        _genericListUpdater(urls.hosts+"?othergroupid="+v,combo3);
+        _genericListUpdater(urls.hosts+"?othergroupid="+othergroupid,combo3);
         combo4.getList().removeAll();
         combo4.setSelected(null);
         combo5.getList().removeAll();
         combo5.setSelected(null);
         combo6.getList().removeAll();
         combo6.setSelected(null);
-        b1.setEnabled(false);
-        b2.setEnabled(false);
+        b3.setEnabled(false);
+        b5.setEnabled(false);
         b6.setEnabled(false);
         r3.setEnabled(true);
         r4.setEnabled(false);
         r5.setEnabled(false);
         r6.setEnabled(false);
       }
-      function _updateGraphGroupList(v)
+      function _updateGraphGroupList(hostname)
       {
-        _genericListUpdater("Vigigraph.py/getJSONGraphGroups?host="+v,combo4);
+        _genericListUpdater(urls.graphs+"?hostname="+hostname,combo4);
         combo5.getList().removeAll();
         combo5.setSelected(null);
         r4.setEnabled(true);
         r5.setEnabled(false);
         r6.setEnabled(true);
-        b2.setEnabled(false);
+        b5.setEnabled(false);
       }
       function _updateGraphList(host,graphGroup)
       {
         _genericListUpdater("Vigigraph.py/getJSONGraphList?host="+encodeURIComponent(host)+"&graphgroup="+encodeURIComponent(graphGroup),combo5);
         r5.setEnabled(true);
-        b2.setEnabled(false);
+        b5.setEnabled(false);
       }
       function _updateReports(host)
       {
@@ -477,9 +487,9 @@ qx.Class.define("vigigraph.Application",
       }
       combo1.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostGroupList(e.getValue().getValue()); });
       combo2.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostList(     e.getValue().getValue()); });
-      combo3.addEventListener("changeSelected", function(e) { if(e.getValue()) { b1.setEnabled(true);_updateGraphGroupList(e.getValue().getLabel()); _updateReports(combo3.getSelected().getLabel());} });
+      combo3.addEventListener("changeSelected", function(e) { if(e.getValue()) { b3.setEnabled(true);_updateGraphGroupList(e.getValue().getLabel()); _updateReports(combo3.getSelected().getLabel());} });
       combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(combo3.getSelected().getLabel(),e.getValue().getLabel());} });
-      combo5.addEventListener("changeSelected", function(e) { if(e.getValue()) b2.setEnabled(true); });
+      combo5.addEventListener("changeSelected", function(e) { if(e.getValue()) b5.setEnabled(true); });
       combo6.addEventListener("changeSelected", function(e) { if(e.getValue()) b6.setEnabled(true); });
       r1.addEventListener("execute",function(e) { _updateServerGroupList();});
       r2.addEventListener("execute",function(e) { _updateHostGroupList(combo1.getSelected().getLabel());});
