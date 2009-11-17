@@ -1,4 +1,4 @@
-Pour compiler le javascript "source/class/vigigraph/Application.js":
+Pour compiler le fichier javascript se trouvant dans source/class/vigigraph/Application.js:
     - Récupérer le framework qooxdoo à cette URL:
         http://downloads.sourceforge.net/project/qooxdoo/qooxdoo-legacy/0.7.3/qooxdoo-0.7.3-sdk.tar.gz
     - Détarer celui-ci:
