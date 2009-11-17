@@ -1,0 +1,14 @@
+Pour compiler le javascript "source/class/vigigraph/Application.js":
+    - Récupérer le framework qooxdoo à cette URL:
+        http://downloads.sourceforge.net/project/qooxdoo/qooxdoo-legacy/0.7.3/qooxdoo-0.7.3-sdk.tar.gz
+    - Détarer celui-ci:
+        tar -zxf qooxdoo-0.7.3-sdk.tar.gz
+    - Compiler via la commande suivante:
+        make build
+
+
+Pour utilisé le javascript compilé il faut le déplacer à l'endroit voulu (ainsi que les icônes utilisées)
+    - Le javascript compilé est disponible dans les répertoires suivant:
+        build/script/vigiraph.js
+    - Les icônes utilisées sont dans:
+        build/resource

@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Main Controller"""
+# vim:set expandtab tabstop=4 shiftwidth=4: 
+"""Vigigraph Controller"""
 
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
-#from catwalk.tg2 import Catwalk
 from repoze.what import predicates
 
 from vigigraph.lib.base import BaseController
 from vigigraph.model import DBSession, metadata
 from vigigraph.controllers.error import ErrorController
+from vigigraph.controllers.rpc import RpcController
 from vigigraph import model
-#from vigigraph.controllers.secure import SecureController
+from repoze.what.predicates import Any, not_anonymous
 
 __all__ = ['RootController']
 
@@ -29,38 +30,14 @@ class RootController(BaseController):
     must be wrapped around with :class:`tg.controllers.WSGIAppController`.
     
     """
-    #secc = SecureController()
-    
-    #admin = Catwalk(model, DBSession)
-    
     error = ErrorController()
+    rpc = RpcController()
 
     @expose('index.html')
+    @require(Any(not_anonymous(), msg=_("You need to be authenticated")))
     def index(self):
         """Handle the front-page."""
         return dict(page='index')
-
-    #@expose('vigigraph.templates.about')
-    #def about(self):
-    #    """Handle the 'about' page."""
-    #    return dict(page='about')
-
-    #@expose('vigigraph.templates.authentication')
-    #def auth(self):
-    #    """Display some information about auth* on this application."""
-    #    return dict(page='auth')
-
-    #@expose('vigigraph.templates.index')
-    #@require(predicates.has_permission('manage', msg=l_('Only for managers')))
-    #def manage_permission_only(self, **kw):
-    #    """Illustrate how a page for managers only works."""
-    #    return dict(page='managers stuff')
-
-    #@expose('vigigraph.templates.index')
-    #@require(predicates.is_user('editor', msg=l_('Only for the editor')))
-    #def editor_user_only(self, **kw):
-    #    """Illustrate how a page exclusive for the editor works."""
-    #    return dict(page='editor stuff')
 
     @expose('login.html')
     def login(self, came_from=url('/')):

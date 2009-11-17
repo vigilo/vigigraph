@@ -1,0 +1,168 @@
+# French translations for SupNavigator.
+# Copyright (C) 2007 CS-SI <http://www.c-s.fr>
+# This file is distributed under the same license as the SupNavigator package.
+# Automatically generated, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SupNavigator 1.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-11-17 12:02+0100\n"
+"PO-Revision-Date: 2007-12-06 16:03+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 16bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: source/class/vigigraph/Application.js:78
+#: source/class/vigigraph/Application.js:679
+#: source/class/vigigraph/Application.js:687
+#: source/class/vigigraph/Application.js:712
+msgid "Vigilo Graphic"
+msgstr ""
+
+#: source/class/vigigraph/Application.js:81
+msgid "Host Picker"
+msgstr "Sélecteur d'hôtes"
+
+#: source/class/vigigraph/Application.js:90
+msgid "Show Nagios page"
+msgstr "Voir la page Nagios"
+
+#: source/class/vigigraph/Application.js:93
+msgid "Show graph"
+msgstr "Voir le graphe"
+
+#: source/class/vigigraph/Application.js:101
+#: source/class/vigigraph/Application.js:181
+msgid "Search"
+msgstr "Chercher"
+
+#: source/class/vigigraph/Application.js:129
+msgid "Main Group"
+msgstr "Groupe principal"
+
+#: source/class/vigigraph/Application.js:130
+msgid "Host Group"
+msgstr "Groupe d'hôtes"
+
+#: source/class/vigigraph/Application.js:131
+msgid "Host Name"
+msgstr "Hôte"
+
+#: source/class/vigigraph/Application.js:132
+msgid "Graph Group"
+msgstr "Groupe de graphes"
+
+#: source/class/vigigraph/Application.js:133
+msgid "Graph Name"
+msgstr "Graphe"
+
+#: source/class/vigigraph/Application.js:134
+msgid "Reports"
+msgstr "Rapports"
+
+#: source/class/vigigraph/Application.js:198
+msgid "Host:"
+msgstr "Hôte :"
+
+#: source/class/vigigraph/Application.js:204
+msgid "Search for a host (\"*\" for all, 100 max)"
+msgstr "Chercher un hôte (\"*\" pour tous, 100 maximum)"
+
+#: source/class/vigigraph/Application.js:205
+msgid "Service:"
+msgstr "Service :"
+
+#: source/class/vigigraph/Application.js:211
+msgid "Search for a service (\"*\" for all, 100 max)"
+msgstr "Chercher un service (\"*\" pour tous, 100 maximum)"
+
+#: source/class/vigigraph/Application.js:217
+msgid "Host"
+msgstr "Hôte"
+
+#: source/class/vigigraph/Application.js:217
+msgid "Service"
+msgstr "Service"
+
+#: source/class/vigigraph/Application.js:529
+msgid "\"%1\" Graph for host %2"
+msgstr "Graphe \"%1\" pour l'hôte %2"
+
+#: source/class/vigigraph/Application.js:534
+msgid "Reload graph"
+msgstr "Recharger le graphe"
+
+#: source/class/vigigraph/Application.js:538
+msgid "Last 12 hours"
+msgstr "12 dernières heures"
+
+#: source/class/vigigraph/Application.js:539
+msgid "Last 24 hours"
+msgstr "24 dernières heures"
+
+#: source/class/vigigraph/Application.js:540
+msgid "Last 48 hours"
+msgstr "48 dernières heures"
+
+#: source/class/vigigraph/Application.js:541
+msgid "Last 7 days"
+msgstr "7 derniers jours"
+
+#: source/class/vigigraph/Application.js:542
+msgid "Last 14 days"
+msgstr "14 derniers jours"
+
+#: source/class/vigigraph/Application.js:543
+msgid "Last 3 months"
+msgstr "3 derniers mois"
+
+#: source/class/vigigraph/Application.js:544
+msgid "Last 6 months"
+msgstr "6 derniers mois"
+
+#: source/class/vigigraph/Application.js:545
+msgid "Last year"
+msgstr "Dernière année"
+
+#: source/class/vigigraph/Application.js:554
+msgid "Timeframe"
+msgstr "Période"
+
+#: source/class/vigigraph/Application.js:555
+msgid "Timeframe menu"
+msgstr "Menu de choix de la période"
+
+#: source/class/vigigraph/Application.js:558
+msgid "Graph start"
+msgstr "Début du graphe"
+
+#: source/class/vigigraph/Application.js:560
+msgid "Last section"
+msgstr "Dernière section"
+
+#: source/class/vigigraph/Application.js:562
+msgid "Next section"
+msgstr "Section suivante"
+
+#: source/class/vigigraph/Application.js:564
+msgid "Graph end"
+msgstr "Fin du graphe"
+
+#: source/class/vigigraph/Application.js:566
+msgid "Zoom in"
+msgstr "Zoomer"
+
+#: source/class/vigigraph/Application.js:568
+msgid "Zoom out"
+msgstr "Dézoomer"
+
+#~ msgid "Supervision Navigator"
+#~ msgstr "Navigateur de Supervision"
+
+#, fuzzy
+#~ msgid "Report \"%1\" for host %2"
+#~ msgstr "Rapport \"%1\" pour l'hôte %2"
