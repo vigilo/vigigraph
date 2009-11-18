@@ -133,8 +133,9 @@ qx.Class.define("vigigraph.Application",
       r5.setToolTip(new qx.ui.popup.ToolTip(this.tr("Refresh")));
       var r6=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");	//Refresh icon for Reports
       r6.setToolTip(new qx.ui.popup.ToolTip(this.tr("Refresh")));
-      var s1=new qx.ui.form.Button("","icon/16/actions/zoom.png");
-      s1.setToolTip(new qx.ui.popup.ToolTip(this.tr("Search")));
+
+      var b1=new qx.ui.form.Button("","icon/16/actions/zoom.png");
+      b1.setToolTip(new qx.ui.popup.ToolTip(this.tr("Search")));
       var b3=new qx.ui.form.Button("","icon/16/actions/go-right.png");
       b3.setToolTip(new qx.ui.popup.ToolTip(this.tr("Show Nagios page")));
       b3.setEnabled(false);
@@ -152,7 +153,7 @@ qx.Class.define("vigigraph.Application",
       gl.add(r5,2,4);
       gl.add(r6,2,5);	//Draw the refresh icon on the screen for reports
       
-      gl.add(s1,3,0);
+      gl.add(b1,3,0);
       gl.add(b3,3,2);
       gl.add(b5,3,4);
       gl.add(b6,3,5);	//Draw the arrow for reports
@@ -164,6 +165,7 @@ qx.Class.define("vigigraph.Application",
         win.setDependent(false);
         win.open();
       });
+
       b5.addEventListener("execute",function(e) { 
         var host=combo3.getSelected().getLabel();
         var graph=combo5.getSelected().getLabel();
@@ -182,8 +184,7 @@ qx.Class.define("vigigraph.Application",
 	      win.open();
       }, this);
       
-      
-      s1.addEventListener("execute",function(e) { 
+      b1.addEventListener("execute",function(e) { 
         var w_search = new qx.ui.window.Window(this.tr("Search"), "icon/16/actions/zoom.png");
         w_search.addToDocument();
         w_search.set({
@@ -373,7 +374,7 @@ qx.Class.define("vigigraph.Application",
         // centerToBrowser does not work on window objects (breaks the buttons in the title bar)
         //w_search.centerToBrowser()
       }, this);
-      // end of s1
+      // end of b1
       //////////////////////////////////////
 
 
@@ -386,6 +387,7 @@ qx.Class.define("vigigraph.Application",
       w1.add(gl);
       w1.open();
       w1.addToDocument();
+
       function _genericListUpdater(url,combobox)
       {
         var g=new qx.io.remote.Request(url,"GET","application/json");

@@ -7,7 +7,7 @@ Pour compiler le fichier javascript se trouvant dans source/class/vigigraph/Appl
         make build
 
 
-Pour utilisé le javascript compilé il faut le déplacer à l'endroit voulu (ainsi que les icônes utilisées)
+Pour utilisé le javascript compilé il faut le déplacer (ainsi que les icônes utilisées) à l'endroit voulu "vigigraph/public/js"
     - Le javascript compilé est disponible dans les répertoires suivant:
         build/script/vigiraph.js
     - Les icônes utilisées sont dans:
