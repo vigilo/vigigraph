@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import and_
 
-from vigigraph import model
+from vigigraph.model import Host, HostGroup, ServiceLowLevel, ServiceGroup 
 from vigigraph.model import DBSession
 
 from datetime import datetime
@@ -10,39 +10,71 @@ import transaction
 
 #DBSession.autocommit = True
 
-# Groupe (Group)
-def add_group(name, parent=None):
-    g = DBSession.query(model.Group).filter(model.Group.name == name).first()
+# Groupe d'hôtes (HostGroup)
+def create_HostGroup(name, parent=None):
+    g = DBSession.query(HostGroup).filter(HostGroup.name == name).first()
     if not g:
         if parent:
-            g = model.Group(name=name, idparent=parent.idgroup)
+            g = HostGroup(name=name, idparent=parent.idgroup)
         else:
-            g = model.Group(name=name)
+            g = HostGroup(name=name)
         print "Ajout du Groupe: ", name
         DBSession.add(g)
     return g
 
-# Groupe de host (HostGroup)
-def add_hostgroup(hostname, group):
-    hg = DBSession.query(model.HostGroup) \
-         .filter(model.HostGroup.hostname == hostname) \
-         .filter(model.HostGroup.idgroup == group.idgroup) \
-         .first()
-    if not hg:
-        hg = model.HostGroup(hostname=hostname, idgroup=group.idgroup)
-        print "Ajout de l'hote %s dans le Groupe %s" % (hostname, group.idgroup)
-        DBSession.add(hg)
-    return hg
-
 # Hôte (Host)
-def add_host(name, checkhostcmd, fqhn, hosttpl, snmpcommunity, mainip, snmpport):
-    h = DBSession.query(model.Host).filter(model.Host.name == name).first()
+def create_Host(name, checkhostcmd, hosttpl, snmpcommunity, mainip, snmpport):
+    h = DBSession.query(Host).filter(Host.name == name).first()
     if not h:
-        h = model.Host(name=name, checkhostcmd=checkhostcmd, fqhn=fqhn, 
+        h = Host(name=name, checkhostcmd=checkhostcmd, 
                        hosttpl=hosttpl, snmpcommunity=snmpcommunity, mainip=mainip, snmpport=snmpport)
         print "Ajout de l'hôte: ", name
         DBSession.add(h)
     return h
+
+# Ajout d'un hôte dans un groupe d'hôtes (Host -> HostGroup)
+def add_Host2HostGroup(host, group):
+    if host not in group.hosts:
+        print "Ajout de l'hote: %(h)s dans le group: %(g)s" % \
+                {'h': host.name,
+                 'g': group.name}
+        group.hosts.append(host)
+
+def create_ServiceLowLevel(hostname, servicename):
+    s = DBSession.query(ServiceLowLevel) \
+            .filter(ServiceLowLevel.servicename == servicename) \
+            .filter(ServiceLowLevel.hostname == hostname) \
+            .first()
+    if not s:
+        s = ServiceLowLevel(hostname=hostname,
+                servicename=servicename,
+                priority = 42, 
+                op_dep=u"?")
+        print "Ajout du service", servicename
+        DBSession.add(s)
+
+# Groupe de services (ServiceGroup)
+def create_ServiceGroup(name, parent=None):
+    g = DBSession.query(ServiceGroup).filter(ServiceGroup.name == name).first()
+    if not g:
+        if parent:
+            g = ServiceGroup(name=name, idparent=parent.idgroup)
+        else:
+            g = ServiceGroup(name=name)
+        print "Ajout du Groupe: ", name
+        DBSession.add(g)
+    return g
+
+
+# Ajout d'un hôte dans un groupe d'hôtes (Host -> HostGroup)
+def add_Service2ServiceGroup(service, group):
+    if service not in group.hosts:
+        print "Ajout du service: %(s)s dans le group: %(g)s" % \
+                {'s': service.name,
+                 'g': group.name}
+        group.hosts.append(service)
+
+
 
 ## DS [PerfDataSource)
 #def add_ds(name, op_dep, servicetype):
@@ -57,22 +89,31 @@ def add_host(name, checkhostcmd, fqhn, hosttpl, snmpcommunity, mainip, snmpport)
 #        DBSession.add(g)
 #    return g
 
-g1 = add_group(u'Serveurs')
-g2 = add_group(u'Telecoms')
-g3 = add_group(u'Serveurs Linux', g1)
-g4 = add_group(u'NORTEL', g2)
-g5 = add_group(u'CISCO', g2)
+hg1 = create_HostGroup(u'Serveurs')
+hg2 = create_HostGroup(u'Telecoms')
+hg3 = create_HostGroup(u'Serveurs Linux', hg1)
+hg4 = create_HostGroup(u'NORTEL', hg2)
+hg5 = create_HostGroup(u'CISCO', hg2)
 
 
-h1 = add_host(u'proto4', u'dummy', u'proto4.si.c-s.fr', u'linuxserver', u'public', u'127.0.0.1', u'12')
-h2 = add_host(u'server.mails', u'dummy', u'messagerie.si.c-s.fr', u'linuxserver', u'public', u'127.0.0.1', u'12')
-h3 = add_host(u'testnortel', u'dummy', u'testnortel.si.c-s.fr', u'switch', u'public', u'127.0.0.1', u'12')
-h4 = add_host(u'proto6', u'dummy', u'proto6.si.c-s.fr', u'ciscorouter', u'public', u'127.0.0.1', u'12')
+h1 = create_Host(u'proto4.si.c-s.fr', u'dummy', u'linuxserver', u'public', u'127.0.0.1', u'12')
+h2 = create_Host(u'messagerie.si.c-s.fr', u'dummy', u'linuxserver', u'public', u'127.0.0.1', u'12')
+h3 = create_Host(u'testnortel.si.c-s.fr', u'dummy', u'switch', u'public', u'127.0.0.1', u'12')
+h4 = create_Host(u'proto6.si.c-s.fr', u'dummy', u'ciscorouter', u'public', u'127.0.0.1', u'12')
 
-hg1 =  add_hostgroup(u'proto4', g3)
-hg2 =  add_hostgroup(u'server.mails', g3)
-hg3 =  add_hostgroup(u'testnortel', g4)
-hg4 =  add_hostgroup(u'proto6', g5)
-hg4 =  add_hostgroup(u'proto6', g3)
+add_Host2HostGroup(h1, hg3)
+add_Host2HostGroup(h2, hg3)
+add_Host2HostGroup(h3, hg4)
+add_Host2HostGroup(h4, hg5)
+add_Host2HostGroup(h4, hg3)
+add_Host2HostGroup(h4, hg3)
+
+sg= create_ServiceGroup(u'Général')
+sg= create_ServiceGroup(u'Interface Réseau')
+sg= create_ServiceGroup(u'Performance')
+sg= create_ServiceGroup(u'Partitions')
+sg= create_ServiceGroup(u'Processus')
+
+s1 = create_ServiceLowLevel(h1.name, u'Interface eth0')
 
 transaction.commit()
