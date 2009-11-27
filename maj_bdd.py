@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import and_
 
-from vigigraph.model import Host, HostGroup, ServiceLowLevel, ServiceGroup 
+from vigigraph.model import Host, HostGroup, ServiceLowLevel, ServiceGroup, PerfDataSource
 from vigigraph.model import DBSession
 
 from datetime import datetime
@@ -52,6 +52,7 @@ def create_ServiceLowLevel(hostname, servicename):
                 op_dep=u"?")
         print "Ajout du service", servicename
         DBSession.add(s)
+    return s
 
 # Groupe de services (ServiceGroup)
 def create_ServiceGroup(name, parent=None):
@@ -67,27 +68,24 @@ def create_ServiceGroup(name, parent=None):
 
 
 # Ajout d'un hôte dans un groupe d'hôtes (Host -> HostGroup)
-def add_Service2ServiceGroup(service, group):
-    if service not in group.hosts:
+def add_ServiceLowLevel2ServiceGroup(service, group):
+    if service not in group.services:
         print "Ajout du service: %(s)s dans le group: %(g)s" % \
-                {'s': service.name,
+                {'s': service.servicename,
                  'g': group.name}
-        group.hosts.append(service)
+        group.services.append(service)
 
-
-
-## DS [PerfDataSource)
-#def add_ds(name, op_dep, servicetype):
-#    s = DBSession.query(model.
-
-## Graph (Graph)
-#def add_graph(name, template, vlabel):
-#    g =  DBSession.query(model.Graph).filter(model.Graph.name == name).first()
-#    if not g:
-#        g = model.Graph(name=name, template=template, vlabel=vlabel)
-#        print "Ajout du graph: ", name
-#        DBSession.add(g)
-#    return g
+# DS (PerfDataSource)
+def create_ds(name, type, service, label):
+    ds = DBSession.query(PerfDataSource) \
+            .filter(PerfDataSource.service == service) \
+            .filter(PerfDataSource.name == name) \
+            .first()
+    if not ds:
+        ds = PerfDataSource(name=name, type=type, service=service, label=label)
+        print "Ajout de la datasource: ", label
+        DBSession.add(ds)
+    return ds
 
 hg1 = create_HostGroup(u'Serveurs')
 hg2 = create_HostGroup(u'Telecoms')
@@ -108,12 +106,22 @@ add_Host2HostGroup(h4, hg5)
 add_Host2HostGroup(h4, hg3)
 add_Host2HostGroup(h4, hg3)
 
-sg= create_ServiceGroup(u'Général')
-sg= create_ServiceGroup(u'Interface Réseau')
-sg= create_ServiceGroup(u'Performance')
-sg= create_ServiceGroup(u'Partitions')
-sg= create_ServiceGroup(u'Processus')
+sg1 = create_ServiceGroup(u'Général')
+sg2 = create_ServiceGroup(u'Interface Réseau')
+sg3 = create_ServiceGroup(u'Performance')
+sg4 = create_ServiceGroup(u'Partitions')
+sg5 = create_ServiceGroup(u'Processus')
 
 s1 = create_ServiceLowLevel(h1.name, u'Interface eth0')
+s2 = create_ServiceLowLevel(h1.name, u'Interface eth1')
+s3 = create_ServiceLowLevel(h1.name, u'Interface série')
+
+add_ServiceLowLevel2ServiceGroup(s1, sg2)
+add_ServiceLowLevel2ServiceGroup(s2, sg2)
+add_ServiceLowLevel2ServiceGroup(s3, sg1)
+
+ds1 = create_ds(u'ineth0', u'GAUGE', s1, u'Données en entrée sur eth0')
+ds2 = create_ds(u'outeth0', u'GAUGE', s1, u'Données en sortie sur eth0')
+ds3 = create_ds(u'outeth0', u'GAUGE', s1, u'Données en sortie sur eth0')
 
 transaction.commit()

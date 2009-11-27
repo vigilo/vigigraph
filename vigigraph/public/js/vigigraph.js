@@ -1,4 +1,4 @@
-$=["","qx.client","Boolean","auto","Integer","qx.event.type.Event","solid","undefined","string","left","String","right","border-dark-shadow","none",';',"completed","Number",",","bottom","top","execute","mousedown","hidden","middle","width","gecko","mshtml","singleton","height","set","mouseup","failed","keydown","scroll","=","object","aborted","timeout","pressed","border-light","sending",'computed=this.',"center",".","default",";","px","receiving","qx.event.type.DataEvent","function","(\\d\\d?)","number","style",":",")",'=value;',"keypress","100%","abandoned","0px","&","other",'this.',"mouseover","click","on"," ","over","minWidth","maxWidth","Function","outset","active","overflow","inset","Enter","boolean","borderTopWidth","absolute","maximized","configured","load","abstract","effect","borderLeftWidth","0","changeEnabled","interval","background","1*","maxHeight","minHeight","white","position","init","frame","_","qx.event.type.MouseEvent","locationX","qx.ui.core.Widget","Color","Object","CSS1Compat","changeValue","error",'"',"off","qx.io.remote.Response",'</span>',"scrollY",'if(this.',"locationY","]",'}',"-","shorthand","dblclick","reset","(","div","wide","paddingTop","abbreviated","|","no","opera","icon/16/actions/view-refresh.png","paddingBottom","scrollX","get","yes","inherit","input","?","paddingLeft",'delete this.',"unstyle","paddingRight","Theme","border-light-shadow","selected","fixed","mousemove","changeSelected","body","border-dark","disappear","created","unload","both","location",'!==undefined)',"/","Left","Right","appear","qx.ui.table.pane.CellEvent","translucent","ie4+","mouseout","+","button","text-field","filter","'","refresh","webkit","gray","list","$","groove","qx.ui.popup.ToolTipManager","narrow","qx.ui.menu.Manager","Refresh","horizontal","marginTop","icon","khtml","display","Space","A","marginLeft","PageUp","qx.ui.menu.Menu","keyup","inset-thin","vertical","1px","label","*","Down","qx.event.type.DragEvent","qx.ui.popup.PopupManager","dotted","text","qx.event.type.FocusEvent","double","Up","%","cellClick","overflowX","overflowY","\n","widthComputed","contextmenu",'return this.','else if(this.',"long","}","qx.event.type.KeyEvent","changeLocale","dashed","normal","qx.resourceUri","static/image/blank.gif","outset-thin","black","heightComputed","text-selected","PageDown","ridge","changeSelection","queued","MozOutline","resize","short","hand","1px dotted invert","_applyResizable","field",'!==undefined){',"ms","fontSize","marginBottom","50%","hour","Home","outline","NumLock","left-reversed","wildcard","this.",'=true;',"middle-reversed","transparent","Tahoma","GET","mousewheel","literal","Vigilo Graphic","top-reversed","focused","_timer","Liberation Sans","marginRight","minimized","Escape","qx.event.type.ChangeEvent","center-reversed",'old=this.',"Lucida Grande",')',"text-disabled","Bitstream Vera Sans","horizontalAlignment",": ","button-abandoned","focus","border-box","opaque","dark-shadow","qx.ui.popup.ToolTip","null","verticalAlignment","_applyClip","End","window-captionbar-button","blur","safari2","Verdana","_applyText","beforeunload","icon/16/actions/go-right.png","_table","date-chooser-title","_element","100px","F2","focusin","icon/16/actions/zoom.png","_applyValue","medium","down","list-view-content-cell-text","dragover","visibilityChanged","date-chooser","dragenter","lead","qx.ui.embed.IframeManager","_applyIcon","9","widget","px;","HHmmss","static","qx.ui.table.selection.Model","Ready","changeShow","focusout","_applyVerticalChildrenAlign","HH:mm:ss",'","',"#","qx.io.remote.XmlHttpTransport","-moz-scrollbars-vertical","  ","_applyHorizontalChildrenAlign","bold","table-header-border","(\\d\\d?\\d?)","-moz-scrollbars-horizontal","visibility","n-resize","textarea","windowblur","qx.io.remote.ScriptTransport","widthType","verticalChildrenAlign","{","menu-button","g","changeState",'typeof value === "number" && isFinite(value)',"pointer","qx.io.remote.IframeTransport","Tab"," }","keyinput","_applyEnabled","qx.ui.form.Button","underline","qx.event.handler.DragAndDropHandler","Z","qx.ui.core.Parent",'</div>',"full","horizontalChildrenAlign","=''","iframe",'",value);',"heightType",'',"widthChanged","_applyState","html","qx.client.NativeWindow","Classic","e-resize","zIndex","Connection dropped","s","_childrenQueue","_labelObject","a","_compute","F1","addAtEnd","checked","appearances","removeAll","cursor","gecko|opera|webkit","_paneScroller","indexOf","Insert","_applyShowCellFocusIndicator","cldr_day_","qx.application.Gui","table-header","col-resize","Content-Type","addAfter","win","nw-resize","ellipsis","columnVisibilityMenuCreateEnd","__init$","qx.ui.table.columnmodel.Basic","fontStyle","value","_list","styleTop","F12","dragleave","log","borderBottomWidth","onscroll","parent","qx.ui.table.columnmodel.resizebehavior.Abstract","list-view-content-cell","_layout",'">',"mshtml|webkit","F3","tab-view-border",":content-box;","up","meta","./resource","padding","nocache","tabIndex","_manager","F11","opacity","qx.ui.embed.Flash","cldr_month_","Search","Delete","_applyPosition","_applyVerticalSpacing","styleRight","KhtmlOpacity","_resizeColumnData","styleLeft","Windows","windowresize","Value",":border-box;","&service=","no-cache","MozUserSelect","F10","backgroundRepeat","clipHeight","changeScrollY","fri","italic","_invalidate",'  </div>',"colorRight","Assertion Failure","reverseChildrenOrder","Pragma","fontWeight",'if(old===computed)return value;',"mon","KhtmlUserSelect","noComputed","F5","]);","remove","dragstart",'else ','<span class="objectBox-number">',"removeChild","colors","character","widthParsed",'";',"colorBottom","beforeDisappear","F4","F6","spinner-button","text/javascript","modelChanged","DOMMouseScroll","widthBottom","addAt","changeFocused",'undefined',"_statusBar","drag","qx.allowUrlSettings","Array","whiteSpace","first","qx.io.image.Preloader","colorTop","combo-box-button","qx.jsonDebugging","disabled","F7","changeCapture","-khtml-box-sizing","add","]\n","borderRightWidth","MozOpacity","0 none","Label","popup","qx.enableAspect","Cache-Control","ne-resize","static/image/dotted_white.gif","_applyHorizontalSpacing","margin","_applyLabel","_recompute","table-pane","dragdrop","F8","&#","toolbar","sec","(a[","backgroundImage","qx.io.remote.AbstractRemoteTransport","text/css","qx.allowUrlVariants","file:",'px;',"day","_applyTextAlign","F9","quoted_literal","hasComputed","tableWidthChanged",'Z',"min","styleBottom","widthRight","before","_applyMenu","verticalScrollBarChanged","dragexit","toString","clipTop","lazyopaque","toggle",'" ',"boxSizing","anchor",'.$$properties.',"qx.log.appender.Native","verticalSpacing","addBefore","fonts",'if(computed===undefined)computed=null;',"textDecoration","draggesture","fontFamily",'a',"widthTop","Margin","v","button-view-pane","wed",":constructor","__font","sat","_iconObject","event","Padding","icons","addAtBegin","backgroundColor","visibilityChangedPre","row-resize",'z',"editing","color","heightParsed","_blocker","cellDblclick","tooltip-text","justify","innerText","concat","tooltip",'!(',"textContent",';-?[0-9]+;-?[0-9]+',"resizer","qx.ui.form.ListItem","</div>","orderChanged","_objects","PrintScreen","menu","ignore",'(',"__user$","readonly","return this.","_frame","qx.ui.window.Window","head","qx.ui.window.Manager","cellContextmenu","ss","thu","slice","horizontalSpacing","qx.io.remote.Exchange","table-header-cell","^","qx.event.handler.FocusHandler","[","WebkitUserSelect","qx.ui.table.IRowRenderer","qx.io.remote.Request","removeAt","clipLeft",'@import "',"borders","lineHeight","widgets","userSelect","tue","();","widthLeft","sun","clipWidth",'if(old===undefined)old=null;',"textAlign","widget/arrows/down.gif","qx.ui.table.ITableModel","colorLeft","_applyReverseChildrenOrder","-1000px","lastIndexOf","list-view-header-border","_applyDimension","table-focus-indicator","qx.ui.table.pane.Model"," [","\r\n","qooxdoo-table-cell","menu-button-arrow","_focusHandler","_applyTablePaneModel",'m',"Border",'    * { box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box }',"_applyActive","_valueOriginalTarget","Pause","pre","_applyMaxColumnCount","h","javascript:void(0)","qx.util.Normalization","Linux","_applyTimeoutInterval","borderBottomStyle","Font","Use proxy","font-size: 11px;","Host Picker","resizableEast","qx.Interface","cldr_pm","qx.ui.table.model.Abstract",'value !== null && window.document',"GMT",'    <input id="marker" type="button" value="Add divider"/> &#160; &#160; Filter: <input name="filter" id="filter" type="text" value="',"_colToXPosMap","qx.ui.form.TextField",')a[i].',".qooxdoo-table-cell {","_applyFocusRoot","qx.ui.basic.Inline","qx.ui.table.ICellRenderer","_applyAllowClose","Not implemented","localeCompare","status",'{0,1}[0-9]{3}){0,})','    html, body, input, pre{ font-size: 11px; font-family: Tahoma, sans-serif; line-height : 1 }','var inherit=prop.$$inherit;',"Not modified","_applyLocale","styleFloat","_image","_ScriptTransport_data","pixelBottom","menu-layout"," (nightly)","cldr_time_format_","_cachedVisibleChildren","_applyEditable","vigigraph","table-editor-textfield","nowrap","qx.html.Dimension","_applyFont","Use getValue() instead!","_applySpacing","Macintosh","_hideTimer","tab-view-pane"," - ","list-view-header","_sortMethods","Gray() Alpha(Opacity=30)","__inherit$","matches","changeBorderTheme","Use removeHtmlProperty instead",'\\\\',"_applySize","border","_applyChecked","resizableNorth","qx.core.Log.debug","this.removeStyleProperty('padding","Partial content","qx.application.IApplication","MacPPC","quote","Zoom out","qx.ui.table.columnmodel.resizebehavior.Default","95%","changeTableModel","qx.application","qx.ui.table.columnmodel.resizebehavior.ColumnData","_applyColorBottom"," &nbsp;","  padding : 0px 6px;","qx.Class","columnVisibilityMenuCreateStart","qx.logAppender","qx.event.handler.EventHandler","Win32","qx.iconTheme","forEach","1.0","qx.ui.menu.Separator",'  <div id="control">',"autoComplete","_iframe",' is not (yet) ready!");',"changeElement","(measure start) ","progid:DXImageTransform.Microsoft.AlphaImageLoader(src='","Height","qx.version","qx.log.appender.Window",'y',"modal","(\\d\\d(\\d\\d)?)","_layoutChanges","changeParent","px; width:","_applyMarginBottom","?hostname=","_applySelectable","_applyPreloader","radio-view-button-checked","qx.bom.element.Dimension","tab-view-button-checked","_captionTitle","_colors","cursor:","application/x-www-form-urlencoded","extend","Pixel","_applyBackgroundImage","qx.ui.menu.CheckBox","((\\+|\\-)\\d\\d:?\\d\\d)","firefox","SS","qx.ui.menu.MenuLayoutImpl","n","/rpc/hosts",'M',"Vigilo Colors","changeTextColor","borderBottom",'computed=value;',"qx.boxModelCorrection","scrollbars"," WARN:  ",'Does not allow any arguments!',"__states",'return value;','\\f'," DEBUG: ","complete","change","_columnVisibilityBt","changeAnonymous","qx.locale.Manager","</span>","tab-view-button","_scrollerParent","_applyOpen","MSXML2.XMLHTTP.3.0",'k',"qx.io.image.Manager","OmniWeb","kk","_applyMinHeight","[^\\.0-9]","qx.ui.table.ICellEditorFactory","See other",'!',"-webkit-box-sizing","&lt;","_columnData","_showTimer","line-through","table-row-background-selected","..","qx.ui.form.ComboBox",";position:relative;height:","link",'if(!clazz.$$propertiesAttached)qx.core.Property.attach(clazz);',"changeActiveChild","_columnIndexMap","cldr_number_group_separator","U",']._autoCloseWindow()}catch(e){}">',"_applyShowInterval","var a=arguments[0] instanceof Array?arguments[0]:arguments;","qx.theme.classic.color.Royale","mm","C","Vigigraph.py/getJSONGroups?host=","Bad gateway",':','value !== null && value.$$type === "Mixin"',"_applyBoundToWidget","NaN","qx.dom.Element","split","_applyBackgroundRepeat","Log window message: Starting error recording, any errors below this line will prevent the log window from closing",'=computed;',"qx.ui.popup.Popup","Type","qx.util.format.NumberFormat","list-view","qx.ui.table.rowrenderer.Default","qx.io.Alias","html,body { margin:0;border:0;padding:0; } ","_captionBar","<hr/>","Graph start","_applyBottom","qx_NativeWindow","menubar","_valueRelatedTarget","_spans","changeResizeMethod",":constructor wrapper","_closeTimer","HTTP version not supported",'value !== null && value.$$type === "Interface"',"qx.Mixin","_applyBorder","beforeAppear","font-family: 'Segoe UI', Corbel, Calibri, Tahoma, 'Lucida Sans Unicode', sans-serif;","_applyFirstColumnX","changeText","_applyRight","Use qx.Class.define instead","__cache","_check","window-inactive-caption-text","o","_applyMetaColumnCounts","qx.ui.layout.BoxLayout","_applyMaxHeight","Galeon","force","after","  position: absolute;","userFocus","widget/splitpane/knob-horizontal.png","widget/arrows/up.gif","parentPaddingBottom","Control","qx.lang.Generics","qx.ui.basic.ScrollBar","8","warn",'D',"changeLeadItem",'  <div id="lines">',"6","client-document-blocker","changeBehavior","push","qx.core.Log.error","qx.log.DefaultFilter","hh","list-view-border","Last 3 months","Log window message: Stopping error recording, discarding ","icon/16/actions/history.png","Last 7 days","icon/16/apps/accessories-time-tracking.png","_selectedItems","Vigigraph.py/getJSONReportsList?host=","hasOwnProperty","qx.ui.basic.Image","qx.ui.table.pane.Scroller","Unidentified","list-view-header-cell-hover","_atom","Service","Request-URL too large","_spacer","Not acceptable","toolbar-part-handle-line","radio-view-bar",'typeof value === "number" && isFinite(value) && value%1 === 0',"Infinity","SSS",'!(value instanceof ','value !== null && qx.theme.manager.Font.getInstance().isDynamic(value)',"qx.html.Scroll","_applyName","changeIcon","_applyMaxCacheLines","_applyStretchChildrenOrthogonalAxis","_openTimer","pixelHeight"," !important","-Infinity","_lastMouseDownDispatchTarget",'(backup);',"/rpc/reports","[Mixin ","__all","qx.jsonEncodeUndefined","_applyFocused","lines",'if(computed===inherit){',"qx.log.Filter","_scrollBar","Connection closed by server","native","borderTop",'<body onload="qx = opener.qx;" onunload="try{qx.log.WindowAppender._registeredAppenders[',"__oninput","sort","verticalAlign",'  </style>',"safari","scrollbar-blocker","_applyPaddingTop","icon/16/actions/zoom-out.png","_tableModel","qx.ui.core.Font","changeEditable","qx.ui.layout.impl.LayoutImpl","qx.locale.Number",';}',"qx.deprecationWarnings","qx.fontTheme","Server error","\\\"","unshift","Host:","menu-check-box","Reload graph",'!==undefined&&',"getFirstActiveChild","qx.core.Log.info","Null","changeFont","_applyOverflow","radio-view-pane","Last year",'<iframe name="','value instanceof Date',"/static","qx.ui.table.IHeaderRenderer","borderLeftStyle","_applyBehavior","7","__convertBoolean","window-captionbar-restore-button","qx.aspects",'if((computed===undefined||computed===inherit)&&','character',":00","_applyHideInterval","_applyReadOnly","BODY","Bitstream Vera Sans Mono","_applySource",'(value);','left:',"qx.OO","changeColorTheme"," errors have been recorded, keeping log window open.</b>","a=qx.lang.Array.fromShortHand(qx.lang.Array.fromArguments(a));","(passed time: ",">>> ",'<span class="objectBox-function">',"last","_resetRuntime",'\\u00',"_handle","qooxdoo","application/json","Moved temporarily","one of one row","_paneClipper","qx.ui.table.Table","_columnDataArr",'    hr { border: 0 none; border-bottom: 1px solid #ccc; margin: 8px 0; padding: 0; height: 1px }','\\r',"substring","#D6D5D9","[object Error]","match",'#',"https://",'width:',"S",'value !== null && value.$$type === "Class"',"qx.util.format.DateFormat","_applyAutoSync","/rpc/graphs","<span style=\"text-decoration:underline\">","  at ","Scroll","Graph Name",'typeof value === "string" && qx.util.ColorUtil.isValid(value)',"__",'var a=this.getChildren();if(a)for(var i=0,l=a.length;i<l;i++){',"qx.ui.layout.impl.VerticalBoxLayoutImpl","Vigigraph.py/searchJSON?host=",'h',"debug","_applyAppearance","_styleProperties","_applyOpacity","qx.html.Offset","widget/window/restore.gif",",height=","qxvariant",'if(mixins[i].$$constructor){mixins[i].$$constructor.apply(this,arguments);}}}',"Alpha(Opacity=","check-box-group-box-legend",'Authorization',"<div style='float:left;width:","([a-zA-Z]+)","charAt","m","_applyBorderTheme","qx.ui.table.cellrenderer.Default","_applySelected","\\$1","parentPaddingRight","_applyZIndex","')","tab-view-button-hover","_format","_aliases","check-box","_applyOpenInterval","window",'var backup=computed;',"_applyPaddingLeft","qx.core.LegacyProperty","_lastUpDownType",'for(var i=0,l=mixins.length;i<l;i++){',"_applyFontTheme","Please use getKeyIdentifier() instead.","_applyTabIndex",'if(this.classname===',"changeAppearance","_rowData","qx.debug","resizable",'if(value!==inherit)',"qx.net.Http",'if(a[i].',"_width","(!this.",';-moz-user-select:none;',"font-size:","qx.locale.LocalizedString","4","combo-box-popup","changeBackgroundColor","changeRight","[Interface ","_applyTableColumnModel","please use getText() instead.","Reports","one row","qx.theme.manager.Color","_restoreButton","_captionFlex","vigilobg","borderTopStyle","stylesheet","__useinit$","changeModal",'Undefined value is not allowed!',"Interface","window-statusbar","changeDataRowRenderer","qx.bom.element.Style","qx.ui.table.selection.Manager",'\\b','Is invalid!',"colorInnerBottom","id","netnewswire","qx.ui.layout.HorizontalBoxLayout","qx.theme.classic.Widget","': ","&gt;","client-document","borderRightStyle","changeMoveMethod","X-Qooxdoo-Response-Type","widget/cursors/copy.gif","Ranges:",'</span></td>',"widget/menu/checkbox.gif","_markerBtn","ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=","_applyMaxLength","Firefox","-moz-box-sizing","img","_showTimeStamp","  text-overflow:ellipsis;","table-menubar-button","_field","qx.lang.Core","_htmlAttributes",'" style="','){',"button-view-bar","qx.minLogLevel","anonymous: ","MozBoxSizing"," (#","changeScrollX","changeSource","_columnIdArr","_applyAllowMaximize","width: ","tree-element-label","0.0","info","__convertNumber","  white-space:nowrap;","__onmouseevent","table-row-background-focused-selected","Vigigraph.py/supPage?host=","=((v==null)?0:v)+'px'","_valueDomEvent","qx.io.remote.RequestQueue","_applyColorInnerBottom","_applyVerticalScrollBarVisible","_applyLeft","window-captionbar"," qooxdoo-table-cell-bold","_applyAnchorItem",'style="',"_borderElement","tool-tip","[object ","_maximizeButton","qx.appearanceTheme","Server timeout","__onwindowblur","clip","Mozilla","Log window message: <b>Note: ","_applyCloseInterval",'</span></td></tr>',"javascript:/","/widget/Windows",'var prop=qx.core.Property;',"changeBottom","width=500,height=250,dependent=yes,resizable=yes,status=no,location=no,menubar=no,toolbar=no,scrollbars=no",'<table>',"widget/table/selectColumnOrder.png","bold-large","qx.ui.resizer.IResizable","Search for a host (\"*\" for all, 100 max)","cldr_number_percent_format",'if(clazz.$$includes){var mixins=clazz.$$flatIncludes;',"_layoutImpl","5","_cached","0px none",'<span class="selectorId">#',')prop.error(this,5,"',"qx.theme.manager.Icon",'<div class="',"Windows Royale","text/plain","qx.core.Version","ValueExact","tree-folder-icon","toLocaleUpperCase",'\", "',"yy","&nbsp;&nbsp;","Width","qx.theme.manager.Border","widget/window/minimize.gif","pixelWidth","__manager","qx.log.Logger","__convertObject","MMMM","_applyWrap","  [not readable: ","ae","explorer","_computed","_applyShowClose","_applyTheme","0x","Show Nagios page"," ms) ",'w',"qx.ui.toolbar.Part","omniweb","))","_requestHeaders",'!==inherit){',"qx.ui.table.celleditor.TextField","changeTheme","qx.eventMonitorNoListeners",'X',"_applyHoverItem","CapsLock","vigigraph.Application","getLastActiveChild","widget/menu/radiobutton.gif",'value !== null && (qx.locale.Manager.getInstance().isDynamic(value) || typeof value === "string")',"_applyIconWidth","_lastMouseEventDate","_queue","_applyGlobalCursor","_applyStyleBottom","MaxWidth","image","valueOf","_applyInterval","galeon","_applyStatusBarVisible","_horScrollBar","join","removeDom","qx.ui.resizer.MResizable",'d',"Courier New","qx.html.StyleSheet","_appenderArr","AppleWebKit","Legacy properties are deprecated","Use setHtmlProperty instead","_remappingChildTable","k","i","about:blank","qx.ui.core.ClientDocument","icon/16/devices/network-wired.png","qx.util.manager.Object","qx.ui.table.pane.Header","right-reversed","toolbar-part-handle",">","other gecko","qx.ui.layout.impl.GridLayoutImpl","qx.util.Compare","KK","qx.ui.basic.Atom","Percent","window-captionbar-icon","_applyBackgroundColor","_applyCaption","qx.colorTheme","http://",'.classname)this.$$initialized=true;',"_applyResponseType","widget/arrows/next.gif","_valueData",'else{',"_focusIndicator","_selectedRangeArr","qx.core.Init","Ae",'<span class="selectorTag">',"2","Conflict",'#lines { width: 100%; height: expression((document.body.offsetHeight - 30) + "px"); }',"map","O","__theme$","_applyShowMaximize",'value !== null && value.nodeType !== undefined',"_filterArr","widget/window/close.gif","rgb(",'computed=undefined;delete this.',"RealPlayer","Apps","font-style:","qx.theme.icon.Nuvola","qx.core.Log.assert","_applyMarginTop","Microsoft.XMLHTTP",'return retval;',"_parseRules","_applyVisibility",'if(computed===undefined||computed===inherit){',"_topRightWidget","splice","qx.theme.ClassicRoyale","_parseFeed","_applyMaxWidth",'typeof value === "string"',"qx.ui.layout.impl.FlowLayoutImpl","table-row-background-odd","resizableWest","divider-vertical","static/history/helper.html","changeZIndex","qx.theme.classic.font.Default",'if(value!==null)',"90%","background-color:",'>',"--- Object: ",'typeof value === "string" && value.length > 0',"_applyActiveWindow","_hideTimeStamp","Next section","Unknown status code",'<div>',"MM","create","Not available","_inlineEvents",")+;)|[^&","_applyIconTheme","_applyWidthRight","qx.lang.Object","  top: 0px;",'throw new Error("Property ',"_columnNameArr","_applyStatus","icon/16/actions/dialog-finish.png",'value !== null && qx.theme.manager.Border.getInstance().isDynamic(value)',"MacIntel","No content","changeMode","_applyFocusHandler","form","qx.core.Log.log","z","Top","_pane","qx.core.Log.warn","command","__convertString","request","</div><span style='float:left'>&hellip;</span>",".qooxdoo-table-cell-italic {","_applyMnemonic","This method is no longer needed since the event object is now an instance of the Response class.","_applyDisplay","_document","Meta","_attachedWidget","Host Group","_applyTableModel","cldr_am","_applyShowStatusbar","_header","mozBoxSizing","%1 of %2 rows","form_","qx.dom.String","ue","unix","3","changeFontTheme",'<span class="objectBox-null">',"body {}","&nbsp;","search","qx.core.Aspect","window-active-caption"," errors.","mac","qx.ui.core.Border",'Requires exactly one argument!',"_divDataSets","widget/window/maximize.gif","Win",'if(value===null)prop.error(this,4,"',"_widget","Parsed","qx.bom.Document",'H','Basic ',"qx.ui.toolbar.ToolBar","_applySelectionModel","&fakeIncr=",'<html><body><div id="state">',"window-captionbar-maximize-button",'value !== null && value.$$type === "Theme"',"Last 12 hours","_lastKeyCode",'    pre { margin: 0; padding: 4px 8px; font-family: Consolas, "Bitstream Vera Sans Mono", monospace; }',"&start=","MSIE","EE","Forbidden","qx.html.Entity","_applyCaptureWidget","anonymous","_lastMouseDown","widthValue",'</span>=&quot;<span class="nodeValue">',"cssFloat","toolbar-part","icon/16/actions/go-next.png",'Referer','!(value && qx.Class.hasInterface(value.constructor, ',"Vigigraph.py/getImage?host=","qx.ui.basic.Label","changeVerticalScrollBarVisible","qx.ui.basic.ScrollArea","Vigigraph.py/getReport?host=","[Theme ","_rowArr","_popup","Proxy authentication required","qx.ui.popup.PopupAtom","beforeInsertDom","_applyAutoCloseWithErrors","Main Group","M","qx.io.image.PreloaderSystem","qx.locale.Date","qx.html.EventRegistration","_innerStyle","qx.html.Window","please use setText() instead.",")+>)|(&([^;]|","qx.bom.element.Location","Ue","_applyStyleRight",'===value)return value;',"-1","Object is null","Vigilo Appearance","<html><head><title>","=[not readable: ","Bad request"," in method "," qooxdoo-table-cell-right","vigigraph.resourceUri","qx.ui.basic.Terminator","_applyColorRight","_applyWidthBottom",'if(value===undefined)prop.error(this,2,"',"_oldParent","_applyItalic","widget/splitpane/knob-vertical.png","?maingroupid=",'value=this.',"_statusText","_formFields","toolbar=no,scrollbars=no,resizable=yes,","widget/cursors/move.gif",'<span class="objectBox-selector">',"_titles","_minimizeButton","qx.ui.selection.SelectionManager","_active","Zoom in","  text-align:right","_tableColumnModel","_applyHideFocus","progid:DXImageTransform.Microsoft.Shadow(color='Gray', Direction=135, Strength=4)"," messages removed)","_applyLeadItem","bottom-reversed","commandLine","_applyImplementation","qx.core.Log.dir","qx.core.MUserData",'value instanceof RegExp',"_logEventQueue","qx.event.type.DomEvent","<pre>Could not execute json: \n","__ondragevent","_valueOldValue","button-view","_applyLoaded","())","_applyParent","table-row-background-even","qx.core.Variant","qx.core.Target",'<div ',"&quot;",'K',"qx.net.HttpRequest","/source/class/","_applyFirstVisibleRow","__listeners","beforeRemoveDom"," qooxdoo-table-cell-italic","frame_","_applyMarginLeft","Request entity too large","qx.html.Location","Gecko","qx.log.LogEventProcessor","_closeButton","pixelTop","&#39;","_applyElement",' of an instance of ',"qx.theme.classic.Border","text-decoration:","_applyShow","Search for a service (\"*\" for all, 100 max)","/rpc/hostgroups",'E',"_applyFocusedChild",'<div class="objectBox-element">',"changeWidth","HHmmsszz","widget/table/ascending.png","widget/cursors/alias.gif","_parentLogger","resizer-frame",'    #lines{ top: 30px; left: 0; right: 0; bottom: 0; position: absolute; overflow: auto; }',"'>","_window","dependent","qx.lang.Array","_applyColorLeft",'</div><div class="objectBox-element">&lt;/<span class="nodeTag">',"close","_fontStyle","toLocaleLowerCase","changeFocusedChild","KDE","_children","&amp;","_applyMethod","_modify","</title></head>","every","\\\\","addChild","qx.ui.table.columnmodel.Resize","changeValidator","Last 24 hours",'s',"qx.util.Mime","  border-bottom:1px solid #eeeeee;","Vigilo",'<td class="propertyNameCell"><span class="propertyName">',"__convertFunction","_change","box-sizing","_applyIconPosition","table-row","changeDisplay","d","_applyWidth","_applyColorInnerRight",'/&gt;</div>',"changeMaxHeight","Consolas","qx.locale.MTranslation","changeMinHeight",'return null;',"unselectable","qx.ui.layout.CanvasLayout","_remappingChildTarget","1","_applyWidgetTheme","Service:","<br>","html { border:0 none; } ",'\\n',"_locale","dir","', ((v==null)?0:v)+'px')","atom","_value","qx.preloaderTimeout","&duration=","shift","qx.theme.manager.Appearance","unkown","_editableColArr","parentPaddingLeft","org.w3c.dom.svg","Current stack trace",'Null value is not allowed!',"table-focus-statusbar","HH:mm:ss zz","changeTableColumnModel","pixelLeft","file://","qx.event.handler.KeyEventHandler","Alt","qx.client.History","Request time-out","_arrowObject","qx.ui.layout.GridLayout","Backspace"," with incoming value '","menu-separator","vigigraph.theme.Vigilo",'Could not change or apply init value after constructing phase!',"new Date(Date.UTC(","__convertUndefined","qxsetting","_data_","orientation","changeOverflow","__stateMap","/rpc/graphgroups",'value instanceof Function',"_htmlProperties","...","__intervalHandler","qx.ui.menu.ButtonLayoutImpl","_req","qx.log.appender.FireBug","parseerror","K","_valueCurrentTarget","qx.core.Log.dirxml","dragend","  font-style:italic","Last 6 months","_applySpellCheck","window-statusbar-text","width=","toLowerCase",'<span class="objectBox-string">&quot;'," of class ","_tablePane","Show report","_applyMinWidth","qx.client.Command","Multiple choices","  -o-text-overflow: ellipsis;","Win64","changeIconTheme","_applyCommand","/icon/Nuvola","menu-separator-line","Last section","w","qx.ui.menu.Button","qx.html.Iframe",".qooxdoo-table-cell-right {","_applySelectionMode",'", computed, old);',"borderRight",",top=","MSXML2.XMLHTTP.6.0","icon/16/actions/zoom-in.png","widget/cursors/nodrop.gif","_resizeLine","vigigraph.theme.vigilo.Colors","1px 0",'value !== null && typeof value === "object"',"changeSelectionModel",'value instanceof Array','<tr>',"changeWindowManager","__visible","qx.ui.layout.impl.HorizontalBoxLayoutImpl","qx.ui.table.pane.FocusIndicator","  height: 100%;","_filterTextWords",",left=","qx_log_","_applyTextColor",'&nbsp;<span class="nodeName">',"e","_applyColorInnerTop","pixelRight","_overallColumnArr","utf-8","_applyMaximum","} ","MozUserFocus","qx.theme.manager.Widget","qx.core.Object","_applyMarginRight","MSHTML-specific HTTP status code","_applyStyleLeft","&graphgroup=",'</div></body></html>',"Flex","Graph Group","font-family:",'var computed, old=this.',"_applyHeight","_applyKeepFirstVisibleRowComplete","qx.core.Log","_lastMouseEventType",'    html, body{ padding: 0; margin: 0; border : 0 none; }',"_modalNativeWindow","_isErroneous","[Class ","_applyWidthTop","_style","changeLeft","_valueDomTarget","changeTop","changeAnchorItem","__onselectevent","Payment required","font-weight:",'</span>&quot;',"qx.ui.resizer.ResizablePopup",'<span class="objectBox-object">',"this.setStyleProperty('padding","windowfocus","BSD","qx.core.Log.clear","qx.ui.menu.Layout","changeMoveable","_applyFocusCellOnMouseMove","qx.Theme","\"%1\" Graph for host %2","&name=","Date","heightValue","&graph=","This method call is no longer needed.","_valueValue","Moved permanently","Show graph","_selectionManager","changeStatus","_applyScrollTimeout","qx.ui.toolbar.MenuButton","?othergroupid=","isPrototypeOf","_captionIcon","H","_parameters",'&quot;</span>',"_applyColumnVisibilityButtonVisible","qx.util.Validation","qx.util.ColorUtil","_valueTarget","Timeframe menu","tree-folder","-resize","Host Name","borderLeft","changeActive"," INFO:  ","_applyShowCaption","_applyTop","script","HHmm","changeGlobalCursor","()","HH","toUpperCase","_button",'var pa=this.getParent();if(pa)computed=pa.',"table-row-selected","_dynamic"," logRow-",".qooxdoo-table-cell-bold {","reverse","cldr_date_time_format_","changeTablePaneModel","changeHeight","qx.util.format.Format","X-Requested-With","qx.theme","qx.ui.selection.Selection","insertDom","oe","_applyFamily","qx.ui.table.model.Simple","combo-box","changeRowHeight","stretchChildrenOrthogonalAxis","empty","tree-folder-label","_ScriptTransport_","window-captionbar-minimize-button","qx.borderTheme",'value !== null && value.type !== undefined',"combo-box-text-field","table-row-background-focused","Error: Could not get a reference to the sheet object","%1 rows",'value !== null && value.nodeType === 1 && value.attributes',"Not found",'value !== null && typeof value === "object" && !(value instanceof Array) && !(value instanceof qx.core.Object)',"_applyShowMinimize","EEE","_applyShowIcon",'(computed, old);','</table>',"is","tree-element-icon",'()</span>','value !== null && value.nodeType === 9 && value.documentElement',"Gone","replace","#FFEEEE","\n</pre>","Unauthorized","changeCaption","_applyPaddingBottom","vigigraph.theme.vigilo.Appearance","_visibleColumnArr",".apply(this._remappingChildTarget, arguments)","_registry","EEEE","*{","action","_applyOrientation","qx.ui.toolbar.PartHandle","  font-weight:bold","qx.log.MLogging","(\\d\\d)",'old=computed=this.',"_applyAllowMinimize","_applyColorTheme","qx.core.Client","MSXML2.XMLHTTP","qx.theme.manager.Meta","changeSpacing","_applyIconHeight",'&lt;<span class="nodeTag">',"icon/16/actions/start.png","shiira",'===undefined)return;',"_applyActiveChild","substr","MaxHeight",'<span class="selectorClass">.','\\t',"_modalWidgets",'([0-9]{1,3}(?:',"  cursor:default;","qx.dom.Node","_applyCursor","__storage","changeVisibility","colorInnerTop","realplayer","other webkit","px;overflow:hidden;white-space:nowrap'>","_lastMouseDownDomTarget","_isPng","Element","_applyUseAdvancedFlexAllocation","dirxml","list-item","_applyUrl"," ---\n","  overflow:hidden;","qx.html.String",'))',"button-hover","_filterInput","cldr_number_decimal_separator","qx.ui.table.headerrenderer.Default",'var retval=clazz.$$original.apply(this,arguments);',"camino",'    #control { top: 0; left: 0; right: 0; padding: 4px 8px; background: #eee; border-bottom: 1px solid #ccc; height: 30px }',"qx.ui.core.ClientDocumentBlocker"," ERROR: ","widget/arrows/down_small.gif","divider-horizontal",'class="',"_top","u","activeX","qx.client.Timer","[object Object]","qx.lang.Function","Out of resources","qx.dev.StackTrace","qx.core.Setting","Liberation Sans Mono","_applyModal","cldr_date_format_","_globalCursorStyleSheet","_line",'\\"',"widget/table/descending.png"," (","Oe","/static/log/log.html","Method not allowed","line-height: ","_applyAppearanceTheme","content-box","Ok",'if(',"MMM","qx.ui.layout.FlowLayout",'value instanceof Error',"Graph end",'anonymous',"Unsupported media type","qx.core.Property","qx.ui.form.List","Precondition failed","changeMenu","combo-box-list","overflow: hidden;","__borderObject","_form","Error in property ","_verScrollBar","<","toolbar-button","Reset column widths","_applyProhibitCaching","MinWidth","this._style.","MSXML2.XMLHTTP.4.0","_translationCatalog","_applyStyleTop","getFirstChild","marker",'"></iframe>',"window-captionbar-title"," (r","qx.io.Json","Gateway time-out","resizableSouth",'else if(computed===undefined)',"qx.core.Log.timeEnd","dd",'&gt;</div><div class="nodeChildren">',"qx.widgetTheme","__formatTree","spacing","X-Qooxdoo-Version","Timeframe","-moz-scrollbars-none",'else this.',"visible","Bottom","initial","qx.core.Log.time","colorInnerLeft","large","_applyOpenItem"," FATAL: ","Safari","hideFocus","<div style='",'A',"_applyDisabledIcon","_applyPaddingRight","_columnVisibilityMenu","changeBorder","Vigigraph.py/getStartTime?host=",'&gt;</span></div>',"en",'S',"__userData","00","beforeInitialOpen","Length required","_applyWidthLeft","--- End of object ---","qx.isSource","_applyVisibleRowCount","_logLinesDiv","logRow",'var clazz=arguments.callee.constructor;',"_inputElement","__onwindowresize","window-active-caption-text","changeMinWidth","_applyHorizontalScrollBarVisible",'var computed, old;','}else{',"window-captionbar-close-button","_isCreated",'<td><span class="propertyValue">',"window-inactive-caption","qx.util.manager.Value","qx.core.Bootstrap","toLocaleString","_shortcutObject","parentPaddingTop","horizontalAlign","qx.enableApplicationLayout","_jobQueue","some",'</body></html>',"widget/arrows/up_small.gif","StringExact","qx.ui.toolbar.Button",'typeof value === "boolean"',"changeDirection","Mixin","charCodeAt","qx.theme.classic.Appearance","])*)(","qx.lang.Number",'\\d+){0,1}',"box","',sizingMethod='scale')","[\xE4\xF6\xFC\xDF\xC4\xD6\xDC]","changeTabIndex","qx.lang.String","qx.ui.table.pane.Pane","_renderRuntime","_applyCapture","_appender",'.checkMap[value]===undefined','.check.call(this, value)',"Nuvola","overline","getLastChild","qx.html.ScrollIntoView",'([-+]){0,1}',"Vigigraph.py/getJSONGraphList?host=","_applyDecoration","qx.widgetDebugId","rect(","colorInnerRight","_isLoaded","Last 48 hours","_applyCurrentToolTip","__onwindowfocus","qx.ui.layout.VerticalBoxLayout","_headerClipper","konqueror","Auto","table-header-cell-hover","pop","BackgroundImageCache","Host","X11","NetNewsWire","qx.compatibility","Last 14 days","_applyColorInnerLeft","  border-right:1px solid #eeeeee;","^(((<([^>]|","qx.bom.Viewport","/rpc/maingroups","url(","img{","_ScriptTransport_id","_applyBold","changeWidgetTheme",'    <pre id="log" wrap="wrap"></pre>',';color:','this.createDispatchChangeEvent("',"Shift","_applyColorTop","html,body{width:100%;height:100%;overflow:hidden;}","changeOpenMenu","qx.log.appender.Abstract","qx.ui.table.cellrenderer.Abstract","qx.html.Style","_scrollContent","qx.locale.Locale","_checkValue","useAdvancedFlexAllocation","return this._remappingChildTarget.","changeHorizontalScrollBarVisible","changeOrientation","HH:mm","__oninterval","qx.ui.basic.HorizontalSpacer","Shiira","qx.theme.manager.Font","changeMaxWidth","MinHeight","icon/16/actions/go-previous.png","yyyy","qx.io.image.PreloaderManager","Camino","state","qx.ui.layout.impl.CanvasLayoutImpl","_commands","_applyMode","tree-element",'  <style type="text/css">','<div class="nodeText">',"monospace","changeAppearanceTheme"];if(!window.qxsettings)qxsettings={};
+$=["","qx.client","Boolean","auto","Integer","qx.event.type.Event","solid","undefined","string","left","String","right","border-dark-shadow","none",';',"completed","Number",",","bottom","top","execute","mousedown","hidden","middle","width","gecko","mshtml","singleton","height","set","mouseup","failed","keydown","scroll","=","object","aborted","timeout","pressed","border-light","sending",'computed=this.',"center",".","default",";","px","receiving","qx.event.type.DataEvent","function","(\\d\\d?)","number","style",":",")",'=value;',"keypress","100%","abandoned","0px","&","other",'this.',"mouseover","click","on"," ","over","minWidth","maxWidth","Function","outset","active","overflow","inset","Enter","boolean","borderTopWidth","absolute","maximized","configured","load","abstract","effect","borderLeftWidth","0","changeEnabled","interval","background","1*","maxHeight","minHeight","white","position","init","frame","_","qx.event.type.MouseEvent","locationX","qx.ui.core.Widget","Color","Object","CSS1Compat","changeValue","error",'"',"off","qx.io.remote.Response",'</span>',"scrollY",'if(this.',"locationY","]",'}',"-","shorthand","dblclick","reset","(","div","wide","paddingTop","abbreviated","|","no","opera","icon/16/actions/view-refresh.png","paddingBottom","scrollX","get","yes","inherit","input","?","paddingLeft",'delete this.',"unstyle","paddingRight","Theme","border-light-shadow","selected","fixed","mousemove","changeSelected","body","border-dark","disappear","created","unload","both","location",'!==undefined)',"/","Left","Right","appear","qx.ui.table.pane.CellEvent","translucent","ie4+","mouseout","+","button","text-field","filter","'","refresh","webkit","gray","list","$","groove","qx.ui.popup.ToolTipManager","narrow","qx.ui.menu.Manager","Refresh","horizontal","marginTop","icon","khtml","display","Space","A","marginLeft","PageUp","qx.ui.menu.Menu","keyup","inset-thin","vertical","1px","label","*","Down","qx.event.type.DragEvent","qx.ui.popup.PopupManager","dotted","text","qx.event.type.FocusEvent","double","Up","%","cellClick","overflowX","overflowY","\n","widthComputed","contextmenu",'return this.','else if(this.',"long","}","qx.event.type.KeyEvent","changeLocale","dashed","normal","qx.resourceUri","static/image/blank.gif","outset-thin","black","heightComputed","text-selected","PageDown","ridge","changeSelection","queued","MozOutline","resize","short","hand","1px dotted invert","_applyResizable","field",'!==undefined){',"ms","fontSize","marginBottom","50%","hour","Home","outline","NumLock","left-reversed","wildcard","this.",'=true;',"middle-reversed","transparent","Tahoma","GET","mousewheel","literal","Vigilo Graphic","top-reversed","focused","_timer","Liberation Sans","marginRight","minimized","Escape","qx.event.type.ChangeEvent","center-reversed",'old=this.',"Lucida Grande",')',"text-disabled","Bitstream Vera Sans","horizontalAlignment",": ","button-abandoned","focus","border-box","opaque","dark-shadow","qx.ui.popup.ToolTip","null","verticalAlignment","_applyClip","End","window-captionbar-button","blur","safari2","Verdana","_applyText","beforeunload","icon/16/actions/go-right.png","_table","date-chooser-title","_element","100px","F2","focusin","icon/16/actions/zoom.png","_applyValue","medium","down","list-view-content-cell-text","dragover","visibilityChanged","date-chooser","dragenter","lead","qx.ui.embed.IframeManager","_applyIcon","9","widget","px;","HHmmss","static","qx.ui.table.selection.Model","Ready","changeShow","focusout","_applyVerticalChildrenAlign","HH:mm:ss",'","',"#","qx.io.remote.XmlHttpTransport","-moz-scrollbars-vertical","  ","_applyHorizontalChildrenAlign","bold","table-header-border","(\\d\\d?\\d?)","-moz-scrollbars-horizontal","visibility","n-resize","textarea","windowblur","qx.io.remote.ScriptTransport","widthType","verticalChildrenAlign","{","menu-button","g","changeState",'typeof value === "number" && isFinite(value)',"pointer","qx.io.remote.IframeTransport","Tab"," }","keyinput","_applyEnabled","qx.ui.form.Button","underline","qx.event.handler.DragAndDropHandler","Z","qx.ui.core.Parent",'</div>',"full","horizontalChildrenAlign","=''","iframe",'",value);',"heightType",'',"widthChanged","_applyState","html","qx.client.NativeWindow","Classic","e-resize","zIndex","Connection dropped","s","_childrenQueue","_labelObject","a","_compute","F1","addAtEnd","checked","appearances","removeAll","cursor","gecko|opera|webkit","_paneScroller","indexOf","Insert","_applyShowCellFocusIndicator","cldr_day_","qx.application.Gui","table-header","col-resize","Content-Type","addAfter","win","nw-resize","ellipsis","columnVisibilityMenuCreateEnd","__init$","qx.ui.table.columnmodel.Basic","fontStyle","value","_list","styleTop","F12","dragleave","log","borderBottomWidth","onscroll","parent","qx.ui.table.columnmodel.resizebehavior.Abstract","list-view-content-cell","_layout",'">',"mshtml|webkit","F3","tab-view-border",":content-box;","up","meta","./resource","padding","nocache","tabIndex","_manager","F11","opacity","qx.ui.embed.Flash","cldr_month_","Search","Delete","_applyPosition","_applyVerticalSpacing","styleRight","KhtmlOpacity","_resizeColumnData","styleLeft","Windows","windowresize","Value",":border-box;","&service=","no-cache","MozUserSelect","F10","backgroundRepeat","clipHeight","changeScrollY","fri","italic","_invalidate",'  </div>',"colorRight","Assertion Failure","reverseChildrenOrder","Pragma","fontWeight",'if(old===computed)return value;',"mon","KhtmlUserSelect","noComputed","F5","]);","remove","dragstart",'else ','<span class="objectBox-number">',"removeChild","colors","character","widthParsed",'";',"colorBottom","beforeDisappear","F4","F6","spinner-button","text/javascript","modelChanged","DOMMouseScroll","widthBottom","addAt","changeFocused",'undefined',"_statusBar","drag","qx.allowUrlSettings","Array","whiteSpace","first","qx.io.image.Preloader","colorTop","combo-box-button","qx.jsonDebugging","disabled","F7","changeCapture","-khtml-box-sizing","add","]\n","borderRightWidth","MozOpacity","0 none","Label","popup","qx.enableAspect","Cache-Control","ne-resize","static/image/dotted_white.gif","_applyHorizontalSpacing","margin","_applyLabel","_recompute","table-pane","dragdrop","F8","&#","toolbar","sec","(a[","backgroundImage","qx.io.remote.AbstractRemoteTransport","text/css","qx.allowUrlVariants","file:",'px;',"day","_applyTextAlign","F9","quoted_literal","hasComputed","tableWidthChanged",'Z',"min","styleBottom","widthRight","before","_applyMenu","verticalScrollBarChanged","dragexit","toString","clipTop","lazyopaque","toggle",'" ',"boxSizing","anchor",'.$$properties.',"qx.log.appender.Native","verticalSpacing","addBefore","fonts",'if(computed===undefined)computed=null;',"textDecoration","draggesture","fontFamily",'a',"widthTop","Margin","v","button-view-pane","wed",":constructor","__font","sat","_iconObject","event","Padding","icons","addAtBegin","backgroundColor","visibilityChangedPre","row-resize",'z',"editing","color","heightParsed","_blocker","cellDblclick","tooltip-text","justify","innerText","concat","tooltip",'!(',"textContent",';-?[0-9]+;-?[0-9]+',"resizer","qx.ui.form.ListItem","</div>","orderChanged","_objects","PrintScreen","menu","ignore",'(',"__user$","readonly","return this.","_frame","qx.ui.window.Window","head","qx.ui.window.Manager","cellContextmenu","ss","thu","slice","horizontalSpacing","qx.io.remote.Exchange","table-header-cell","^","qx.event.handler.FocusHandler","[","WebkitUserSelect","qx.ui.table.IRowRenderer","qx.io.remote.Request","removeAt","clipLeft",'@import "',"borders","lineHeight","widgets","userSelect","tue","();","widthLeft","sun","clipWidth",'if(old===undefined)old=null;',"textAlign","widget/arrows/down.gif","qx.ui.table.ITableModel","colorLeft","_applyReverseChildrenOrder","-1000px","lastIndexOf","list-view-header-border","_applyDimension","table-focus-indicator","qx.ui.table.pane.Model"," [","\r\n","qooxdoo-table-cell","menu-button-arrow","_focusHandler","_applyTablePaneModel",'m',"Border",'    * { box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box }',"_applyActive","_valueOriginalTarget","Pause","pre","_applyMaxColumnCount","h","javascript:void(0)","qx.util.Normalization","Linux","_applyTimeoutInterval","borderBottomStyle","Font","Use proxy","font-size: 11px;","Host Picker","resizableEast","qx.Interface","cldr_pm","qx.ui.table.model.Abstract",'value !== null && window.document',"GMT",'    <input id="marker" type="button" value="Add divider"/> &#160; &#160; Filter: <input name="filter" id="filter" type="text" value="',"_colToXPosMap","qx.ui.form.TextField",')a[i].',".qooxdoo-table-cell {","_applyFocusRoot","qx.ui.basic.Inline","qx.ui.table.ICellRenderer","_applyAllowClose","Not implemented","localeCompare","status",'{0,1}[0-9]{3}){0,})','    html, body, input, pre{ font-size: 11px; font-family: Tahoma, sans-serif; line-height : 1 }','var inherit=prop.$$inherit;',"Not modified","_applyLocale","styleFloat","_image","_ScriptTransport_data","pixelBottom","menu-layout"," (nightly)","cldr_time_format_","_cachedVisibleChildren","_applyEditable","vigigraph","table-editor-textfield","nowrap","qx.html.Dimension","_applyFont","Use getValue() instead!","_applySpacing","Macintosh","_hideTimer","tab-view-pane"," - ","list-view-header","_sortMethods","Gray() Alpha(Opacity=30)","__inherit$","matches","changeBorderTheme","Use removeHtmlProperty instead",'\\\\',"_applySize","border","_applyChecked","resizableNorth","qx.core.Log.debug","this.removeStyleProperty('padding","Partial content","qx.application.IApplication","MacPPC","quote","Zoom out","qx.ui.table.columnmodel.resizebehavior.Default","95%","changeTableModel","qx.application","qx.ui.table.columnmodel.resizebehavior.ColumnData","_applyColorBottom"," &nbsp;","  padding : 0px 6px;","qx.Class","columnVisibilityMenuCreateStart","qx.logAppender","qx.event.handler.EventHandler","Win32","qx.iconTheme","forEach","1.0","qx.ui.menu.Separator",'  <div id="control">',"autoComplete","_iframe",' is not (yet) ready!");',"changeElement","(measure start) ","progid:DXImageTransform.Microsoft.AlphaImageLoader(src='","Height","qx.version","qx.log.appender.Window",'y',"modal","(\\d\\d(\\d\\d)?)","_layoutChanges","changeParent","px; width:","_applyMarginBottom","?hostname=","_applySelectable","_applyPreloader","radio-view-button-checked","qx.bom.element.Dimension","tab-view-button-checked","_captionTitle","_colors","cursor:","application/x-www-form-urlencoded","extend","Pixel","_applyBackgroundImage","qx.ui.menu.CheckBox","((\\+|\\-)\\d\\d:?\\d\\d)","firefox","SS","qx.ui.menu.MenuLayoutImpl","n","/rpc/hosts",'M',"Vigilo Colors","changeTextColor","borderBottom",'computed=value;',"qx.boxModelCorrection","scrollbars"," WARN:  ",'Does not allow any arguments!',"__states",'return value;','\\f'," DEBUG: ","complete","change","_columnVisibilityBt","changeAnonymous","qx.locale.Manager","</span>","tab-view-button","_scrollerParent","_applyOpen","MSXML2.XMLHTTP.3.0",'k',"qx.io.image.Manager","OmniWeb","kk","_applyMinHeight","[^\\.0-9]","qx.ui.table.ICellEditorFactory","See other",'!',"-webkit-box-sizing","&lt;","_columnData","_showTimer","line-through","table-row-background-selected","..","qx.ui.form.ComboBox",";position:relative;height:","link",'if(!clazz.$$propertiesAttached)qx.core.Property.attach(clazz);',"changeActiveChild","_columnIndexMap","cldr_number_group_separator","U",']._autoCloseWindow()}catch(e){}">',"_applyShowInterval","var a=arguments[0] instanceof Array?arguments[0]:arguments;","qx.theme.classic.color.Royale","mm","C","Vigigraph.py/getJSONGroups?host=","Bad gateway",':','value !== null && value.$$type === "Mixin"',"_applyBoundToWidget","NaN","qx.dom.Element","split","_applyBackgroundRepeat","Log window message: Starting error recording, any errors below this line will prevent the log window from closing",'=computed;',"qx.ui.popup.Popup","Type","qx.util.format.NumberFormat","list-view","qx.ui.table.rowrenderer.Default","qx.io.Alias","html,body { margin:0;border:0;padding:0; } ","_captionBar","<hr/>","Graph start","_applyBottom","qx_NativeWindow","menubar","_valueRelatedTarget","_spans","changeResizeMethod",":constructor wrapper","_closeTimer","HTTP version not supported",'value !== null && value.$$type === "Interface"',"qx.Mixin","_applyBorder","beforeAppear","font-family: 'Segoe UI', Corbel, Calibri, Tahoma, 'Lucida Sans Unicode', sans-serif;","_applyFirstColumnX","changeText","_applyRight","Use qx.Class.define instead","__cache","_check","window-inactive-caption-text","o","_applyMetaColumnCounts","qx.ui.layout.BoxLayout","_applyMaxHeight","Galeon","force","after","  position: absolute;","userFocus","widget/splitpane/knob-horizontal.png","widget/arrows/up.gif","parentPaddingBottom","Control","qx.lang.Generics","qx.ui.basic.ScrollBar","8","warn",'D',"changeLeadItem",'  <div id="lines">',"6","client-document-blocker","changeBehavior","push","qx.core.Log.error","qx.log.DefaultFilter","hh","list-view-border","Last 3 months","Log window message: Stopping error recording, discarding ","icon/16/actions/history.png","Last 7 days","icon/16/apps/accessories-time-tracking.png","_selectedItems","Vigigraph.py/getJSONReportsList?host=","hasOwnProperty","qx.ui.basic.Image","qx.ui.table.pane.Scroller","Unidentified","list-view-header-cell-hover","_atom","Service","Request-URL too large","_spacer","Not acceptable","toolbar-part-handle-line","radio-view-bar",'typeof value === "number" && isFinite(value) && value%1 === 0',"Infinity","SSS",'!(value instanceof ','value !== null && qx.theme.manager.Font.getInstance().isDynamic(value)',"qx.html.Scroll","_applyName","changeIcon","_applyMaxCacheLines","_applyStretchChildrenOrthogonalAxis","_openTimer","pixelHeight"," !important","-Infinity","_lastMouseDownDispatchTarget",'(backup);',"/rpc/reports","[Mixin ","__all","qx.jsonEncodeUndefined","_applyFocused","lines",'if(computed===inherit){',"qx.log.Filter","_scrollBar","Connection closed by server","native","borderTop",'<body onload="qx = opener.qx;" onunload="try{qx.log.WindowAppender._registeredAppenders[',"__oninput","sort","verticalAlign",'  </style>',"safari","scrollbar-blocker","_applyPaddingTop","icon/16/actions/zoom-out.png","_tableModel","qx.ui.core.Font","changeEditable","qx.ui.layout.impl.LayoutImpl","qx.locale.Number",';}',"qx.deprecationWarnings","qx.fontTheme","Server error","\\\"","unshift","Host:","menu-check-box","Reload graph",'!==undefined&&',"getFirstActiveChild","qx.core.Log.info","Null","changeFont","_applyOverflow","radio-view-pane","Last year",'<iframe name="','value instanceof Date',"/static","qx.ui.table.IHeaderRenderer","borderLeftStyle","_applyBehavior","7","__convertBoolean","window-captionbar-restore-button","qx.aspects",'if((computed===undefined||computed===inherit)&&','character',":00","_applyHideInterval","_applyReadOnly","BODY","Bitstream Vera Sans Mono","_applySource",'(value);','left:',"qx.OO","changeColorTheme"," errors have been recorded, keeping log window open.</b>","a=qx.lang.Array.fromShortHand(qx.lang.Array.fromArguments(a));","(passed time: ",">>> ",'<span class="objectBox-function">',"last","_resetRuntime",'\\u00',"_handle","qooxdoo","application/json","Moved temporarily","one of one row","_paneClipper","qx.ui.table.Table","_columnDataArr",'    hr { border: 0 none; border-bottom: 1px solid #ccc; margin: 8px 0; padding: 0; height: 1px }','\\r',"substring","#D6D5D9","[object Error]","match",'#',"https://",'width:',"S",'value !== null && value.$$type === "Class"',"qx.util.format.DateFormat","_applyAutoSync","/rpc/graphs","<span style=\"text-decoration:underline\">","  at ","Scroll","Graph Name",'typeof value === "string" && qx.util.ColorUtil.isValid(value)',"__",'var a=this.getChildren();if(a)for(var i=0,l=a.length;i<l;i++){',"qx.ui.layout.impl.VerticalBoxLayoutImpl","Vigigraph.py/searchJSON?host=",'h',"debug","_applyAppearance","_styleProperties","_applyOpacity","qx.html.Offset","widget/window/restore.gif",",height=","qxvariant",'if(mixins[i].$$constructor){mixins[i].$$constructor.apply(this,arguments);}}}',"Alpha(Opacity=","check-box-group-box-legend",'Authorization',"<div style='float:left;width:","([a-zA-Z]+)","charAt","m","_applyBorderTheme","qx.ui.table.cellrenderer.Default","_applySelected","\\$1","parentPaddingRight","_applyZIndex","')","tab-view-button-hover","_format","_aliases","check-box","_applyOpenInterval","window",'var backup=computed;',"_applyPaddingLeft","qx.core.LegacyProperty","_lastUpDownType",'for(var i=0,l=mixins.length;i<l;i++){',"_applyFontTheme","Please use getKeyIdentifier() instead.","_applyTabIndex",'if(this.classname===',"changeAppearance","_rowData","qx.debug","resizable",'if(value!==inherit)',"qx.net.Http",'if(a[i].',"_width","(!this.",';-moz-user-select:none;',"font-size:","qx.locale.LocalizedString","4","combo-box-popup","changeBackgroundColor","changeRight","[Interface ","_applyTableColumnModel","please use getText() instead.","Reports","one row","qx.theme.manager.Color","_restoreButton","_captionFlex","vigilobg","borderTopStyle","stylesheet","__useinit$","changeModal",'Undefined value is not allowed!',"Interface","window-statusbar","changeDataRowRenderer","qx.bom.element.Style","qx.ui.table.selection.Manager",'\\b','Is invalid!',"colorInnerBottom","id","netnewswire","qx.ui.layout.HorizontalBoxLayout","qx.theme.classic.Widget","': ","&gt;","client-document","borderRightStyle","changeMoveMethod","X-Qooxdoo-Response-Type","widget/cursors/copy.gif","Ranges:",'</span></td>',"widget/menu/checkbox.gif","_markerBtn","ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=","_applyMaxLength","Firefox","-moz-box-sizing","img","_showTimeStamp","  text-overflow:ellipsis;","table-menubar-button","_field","qx.lang.Core","_htmlAttributes",'" style="','){',"button-view-bar","qx.minLogLevel","anonymous: ","MozBoxSizing"," (#","changeScrollX","changeSource","_columnIdArr","_applyAllowMaximize","width: ","tree-element-label","0.0","info","__convertNumber","  white-space:nowrap;","__onmouseevent","table-row-background-focused-selected","Vigigraph.py/supPage?host=","=((v==null)?0:v)+'px'","_valueDomEvent","qx.io.remote.RequestQueue","_applyColorInnerBottom","_applyVerticalScrollBarVisible","_applyLeft","window-captionbar"," qooxdoo-table-cell-bold","_applyAnchorItem",'style="',"_borderElement","tool-tip","[object ","_maximizeButton","qx.appearanceTheme","Server timeout","__onwindowblur","clip","Mozilla","Log window message: <b>Note: ","_applyCloseInterval",'</span></td></tr>',"javascript:/","/widget/Windows",'var prop=qx.core.Property;',"changeBottom","width=500,height=250,dependent=yes,resizable=yes,status=no,location=no,menubar=no,toolbar=no,scrollbars=no",'<table>',"widget/table/selectColumnOrder.png","bold-large","qx.ui.resizer.IResizable","Search for a host (\"*\" for all, 100 max)","cldr_number_percent_format",'if(clazz.$$includes){var mixins=clazz.$$flatIncludes;',"_layoutImpl","5","_cached","0px none",'<span class="selectorId">#',')prop.error(this,5,"',"qx.theme.manager.Icon",'<div class="',"Windows Royale","text/plain","qx.core.Version","ValueExact","tree-folder-icon","toLocaleUpperCase",'\", "',"yy","&nbsp;&nbsp;","Width","qx.theme.manager.Border","widget/window/minimize.gif","pixelWidth","__manager","qx.log.Logger","__convertObject","MMMM","_applyWrap","  [not readable: ","ae","explorer","_computed","_applyShowClose","_applyTheme","0x","Show Nagios page"," ms) ",'w',"qx.ui.toolbar.Part","omniweb","))","_requestHeaders",'!==inherit){',"form","qx.ui.table.celleditor.TextField","changeTheme","qx.eventMonitorNoListeners",'X',"_applyHoverItem","CapsLock","vigigraph.Application","getLastActiveChild","widget/menu/radiobutton.gif",'value !== null && (qx.locale.Manager.getInstance().isDynamic(value) || typeof value === "string")',"_applyIconWidth","_lastMouseEventDate","_queue","_applyGlobalCursor","_applyStyleBottom","MaxWidth","image","valueOf","_applyInterval","galeon","_applyStatusBarVisible","_horScrollBar","join","removeDom","qx.ui.resizer.MResizable",'d',"Courier New","qx.html.StyleSheet","_appenderArr","AppleWebKit","Legacy properties are deprecated","Use setHtmlProperty instead","_remappingChildTable","k","i","about:blank","qx.ui.core.ClientDocument","icon/16/devices/network-wired.png","qx.util.manager.Object","qx.ui.table.pane.Header","right-reversed","toolbar-part-handle",">","other gecko","qx.ui.layout.impl.GridLayoutImpl","qx.util.Compare","KK","qx.ui.basic.Atom","Percent","window-captionbar-icon","_applyBackgroundColor","_applyCaption","qx.colorTheme","http://",'.classname)this.$$initialized=true;',"_applyResponseType","widget/arrows/next.gif","_valueData",'else{',"_focusIndicator","_selectedRangeArr","qx.core.Init","Ae",'<span class="selectorTag">',"2","Conflict",'#lines { width: 100%; height: expression((document.body.offsetHeight - 30) + "px"); }',"map","O","__theme$","_applyShowMaximize",'value !== null && value.nodeType !== undefined',"_filterArr","widget/window/close.gif","rgb(",'computed=undefined;delete this.',"RealPlayer","Apps","font-style:","qx.theme.icon.Nuvola","qx.core.Log.assert","_applyMarginTop","Microsoft.XMLHTTP",'return retval;',"_parseRules","_applyVisibility",'if(computed===undefined||computed===inherit){',"_topRightWidget","splice","qx.theme.ClassicRoyale","_parseFeed","_applyMaxWidth",'typeof value === "string"',"qx.ui.layout.impl.FlowLayoutImpl","table-row-background-odd","resizableWest","divider-vertical","static/history/helper.html","changeZIndex","qx.theme.classic.font.Default",'if(value!==null)',"90%","background-color:",'>',"--- Object: ",'typeof value === "string" && value.length > 0',"_applyActiveWindow","_hideTimeStamp","Next section","Unknown status code",'<div>',"MM","create","Not available","_inlineEvents",")+;)|[^&","_applyIconTheme","_applyWidthRight","qx.lang.Object","  top: 0px;",'throw new Error("Property ',"_columnNameArr","_applyStatus","icon/16/actions/dialog-finish.png",'value !== null && qx.theme.manager.Border.getInstance().isDynamic(value)',"MacIntel","No content","changeMode","_applyFocusHandler","/rpc/servicegroups","qx.core.Log.log","z","Top","_pane","qx.core.Log.warn","command","__convertString","request","</div><span style='float:left'>&hellip;</span>",".qooxdoo-table-cell-italic {","_applyMnemonic","This method is no longer needed since the event object is now an instance of the Response class.","_applyDisplay","_document","Meta","_attachedWidget","Host Group","_applyTableModel","cldr_am","_applyShowStatusbar","_header","mozBoxSizing","%1 of %2 rows","form_","qx.dom.String","ue","unix","3","changeFontTheme",'<span class="objectBox-null">',"body {}","&nbsp;","search","qx.core.Aspect","window-active-caption"," errors.","mac","qx.ui.core.Border",'Requires exactly one argument!',"_divDataSets","widget/window/maximize.gif","Win",'if(value===null)prop.error(this,4,"',"_widget","Parsed","qx.bom.Document",'H','Basic ',"qx.ui.toolbar.ToolBar","_applySelectionModel","&fakeIncr=",'<html><body><div id="state">',"window-captionbar-maximize-button",'value !== null && value.$$type === "Theme"',"Last 12 hours","_lastKeyCode",'    pre { margin: 0; padding: 4px 8px; font-family: Consolas, "Bitstream Vera Sans Mono", monospace; }',"&start=","MSIE","EE","Forbidden","qx.html.Entity","_applyCaptureWidget","anonymous","_lastMouseDown","widthValue",'</span>=&quot;<span class="nodeValue">',"cssFloat","toolbar-part","icon/16/actions/go-next.png",'Referer','!(value && qx.Class.hasInterface(value.constructor, ',"Vigigraph.py/getImage?host=","qx.ui.basic.Label","changeVerticalScrollBarVisible","qx.ui.basic.ScrollArea","Vigigraph.py/getReport?host=","[Theme ","_rowArr","_popup","Proxy authentication required","qx.ui.popup.PopupAtom","beforeInsertDom","_applyAutoCloseWithErrors","Main Group","M","qx.io.image.PreloaderSystem","qx.locale.Date","qx.html.EventRegistration","_innerStyle","qx.html.Window","please use setText() instead.",")+>)|(&([^;]|","qx.bom.element.Location","Ue","_applyStyleRight",'===value)return value;',"-1","Object is null","Vigilo Appearance","<html><head><title>","=[not readable: ","Bad request"," in method "," qooxdoo-table-cell-right","vigigraph.resourceUri","qx.ui.basic.Terminator","_applyColorRight","_applyWidthBottom",'if(value===undefined)prop.error(this,2,"',"_oldParent","_applyItalic","widget/splitpane/knob-vertical.png","?maingroupid=",'value=this.',"_statusText","_formFields","toolbar=no,scrollbars=no,resizable=yes,","widget/cursors/move.gif",'<span class="objectBox-selector">',"_titles","_minimizeButton","qx.ui.selection.SelectionManager","_active","Zoom in","  text-align:right","_tableColumnModel","_applyHideFocus","progid:DXImageTransform.Microsoft.Shadow(color='Gray', Direction=135, Strength=4)"," messages removed)","_applyLeadItem","bottom-reversed","commandLine","_applyImplementation","qx.core.Log.dir","qx.core.MUserData",'value instanceof RegExp',"_logEventQueue","qx.event.type.DomEvent","<pre>Could not execute json: \n","__ondragevent","_valueOldValue","button-view","_applyLoaded","())","_applyParent","table-row-background-even","qx.core.Variant","qx.core.Target",'<div ',"&quot;",'K',"qx.net.HttpRequest","/source/class/","_applyFirstVisibleRow","__listeners","beforeRemoveDom"," qooxdoo-table-cell-italic","frame_","_applyMarginLeft","Request entity too large","qx.html.Location","Gecko","qx.log.LogEventProcessor","_closeButton","pixelTop","&#39;","_applyElement",' of an instance of ',"qx.theme.classic.Border","text-decoration:","_applyShow","Search for a service (\"*\" for all, 100 max)","/rpc/hostgroups",'E',"_applyFocusedChild",'<div class="objectBox-element">',"changeWidth","HHmmsszz","widget/table/ascending.png","widget/cursors/alias.gif","_parentLogger","resizer-frame",'    #lines{ top: 30px; left: 0; right: 0; bottom: 0; position: absolute; overflow: auto; }',"'>","_window","dependent","qx.lang.Array","_applyColorLeft",'</div><div class="objectBox-element">&lt;/<span class="nodeTag">',"close","_fontStyle","toLocaleLowerCase","changeFocusedChild","KDE","_children","&amp;","_applyMethod","_modify","</title></head>","every","\\\\","addChild","qx.ui.table.columnmodel.Resize","changeValidator","Last 24 hours",'s',"qx.util.Mime","  border-bottom:1px solid #eeeeee;","Vigilo",'<td class="propertyNameCell"><span class="propertyName">',"__convertFunction","_change","box-sizing","_applyIconPosition","table-row","changeDisplay","d","_applyWidth","_applyColorInnerRight",'/&gt;</div>',"changeMaxHeight","Consolas","qx.locale.MTranslation","changeMinHeight",'return null;',"unselectable","qx.ui.layout.CanvasLayout","_remappingChildTarget","1","_applyWidgetTheme","Service:","<br>","html { border:0 none; } ",'\\n',"_locale","dir","', ((v==null)?0:v)+'px')","atom","_value","qx.preloaderTimeout","&duration=","shift","qx.theme.manager.Appearance","unkown","_editableColArr","parentPaddingLeft","org.w3c.dom.svg","Current stack trace",'Null value is not allowed!',"table-focus-statusbar","HH:mm:ss zz","changeTableColumnModel","pixelLeft","file://","qx.event.handler.KeyEventHandler","Alt","qx.client.History","Request time-out","_arrowObject","qx.ui.layout.GridLayout","Backspace"," with incoming value '","menu-separator","vigigraph.theme.Vigilo",'Could not change or apply init value after constructing phase!',"new Date(Date.UTC(","__convertUndefined","qxsetting","_data_","orientation","changeOverflow","__stateMap",'value instanceof Function',"_htmlProperties","...","__intervalHandler","qx.ui.menu.ButtonLayoutImpl","_req","qx.log.appender.FireBug","parseerror","K","_valueCurrentTarget","qx.core.Log.dirxml","dragend","  font-style:italic","Last 6 months","_applySpellCheck","window-statusbar-text","width=","toLowerCase",'<span class="objectBox-string">&quot;'," of class ","_tablePane","Show report","_applyMinWidth","qx.client.Command","Multiple choices","  -o-text-overflow: ellipsis;","Win64","changeIconTheme","_applyCommand","/icon/Nuvola","menu-separator-line","Last section","w","qx.ui.menu.Button","qx.html.Iframe",".qooxdoo-table-cell-right {","_applySelectionMode",'", computed, old);',"borderRight",",top=","MSXML2.XMLHTTP.6.0","icon/16/actions/zoom-in.png","widget/cursors/nodrop.gif","_resizeLine","vigigraph.theme.vigilo.Colors","1px 0",'value !== null && typeof value === "object"',"changeSelectionModel",'value instanceof Array','<tr>',"changeWindowManager","__visible","qx.ui.layout.impl.HorizontalBoxLayoutImpl","qx.ui.table.pane.FocusIndicator","  height: 100%;","_filterTextWords",",left=","qx_log_","_applyTextColor",'&nbsp;<span class="nodeName">',"e","_applyColorInnerTop","pixelRight","_overallColumnArr","utf-8","_applyMaximum","} ","MozUserFocus","qx.theme.manager.Widget","qx.core.Object","_applyMarginRight","MSHTML-specific HTTP status code","_applyStyleLeft","&graphgroup=",'</div></body></html>',"Flex","Graph Group","font-family:",'var computed, old=this.',"_applyHeight","_applyKeepFirstVisibleRowComplete","qx.core.Log","_lastMouseEventType",'    html, body{ padding: 0; margin: 0; border : 0 none; }',"_modalNativeWindow","_isErroneous","[Class ","_applyWidthTop","_style","changeLeft","_valueDomTarget","changeTop","changeAnchorItem","__onselectevent","Payment required","font-weight:",'</span>&quot;',"qx.ui.resizer.ResizablePopup",'<span class="objectBox-object">',"this.setStyleProperty('padding","windowfocus","BSD","qx.core.Log.clear","qx.ui.menu.Layout","changeMoveable","_applyFocusCellOnMouseMove","qx.Theme","\"%1\" Graph for host %2","&name=","Date","heightValue","&graph=","This method call is no longer needed.","_valueValue","Moved permanently","Show graph","_selectionManager","changeStatus","_applyScrollTimeout","qx.ui.toolbar.MenuButton","?othergroupid=","isPrototypeOf","_captionIcon","H","_parameters",'&quot;</span>',"_applyColumnVisibilityButtonVisible","qx.util.Validation","qx.util.ColorUtil","_valueTarget","Timeframe menu","tree-folder","-resize","Host Name","borderLeft","changeActive"," INFO:  ","_applyShowCaption","_applyTop","script","HHmm","changeGlobalCursor","()","HH","toUpperCase","_button",'var pa=this.getParent();if(pa)computed=pa.',"table-row-selected","_dynamic"," logRow-",".qooxdoo-table-cell-bold {","reverse","cldr_date_time_format_","changeTablePaneModel","changeHeight","qx.util.format.Format","X-Requested-With","qx.theme","qx.ui.selection.Selection","insertDom","oe","_applyFamily","qx.ui.table.model.Simple","combo-box","changeRowHeight","stretchChildrenOrthogonalAxis","empty","tree-folder-label","_ScriptTransport_","window-captionbar-minimize-button","qx.borderTheme",'value !== null && value.type !== undefined',"combo-box-text-field","table-row-background-focused","Error: Could not get a reference to the sheet object","%1 rows",'value !== null && value.nodeType === 1 && value.attributes',"Not found",'value !== null && typeof value === "object" && !(value instanceof Array) && !(value instanceof qx.core.Object)',"_applyShowMinimize","EEE","_applyShowIcon",'(computed, old);','</table>',"is","tree-element-icon",'()</span>','value !== null && value.nodeType === 9 && value.documentElement',"Gone","replace","#FFEEEE","\n</pre>","Unauthorized","changeCaption","_applyPaddingBottom","vigigraph.theme.vigilo.Appearance","_visibleColumnArr",".apply(this._remappingChildTarget, arguments)","_registry","EEEE","*{","action","_applyOrientation","qx.ui.toolbar.PartHandle","  font-weight:bold","qx.log.MLogging","(\\d\\d)",'old=computed=this.',"_applyAllowMinimize","_applyColorTheme","qx.core.Client","MSXML2.XMLHTTP","qx.theme.manager.Meta","changeSpacing","_applyIconHeight",'&lt;<span class="nodeTag">',"icon/16/actions/start.png","shiira",'===undefined)return;',"_applyActiveChild","substr","MaxHeight",'<span class="selectorClass">.','\\t',"_modalWidgets",'([0-9]{1,3}(?:',"  cursor:default;","qx.dom.Node","_applyCursor","__storage","changeVisibility","colorInnerTop","realplayer","other webkit","px;overflow:hidden;white-space:nowrap'>","_lastMouseDownDomTarget","_isPng","Element","_applyUseAdvancedFlexAllocation","dirxml","list-item","_applyUrl"," ---\n","  overflow:hidden;","qx.html.String",'))',"button-hover","_filterInput","cldr_number_decimal_separator","qx.ui.table.headerrenderer.Default",'var retval=clazz.$$original.apply(this,arguments);',"camino",'    #control { top: 0; left: 0; right: 0; padding: 4px 8px; background: #eee; border-bottom: 1px solid #ccc; height: 30px }',"qx.ui.core.ClientDocumentBlocker"," ERROR: ","widget/arrows/down_small.gif","divider-horizontal",'class="',"_top","u","activeX","qx.client.Timer","[object Object]","qx.lang.Function","Out of resources","qx.dev.StackTrace","qx.core.Setting","Liberation Sans Mono","_applyModal","cldr_date_format_","_globalCursorStyleSheet","_line",'\\"',"widget/table/descending.png"," (","Oe","/static/log/log.html","Method not allowed","line-height: ","_applyAppearanceTheme","content-box","Ok",'if(',"MMM","qx.ui.layout.FlowLayout",'value instanceof Error',"Graph end",'anonymous',"Unsupported media type","qx.core.Property","qx.ui.form.List","Precondition failed","changeMenu","combo-box-list","overflow: hidden;","__borderObject","_form","Error in property ","_verScrollBar","<","toolbar-button","Reset column widths","_applyProhibitCaching","MinWidth","this._style.","MSXML2.XMLHTTP.4.0","_translationCatalog","_applyStyleTop","getFirstChild","marker",'"></iframe>',"window-captionbar-title"," (r","qx.io.Json","Gateway time-out","resizableSouth",'else if(computed===undefined)',"qx.core.Log.timeEnd","dd",'&gt;</div><div class="nodeChildren">',"qx.widgetTheme","__formatTree","spacing","X-Qooxdoo-Version","Timeframe","-moz-scrollbars-none",'else this.',"visible","Bottom","initial","qx.core.Log.time","colorInnerLeft","large","_applyOpenItem"," FATAL: ","Safari","hideFocus","<div style='",'A',"_applyDisabledIcon","_applyPaddingRight","_columnVisibilityMenu","changeBorder","Vigigraph.py/getStartTime?host=",'&gt;</span></div>',"en",'S',"__userData","00","beforeInitialOpen","Length required","_applyWidthLeft","--- End of object ---","qx.isSource","_applyVisibleRowCount","_logLinesDiv","logRow",'var clazz=arguments.callee.constructor;',"_inputElement","__onwindowresize","window-active-caption-text","changeMinWidth","_applyHorizontalScrollBarVisible",'var computed, old;','}else{',"window-captionbar-close-button","_isCreated",'<td><span class="propertyValue">',"window-inactive-caption","qx.util.manager.Value","qx.core.Bootstrap","toLocaleString","_shortcutObject","parentPaddingTop","horizontalAlign","qx.enableApplicationLayout","_jobQueue","some",'</body></html>',"widget/arrows/up_small.gif","StringExact","qx.ui.toolbar.Button",'typeof value === "boolean"',"changeDirection","Mixin","charCodeAt","qx.theme.classic.Appearance","])*)(","qx.lang.Number",'\\d+){0,1}',"box","',sizingMethod='scale')","[\xE4\xF6\xFC\xDF\xC4\xD6\xDC]","changeTabIndex","qx.lang.String","qx.ui.table.pane.Pane","_renderRuntime","_applyCapture","_appender",'.checkMap[value]===undefined','.check.call(this, value)',"Nuvola","overline","getLastChild","qx.html.ScrollIntoView",'([-+]){0,1}',"Vigigraph.py/getJSONGraphList?host=","_applyDecoration","qx.widgetDebugId","rect(","colorInnerRight","_isLoaded","Last 48 hours","_applyCurrentToolTip","__onwindowfocus","qx.ui.layout.VerticalBoxLayout","_headerClipper","konqueror","Auto","table-header-cell-hover","pop","BackgroundImageCache","Host","X11","NetNewsWire","qx.compatibility","Last 14 days","_applyColorInnerLeft","  border-right:1px solid #eeeeee;","^(((<([^>]|","qx.bom.Viewport","/rpc/maingroups","url(","img{","_ScriptTransport_id","_applyBold","changeWidgetTheme",'    <pre id="log" wrap="wrap"></pre>',';color:','this.createDispatchChangeEvent("',"Shift","_applyColorTop","html,body{width:100%;height:100%;overflow:hidden;}","changeOpenMenu","qx.log.appender.Abstract","qx.ui.table.cellrenderer.Abstract","qx.html.Style","_scrollContent","qx.locale.Locale","_checkValue","useAdvancedFlexAllocation","return this._remappingChildTarget.","changeHorizontalScrollBarVisible","changeOrientation","HH:mm","__oninterval","qx.ui.basic.HorizontalSpacer","Shiira","qx.theme.manager.Font","changeMaxWidth","MinHeight","icon/16/actions/go-previous.png","yyyy","qx.io.image.PreloaderManager","Camino","state","qx.ui.layout.impl.CanvasLayoutImpl","_commands","_applyMode","tree-element",'  <style type="text/css">','<div class="nodeText">',"monospace","changeAppearanceTheme"];if(!window.qxsettings)qxsettings={};
 if(qxsettings["qx.resourceUri"]==undefined)qxsettings["qx.resourceUri"]="./resource/qx";
 if(qxsettings["vigigraph.resourceUri"]==undefined)qxsettings["vigigraph.resourceUri"]="./resource/vigigraph";
 if(qxsettings["qx.theme"]==undefined)qxsettings["qx.theme"]="vigigraph.theme.Vigilo";
@@ -113,7 +113,7 @@ this)){return false;
 }}return true;
 };
 }if(!String.prototype.quote){String.prototype.quote=function(){return $[105]+this.replace(/\\/g,
-$[1561]).replace(/\"/g,
+$[1562]).replace(/\"/g,
 $[958])+$[105];
 };
 }
@@ -123,23 +123,23 @@ $[958])+$[105];
 
 /* ID: qx.lang.Generics */
 qx.Class.define($[878],
-{statics:{__map:{"Array":[$[1252],
+{statics:{__map:{"Array":[$[1253],
 $[1785],
 $[942],
 $[888],
 $[2054],
-$[1602],
+$[1603],
 $[959],
-$[1318],
+$[1319],
 $[572],
 $[596],
 $[375],
 $[625],
 $[730],
-$[1297],
+$[1298],
 $[163],
 $[2011],
-$[1560]],
+$[1561]],
 "String":[$[714],
 $[1011],
 $[1651],
@@ -148,11 +148,11 @@ $[1047],
 $[2019],
 $[375],
 $[625],
-$[1552],
+$[1553],
 $[1202],
 $[670],
 $[1014],
-$[1392],
+$[1393],
 $[1823],
 $[830],
 $[1854],
@@ -205,7 +205,7 @@ try{delete window.qxsettings;
 __loadUrlSettings:function(){if(this.get($[476])!=true){return;
 }var $0=document.location.search.slice(1).split($[60]);
 for(var $1=0;$1<$0.length;$1++){var $2=$0[$1].split($[53]);
-if($2.length!=3||$2[0]!=$[1628]){continue;
+if($2.length!=3||$2[0]!=$[1629]){continue;
 }var $3=$2[1];
 if(!this.__settings[$3]){this.__settings[$3]={};
 }this.__settings[$3].value=decodeURIComponent($2[2]);
@@ -225,7 +225,7 @@ $0.__init();
 
 
 /* ID: qx.lang.Array */
-qx.Class.define($[1547],
+qx.Class.define($[1548],
 {statics:{fromArguments:function($0){return Array.prototype.slice.call($0,
 0);
 },
@@ -307,7 +307,7 @@ $3=$0.length;$2<$3;$2++){if($0[$2]!==$1[$2]){return false;
 
 
 /* ID: qx.core.Variant */
-qx.Class.define($[1507],
+qx.Class.define($[1508],
 {statics:{__variants:{},
 __cache:{},
 compilerIsSet:function(){return true;
@@ -376,7 +376,7 @@ $0.define($[2059],
 [$[65],
 $[106]],
 $[65]);
-$0.define($[1232],
+$0.define($[1233],
 [$[65],
 $[106]],
 $[106]);
@@ -395,7 +395,7 @@ $0.__init();
 
 
 /* ID: qx.core.Aspect */
-qx.Class.define($[1393],
+qx.Class.define($[1394],
 {statics:{__registry:[],
 wrap:function($0,
 $1,
@@ -467,11 +467,11 @@ $8=RegExp.$1;
 $6=$[125];
 $8=$8.substring(0,
 3)+$[43]+$8.substring(3);
-$d=$1.indexOf($[1418])!==-1?$[26]:$1.indexOf($[1173])!==-1?$[25]:null;
-}else if(typeof $2===$[8]&&$2===$[1554]&&/KHTML\/([0-9-\.]*)/.test($1)){$7=$[178];
+$d=$1.indexOf($[1419])!==-1?$[26]:$1.indexOf($[1173])!==-1?$[25]:null;
+}else if(typeof $2===$[8]&&$2===$[1555]&&/KHTML\/([0-9-\.]*)/.test($1)){$7=$[178];
 $6=$[2051];
 $8=RegExp.$1;
-}else if($1.indexOf($[1259])!=-1&&/AppleWebKit\/([^ ]+)/.test($1)){$7=$[166];
+}else if($1.indexOf($[1260])!=-1&&/AppleWebKit\/([^ ]+)/.test($1)){$7=$[166];
 $8=RegExp.$1;
 $e=$8.indexOf($[160])!=-1;
 var $g=RegExp($[798]).exec($8);
@@ -482,16 +482,16 @@ if($1.indexOf($[1969])!=-1){$6=$[945];
 }else if($1.indexOf($[795])!=-1){$6=$[1226];
 }else if($1.indexOf($[2091])!=-1){$6=$[1851];
 }else if($1.indexOf($[2058])!=-1){$6=$[1110];
-}else if($1.indexOf($[1306])!=-1){$6=$[1866];
+}else if($1.indexOf($[1307])!=-1){$6=$[1866];
 }else{$6=$[1867];
 }
 if($e){$6+=$[682];
-}}else if(window.controllers&&typeof $3===$[8]&&$3===$[1522]&&/rv\:([^\);]+)(\)|;)/.test($1)){$7=$[25];
+}}else if(window.controllers&&typeof $3===$[8]&&$3===$[1523]&&/rv\:([^\);]+)(\)|;)/.test($1)){$7=$[25];
 $8=RegExp.$1;
 if($1.indexOf($[1126])!=-1){$6=$[765];
 }else if($1.indexOf($[2098])!=-1){$6=$[1885];
-}else if($1.indexOf($[869])!=-1){$6=$[1249];
-}else{$6=$[1273];
+}else if($1.indexOf($[869])!=-1){$6=$[1250];
+}else{$6=$[1274];
 }}else if(/MSIE\s+([^\);]+)(\)|;)/.test($1)){$7=$[26];
 $8=RegExp.$1;
 $6=$[1217];
@@ -512,7 +512,7 @@ $h.push($[802]);
 break;
 case $[26]:break;
 default:break;
-}$h.push($[1573]);
+}$h.push($[1574]);
 var $i=document.compatMode!==$[102];
 var $j=$[1979];
 var $k=($7==$[26]?navigator.userLanguage:navigator.language).toLowerCase();
@@ -528,10 +528,10 @@ var $q=false;
 var $r=false;
 if($4.indexOf($[427])!=-1||$4.indexOf($[728])!=-1||$4.indexOf($[1660])!=-1){$o=true;
 $n=$[384];
-}else if($4.indexOf($[693])!=-1||$4.indexOf($[713])!=-1||$4.indexOf($[1355])!=-1){$p=true;
-$n=$[1396];
+}else if($4.indexOf($[693])!=-1||$4.indexOf($[713])!=-1||$4.indexOf($[1356])!=-1){$p=true;
+$n=$[1397];
 }else if($4.indexOf($[2057])!=-1||$4.indexOf($[647])!=-1||$4.indexOf($[1735])!=-1){$q=true;
-$n=$[1386];
+$n=$[1387];
 }else{$r=true;
 $n=$[61];
 }var $s=false;
@@ -539,7 +539,7 @@ var $t=false;
 var $u=false;
 var $v=false;
 if($7==$[26]){$s=true;
-}if(document.implementation&&document.implementation.hasFeature){if(document.implementation.hasFeature($[1607],
+}if(document.implementation&&document.implementation.hasFeature){if(document.implementation.hasFeature($[1608],
 $[731])){$t=$u=true;
 }}this._runsLocally=$0;
 this._engineName=$7;
@@ -658,7 +658,7 @@ qx.core.Client.getInstance().getEngine());
 
 
 /* ID: qx.lang.Object */
-qx.Class.define($[1348],
+qx.Class.define($[1349],
 {statics:{isEmpty:function($0){for(var $1 in $0){return false;
 }return true;
 },
@@ -675,7 +675,7 @@ _shadowedKeys:[$[1755],
 $[900],
 $[2005],
 $[530],
-$[1247]],
+$[1248]],
 getKeys:qx.core.Variant.select($[1],
 {"mshtml":function($0){var $1=[];
 for(var $2 in $0){$1.push($2);
@@ -1061,8 +1061,8 @@ $3.push($[1066]);
 $3.push($[1041]);
 $3.push($[1070],
 $1,
-$[1284]);
-$3.push($[1313]);
+$[1285]);
+$3.push($[1314]);
 var $4=new Function($3.join($[0]));
 var $5;
 if($2===$[27]){$4.getInstance=this.getInstance;
@@ -1217,7 +1217,7 @@ __validateConfig:function(){}}});
 
 
 /* ID: qx.locale.MTranslation */
-qx.Mixin.define($[1583],
+qx.Mixin.define($[1584],
 {members:{tr:function($0,
 $1){var $2=qx.locale.Manager;
 if($2){return $2.tr.apply($2,
@@ -1273,7 +1273,7 @@ printStackTrace:function(){this.getLogger().printStackTrace();
 
 
 /* ID: qx.core.MUserData */
-qx.Mixin.define($[1495],
+qx.Mixin.define($[1496],
 {members:{setUserData:function($0,
 $1){if(!this.__userData){this.__userData={};
 }this.__userData[$0]=$1;
@@ -1298,7 +1298,7 @@ getResetterName:function($0){return qx.core.Property.$$method.reset[$0];
 addFastProperty:function($0,
 $1){var $2=$0.name;
 var $3=qx.lang.String.toFirstUp($2);
-var $4=$[1599]+$3;
+var $4=$[1600]+$3;
 var $5=$[129]+$3;
 var $6=$[29]+$3;
 var $7=$[366]+$3;
@@ -1324,7 +1324,7 @@ $1){var $2=$0.name;
 var $3=qx.lang.String.toFirstUp($2);
 var $4=$[1191]+$3;
 var $5=$[366]+$3;
-var $6=$[1572]+$3;
+var $6=$[1573]+$3;
 if(typeof $0.defaultValue!==$[7]){$1[$4]=$0.defaultValue;
 }$1[$[129]+$3]=function(){if(this[$4]==null){this[$4]=this[$5]();
 }return this[$4];
@@ -1350,7 +1350,7 @@ $1[$[502]+$3].self=$1.constructor;
 },
 addProperty:function($0,
 $1){qx.log.Logger.deprecatedMethodWarning(arguments.callee,
-$[1260]);
+$[1261]);
 if(typeof $0!==$[35]){throw new Error("AddProperty: Param should be an object!");
 }
 if(typeof $0.name!==$[8]){throw new Error("AddProperty: Malformed input parameters: name needed!");
@@ -1378,7 +1378,7 @@ $0.addToQueueRuntime=$0.addToQueueRuntime||false;
 $0.up=$0.name.toUpperCase();
 var $2=qx.core.Property.$$store.user[$0.name]=$[586]+$0.name;
 var $3=$[784]+$0.method;
-var $4=$[1558]+$0.implMethod;
+var $4=$[1559]+$0.implMethod;
 var $5=$[863]+$0.implMethod;
 var $6=qx.core.Property.$$method;
 if(!$6.set[$0.name]){$6.set[$0.name]=$[29]+$0.method;
@@ -1469,20 +1469,20 @@ if(typeof $0.getAlias===$[8]){$1[$0.getAlias]=$1[$[129]+$0.method];
 /* ID: qx.core.Property */
 qx.Class.define($[1923],
 {statics:{__checks:{"Boolean":$[2016],
-"String":$[1322],
-"NonEmptyString":$[1335],
+"String":$[1323],
+"NonEmptyString":$[1336],
 "Number":$[334],
 "Integer":$[912],
 "Float":$[334],
 "Double":$[334],
 "Error":$[1919],
-"RegExp":$[1496],
+"RegExp":$[1497],
 "Object":$[1680],
 "Array":$[1682],
 "Map":$[1812],
 "Function":$[1634],
 "Date":$[972],
-"Node":$[1301],
+"Node":$[1302],
 "Element":$[1810],
 "Document":$[1821],
 "Window":$[658],
@@ -1490,11 +1490,11 @@ qx.Class.define($[1923],
 "Class":$[1019],
 "Mixin":$[826],
 "Interface":$[853],
-"Theme":$[1413],
+"Theme":$[1414],
 "Color":$[1027],
-"Border":$[1354],
+"Border":$[1355],
 "Font":$[916],
-"Label":$[1239]},
+"Label":$[1240]},
 __dispose:{"Object":true,
 "Array":true,
 "Map":true,
@@ -1635,7 +1635,7 @@ if($1.dispose===undefined&&typeof $1.check===$[8]){$1.dispose=this.__dispose[$1.
 }var $6=this.$$method;
 var $7=this.$$store;
 $7.user[$5]=$[586]+$5;
-$7.theme[$5]=$[1299]+$5;
+$7.theme[$5]=$[1300]+$5;
 $7.init[$5]=$[388]+$5;
 $7.inherit[$5]=$[700]+$5;
 $7.useinit[$5]=$[1098]+$5;
@@ -1688,21 +1688,21 @@ $5,
 $[136]);
 };
 }
-if($1.check===$[2]){$4[$2+$[533]+$3]=new Function($[588]+$6.set[$5]+$[1079]+$6.get[$5]+$[1504]);
+if($1.check===$[2]){$4[$2+$[533]+$3]=new Function($[588]+$6.set[$5]+$[1079]+$6.get[$5]+$[1505]);
 $4[$2+$[1818]+$3]=new Function($[588]+$6.get[$5]+$[1776]);
 }},
-__errors:{0:$[1625],
-1:$[1398],
+__errors:{0:$[1626],
+1:$[1399],
 2:$[1100],
 3:$[778],
-4:$[1609],
+4:$[1610],
 5:$[1107]},
 error:function($0,
 $1,
 $2,
 $3,
 $4){var $5=$0.constructor.classname;
-var $6=$[1931]+$2+$[1653]+$5+$[1463]+this.$$method[$3][$2]+$[1622]+$4+$[1113];
+var $6=$[1931]+$2+$[1653]+$5+$[1464]+this.$$method[$3][$2]+$[1623]+$4+$[1113];
 $0.printStackTrace();
 $0.error($6+(this.__errors[$1]||"Unknown reason: "+$1));
 throw new Error($6+(this.__errors[$1]||"Unknown reason: "+$1));
@@ -1756,10 +1756,10 @@ $[14]);
 if($4.init!==undefined){$6.push($[206],
 this.$$store.init[$2],
 $[14]);
-}else if($4.inheritable||$4.nullable){$6.push($[1585]);
-}else{$6.push($[1350],
+}else if($4.inheritable||$4.nullable){$6.push($[1586]);
+}else{$6.push($[1351],
 $2,
-$[1528],
+$[1529],
 $1.classname,
 $[736]);
 }return this.__unwrapFunctionFromCode($0,
@@ -1782,20 +1782,20 @@ if($3===$[52]||$3===$[136]){var $b=this.$$store.theme[$2];
 }else if($3===$[94]){var $b=this.$$store.init[$2];
 }else{var $b=this.$$store.user[$2];
 }{if(!$5.nullable||$5.check||$5.inheritable){$7.push($[1179]);
-}if($3===$[29]){$7.push($[1469]+$2+$[313]+$3+$[351]);
+}if($3===$[29]){$7.push($[1470]+$2+$[313]+$3+$[351]);
 }};
-if($8){if($5.transform){$7.push($[1474],
+if($8){if($5.transform){$7.push($[1475],
 $5.transform,
 $[989]);
 }}if($a){if($8){$7.push($[110],
 $b,
-$[1456]);
+$[1457]);
 }else if($9){$7.push($[110],
 $b,
 $[1852]);
 }}if($5.inheritable){$7.push($[674]);
-}if($8&&(false||$3===$[29])){if(!$5.nullable){$7.push($[1402]+$2+$[313]+$3+$[351]);
-}if($5.check!==undefined){if($5.nullable){$7.push($[1330]);
+}if($8&&(false||$3===$[29])){if(!$5.nullable){$7.push($[1403]+$2+$[313]+$3+$[351]);
+}if($5.check!==undefined){if($5.nullable){$7.push($[1331]);
 }if($5.inheritable){$7.push($[1075]);
 }$7.push($[1916]);
 if(this.__checks[$5.check]!==undefined){$7.push($[574],
@@ -1804,7 +1804,7 @@ $[262]);
 }else if(qx.Class.isDefined($5.check)){$7.push($[915],
 $5.check,
 $[262]);
-}else if(qx.Interface.isDefined($5.check)){$7.push($[1431],
+}else if(qx.Interface.isDefined($5.check)){$7.push($[1432],
 $5.check,
 $[1879]);
 }else if(typeof $5.check===$[49]){$7.push($[801],
@@ -1957,7 +1957,7 @@ $[55]);
 this.$$store.init[$2],
 $[14]);
 }}$7.push($[113]);
-if($3===$[29]||$3===$[52]||$3===$[94]){$7.push($[1288]);
+if($3===$[29]||$3===$[52]||$3===$[94]){$7.push($[1289]);
 if($3===$[29]){$7.push($[41],
 this.$$store.user[$2],
 $[55]);
@@ -1975,7 +1975,7 @@ this.$$store.useinit[$2],
 $[243]);
 }$7.push($[113]);
 }}
-if($5.inheritable){$7.push($[1316]);
+if($5.inheritable){$7.push($[1317]);
 if($3===$[165]){$7.push($[774]);
 }else{$7.push($[1780],
 this.$$store.inherit[$2],
@@ -2000,7 +2000,7 @@ $[954]);
 $7.push($[113]);
 $7.push($[447]);
 $7.push($[934]);
-$7.push($[1305],
+$7.push($[1306],
 this.$$store.inherit[$2],
 $[14]);
 $7.push($[113]);
@@ -2329,7 +2329,7 @@ $1.push($[1182]);
 for(var $6=0;$6<$2.length;++$6){var $3=$2[$6][0],
 $7=$2[$6][1];
 $1.push($[1683],
-$[1570],
+$[1571],
 this._escapeHTML($3),
 $[1121],
 $[2001]);
@@ -2338,7 +2338,7 @@ $1);
 $1.push($[1176]);
 }$1.push($[1817]);
 this._logRow($1,
-$[1596]);
+$[1597]);
 },
 dirxml:function($0){var $1=[];
 this._appendNode($0,
@@ -2366,13 +2366,13 @@ _commandLine:null,
 _messageQueue:[],
 _timeMap:{},
 _clPrefix:$[996],
-_consoleShortcuts:{log:$[1360],
+_consoleShortcuts:{log:$[1361],
 info:$[965],
 debug:$[709],
-warn:$[1364],
+warn:$[1365],
 error:$[889],
-assert:$[1310],
-dir:$[1494],
+assert:$[1311],
+dir:$[1495],
 dirxml:$[1644],
 time:$[1964],
 timeEnd:$[1951],
@@ -2389,7 +2389,7 @@ _onLogReady:function($0){var $1=$0.document;
 this._consoleWindow=$0;
 this._consoleDocument=$1;
 this._consoleLog=$1.getElementById($[396]);
-this._commandLine=$1.getElementById($[1492]);
+this._commandLine=$1.getElementById($[1493]);
 this._onUnloadWrapped=qx.lang.Function.bind(this._onUnload,
 this);
 this._onResizeWrapped=qx.lang.Function.bind(this._onResize,
@@ -2417,7 +2417,7 @@ _evalCommandLine:function(){var $0=this._commandLine.value;
 this._commandLine.value=$[0];
 this._logRow([this._clPrefix,
 $0],
-$[1365]);
+$[1366]);
 var $1=/^([a-z]+)\(/;
 var $2=$1.exec($0);
 if($2!=null){if(this._consoleShortcuts[$2[1]]){$0=this._consoleShortcuts[$2[1]]+$0.substring($2[1].length);
@@ -2497,10 +2497,10 @@ $0=$0.substr($4.index+$4[0].length);
 return $1;
 },
 _escapeHTML:function($0){function $1($2){switch($2){case $[1933]:return $[803];
-case $[1272]:return $[1114];
-case $[60]:return $[1556];
-case $[164]:return $[1526];
-case $[105]:return $[1510];
+case $[1273]:return $[1114];
+case $[60]:return $[1557];
+case $[164]:return $[1527];
+case $[105]:return $[1511];
 }return $[133];
 }return String($0).replace(/[<>&"']/g,
 $1);
@@ -2512,7 +2512,7 @@ _appendText:function($0,
 $1){$1.push(this._escapeHTML(this._objectToString($0)));
 },
 _appendNull:function($0,
-$1){$1.push($[1389],
+$1){$1.push($[1390],
 this._escapeHTML(this._objectToString($0)),
 $[108]);
 },
@@ -2568,8 +2568,8 @@ $4?$4[1]:$2,
 $[108]);
 },
 _appendSelector:function($0,
-$1){$1.push($[1479]);
-$1.push($[1293],
+$1){$1.push($[1480]);
+$1.push($[1294],
 this._escapeHTML($0.nodeName.toLowerCase()),
 $[108]);
 if($0.id)$1.push($[1193],
@@ -2581,7 +2581,7 @@ $[108]);
 $1.push($[108]);
 },
 _appendNode:function($0,
-$1){if($0.nodeType==1){$1.push($[1536],
+$1){if($0.nodeType==1){$1.push($[1537],
 $[1849],
 $0.nodeName.toLowerCase(),
 $[108]);
@@ -2589,17 +2589,17 @@ for(var $2=0;$2<$0.attributes.length;++$2){var $3=$0.attributes[$2];
 if(!$3.specified)continue;
 $1.push($[1693],
 $3.nodeName.toLowerCase(),
-$[1426],
+$[1427],
 this._escapeHTML($3.nodeValue),
 $[1730]);
 }
 if($0.firstChild){$1.push($[1953]);
 for(var $4=$0.firstChild;$4;$4=$4.nextSibling)this._appendNode($4,
 $1);
-$1.push($[1549],
+$1.push($[1550],
 $0.nodeName.toLowerCase(),
 $[1978]);
-}else $1.push($[1580]);
+}else $1.push($[1581]);
 }else if($0.nodeType==3){$1.push($[2105],
 this._escapeHTML($0.nodeValue),
 $[346]);
@@ -2775,7 +2775,7 @@ isDefined:function($0){return this.getByName($0)!==undefined;
 },
 getTotalNumber:function(){return qx.lang.Object.getLength(this.__registry);
 },
-genericToString:function(){return $[1437]+this.name+$[112];
+genericToString:function(){return $[1438]+this.name+$[112];
 },
 __extractType:function($0){for(var $1=0,
 $2=this.__inheritableKeys,
@@ -2827,7 +2827,7 @@ for(var $5 in $3){if($4[$5]!==undefined){throw new Error("It is not allowed to o
 
 
 /* ID: qx.core.Target */
-qx.Class.define($[1508],
+qx.Class.define($[1509],
 {extend:qx.core.Object,
 construct:function(){arguments.callee.base.call(this);
 },
@@ -2893,7 +2893,7 @@ $0);
 }}}if($0.getBubbles()&&!$0.getPropagationStopped()&&typeof (this.getParent)==$[49]){var $6=this.getParent();
 if($6&&!$6.getDisposed()&&$6.getEnabled()){$6._dispatchEvent($0);
 }}}},
-destruct:function(){this._disposeObjectDeep($[1515],
+destruct:function(){this._disposeObjectDeep($[1516],
 2);
 }});
 
@@ -2949,7 +2949,7 @@ this.setData($1);
 properties:{propagationStopped:{_fast:true,
 defaultValue:false},
 data:{_fast:true}},
-destruct:function(){this._disposeFields($[1287]);
+destruct:function(){this._disposeFields($[1288]);
 }});
 
 
@@ -2972,7 +2972,7 @@ $[691]);
 return this.getValue();
 }},
 destruct:function(){this._disposeFields($[1747],
-$[1501]);
+$[1502]);
 }});
 
 
@@ -3012,7 +3012,7 @@ if(!this.getEnabled()){return $1.DENY;
 
 
 /* ID: qx.log.LogEventProcessor */
-qx.Class.define($[1523],
+qx.Class.define($[1524],
 {extend:qx.core.Object,
 type:$[82],
 construct:function(){arguments.callee.base.call(this);
@@ -3041,7 +3041,7 @@ if($3!=$1){return $3;
 },
 handleLogEvent:function($0){throw new Error("handleLogEvent is abstract");
 }},
-destruct:function(){this._disposeFields($[1302]);
+destruct:function(){this._disposeFields($[1303]);
 }});
 
 
@@ -3083,14 +3083,14 @@ if($0.instanceId!=null){$2+=$[602]+$0.instanceId+$[112];
 }$2+=$[266];
 }if(typeof $0.message==$[8]){$2+=$0.message;
 }else{var $6=$0.message;
-if($6==null){$2+=$[1458];
-}else{$2+=$[1334]+$6+$[1876];
+if($6==null){$2+=$[1459];
+}else{$2+=$[1335]+$6+$[1876];
 var $7=new Array();
 try{for(var $8 in $6){$7.push($8);
 }}catch(exc){$2+=$4+$[1215]+exc+$[489];
 }$7.sort();
 for(var $5=0;$5<$7.length;$5++){try{$2+=$4+$[317]+$7[$5]+$[34]+$6[$7[$5]]+$[203];
-}catch(exc){$2+=$4+$[317]+$7[$5]+$[1461]+exc+$[489];
+}catch(exc){$2+=$4+$[317]+$7[$5]+$[1462]+exc+$[489];
 }}$2+=$4+$[1986];
 }}if($0.throwable!=null){var $9=$0.throwable;
 if($9.name==null){$2+=$[266]+$9;
@@ -3141,7 +3141,7 @@ popUnder:{check:$[2],
 init:false},
 autoCloseWithErrors:{check:$[2],
 init:true,
-apply:$[1443]},
+apply:$[1444]},
 windowWidth:{check:$[4],
 init:600},
 windowHeight:{check:$[4],
@@ -3159,7 +3159,7 @@ var $2=this.getWindowLeft();
 if($2===null){$2=window.screen.width-$0;
 }var $3=this.getWindowTop();
 if($3===null){$3=window.screen.height-$1;
-}var $4=$[1477]+$[1650]+$0+$[1039]+$1+$[1690]+$2+$[1673]+$3;
+}var $4=$[1478]+$[1650]+$0+$[1039]+$1+$[1690]+$2+$[1673]+$3;
 this._logWindow=window.open($[0],
 this._name,
 $4);
@@ -3177,9 +3177,9 @@ if(this.getPopUnder()){this._logWindow.blur();
 window.focus();
 }var $0=this._logWindow.document;
 var $1=qx.core.Variant.isSet($[1],
-$[26])?$[1296]:$[353];
+$[26])?$[1297]:$[353];
 $0.open();
-$0.write($[1460]+this._name+$[1559]+$[940]+this._id+$[817]+$[2104]+$[673]+$[1717]+$[638]+$[1543]+$[1886]+$[1416]+$[1009]+$1+$[944]+$[733]+$[660]+this._filterText+$[403]+$[441]+$[884]+$[2071]+$[441]+$[2012]);
+$0.write($[1461]+this._name+$[1560]+$[940]+this._id+$[817]+$[2104]+$[673]+$[1717]+$[638]+$[1544]+$[1886]+$[1417]+$[1009]+$1+$[944]+$[733]+$[660]+this._filterText+$[403]+$[441]+$[884]+$[2071]+$[441]+$[2012]);
 $0.close();
 this._logElem=$0.getElementById($[396]);
 this._markerBtn=$0.getElementById($[1943]);
@@ -3225,7 +3225,7 @@ while(this._logElem.childNodes.length>this.getMaxMessages()){this._logElem.remov
 if(this._removedMessageCount==null){this._removedMessageCount=1;
 }else{this._removedMessageCount++;
 }}
-if(this._removedMessageCount!=null){this._logElem.firstChild.innerHTML=$[118]+this._removedMessageCount+$[1489];
+if(this._removedMessageCount!=null){this._logElem.firstChild.innerHTML=$[118]+this._removedMessageCount+$[1490];
 }this._logLinesDiv.scrollTop=this._logLinesDiv.scrollHeight;
 }},
 setFilterText:function($0){if($0==null){$0=$[0];
@@ -3241,7 +3241,7 @@ for(var $2=0;$1&&($2<this._filterTextWords.length);$2++){$1=$0.txt.indexOf(this.
 _applyAutoCloseWithErrors:function($0,
 $1){if(!$0&&$1){this._errorsPreventingAutoCloseCount=0;
 this._showMessageInLog($[832]);
-}else if($0&&!$1){this._showMessageInLog($[894]+this._errorsPreventingAutoCloseCount+$[1395]);
+}else if($0&&!$1){this._showMessageInLog($[894]+this._errorsPreventingAutoCloseCount+$[1396]);
 }}},
 destruct:function(){try{if(this._markerBtn){this._markerBtn.onclick=null;
 }
@@ -3250,9 +3250,9 @@ if(this._filterInput){this._filterInput.onkeyup=null;
 this._disposeFields($[1123],
 $[1881],
 $[1989],
-$[1497],
+$[1498],
 $[1689],
-$[1399]);
+$[1400]);
 }});
 
 
@@ -3285,7 +3285,7 @@ check:$[2],
 apply:$[340]},
 interval:{check:$[4],
 init:1000,
-apply:$[1248]}},
+apply:$[1249]}},
 members:{__intervalHandler:null,
 _applyInterval:function($0,
 $1){if(this.getEnabled()){this.restart();
@@ -3491,7 +3491,7 @@ printStackTrace:function(){var $0=qx.dev.StackTrace.getStackTrace();
 qx.lang.Array.removeAt($0,
 0);
 this.log(qx.log.Logger.LEVEL_DEBUG,
-$[1608],
+$[1609],
 $[0],
 null,
 $0);
@@ -3503,8 +3503,8 @@ null);
 $0.ROOT_LOGGER.setMinLevel(qx.core.Setting.get($[1138]));
 $0.ROOT_LOGGER.addAppender(new (qx.Class.getByName(qx.core.Setting.get($[726]))));
 },
-destruct:function(){this._disposeFields($[1541],
-$[1258]);
+destruct:function(){this._disposeFields($[1542],
+$[1259]);
 }});
 
 
@@ -3521,7 +3521,7 @@ var $1=this.getStackTraceFromCaller(arguments);
 var $2=$1.length>$0.length?$1:$0;
 for(var $3=0;$3<Math.min($1.length,
 $0.length);$3++){var $4=$1[$3];
-if($4.indexOf($[1423])>=0){continue;
+if($4.indexOf($[1424])>=0){continue;
 }var $5=$4.split($[53]);
 if($5.length!=2){continue;
 }var $6=$5[0];
@@ -3609,7 +3609,7 @@ if($3&&$3.length>=1&&$3[1]){return $3[1];
 if($3&&$3.length>=1&&$3[1]){return $[1139]+$3[1];
 }return $[1921];
 },
-__fileNameToClassName:function($0){var $1=$[1513];
+__fileNameToClassName:function($0){var $1=$[1514];
 var $2=$0.indexOf($1);
 var $3=($2==-1)?$0:$0.substring($2+$1.length).replace(/\//g,
 $[43]).replace(/\.js$/,
@@ -3630,7 +3630,7 @@ qx.html.Entity.TO_CHARCODE);
 },
 fromText:function($0){return qx.html.String.escape($0).replace(/(  |\n)/g,
 function($1){var $2={"  ":$[722],
-"\n":$[1592]};
+"\n":$[1593]};
 return $2[$1]||$1;
 });
 },
@@ -3645,7 +3645,7 @@ function($1){if(/\s+/.test($1)){return $[66];
 
 
 /* ID: qx.dom.String */
-qx.Class.define($[1384],
+qx.Class.define($[1385],
 {statics:{escapeEntities:qx.core.Variant.select($[1],
 {"mshtml":function($0,
 $1){var $2,
@@ -3678,7 +3678,7 @@ var $2=$2.substring(1,
 $2.length-1);
 var $4=$1[$2];
 if($4){$3=String.fromCharCode($4);
-}else{if($2.charAt(0)==$[1015]){if($2.charAt(1).toUpperCase()==$[1233]){$4=$2.substring(2);
+}else{if($2.charAt(0)==$[1015]){if($2.charAt(1).toUpperCase()==$[1234]){$4=$2.substring(2);
 if($4.match(/^[0-9A-Fa-f]+$/gi)){$3=String.fromCharCode(parseInt($[1221]+$4));
 }}else{$4=$2.substring(1);
 if($4.match(/^\d+$/gi)){$3=String.fromCharCode(parseInt($4));
@@ -3693,7 +3693,7 @@ $[0]);
 
 
 /* ID: qx.html.Entity */
-qx.Class.define($[1421],
+qx.Class.define($[1422],
 {statics:{TO_CHARCODE:{"quot":34,
 "amp":38,
 "lt":60,
@@ -3954,7 +3954,7 @@ $2){$0.FROM_CHARCODE=qx.lang.Object.invert($0.TO_CHARCODE);
 
 
 /* ID: qx.html.EventRegistration */
-qx.Class.define($[1448],
+qx.Class.define($[1449],
 {statics:{addEventListener:qx.core.Variant.select($[1],
 {"mshtml":function($0,
 $1,
@@ -3984,7 +3984,7 @@ false);
 
 
 /* ID: qx.core.Init */
-qx.Class.define($[1291],
+qx.Class.define($[1292],
 {type:$[27],
 extend:qx.core.Target,
 construct:function(){arguments.callee.base.call(this);
@@ -4318,7 +4318,7 @@ colors:{"vigilobg":[0xc3,
 
 
 /* ID: qx.theme.classic.Border */
-qx.Theme.define($[1529],
+qx.Theme.define($[1530],
 {title:$[358],
 borders:{"black":{width:1,
 color:$[217]},
@@ -4409,7 +4409,7 @@ colorLeft:$[12]}}});
 
 
 /* ID: qx.theme.classic.font.Default */
-qx.Theme.define($[1329],
+qx.Theme.define($[1330],
 {title:$[358],
 fonts:{"default":{size:11,
 family:[$[261],
@@ -4438,10 +4438,10 @@ $[254],
 $[264]],
 bold:true},
 "monospace":{size:11,
-family:[$[1582],
+family:[$[1583],
 $[1901],
 $[987],
-$[1256],
+$[1257],
 $[2106]]}}});
 
 
@@ -4496,7 +4496,7 @@ qx.core.Setting.get($[214])+$[973]);
 },
 members:{_preprocess:function($0){var $1=this._dynamic;
 if($1[$0]===false){return $0;
-}else if($1[$0]===undefined){if($0.charAt(0)===$[152]||$0.charAt(0)===$[43]||$0.indexOf($[1283])===0||$0.indexOf($[1016])===$[85]||$0.indexOf($[1614])===0){$1[$0]=false;
+}else if($1[$0]===undefined){if($0.charAt(0)===$[152]||$0.charAt(0)===$[43]||$0.indexOf($[1284])===0||$0.indexOf($[1016])===$[85]||$0.indexOf($[1615])===0){$1[$0]=false;
 return $0;
 }var $2=$0.substring(0,
 $0.indexOf($[152]));
@@ -4544,11 +4544,11 @@ appearances:{"empty":{},
 "image":{},
 "atom":{},
 "popup":{},
-"cursor-dnd-move":{style:function($0){return {source:$[1478]};
+"cursor-dnd-move":{style:function($0){return {source:$[1479]};
 }},
 "cursor-dnd-copy":{style:function($0){return {source:$[1119]};
 }},
-"cursor-dnd-alias":{style:function($0){return {source:$[1540]};
+"cursor-dnd-alias":{style:function($0){return {source:$[1541]};
 }},
 "cursor-dnd-nodrop":{style:function($0){return {source:$[1676]};
 }},
@@ -4795,7 +4795,7 @@ $8],
 border:$a,
 backgroundColor:$9};
 }},
-"radio-view":{include:$[1502]},
+"radio-view":{include:$[1503]},
 "radio-view-pane":{style:function($0){return {backgroundColor:$[969]};
 }},
 "radio-view-page":{},
@@ -4840,7 +4840,7 @@ border:$0.maximized?$[7]:$[71]};
 2,
 2],
 verticalChildrenAlign:$[23],
-backgroundColor:$0.active?$[1394]:$[2002],
+backgroundColor:$0.active?$[1395]:$[2002],
 textColor:$0.active?$[1994]:$[864]};
 }},
 "window-resize-frame":{style:function($0){return {border:$[271]};
@@ -4865,11 +4865,11 @@ style:function($0){return {icon:$[1208]};
 style:function($0){return {icon:$[1038]};
 }},
 "window-captionbar-maximize-button":{include:$[277],
-style:function($0){return {icon:$[1400]};
+style:function($0){return {icon:$[1401]};
 }},
 "window-captionbar-close-button":{include:$[277],
 style:function($0){return {marginLeft:2,
-icon:$[1303]};
+icon:$[1304]};
 }},
 "window-statusbar":{style:function($0){return {border:$[186]};
 }},
@@ -4896,13 +4896,13 @@ verticalChildrenAlign:$[23],
 backgroundColor:$0.over?$[140]:$[7],
 textColor:$0.over?$[219]:$[7]};
 }},
-"menu-button-arrow":{style:function($0){return {source:$[1286]};
+"menu-button-arrow":{style:function($0){return {source:$[1287]};
 }},
 "menu-check-box":{include:$[331],
 style:function($0){return {icon:$0.checked?$[1122]:$[215]};
 }},
 "menu-radio-button":{include:$[331],
-style:function($0){return {icon:$0.checked?$[1238]:$[215]};
+style:function($0){return {icon:$0.checked?$[1239]:$[215]};
 }},
 "menu-separator":{style:function($0){return {marginTop:3,
 marginBottom:2,
@@ -4912,7 +4912,7 @@ paddingRight:3};
 "menu-separator-line":{style:function($0){return {right:0,
 left:0,
 height:$[3],
-border:$[1326]};
+border:$[1327]};
 }},
 "list":{style:function($0){return {border:$[186],
 backgroundColor:$[168]};
@@ -5215,7 +5215,7 @@ iconPosition:$[11],
 verticalChildrenAlign:$[23],
 border:$1,
 backgroundColor:$2,
-icon:$0.sorted?($0.sortedAscending?$[1539]:$[1907]):null,
+icon:$0.sorted?($0.sortedAscending?$[1540]:$[1907]):null,
 horizontalChildrenAlign:$[9]};
 }},
 "splitpane":{style:function($0){return {overflow:$[22],
@@ -5237,7 +5237,7 @@ marginTop:-7};
 }else{return {opacity:$0.dragging?0.5:1.0,
 top:$[235],
 left:$[235],
-source:$[1472],
+source:$[1473],
 marginTop:-2,
 marginLeft:-7,
 cursor:$[562]};
@@ -5251,7 +5251,7 @@ opacity:0.2};
 
 /* ID: vigigraph.theme.vigilo.Appearance */
 qx.Theme.define($[1829],
-{title:$[1459],
+{title:$[1460],
 extend:qx.theme.classic.Appearance,
 appearances:{"client-document":{base:true,
 style:function($0){return {backgroundColor:$[1095]};
@@ -5261,7 +5261,7 @@ style:function($0){return {backgroundColor:$[1095]};
 
 
 /* ID: qx.theme.icon.Nuvola */
-qx.Theme.define($[1309],
+qx.Theme.define($[1310],
 {title:$[2035],
 icons:{uri:qx.core.Setting.get($[214])+$[1663]}});
 
@@ -5269,8 +5269,8 @@ icons:{uri:qx.core.Setting.get($[214])+$[1663]}});
 
 
 /* ID: vigigraph.theme.Vigilo */
-qx.Theme.define($[1624],
-{title:$[1569],
+qx.Theme.define($[1625],
+{title:$[1570],
 meta:{color:vigigraph.theme.vigilo.Colors,
 border:qx.theme.classic.Border,
 font:qx.theme.classic.font.Default,
@@ -5579,12 +5579,12 @@ $[91],
 $[90]];
 var $7=[$[153],
 $[154],
-$[1362],
+$[1363],
 $[1962],
 $[1206],
 $[740],
 $[1937],
-$[1245],
+$[1246],
 $[2094],
 $[1855]];
 var $8=$1+$[548];
@@ -5601,7 +5601,7 @@ $[25])){for(var $b=0;$b<4;$b++){$0[$c+$7[$b]]=new Function($5,
 $e+$7[$b]+$4);
 $0[$d+$7[$b]]=new Function($e+$7[$b]+$[349]);
 }}else{for(var $b=0;$b<4;$b++){$0[$c+$7[$b]]=new Function($5,
-$[1733]+$7[$b]+$[1597]);
+$[1733]+$7[$b]+$[1598]);
 $0[$d+$7[$b]]=new Function($[710]+$7[$b]+$[1055]);
 }}for(var $b=0;$b<$6.length;$b++){$0[$1+$7[$b]]=new Function($5,
 $3+$6[$b]+$4);
@@ -5631,10 +5631,10 @@ $6;$2<$3;$2++){$4=$1[$2];
 $5=$[1218]+qx.lang.String.toFirstUp($4);
 $6=$5+$[835];
 $0.layoutPropertyTypes[$4]={dataType:$6,
-dataParsed:$5+$[1404],
+dataParsed:$5+$[1405],
 dataValue:$5+$[429],
 typePixel:$6+$[761],
-typePercent:$6+$[1278],
+typePercent:$6+$[1279],
 typeAuto:$6+$[2052],
 typeFlex:$6+$[1709],
 typeNull:$6+$[966]};
@@ -5657,19 +5657,19 @@ event:$[86]},
 parent:{check:$[345],
 nullable:true,
 event:$[747],
-apply:$[1505]},
+apply:$[1506]},
 element:{check:$[1871],
 nullable:true,
-apply:$[1527],
+apply:$[1528],
 event:$[737]},
 visibility:{check:$[2],
 init:true,
-apply:$[1315],
+apply:$[1316],
 event:$[1864]},
 display:{check:$[2],
 init:true,
-apply:$[1372],
-event:$[1576]},
+apply:$[1373],
+event:$[1577]},
 anonymous:{check:$[2],
 init:false,
 event:$[786]},
@@ -5689,14 +5689,14 @@ allowStretchY:{check:$[2],
 init:true},
 zIndex:{check:$[16],
 apply:$[1054],
-event:$[1328],
+event:$[1329],
 themeable:true,
 nullable:true,
 init:null},
 backgroundColor:{nullable:true,
 init:null,
 check:$[100],
-apply:$[1280],
+apply:$[1281],
 event:$[1085],
 themeable:true},
 textColor:{nullable:true,
@@ -5744,7 +5744,7 @@ $[128],
 $[109]],
 nullable:true,
 apply:$[968],
-event:$[1631],
+event:$[1632],
 themeable:true,
 init:null},
 clipLeft:{check:$[4],
@@ -5770,7 +5770,7 @@ apply:$[1069],
 event:$[2027]},
 hideFocus:{check:$[2],
 init:false,
-apply:$[1487],
+apply:$[1488],
 themeable:true},
 enableElementFocus:{check:$[2],
 init:true},
@@ -5803,7 +5803,7 @@ supportsDropMethod:{check:$[70],
 nullable:true,
 init:null},
 marginTop:{check:$[16],
-apply:$[1311],
+apply:$[1312],
 nullable:true,
 themeable:true},
 marginRight:{check:$[16],
@@ -5815,7 +5815,7 @@ apply:$[749],
 nullable:true,
 themeable:true},
 marginLeft:{check:$[16],
-apply:$[1519],
+apply:$[1520],
 nullable:true,
 themeable:true},
 paddingTop:{check:$[16],
@@ -5844,8 +5844,8 @@ event:$[1086],
 nullable:true,
 themeable:true,
 init:null},
-width:{apply:$[1578],
-event:$[1537],
+width:{apply:$[1579],
+event:$[1538],
 nullable:true,
 themeable:true,
 init:null},
@@ -5854,7 +5854,7 @@ event:$[1995],
 nullable:true,
 themeable:true,
 init:null},
-maxWidth:{apply:$[1321],
+maxWidth:{apply:$[1322],
 event:$[2093],
 nullable:true,
 themeable:true,
@@ -5875,12 +5875,12 @@ nullable:true,
 themeable:true,
 init:null},
 minHeight:{apply:$[797],
-event:$[1584],
+event:$[1585],
 nullable:true,
 themeable:true,
 init:null},
 maxHeight:{apply:$[868],
-event:$[1581],
+event:$[1582],
 nullable:true,
 themeable:true,
 init:null},
@@ -6175,7 +6175,7 @@ if(this.getVisibility()){this._afterDisappear();
 }}delete this._oldParent;
 }if($1){if($2._initialLayoutDone){$2.getLayoutImpl().updateChildrenOnAddChild(this,
 $2.getChildren().indexOf(this));
-$2.addToJobQueue($[1562]);
+$2.addToJobQueue($[1563]);
 }this.addToLayoutChanges($[1963]);
 this.addToCustomQueues($0);
 if(this.getVisibility()){this._beforeAppear();
@@ -6228,13 +6228,13 @@ isSeeable:function(){return this._isSeeable;
 },
 isAppearRelevant:function(){return this.getVisibility()&&this._isDisplayable;
 },
-_beforeInsertDom:function(){this.createDispatchEvent($[1442]);
+_beforeInsertDom:function(){this.createDispatchEvent($[1443]);
 },
 _afterInsertDom:function(){this.createDispatchEvent($[1793]);
 },
-_beforeRemoveDom:function(){this.createDispatchEvent($[1516]);
+_beforeRemoveDom:function(){this.createDispatchEvent($[1517]);
 },
-_afterRemoveDom:function(){this.createDispatchEvent($[1253]);
+_afterRemoveDom:function(){this.createDispatchEvent($[1254]);
 },
 _applyVisibility:function($0,
 $1){if($0){if(this._isDisplayable){this._beforeAppear();
@@ -6278,7 +6278,7 @@ this._applyStyleProperties($0);
 this._applyHtmlProperties($0);
 this._applyHtmlAttributes($0);
 this._applyElementData($0);
-this.createDispatchEvent($[1342]);
+this.createDispatchEvent($[1343]);
 this.addToStateQueue();
 }else{this._element=this._style=null;
 }},
@@ -6344,7 +6344,7 @@ for(var $c in $1){this._layoutChanges[$c]=true;
 ex);
 }try{if(this instanceof qx.ui.core.Parent&&($1.paddingLeft||$1.paddingRight||$1.paddingTop||$1.paddingBottom)){var $d=this.getChildren(),
 $e=$d.length;
-if($1.paddingLeft){for(var $c=0;$c<$e;$c++){$d[$c].addToLayoutChanges($[1606]);
+if($1.paddingLeft){for(var $c=0;$c<$e;$c++){$d[$c].addToLayoutChanges($[1607]);
 }}
 if($1.paddingRight){for(var $c=0;$c<$e;$c++){$d[$c].addToLayoutChanges($[1053]);
 }}
@@ -6915,7 +6915,7 @@ $0);
 },
 setHtmlAttribute:function($0,
 $1){qx.log.Logger.deprecatedMethodWarning(arguments.callee,
-$[1261]);
+$[1262]);
 if(!this._htmlAttributes){this._htmlAttributes={};
 }this._htmlAttributes[$0]=$1;
 if(this._isCreated){this.getElement().setAttribute($0,
@@ -7286,7 +7286,7 @@ for(var $4 in this._styleProperties){switch($4){case $[360]:case $[163]:case $[1
 default:$3[$4]=$2[$4];
 $2[$4]=$[0];
 }}
-for(var $4 in this._htmlProperties){switch($4){case $[1586]:$1.unselectable=this._htmlProperties[$4];
+for(var $4 in this._htmlProperties){switch($4){case $[1587]:$1.unselectable=this._htmlProperties[$4];
 }}while($0.firstChild){$1.appendChild($0.firstChild);
 }$0.appendChild($1);
 }}),
@@ -7402,12 +7402,12 @@ if(this._innerStyle){this._innerStyle.height=$[0];
 destruct:function(){var $0=this.getElement();
 if($0){$0.qx_Widget=null;
 }this._disposeFields($[2000],
-$[1344],
+$[1345],
 $[286],
 $[1722],
 $[1165],
-$[1449],
-$[1470],
+$[1450],
+$[1471],
 $[1035],
 $[1635],
 $[1134],
@@ -7598,7 +7598,7 @@ $[397]);
 
 
 /* ID: qx.html.StyleSheet */
-qx.Class.define($[1257],
+qx.Class.define($[1258],
 {statics:{includeFile:function($0){var $1=document.createElement($[811]);
 $1.type=$[512];
 $1.rel=$[1097];
@@ -7613,7 +7613,7 @@ if($0){$1.cssText=$0;
 },
 "other":function($0){var $1=document.createElement($[52]);
 $1.type=$[512];
-$1.appendChild(document.createTextNode($0||$[1390]));
+$1.appendChild(document.createTextNode($0||$[1391]));
 document.getElementsByTagName($[591])[0].appendChild($1);
 if($1.sheet){return $1.sheet;
 }else{var $2=document.styleSheets;
@@ -7720,15 +7720,15 @@ this._children=[];
 this._layoutImpl=this._createLayoutImpl();
 },
 properties:{focusHandler:{check:$[601],
-apply:$[1358],
+apply:$[1359],
 nullable:true},
 activeChild:{check:$[99],
 apply:$[1853],
 event:$[813],
 nullable:true},
 focusedChild:{check:$[99],
-apply:$[1535],
-event:$[1553],
+apply:$[1536],
+event:$[1554],
 nullable:true},
 visibleChildren:{_cached:true,
 defaultValue:null}},
@@ -8080,14 +8080,14 @@ $4.display=$5;
 return $6;
 };
 }},
-destruct:function(){this._disposeObjectDeep($[1555],
+destruct:function(){this._disposeObjectDeep($[1556],
 1);
 this._disposeObjects($[1189],
 $[634]);
 this._disposeFields($[363],
 $[363],
-$[1262],
-$[1588],
+$[1263],
+$[1589],
 $[684]);
 }});
 
@@ -8208,7 +8208,7 @@ allowClientSelectAll:{check:$[2],
 init:false},
 captureWidget:{check:$[99],
 nullable:true,
-apply:$[1422]},
+apply:$[1423]},
 focusRoot:{check:$[345],
 nullable:true,
 apply:$[665]}},
@@ -8467,14 +8467,14 @@ destruct:function(){this.detachEvents();
 this._disposeObjectDeep($[2101],
 1);
 this._disposeFields($[1152],
-$[1500],
+$[1501],
 $[1727],
 $[1171],
 $[2048],
 $[1993]);
 this._disposeFields($[1716],
-$[1424],
-$[1241],
+$[1425],
+$[1242],
 $[1869],
 $[926]);
 }});
@@ -8535,7 +8535,7 @@ break;
 
 
 /* ID: qx.event.handler.KeyEventHandler */
-qx.Class.define($[1615],
+qx.Class.define($[1616],
 {type:$[27],
 extend:qx.core.Target,
 construct:function(){arguments.callee.base.call(this);
@@ -8684,16 +8684,16 @@ $0);
 },
 "default":function(){throw new Error("Unsupported browser for key event handler!");
 }}),
-_specialCharCodeMap:{8:$[1621],
+_specialCharCodeMap:{8:$[1622],
 9:$[337],
 13:$[75],
 27:$[257],
 32:$[180]},
 _keyCodeToIdentifierMap:{16:$[2074],
 17:$[877],
-18:$[1616],
-20:$[1235],
-224:$[1374],
+18:$[1617],
+20:$[1236],
+224:$[1375],
 37:$[153],
 38:$[198],
 39:$[154],
@@ -8720,12 +8720,12 @@ _keyCodeToIdentifierMap:{16:$[2074],
 44:$[582],
 145:$[1025],
 19:$[641],
-91:$[1401],
-93:$[1307]},
+91:$[1402],
+93:$[1308]},
 _numpadToCharCode:{96:$[85].charCodeAt(0),
-97:$[1589].charCodeAt(0),
-98:$[1294].charCodeAt(0),
-99:$[1387].charCodeAt(0),
+97:$[1590].charCodeAt(0),
+98:$[1295].charCodeAt(0),
+99:$[1388].charCodeAt(0),
 100:$[1083].charCodeAt(0),
 101:$[1190].charCodeAt(0),
 102:$[885].charCodeAt(0),
@@ -8840,14 +8840,14 @@ $[125])){$1._lastKeyCode=null;
 }},
 destruct:function(){this._detachEvents();
 this._disposeFields($[1065],
-$[1415]);
+$[1416]);
 }});
 
 
 
 
 /* ID: qx.event.type.DomEvent */
-qx.Class.define($[1498],
+qx.Class.define($[1499],
 {extend:qx.event.type.Event,
 construct:function($0,
 $1,
@@ -9110,7 +9110,7 @@ _computeWheelDelta:qx.core.Variant.select($[1],
 
 
 /* ID: qx.util.manager.Object */
-qx.Class.define($[1268],
+qx.Class.define($[1269],
 {extend:qx.core.Target,
 construct:function(){arguments.callee.base.call(this);
 this._objects={};
@@ -9155,7 +9155,7 @@ for(var $2 in $1){$1[$2].release();
 
 
 /* ID: qx.ui.layout.CanvasLayout */
-qx.Class.define($[1587],
+qx.Class.define($[1588],
 {extend:qx.ui.core.Parent,
 construct:function(){arguments.callee.base.call(this);
 },
@@ -9281,7 +9281,7 @@ defer:function($0,
 $1){$1.computeChildrenNeededWidth=$1.computeChildrenNeededWidth_max;
 $1.computeChildrenNeededHeight=$1.computeChildrenNeededHeight_max;
 },
-destruct:function(){this._disposeFields($[1403]);
+destruct:function(){this._disposeFields($[1404]);
 }});
 
 
@@ -9402,7 +9402,7 @@ if($1.initial||$1.bottom||$1.parentPaddingBottom){$0._computedBottomTypeNull?$0.
 
 
 /* ID: qx.ui.core.ClientDocument */
-qx.Class.define($[1266],
+qx.Class.define($[1267],
 {type:$[27],
 extend:qx.ui.layout.CanvasLayout,
 construct:function(){arguments.callee.base.call(this);
@@ -9442,7 +9442,7 @@ init:true},
 globalCursor:{check:$[10],
 nullable:true,
 themeable:true,
-apply:$[1243],
+apply:$[1244],
 event:$[1775]}},
 members:{_applyParent:qx.lang.Function.returnTrue,
 getTopLevelWidget:qx.lang.Function.returnThis,
@@ -9548,13 +9548,13 @@ settings:{"qx.enableApplicationLayout":true,
 defer:function(){if(qx.core.Setting.get($[775])){var $0=qx.core.Client.getInstance().getEngineBoxSizingAttributes();
 var $1=$0.join($[430])+$[430];
 var $2=$0.join($[407])+$[407];
-qx.html.StyleSheet.createElement($[840]+$[1593]+$[1834]+$1+$[1700]+$[2067]+$2+$[209]);
+qx.html.StyleSheet.createElement($[840]+$[1594]+$[1834]+$1+$[1700]+$[2067]+$2+$[209]);
 }
 if(qx.core.Setting.get($[2009])){qx.html.StyleSheet.createElement($[2076]);
 }},
 destruct:function(){this._disposeObjects($[567]);
-this._disposeFields($[1545],
-$[1373],
+this._disposeFields($[1546],
+$[1374],
 $[1858],
 $[1718],
 $[1904]);
@@ -9564,7 +9564,7 @@ $[1904]);
 
 
 /* ID: qx.ui.basic.Terminator */
-qx.Class.define($[1466],
+qx.Class.define($[1467],
 {extend:qx.ui.core.Widget,
 members:{renderPadding:function($0){if($0.paddingLeft){this._renderRuntimePaddingLeft(this.getPaddingLeft());
 }
@@ -9646,7 +9646,7 @@ members:{getFocusRoot:function(){return null;
 
 
 /* ID: qx.theme.manager.Appearance */
-qx.Class.define($[1603],
+qx.Class.define($[1604],
 {type:$[27],
 extend:qx.util.manager.Object,
 construct:function(){arguments.callee.base.call(this);
@@ -9716,7 +9716,7 @@ if($3.include){for(var $d in $c){if($b[$d]===undefined&&$a[$d]===undefined){$9[$
 }return $9||null;
 }},
 destruct:function(){this._disposeFields($[862],
-$[1632]);
+$[1633]);
 }});
 
 
@@ -9729,7 +9729,7 @@ extend:qx.core.Target,
 properties:{theme:{check:$[138],
 nullable:true,
 apply:$[1220],
-event:$[1231]},
+event:$[1232]},
 autoSync:{check:$[2],
 init:true,
 apply:$[1021]}},
@@ -9777,7 +9777,7 @@ $1=$0.get($[1791]);
 if($1){$2=qx.Theme.getByName($1);
 if(!$2){throw new Error("The meta theme to use is not available: "+$1);
 }this.setTheme($2);
-}$1=$0.get($[1282]);
+}$1=$0.get($[1283]);
 if($1){$2=qx.Theme.getByName($1);
 if(!$2){throw new Error("The color theme to use is not available: "+$1);
 }qx.theme.manager.Color.getInstance().setColorTheme($2);
@@ -9823,7 +9823,7 @@ getIconThemes:function(){return this.__queryThemes($[558]);
 },
 getAppearanceThemes:function(){return this.__queryThemes($[370]);
 }},
-settings:{"qx.theme":$[1319],
+settings:{"qx.theme":$[1320],
 "qx.colorTheme":null,
 "qx.borderTheme":null,
 "qx.fontTheme":null,
@@ -9980,7 +9980,7 @@ cssStringToRgb:function($0){if(this.isNamedColor($0)){return this.NAMED[$0];
 },
 stringToRgbString:function($0){return this.rgbToRgbString(this.stringToRgb($0));
 },
-rgbToRgbString:function($0){return $[1304]+$0[0]+$[17]+$0[1]+$[17]+$0[2]+$[54];
+rgbToRgbString:function($0){return $[1305]+$0[0]+$[17]+$0[1]+$[17]+$0[2]+$[54];
 },
 rgbToHexString:function($0){return (qx.lang.String.pad($0[0].toString(16).toUpperCase(),
 2)+qx.lang.String.pad($0[1].toString(16).toUpperCase(),
@@ -10163,7 +10163,7 @@ if(qx.theme.manager.Meta.getInstance().getAutoSync()){this.syncBorderTheme();
 
 
 /* ID: qx.ui.core.Border */
-qx.Class.define($[1397],
+qx.Class.define($[1398],
 {extend:qx.core.Object,
 construct:function($0,
 $1,
@@ -10234,10 +10234,10 @@ init:0,
 apply:$[1721]},
 widthRight:{check:$[16],
 init:0,
-apply:$[1347]},
+apply:$[1348]},
 widthBottom:{check:$[16],
 init:0,
-apply:$[1468]},
+apply:$[1469]},
 widthLeft:{check:$[16],
 init:0,
 apply:$[1985]},
@@ -10262,7 +10262,7 @@ $[74],
 $[221],
 $[170]],
 init:$[6],
-apply:$[1455]},
+apply:$[1456]},
 styleBottom:{nullable:true,
 check:[$[6],
 $[194],
@@ -10273,7 +10273,7 @@ $[74],
 $[221],
 $[170]],
 init:$[6],
-apply:$[1244]},
+apply:$[1245]},
 styleLeft:{nullable:true,
 check:[$[6],
 $[194],
@@ -10290,19 +10290,19 @@ check:$[100],
 apply:$[2075]},
 colorRight:{nullable:true,
 check:$[100],
-apply:$[1467]},
+apply:$[1468]},
 colorBottom:{nullable:true,
 check:$[100],
 apply:$[721]},
 colorLeft:{nullable:true,
 check:$[100],
-apply:$[1548]},
+apply:$[1549]},
 colorInnerTop:{nullable:true,
 check:$[100],
 apply:$[1695]},
 colorInnerRight:{nullable:true,
 check:$[100],
-apply:$[1579]},
+apply:$[1580]},
 colorInnerBottom:{nullable:true,
 check:$[100],
 apply:$[1158]},
@@ -10551,7 +10551,7 @@ extend:qx.util.manager.Value,
 properties:{fontTheme:{check:$[138],
 nullable:true,
 apply:$[1067],
-event:$[1388]}},
+event:$[1389]}},
 members:{resolveDynamic:function($0){return $0 instanceof qx.ui.core.Font?$0:this._dynamic[$0];
 },
 isDynamic:function($0){return $0&&($0 instanceof qx.ui.core.Font||this._dynamic[$0]!==undefined);
@@ -10635,7 +10635,7 @@ nullable:true,
 apply:$[2069]},
 italic:{check:$[2],
 nullable:true,
-apply:$[1471]},
+apply:$[1472]},
 decoration:{check:[$[342],
 $[806],
 $[2036]],
@@ -10692,7 +10692,7 @@ $1.fontStyle=this.__italic||$[0];
 $1.textDecoration=this.__decoration||$[0];
 },
 generateStyle:function(){return (this.__family?$[1711]+this.__family.replace(/\"/g,
-$[164])+$[45]:$[0])+(this.__size?$[1081]+this.__size+$[45]:$[0])+(this.__weight?$[1729]+this.__weight+$[45]:$[0])+(this.__style?$[1308]+this.__style+$[45]:$[0])+(this.__decoration?$[1530]+this.__decoration+$[45]:$[0]);
+$[164])+$[45]:$[0])+(this.__size?$[1081]+this.__size+$[45]:$[0])+(this.__weight?$[1729]+this.__weight+$[45]:$[0])+(this.__style?$[1309]+this.__style+$[45]:$[0])+(this.__decoration?$[1531]+this.__decoration+$[45]:$[0]);
 }}});
 
 
@@ -10704,7 +10704,7 @@ qx.Class.define($[1195],
 extend:qx.core.Target,
 properties:{iconTheme:{check:$[138],
 nullable:true,
-apply:$[1346],
+apply:$[1347],
 event:$[1661]}},
 members:{_applyIconTheme:function($0,
 $1){if(qx.theme.manager.Meta.getInstance().getAutoSync()){this.syncIconTheme();
@@ -10724,7 +10724,7 @@ qx.Class.define($[1702],
 extend:qx.core.Target,
 properties:{widgetTheme:{check:$[138],
 nullable:true,
-apply:$[1590],
+apply:$[1591],
 event:$[2070]}},
 members:{_applyWidgetTheme:function($0,
 $1){if(qx.theme.manager.Meta.getInstance().getAutoSync()){this.syncWidgetTheme();
@@ -10867,14 +10867,14 @@ if(!$3.isFocusRoot()&&$3 instanceof qx.ui.core.Parent){$1=this._getLast($3,
 $1);
 }}return $1;
 }},
-destruct:function(){this._disposeFields($[1375]);
+destruct:function(){this._disposeFields($[1376]);
 }});
 
 
 
 
 /* ID: qx.html.Location */
-qx.Class.define($[1521],
+qx.Class.define($[1522],
 {statics:{getPageOuterLeft:function($0){return qx.html.Location.getPageBoxLeft($0)-qx.html.Style.getMarginLeft($0);
 },
 getPageOuterTop:function($0){return qx.html.Location.getPageBoxTop($0)-qx.html.Style.getMarginTop($0);
@@ -11234,14 +11234,14 @@ if($6.tagName.toLowerCase()==$[144]){break;
 
 
 /* ID: qx.io.image.PreloaderSystem */
-qx.Class.define($[1446],
+qx.Class.define($[1447],
 {extend:qx.core.Target,
 construct:function($0,
 $1,
 $2){arguments.callee.base.call(this);
 if($0 instanceof Array){this._list=qx.lang.Object.fromArray($0);
 }else{this._list=$0;
-}this._timer=new qx.client.Timer(qx.core.Setting.get($[1600]));
+}this._timer=new qx.client.Timer(qx.core.Setting.get($[1601]));
 this._timer.addEventListener($[87],
 this.__oninterval,
 this);
@@ -11387,19 +11387,19 @@ $[1870]);
 
 /* ID: vigigraph.Application */
 var urls={"maingroups":$[2065],
-"hostgroups":$[1533],
+"hostgroups":$[1534],
 "hosts":$[769],
-"graphgroups":$[1633],
+"graphgroups":$[1360],
 "graphs":$[1022],
 "reports":$[928]};
-qx.Class.define($[1236],
+qx.Class.define($[1237],
 {extend:qx.application.Gui,
 members:{main:function(){arguments.callee.base.call(this);
 qx.io.Alias.getInstance().add($[686],
-qx.core.Setting.get($[1465]));
+qx.core.Setting.get($[1466]));
 document.title=this.tr($[250]);
 var $0=new qx.ui.window.Window(this.tr($[653]),
-$[1267]);
+$[1268]);
 $0.setSpace(20,
 250,
 48,
@@ -11440,10 +11440,10 @@ $1.setRowHeight(4,
 20);
 $1.setRowHeight(5,
 20);
-$1.add(new qx.ui.basic.Label(this.tr($[1444])),
+$1.add(new qx.ui.basic.Label(this.tr($[1445])),
 0,
 0);
-$1.add(new qx.ui.basic.Label(this.tr($[1376])),
+$1.add(new qx.ui.basic.Label(this.tr($[1377])),
 0,
 1);
 $1.add(new qx.ui.basic.Label(this.tr($[1767])),
@@ -11549,7 +11549,7 @@ function($i){var $k=$4.getSelected().getLabel();
 var $m=$7.getSelected().getLabel();
 var $n=0;
 var $o=0;
-var $j=new qx.client.NativeWindow($[1436]+$k+$[1742]+$m);
+var $j=new qx.client.NativeWindow($[1437]+$k+$[1742]+$m);
 $j.setDimension(800,
 600);
 $j.setDependent(false);
@@ -11583,13 +11583,13 @@ $s.setMarginRight(5);
 $s.setLiveUpdate(true);
 $s.tabIndex=1;
 $s.setToolTip(new qx.ui.popup.ToolTip(this.tr($[1186])));
-$r.add(new qx.ui.basic.Label(this.tr($[1591])));
+$r.add(new qx.ui.basic.Label(this.tr($[1592])));
 var $t=new qx.ui.form.TextField();
 $r.add($t);
 $t.setMarginRight(5);
 $t.setLiveUpdate(true);
 $t.tabIndex=2;
-$t.setToolTip(new qx.ui.popup.ToolTip(this.tr($[1532])));
+$t.setToolTip(new qx.ui.popup.ToolTip(this.tr($[1533])));
 var $u=new qx.ui.form.Button($[0],
 $[290]);
 $u.setWidth(20);
@@ -11608,7 +11608,7 @@ top:0,
 right:0,
 bottom:10,
 width:$[717],
-height:$[1331],
+height:$[1332],
 border:$[186]});
 getSelectionModel().setSelectionMode(qx.ui.table.selection.Model.SINGLE_SELECTION);
 setColumnVisibilityButtonVisible(false);
@@ -11808,7 +11808,7 @@ $a.setEnabled(false);
 $b.setEnabled(false);
 $c.setEnabled(false);
 $d.setEnabled(false);
-}function $12($13){$Y(urls.hostgroups+$[1473]+$13,
+}function $12($13){$Y(urls.hostgroups+$[1474]+$13,
 $3);
 $4.getList().removeAll();
 $4.setSelected(null);
@@ -11841,7 +11841,7 @@ $a.setEnabled(true);
 $b.setEnabled(false);
 $c.setEnabled(false);
 $d.setEnabled(false);
-}function $16($17){$Y(urls.graphs+$[750]+$17,
+}function $16($17){$Y(urls.graphgroups+$[750]+$17,
 $5);
 $6.getList().removeAll();
 $6.setSelected(null);
@@ -11945,9 +11945,9 @@ $[126]);
 $c.setToolTip(new qx.ui.popup.ToolTip(this.tr($[962])));
 var $d=new qx.ui.menu.Menu();
 var $e=[[12,
-this.tr($[1414])],
+this.tr($[1415])],
 [24,
-this.tr($[1565])],
+this.tr($[1566])],
 [48,
 this.tr($[2046])],
 [7*24,
@@ -11978,14 +11978,14 @@ var $l=new qx.ui.form.Button($[0],
 $[2095]);
 $l.setToolTip(new qx.ui.popup.ToolTip(this.tr($[1665])));
 var $m=new qx.ui.form.Button($[0],
-$[1429]);
-$m.setToolTip(new qx.ui.popup.ToolTip(this.tr($[1338])));
+$[1430]);
+$m.setToolTip(new qx.ui.popup.ToolTip(this.tr($[1339])));
 var $n=new qx.ui.form.Button($[0],
-$[1353]);
+$[1354]);
 $n.setToolTip(new qx.ui.popup.ToolTip(this.tr($[1920])));
 var $o=new qx.ui.form.Button($[0],
 $[1675]);
-$o.setToolTip(new qx.ui.popup.ToolTip(this.tr($[1484])));
+$o.setToolTip(new qx.ui.popup.ToolTip(this.tr($[1485])));
 var $p=new qx.ui.form.Button($[0],
 $[948]);
 $p.setToolTip(new qx.ui.popup.ToolTip(this.tr($[715])));
@@ -11999,11 +11999,11 @@ false,
 false,
 false);
 function $r($6,
-$7){$5=$[1432]+encodeURIComponent($0)+$[1417]+$6+$[1601]+$7+$[1745]+encodeURIComponent($1);
+$7){$5=$[1433]+encodeURIComponent($0)+$[1418]+$6+$[1602]+$7+$[1745]+encodeURIComponent($1);
 qx.log.Logger.ROOT_LOGGER.debug($5);
 }function $s($t,
 $u){$u.removeAll();
-$u.add(new qx.ui.basic.Image($t+$[1410]+$8++));
+$u.add(new qx.ui.basic.Image($t+$[1411]+$8++));
 }function $v(){var $w=new Date();
 return parseInt($w.getTime()/1000);
 }function $x(){var $5=$[1977]+encodeURIComponent($0);
@@ -12263,7 +12263,7 @@ this.setTop($2<0?0:$2);
 }},
 destruct:function(){qx.ui.popup.PopupManager.getInstance().remove(this);
 this._disposeFields($[1129],
-$[1337]);
+$[1338]);
 }});
 
 
@@ -12290,7 +12290,7 @@ if(qx.Class.isDefined($[272])&&$0 instanceof qx.ui.popup.ToolTip&&!($1 instanceo
 
 
 /* ID: qx.util.Compare */
-qx.Class.define($[1275],
+qx.Class.define($[1276],
 {statics:{byString:function($0,
 $1){return $0==$1?0:$0>$1?1:-1;
 },
@@ -12348,7 +12348,7 @@ qx.Class.define($[646],
 {statics:{__umlautsRegExp:new RegExp($[2026],
 $[332]),
 __umlautsShortData:{"\xC4":$[181],
-"\xD6":$[1298],
+"\xD6":$[1299],
 "\xDC":$[816],
 "\xE4":$[365],
 "\xF6":$[865],
@@ -12360,12 +12360,12 @@ umlautsShort:function($0){return $0.replace(qx.util.Normalization.__umlautsRegEx
 qx.lang.Function.bind(this.__umlautsShort,
 this));
 },
-__umlautsLongData:{"\xC4":$[1292],
+__umlautsLongData:{"\xC4":$[1293],
 "\xD6":$[1909],
-"\xDC":$[1454],
+"\xDC":$[1455],
 "\xE4":$[1216],
 "\xF6":$[1794],
-"\xFC":$[1385],
+"\xFC":$[1386],
 "\xDF":$[594]},
 __umlautsLong:function($0){return qx.util.Normalization.__umlautsLongData[$0];
 },
@@ -12378,7 +12378,7 @@ this));
 
 
 /* ID: qx.bom.element.Location */
-qx.Class.define($[1453],
+qx.Class.define($[1454],
 {statics:{__style:function($0,
 $1){return qx.bom.element.Style.get($0,
 $1,
@@ -12604,14 +12604,14 @@ bottom:$4.bottom-$5.bottom};
 /* ID: qx.bom.element.Style */
 qx.Class.define($[1104],
 {statics:{__hints:{names:{"float":qx.core.Variant.isSet($[1],
-$[26])?$[677]:$[1427],
+$[26])?$[677]:$[1428],
 "boxSizing":qx.core.Variant.isSet($[1],
-$[25])?$[1381]:$[535]},
+$[25])?$[1382]:$[535]},
 mshtmlPixel:{width:$[1209],
 height:$[923],
-left:$[1613],
+left:$[1614],
 right:$[1696],
-top:$[1525],
+top:$[1526],
 bottom:$[680]},
 special:{clip:true,
 cursor:true,
@@ -12736,7 +12736,7 @@ false);
 
 
 /* ID: qx.bom.Document */
-qx.Class.define($[1405],
+qx.Class.define($[1406],
 {statics:{isQuirksMode:function($0){return ($0||window).document.compatMode!==$[102];
 },
 isStandardMode:function($0){return ($0||window).document.compatMode===$[102];
@@ -12758,9 +12758,9 @@ $2);
 
 
 /* ID: qx.ui.resizer.MResizable */
-qx.Mixin.define($[1254],
+qx.Mixin.define($[1255],
 {construct:function($0){this._frame=new qx.ui.basic.Terminator;
-this._frame.setAppearance($[1542]);
+this._frame.setAppearance($[1543]);
 this.addEventListener($[21],
 this._onmousedown);
 this.addEventListener($[30],
@@ -12783,7 +12783,7 @@ apply:$[229]},
 resizable:{group:[$[708],
 $[654],
 $[1949],
-$[1325]],
+$[1326]],
 mode:$[115]},
 resizeMethod:{init:$[95],
 check:[$[270],
@@ -12986,7 +12986,7 @@ $4.setHeight($[3]);
 $4.setOverflow($[22]);
 $3.add($4);
 var $5=this._captionIcon=new qx.ui.basic.Image;
-$5.setAppearance($[1279]);
+$5.setAppearance($[1280]);
 $4.add($5);
 var $6=this._captionTitle=new qx.ui.basic.Label($0);
 $6.setAppearance($[1945]);
@@ -13014,7 +13014,7 @@ $9.addEventListener($[21],
 this._onbuttonmousedown,
 this);
 var $a=this._maximizeButton=new qx.ui.form.Button;
-$a.setAppearance($[1412]);
+$a.setAppearance($[1413]);
 $a.setTabIndex(-1);
 $a.addEventListener($[20],
 this._onmaximizebuttonclick,
@@ -13086,9 +13086,9 @@ $[79]],
 init:null,
 nullable:true,
 apply:$[2102],
-event:$[1357]},
+event:$[1358]},
 opener:{check:$[99]},
-caption:{apply:$[1281],
+caption:{apply:$[1282],
 event:$[1827],
 dispose:true},
 icon:{check:$[10],
@@ -13097,20 +13097,20 @@ apply:$[301],
 event:$[919]},
 status:{check:$[10],
 init:$[308],
-apply:$[1352],
+apply:$[1353],
 event:$[1751]},
 showClose:{check:$[2],
 init:true,
 apply:$[1219]},
 showMaximize:{check:$[2],
 init:true,
-apply:$[1300]},
+apply:$[1301]},
 showMinimize:{check:$[2],
 init:true,
 apply:$[1813]},
 showStatusbar:{check:$[2],
 init:false,
-apply:$[1379]},
+apply:$[1380]},
 allowClose:{check:$[2],
 init:true,
 apply:$[668]},
@@ -13414,13 +13414,13 @@ $[841],
 $[1756],
 $[756],
 $[1094],
-$[1524],
-$[1481],
+$[1525],
+$[1482],
 $[1168],
 $[1093],
-$[1363],
+$[1364],
 $[474],
-$[1475]);
+$[1476]);
 }});
 
 
@@ -13495,7 +13495,7 @@ this._layoutImpl=null;
 if($0){this._layoutImpl=this._createLayoutImpl();
 }this._doLayoutOrder($0,
 $1);
-this.addToQueueRuntime($[1630]);
+this.addToQueueRuntime($[1631]);
 },
 _applySpacing:function($0,
 $1){this._doLayout();
@@ -13773,7 +13773,7 @@ switch($2.getLayoutMode()){case $[18]:case $[251]:var $3=$4._cachedLocationVerti
 break;
 default:var $3=$4._cachedLocationVertical+$4.getOuterHeight()+$2.getSpacing();
 }}$0._cachedLocationVertical=$3;
-switch(this.getWidget().getLayoutMode()){case $[18]:case $[1491]:case $[244]:$3+=!$0._computedBottomTypeNull?$0.getBottomValue():!$0._computedTopTypeNull?-($0.getTopValue()):0;
+switch(this.getWidget().getLayoutMode()){case $[18]:case $[1492]:case $[244]:$3+=!$0._computedBottomTypeNull?$0.getBottomValue():!$0._computedTopTypeNull?-($0.getTopValue()):0;
 $0._resetRuntimeTop();
 $0._renderRuntimeBottom($3);
 break;
@@ -14081,7 +14081,7 @@ switch($2.getLayoutMode()){case $[11]:case $[240]:var $3=$4._cachedLocationHoriz
 break;
 default:var $3=$4._cachedLocationHorizontal+$4.getOuterWidth()+$2.getSpacing();
 }}$0._cachedLocationHorizontal=$3;
-switch($2.getLayoutMode()){case $[11]:case $[1270]:case $[259]:$3+=!$0._computedRightTypeNull?$0.getRightValue():!$0._computedLeftTypeNull?-($0.getLeftValue()):0;
+switch($2.getLayoutMode()){case $[11]:case $[1271]:case $[259]:$3+=!$0._computedRightTypeNull?$0.getRightValue():!$0._computedLeftTypeNull?-($0.getLeftValue()):0;
 $0._resetRuntimeLeft();
 $0._renderRuntimeRight($3);
 break;
@@ -14155,7 +14155,7 @@ init:$[3]},
 height:{refine:true,
 init:$[3]},
 appearance:{refine:true,
-init:$[1246]},
+init:$[1247]},
 source:{check:$[10],
 apply:$[988],
 event:$[1143],
@@ -14166,7 +14166,7 @@ apply:$[752],
 nullable:true},
 loaded:{check:$[2],
 init:false,
-apply:$[1503]},
+apply:$[1504]},
 resizeToInner:{check:$[2],
 init:false}},
 members:{_onload:function(){this.setLoaded(true);
@@ -14333,7 +14333,7 @@ destruct:function(){if(this._image){this._image.style.filter=$[0];
 
 
 /* ID: qx.ui.basic.Label */
-qx.Class.define($[1433],
+qx.Class.define($[1434],
 {extend:qx.ui.basic.Terminator,
 construct:function($0,
 $1,
@@ -14355,7 +14355,7 @@ var $1=$0.style;
 $1.width=$1.height=$[3];
 $1.visibility=$[22];
 $1.position=$[78];
-$1.zIndex=$[1457];
+$1.zIndex=$[1458];
 document.body.appendChild($0);
 this._measureNode=$0;
 }return $0;
@@ -14400,11 +14400,11 @@ init:$[3],
 apply:$[281]},
 mnemonic:{check:$[10],
 nullable:true,
-apply:$[1370]}},
+apply:$[1371]}},
 members:{_content:$[0],
 _isHtml:false,
 setHtml:function($0){qx.log.Logger.deprecatedMethodWarning(arguments.callee,
-$[1451]);
+$[1452]);
 this.setText($0);
 },
 getHtml:function(){qx.log.Logger.deprecatedMethodWarning(arguments.callee,
@@ -14444,7 +14444,7 @@ _syncText:function($0){var $1=this.getMode();
 if($1===$[3]){$1=qx.util.Validation.isValidString($0)&&$0.match(/<.*>/)?$[356]:$[195];
 }
 switch($1){case $[195]:var $2=qx.html.String.escape($0).replace(/(^ | $)/g,
-$[1391]).replace(/  /g,
+$[1392]).replace(/  /g,
 $[1205]);
 this._isHtml=$2!==$0;
 this._content=$2;
@@ -14456,8 +14456,8 @@ break;
 if(this._isCreated){this._renderContent();
 }},
 _applyMnemonic:function($0,
-$1){this._mnemonicTest=$0?new RegExp($[2063]+$0+$[1452]+$0+$[1345]+$0+$[2021]+$0+$[54],
-$[1264]):null;
+$1){this._mnemonicTest=$0?new RegExp($[2063]+$0+$[1453]+$0+$[1346]+$0+$[2021]+$0+$[54],
+$[1265]):null;
 if(this._isCreated){this._renderContent();
 }},
 _computeObjectNeededDimensions:function(){var $0=arguments.callee.self._getMeasureNode();
@@ -14481,7 +14481,7 @@ _computePreferredInnerHeight:function(){this._computeObjectNeededDimensions();
 return this._cachedPreferredInnerHeight;
 },
 __patchTextOverflow:function($0,
-$1){return ($[1045]+($1-14)+$[1868]+$0+$[1368]);
+$1){return ($[1045]+($1-14)+$[1868]+$0+$[1369]);
 },
 _postApply:function(){var $0=this._content;
 var $1=this._getTargetNode();
@@ -14680,7 +14680,7 @@ init:$[89]}}});
 
 
 /* ID: qx.ui.basic.Atom */
-qx.Class.define($[1277],
+qx.Class.define($[1278],
 {extend:qx.ui.layout.BoxLayout,
 construct:function($0,
 $1,
@@ -14706,7 +14706,7 @@ init:false},
 allowStretchY:{refine:true,
 init:false},
 appearance:{refine:true,
-init:$[1598]},
+init:$[1599]},
 stretchChildrenOrthogonalAxis:{refine:true,
 init:false},
 width:{refine:true,
@@ -14739,7 +14739,7 @@ $[13]],
 themeable:true,
 nullable:true,
 inheritable:true,
-apply:$[1531],
+apply:$[1532],
 event:$[309]},
 iconPosition:{init:$[9],
 check:[$[19],
@@ -14747,10 +14747,10 @@ $[11],
 $[18],
 $[9]],
 themeable:true,
-apply:$[1574]},
+apply:$[1575]},
 iconWidth:{check:$[4],
 themeable:true,
-apply:$[1240],
+apply:$[1241],
 nullable:true},
 iconHeight:{check:$[4],
 themeable:true,
@@ -14916,7 +14916,7 @@ qx.Class.define($[592],
 {extend:qx.util.manager.Object,
 properties:{activeWindow:{check:$[101],
 nullable:true,
-apply:$[1336]}},
+apply:$[1337]}},
 members:{_applyActiveWindow:function($0,
 $1){qx.ui.popup.PopupManager.getInstance().update();
 if($1){$1.setActive(false);
@@ -14958,7 +14958,7 @@ this.setActiveWindow($1[$3-1]);
 
 
 /* ID: qx.ui.layout.GridLayout */
-qx.Class.define($[1620],
+qx.Class.define($[1621],
 {extend:qx.ui.core.Parent,
 construct:function(){arguments.callee.base.call(this);
 this._columnData=[];
@@ -15109,7 +15109,7 @@ _invalidateRowLayout:function(){if(!this._initialLayoutDone||!this._isDisplayabl
 },
 setColumnWidth:function($0,
 $1){this._setupColumnProperty($0,
-$[1425],
+$[1426],
 $1);
 var $2=qx.ui.core.Parent.prototype._evalUnitsPixelPercentAutoFlex($1);
 this._setupColumnProperty($0,
@@ -15419,7 +15419,7 @@ $[848]);
 
 
 /* ID: qx.ui.layout.impl.GridLayoutImpl */
-qx.Class.define($[1274],
+qx.Class.define($[1275],
 {extend:qx.ui.layout.impl.LayoutImpl,
 construct:function($0){arguments.callee.base.call(this,
 $0);
@@ -15807,7 +15807,7 @@ var $1=qx.locale.Manager.getInstance();
 $1.removeEventListener($[211],
 this._onlocalechange,
 this);
-this._disposeObjects($[1439],
+this._disposeObjects($[1440],
 $[392],
 $[414],
 $[1132],
@@ -15968,7 +15968,7 @@ destruct:function(){this._disposeObjects($[414]);
 
 
 /* ID: qx.ui.selection.SelectionManager */
-qx.Class.define($[1482],
+qx.Class.define($[1483],
 {extend:qx.core.Target,
 construct:function($0){arguments.callee.base.call(this);
 this._selectedItems=new qx.ui.selection.Selection(this);
@@ -15991,7 +15991,7 @@ apply:$[1163],
 event:$[1726]},
 leadItem:{check:$[101],
 nullable:true,
-apply:$[1490],
+apply:$[1491],
 event:$[883]},
 multiColumnSupport:{check:$[2],
 init:false}},
@@ -16512,7 +16512,7 @@ readOnly:{check:$[2],
 apply:$[985],
 init:false},
 validator:{check:$[70],
-event:$[1564],
+event:$[1565],
 nullable:true}},
 members:{_inputTag:$[132],
 _inputType:$[195],
@@ -16868,7 +16868,7 @@ if($1){$1.execute();
 
 
 /* ID: qx.ui.popup.PopupAtom */
-qx.Class.define($[1441],
+qx.Class.define($[1442],
 {extend:qx.ui.popup.Popup,
 construct:function($0,
 $1){arguments.callee.base.call(this);
@@ -16893,7 +16893,7 @@ $1){arguments.callee.base.call(this,
 $0,
 $1);
 this.setStyleProperty($[163],
-$[1488]);
+$[1489]);
 this._showTimer=new qx.client.Timer(this.getShowInterval());
 this._showTimer.addEventListener($[87],
 this._onshowtimer,
@@ -17105,7 +17105,7 @@ dependent:{check:$[2],
 init:true},
 url:{check:$[10],
 apply:$[1875],
-init:$[1265]},
+init:$[1266]},
 name:{check:$[10],
 apply:$[918],
 init:$[0]},
@@ -17179,7 +17179,7 @@ if(this.getTop()!=null){$0.push($[19]);
 $0.push($[34]);
 $0.push(this.getTop());
 $0.push($[17]);
-}$0.push($[1546]);
+}$0.push($[1547]);
 $0.push($[34]);
 $0.push(this.getDependent()?$[130]:$[124]);
 $0.push($[17]);
@@ -17230,7 +17230,7 @@ try{this._window._native=null;
 this._window.onload=null;
 }catch(ex){}this._window=null;
 this._loaded=false;
-this.createDispatchEvent($[1550]);
+this.createDispatchEvent($[1551]);
 },
 centerToScreen:function(){this._centerHelper((screen.width-this.getWidth())/2,
 (screen.height-this.getHeight())/2);
@@ -17269,7 +17269,7 @@ this._window.onload=null;
 
 
 /* ID: qx.html.Window */
-qx.Class.define($[1450],
+qx.Class.define($[1451],
 {statics:{getInnerWidth:qx.core.Variant.select($[1],
 {"mshtml":function($0){if($0.document.documentElement&&$0.document.documentElement.clientWidth){return $0.document.documentElement.clientWidth;
 }else if($0.document.body){return $0.document.body.clientWidth;
@@ -17428,7 +17428,7 @@ this._internalChange=false;
 this.setColumnNamesByIndex($0);
 }},
 destruct:function(){this._disposeFields($[1144],
-$[1351],
+$[1352],
 $[814]);
 }});
 
@@ -17595,8 +17595,8 @@ for(var $6=0;$6<$3;++$6){$5[$6]=$0[$7][this.getColumnId($6)];
 }$4[$7]=$5;
 }return $4;
 }},
-destruct:function(){this._disposeFields($[1438],
-$[1605],
+destruct:function(){this._disposeFields($[1439],
+$[1606],
 $[698]);
 }});
 
@@ -17659,8 +17659,8 @@ qx.Class.define($[2079],
 implement:qx.ui.table.ICellRenderer,
 extend:qx.core.Object,
 construct:function(){var $0=arguments.callee.self;
-if(!$0.stylesheet){$0.stylesheet=qx.html.StyleSheet.createElement($[664]+$[872]+$[1349]+$[1688]+$[1877]+$[1130]+$[1659]+$[1151]+$[2062]+$[1568]+$[723]+$[1860]+(qx.core.Variant.isSet($[1],
-$[26])?$[353]:$[1080])+$[209]+$[1669]+$[1485]+$[338]+$[1369]+$[1646]+$[338]+$[1784]+$[1838]+$[338]);
+if(!$0.stylesheet){$0.stylesheet=qx.html.StyleSheet.createElement($[664]+$[872]+$[1350]+$[1688]+$[1877]+$[1130]+$[1659]+$[1151]+$[2062]+$[1569]+$[723]+$[1860]+(qx.core.Variant.isSet($[1],
+$[26])?$[353]:$[1080])+$[209]+$[1669]+$[1486]+$[338]+$[1370]+$[1646]+$[338]+$[1784]+$[1838]+$[338]);
 }},
 members:{_getCellClass:function($0){return $[632];
 },
@@ -17701,11 +17701,11 @@ _getCellClass:function($0){var $1=arguments.callee.base.call(this,
 $0);
 if(!$1){return $[0];
 }var $2=this._getStyleFlags($0);
-if($2&qx.ui.table.cellrenderer.Default.STYLEFLAG_ALIGN_RIGHT){$1+=$[1464];
+if($2&qx.ui.table.cellrenderer.Default.STYLEFLAG_ALIGN_RIGHT){$1+=$[1465];
 }
 if($2&qx.ui.table.cellrenderer.Default.STYLEFLAG_BOLD){$1+=$[1162];
 }
-if($2&qx.ui.table.cellrenderer.Default.STYLEFLAG_ITALIC){$1+=$[1517];
+if($2&qx.ui.table.cellrenderer.Default.STYLEFLAG_ITALIC){$1+=$[1518];
 }return $1;
 },
 _getContentHtml:function($0){return qx.html.String.escape(this._formatValue($0));
@@ -17915,13 +17915,13 @@ switch($f){case $[743]:if($g==2){$h=this.__fillNumber($3%100,
 case $[882]:$h=this.__fillNumber(this.__getDayInYear($0),
 $g);
 break;
-case $[1255]:$h=this.__fillNumber($5,
+case $[1256]:$h=this.__fillNumber($5,
 $g);
 break;
 case $[1224]:$h=this.__fillNumber(this.__getWeekInYear($0),
 $g);
 break;
-case $[1534]:if($g==2){$h=qx.locale.Date.getDayName($[172],
+case $[1535]:if($g==2){$h=qx.locale.Date.getDayName($[172],
 $6,
 $2);
 }else if($g==3){$h=qx.locale.Date.getDayName($[122],
@@ -17942,13 +17942,13 @@ $2);
 }break;
 case $[546]:$h=($7<12)?qx.locale.Date.getAmMarker($2):qx.locale.Date.getPmMarker($2);
 break;
-case $[1406]:$h=this.__fillNumber($7,
+case $[1407]:$h=this.__fillNumber($7,
 $g);
 break;
 case $[793]:$h=this.__fillNumber(($7==0)?24:$7,
 $g);
 break;
-case $[1511]:$h=this.__fillNumber($7%12,
+case $[1512]:$h=this.__fillNumber($7%12,
 $g);
 break;
 case $[1032]:$h=this.__fillNumber((($7%12)==0)?12:($7%12),
@@ -17957,7 +17957,7 @@ break;
 case $[636]:$h=this.__fillNumber($8,
 $g);
 break;
-case $[1566]:$h=this.__fillNumber($9,
+case $[1567]:$h=this.__fillNumber($9,
 $g);
 break;
 case $[1980]:$h=this.__fillNumber($a,
@@ -18016,7 +18016,7 @@ break;
 if($7==$[164]){$2+=$6;
 $5++;
 }else{$5++;
-$4=$[1604];
+$4=$[1605];
 }}else{$2+=$6;
 $5++;
 }break;
@@ -18150,10 +18150,10 @@ manipulator:$1});
 this._parseRules.push({pattern:$[1204],
 regex:$[1840],
 manipulator:$1});
-this._parseRules.push({pattern:$[1445],
+this._parseRules.push({pattern:$[1446],
 regex:$[50],
 manipulator:$4});
-this._parseRules.push({pattern:$[1341],
+this._parseRules.push({pattern:$[1342],
 regex:$[50],
 manipulator:$4});
 this._parseRules.push({pattern:$[1917],
@@ -18165,10 +18165,10 @@ manipulator:$d});
 this._parseRules.push({pattern:$[1952],
 regex:$[50],
 field:$[516]});
-this._parseRules.push({pattern:$[1577],
+this._parseRules.push({pattern:$[1578],
 regex:$[50],
 field:$[516]});
-this._parseRules.push({pattern:$[1419],
+this._parseRules.push({pattern:$[1420],
 regex:$[118]+$e.join($[123])+$[54],
 manipulator:$f});
 this._parseRules.push({pattern:$[1814],
@@ -18189,10 +18189,10 @@ field:$[236]});
 this._parseRules.push({pattern:$[796],
 regex:$[50],
 manipulator:$6});
-this._parseRules.push({pattern:$[1263],
+this._parseRules.push({pattern:$[1264],
 regex:$[50],
 manipulator:$6});
-this._parseRules.push({pattern:$[1276],
+this._parseRules.push({pattern:$[1277],
 regex:$[50],
 field:$[236]});
 this._parseRules.push({pattern:$[1642],
@@ -18228,23 +18228,23 @@ field:$[232]});
 this._parseRules.push({pattern:$[344],
 regex:$[764],
 manipulator:$8});
-this._parseRules.push({pattern:$[1361],
+this._parseRules.push({pattern:$[1362],
 regex:$[1046],
 manipulator:$8});
 }},
 destruct:function(){this._disposeFields($[1057],
-$[1595],
+$[1596],
 $[1955],
-$[1320],
-$[1314]);
+$[1321],
+$[1315]);
 }});
 
 
 
 
 /* ID: qx.locale.Date */
-qx.Class.define($[1447],
-{statics:{getAmMarker:function($0){return new qx.locale.LocalizedString($[1378],
+qx.Class.define($[1448],
+{statics:{getAmMarker:function($0){return new qx.locale.LocalizedString($[1379],
 [],
 $0);
 },
@@ -18328,8 +18328,8 @@ switch($0){case $[226]:case $[292]:return qx.locale.Date.getDateTimeFormat($[177
 $[2088]);
 case $[208]:return qx.locale.Date.getDateTimeFormat($[305],
 $[312]);
-case $[347]:return qx.locale.Date.getDateTimeFormat($[1538],
-$[1611]);
+case $[347]:return qx.locale.Date.getDateTimeFormat($[1539],
+$[1612]);
 default:throw new Error("This case should never happen.");
 }},
 getWeekStart:function($0){var $1={"MV":5,
@@ -18469,7 +18469,7 @@ getCellEditorValue:function($0){return true;
 
 
 /* ID: qx.ui.table.celleditor.TextField */
-qx.Class.define($[1230],
+qx.Class.define($[1231],
 {extend:qx.core.Target,
 implement:qx.ui.table.ICellEditorFactory,
 construct:function(){arguments.callee.base.call(this);
@@ -18632,7 +18632,7 @@ $[661]);
 
 
 /* ID: qx.ui.table.columnmodel.Resize */
-qx.Class.define($[1563],
+qx.Class.define($[1564],
 {extend:qx.ui.table.columnmodel.Basic,
 construct:function(){arguments.callee.base.call(this);
 this._bInProgress=false;
@@ -18984,7 +18984,7 @@ this._onmousedown);
 properties:{height:{refine:true,
 init:$[3]},
 appearance:{refine:true,
-init:$[1623]}},
+init:$[1624]}},
 members:{hasIcon:qx.lang.Function.returnFalse,
 hasLabel:qx.lang.Function.returnFalse,
 hasShortcut:qx.lang.Function.returnFalse,
@@ -19115,7 +19115,7 @@ _onmouseup:function($0){this.execute();
 destruct:function(){this._disposeObjects($[555],
 $[364],
 $[2006],
-$[1619]);
+$[1620]);
 }});
 
 
@@ -19167,7 +19167,7 @@ themeable:true,
 init:8},
 hoverItem:{check:$[99],
 nullable:true,
-apply:$[1234]},
+apply:$[1235]},
 openItem:{check:$[99],
 nullable:true,
 apply:$[1967]},
@@ -19217,7 +19217,7 @@ $[371],
 $[1942],
 $[964],
 $[2037],
-$[1237]],
+$[1238]],
 _isFocusRoot:false,
 getLayout:function(){return this._layout;
 },
@@ -19666,7 +19666,7 @@ this.add(this._handle);
 this.initWidth();
 },
 properties:{appearance:{refine:true,
-init:$[1428]},
+init:$[1429]},
 width:{refine:true,
 init:$[3]},
 show:{init:$[131],
@@ -19692,13 +19692,13 @@ $0.setAppearance($[910]);
 this.add($0);
 },
 properties:{appearance:{refine:true,
-init:$[1271]}}});
+init:$[1272]}}});
 
 
 
 
 /* ID: qx.ui.toolbar.ToolBar */
-qx.Class.define($[1408],
+qx.Class.define($[1409],
 {extend:qx.ui.layout.HorizontalBoxLayout,
 construct:function(){arguments.callee.base.call(this);
 this.addEventListener($[56],
@@ -19843,7 +19843,7 @@ this._scrollerParent.setDimension($[57],
 $[89]);
 this._scrollerParent.setSpacing(1);
 this._statusBar=new qx.ui.basic.Label;
-this._statusBar.setAppearance($[1610]);
+this._statusBar.setAppearance($[1611]);
 this._statusBar.setDimension($[57],
 $[3]);
 this.add(this._scrollerParent,
@@ -19886,21 +19886,21 @@ statics:{__redirectEvents:{cellClick:1,
 cellDblclick:1,
 cellContextmenu:1}},
 properties:{selectionModel:{check:$[307],
-apply:$[1409],
+apply:$[1410],
 event:$[1681]},
 tableModel:{check:$[621],
-apply:$[1377],
+apply:$[1378],
 event:$[718],
 nullable:true},
 tableColumnModel:{check:$[389],
 apply:$[1088],
-event:$[1612]},
+event:$[1613]},
 rowHeight:{check:$[16],
 init:20,
 event:$[1798]},
 statusBarVisible:{check:$[2],
 init:true,
-apply:$[1250]},
+apply:$[1251]},
 columnVisibilityButtonVisible:{check:$[2],
 init:true,
 apply:$[1760]},
@@ -20264,7 +20264,7 @@ $[1809],
 $1,
 $1);
 }else{$2=this.trn($[1005],
-$[1382],
+$[1383],
 $1,
 $0,
 $1);
@@ -20449,16 +20449,16 @@ this,
 $[807]);
 qx.theme.manager.Color.getInstance().connect(this._styleBgcolEven,
 this,
-$[1506]);
+$[1507]);
 qx.theme.manager.Color.getInstance().connect(this._styleBgcolOdd,
 this,
-$[1324]);
+$[1325]);
 qx.theme.manager.Color.getInstance().connect(this._styleColSelected,
 this,
 $[1781]);
 qx.theme.manager.Color.getInstance().connect(this._styleColNormal,
 this,
-$[1575]);
+$[1576]);
 },
 properties:{highlightFocusRow:{check:$[2],
 init:true}},
@@ -20516,7 +20516,7 @@ if($0.focusedRow&&this.getHighlightFocusRow()){$3.backgroundColor=$0.selected?th
 createRowStyle:function($0){var $1=[];
 $1.push($[45]);
 $1.push(this._fontStyleString);
-$1.push($[1332]);
+$1.push($[1333]);
 if($0.focusedRow&&this.getHighlightFocusRow()){$1.push($0.selected?this._colors.bgcolFocusedSelected:this._colors.bgcolFocused);
 }else{if($0.selected){$1.push(this._colors.bgcolSelected);
 }else{$1.push(($0.row%2==0)?this._colors.bgcolEven:this._colors.bgcolOdd);
@@ -20542,7 +20542,7 @@ _updateTableContent:function(){if(this._noTableContentUpdate){return;
 if(this._table){this._table.updateContent();
 }}},
 destruct:function(){this._disposeFields($[757],
-$[1551],
+$[1552],
 $[553],
 $[284]);
 }});
@@ -20759,7 +20759,7 @@ $0+=$[630]+$2.minIndex+$[808]+$2.maxIndex+$[112];
 _fireChangeSelection:function(){if(this.hasBatchMode()){this._hadChangeEventInBatchMode=true;
 }this.createDispatchEvent($[222]);
 }},
-destruct:function(){this._disposeFields($[1290]);
+destruct:function(){this._disposeFields($[1291]);
 }});
 
 
@@ -20777,7 +20777,7 @@ properties:{appearance:{refine:true,
 init:$[503]},
 firstVisibleRow:{check:$[16],
 init:0,
-apply:$[1514]},
+apply:$[1515]},
 visibleRowCount:{check:$[16],
 init:0,
 apply:$[1988]},
@@ -20936,7 +20936,7 @@ $l.row=$g;
 $l.selected=$h;
 $l.focusedRow=$i;
 $l.rowData=$4.getRowData($g);
-$k.push($[1509]);
+$k.push($[1510]);
 var $m=$7.getRowClass($l);
 if($m){$k.push($[1891],
 $m,
@@ -20946,7 +20946,7 @@ $n+=$[810]+$8+$[748]+$6.getTotalWidth()+$[304];
 if($n){$k.push($[1164],
 $n,
 $[534]);
-}$k.push($[1333]);
+}$k.push($[1334]);
 for(var $c=0;$c<$9;$c++){var $o=$b[$c];
 for(var $p in $o){$l[$p]=$o[$p];
 }var $d=$l.col;
@@ -20979,7 +20979,7 @@ for($b=Math.abs($0)-1;$b>=0;$b--){var $8=$2[$6];
 try{$1.removeChild($8);
 }catch(e){break;
 }}if(!this._tableContainer){this._tableContainer=document.createElement($[119]);
-}var $9=$[1340];
+}var $9=$[1341];
 $9+=this._getRowsHtml($4+$7,
 Math.abs($0));
 $9+=$[346];
@@ -21016,7 +21016,7 @@ $[304],
 $[1928],
 $[652],
 $[857],
-$[1544],
+$[1545],
 this._getRowsHtml($5,
 $6),
 $[579]];
@@ -21040,7 +21040,7 @@ destruct:function(){this._disposeObjects($[374]);
 
 
 /* ID: qx.ui.table.pane.Header */
-qx.Class.define($[1269],
+qx.Class.define($[1270],
 {extend:qx.ui.layout.HorizontalBoxLayout,
 construct:function($0){arguments.callee.base.call(this);
 this._paneScroller=$0;
@@ -21248,7 +21248,7 @@ event:$[2086]},
 verticalScrollBarVisible:{check:$[2],
 init:true,
 apply:$[1159],
-event:$[1434]},
+event:$[1435]},
 tablePaneModel:{check:$[629],
 apply:$[635],
 event:$[1787]},
@@ -21864,8 +21864,8 @@ this._updateInterval=null;
 }var $0=this.getTablePaneModel();
 if($0){$0.dispose();
 }this._disposeObjects($[1932],
-$[1251],
-$[1380],
+$[1252],
+$[1381],
 $[2050],
 $[908],
 $[1892],
@@ -21873,8 +21873,8 @@ $[1654],
 $[1006],
 $[1677],
 $[284],
-$[1289],
-$[1317]);
+$[1290],
+$[1318]);
 }});
 
 
@@ -22003,7 +22003,7 @@ $[567]);
 
 
 /* ID: qx.ui.basic.ScrollArea */
-qx.Class.define($[1435],
+qx.Class.define($[1436],
 {extend:qx.ui.layout.CanvasLayout,
 construct:function(){arguments.callee.base.call(this);
 this.__onscroll=qx.lang.Function.bindEvent(this._onscroll,
@@ -22164,7 +22164,7 @@ for(var $2=0;$2<$1;$2++){var $3=this.getColumnAtX($2);
 $0+=this._tableColumnModel.getColumnWidth($3);
 }return $0;
 }},
-destruct:function(){this._disposeObjects($[1486]);
+destruct:function(){this._disposeObjects($[1487]);
 }});
 
 
@@ -22213,7 +22213,7 @@ METHOD_DELETE:"DELETE"}});
 
 
 /* ID: qx.util.Mime */
-qx.Class.define($[1567],
+qx.Class.define($[1568],
 {statics:{JAVASCRIPT:"text/javascript",
 JSON:"application/json",
 XML:"application/xml",
@@ -22260,7 +22260,7 @@ qx.net.Http.METHOD_POST,
 qx.net.Http.METHOD_PUT,
 qx.net.Http.METHOD_HEAD,
 qx.net.Http.METHOD_DELETE],
-apply:$[1557],
+apply:$[1558],
 init:qx.net.Http.METHOD_GET},
 asynchronous:{check:$[2],
 init:true},
@@ -22287,7 +22287,7 @@ qx.util.Mime.JSON,
 qx.util.Mime.XML,
 qx.util.Mime.HTML],
 init:qx.util.Mime.TEXT,
-apply:$[1285]},
+apply:$[1286]},
 timeout:{check:$[4],
 nullable:true},
 prohibitCaching:{check:$[2],
@@ -22405,7 +22405,7 @@ getSequenceNumber:function(){return this._seqNum;
 destruct:function(){this.setTransport(null);
 this._disposeFields($[1228],
 $[1758],
-$[1476]);
+$[1477]);
 }});
 
 
@@ -22529,10 +22529,10 @@ if($1){$1.abort();
 $0)){qx.lang.Array.remove(this._queue,
 $0);
 }}},
-destruct:function(){this._disposeObjectDeep($[1483],
+destruct:function(){this._disposeObjectDeep($[1484],
 1);
 this._disposeObjects($[253]);
-this._disposeFields($[1242]);
+this._disposeFields($[1243]);
 }});
 
 
@@ -22599,30 +22599,30 @@ default:if($0>206&&$0<300){return true;
 }qx.log.Logger.getClassLogger(qx.io.remote.Exchange).debug("Unknown status code: "+$0+" ("+$1+")");
 return false;
 }}},
-statusCodeToString:function($0){switch($0){case -1:return $[1343];
+statusCodeToString:function($0){switch($0){case -1:return $[1344];
 case 200:return $[1915];
 case 304:return $[675];
 case 206:return $[711];
-case 204:return $[1356];
+case 204:return $[1357];
 case 300:return $[1658];
 case 301:return $[1748];
 case 302:return $[1004];
 case 303:return $[800];
 case 305:return $[651];
-case 400:return $[1462];
+case 400:return $[1463];
 case 401:return $[1826];
 case 402:return $[1728];
-case 403:return $[1420];
+case 403:return $[1421];
 case 404:return $[1811];
 case 405:return $[1911];
 case 406:return $[909];
-case 407:return $[1440];
-case 408:return $[1618];
-case 409:return $[1295];
+case 407:return $[1441];
+case 408:return $[1619];
+case 409:return $[1296];
 case 410:return $[1822];
 case 411:return $[1984];
 case 412:return $[1925];
-case 413:return $[1520];
+case 413:return $[1521];
 case 414:return $[907];
 case 415:return $[1922];
 case 500:return $[957];
@@ -22637,13 +22637,13 @@ case 12030:return $[361];
 case 12031:return $[361];
 case 12152:return $[937];
 case 13030:return $[1705];
-default:return $[1339];
+default:return $[1340];
 }}},
 properties:{request:{check:$[605],
 nullable:true},
 implementation:{check:$[511],
 nullable:true,
-apply:$[1493]},
+apply:$[1494]},
 state:{check:[$[80],
 $[40],
 $[47],
@@ -22812,7 +22812,7 @@ if($1){return $1[$0]||null;
 }return null;
 },
 getData:function(){qx.log.Logger.deprecatedMethodWarning(arguments.callee,
-$[1371]);
+$[1372]);
 return this;
 }}});
 
@@ -22998,7 +22998,7 @@ if(this.getUsername()){if(this.getUseBasicHttpAuth()){$0.open($1,
 $3,
 $2);
 $0.setRequestHeader($[1044],
-$[1407]+$a(this.getUsername()+$[825]+this.getPassword()));
+$[1408]+$a(this.getUsername()+$[825]+this.getPassword()));
 }else{$0.open($1,
 $3,
 $2,
@@ -23007,7 +23007,7 @@ this.getPassword());
 }}else{$0.open($1,
 $3,
 $2);
-}$0.setRequestHeader($[1430],
+}$0.setRequestHeader($[1431],
 window.location.href);
 var $l=this.getRequestHeaders();
 for(var $7 in $l){$0.setRequestHeader($7,
@@ -23103,7 +23103,7 @@ try{if($0&&$0.length>0){return qx.io.Json.parseQx($0)||null;
 }else{return null;
 }}catch(ex){this.error("Could not execute json: ["+$0+"]",
 ex);
-return $[1499]+$0+$[1825];
+return $[1500]+$0+$[1825];
 }case qx.util.Mime.JAVASCRIPT:{};
 try{if($0&&$0.length>0){return window.eval($0)||null;
 }else{return null;
@@ -23151,7 +23151,7 @@ switch($0.readyState){case 1:case 2:case 3:$0.abort();
 
 
 /* ID: qx.net.HttpRequest */
-qx.Class.define($[1512],
+qx.Class.define($[1513],
 {statics:{create:qx.core.Variant.select($[1],
 {"default":function(){return new XMLHttpRequest;
 },
@@ -23163,7 +23163,7 @@ qx.Class.define($[1512],
 $[1674],
 $[1939],
 $[1845],
-$[1312]];
+$[1313]];
 var $1;
 var $2;
 for(var $3=0,
@@ -23183,12 +23183,12 @@ if($1){this.__server=$2;
 qx.Class.define($[1947],
 {statics:{BEAUTIFYING_INDENT:"  ",
 BEAUTIFYING_LINE_END:"\n",
-__map:{"function":$[1571],
+__map:{"function":$[1572],
 "boolean":$[978],
 "number":$[1150],
-"string":$[1366],
+"string":$[1367],
 "object":$[1212],
-"undefined":$[1627]},
+"undefined":$[1628]},
 __convertFunction:function($0){return String($0);
 },
 __convertBoolean:function($0){return String($0);
@@ -23203,7 +23203,7 @@ qx.io.Json.__convertStringHelper);
 },
 __convertStringEscape:{'\b':$[1106],
 '\t':$[1857],
-'\n':$[1594],
+'\n':$[1595],
 '\f':$[781],
 '\r':$[1010],
 '"':$[1906],
@@ -23239,7 +23239,7 @@ $1.push(qx.io.Json.__indent);
 return $1.join($[0]);
 },
 __convertDate:function($0){var $1=$0.getUTCFullYear()+$[17]+$0.getUTCMonth()+$[17]+$0.getUTCDate()+$[17]+$0.getUTCHours()+$[17]+$0.getUTCMinutes()+$[17]+$0.getUTCSeconds()+$[17]+$0.getUTCMilliseconds();
-return $[1626]+$1+$[1227];
+return $[1627]+$1+$[1227];
 },
 __convertMap:function($0){var $1=[],
 $2=true,
@@ -23304,8 +23304,8 @@ qx.Class.define($[336],
 {extend:qx.io.remote.AbstractRemoteTransport,
 construct:function(){arguments.callee.base.call(this);
 var $0=(new Date).valueOf();
-var $1=$[1518]+$0;
-var $2=$[1383]+$0;
+var $1=$[1519]+$0;
+var $2=$[1384]+$0;
 if(qx.core.Variant.isSet($[1],
 $[26])){this._frame=document.createElement($[971]+$1+$[1944]);
 }else{this._frame=document.createElement($[350]);
@@ -23315,13 +23315,13 @@ this._frame.onload=qx.lang.Function.bind(this._onload,
 this);
 this._frame.style.display=$[13];
 document.body.appendChild(this._frame);
-this._form=document.createElement($[1359]);
+this._form=document.createElement($[1230]);
 this._form.target=$1;
 this._form.id=this._form.name=$2;
 this._form.style.display=$[13];
 document.body.appendChild(this._form);
 this._data=document.createElement($[325]);
-this._data.id=this._data.name=$[1629];
+this._data.id=this._data.name=$[1630];
 this._form.appendChild(this._data);
 this._frame.onreadystatechange=qx.lang.Function.bind(this._onreadystatechange,
 this);
@@ -23565,7 +23565,7 @@ document.body.removeChild(this._element);
 
 
 /* ID: qx.client.History */
-qx.Class.define($[1617],
+qx.Class.define($[1618],
 {type:$[27],
 extend:qx.core.Target,
 construct:qx.core.Variant.select($[1],
@@ -23576,7 +23576,7 @@ this._iframe.style.position=$[78];
 this._iframe.style.left=$[624];
 this._iframe.style.top=$[624];
 document.body.appendChild(this._iframe);
-var $0=qx.io.Alias.getInstance().resolve($[1327]);
+var $0=qx.io.Alias.getInstance().resolve($[1328]);
 this._iframe.src=$0;
 this._titles={};
 this._state=decodeURIComponent(this.__getHash());
@@ -23618,7 +23618,7 @@ navigateForward:function(){qx.client.Timer.once(function(){history.forward();
 _applyTimeoutInterval:function($0){this._timer.setInterval($0);
 },
 __onHistoryLoad:function($0){this._state=$0;
-this.createDispatchDataEvent($[1367],
+this.createDispatchDataEvent($[1368],
 $0);
 if(this._titles[$0]!=null){document.title=this._titles[$0];
 }},
@@ -23647,7 +23647,7 @@ return $3;
 "default":function(){return decodeURIComponent(this.__getHash());
 }}),
 __storeState:qx.core.Variant.select($[1],
-{"mshtml":function($0){var $1=$[1411]+encodeURIComponent($0)+$[1708];
+{"mshtml":function($0){var $1=$[1412]+encodeURIComponent($0)+$[1708];
 try{var $2=this._iframe.contentWindow.document;
 $2.open();
 $2.write($1);
@@ -23675,7 +23675,7 @@ return;
 destruct:function(){this._timer.stop();
 this._disposeObjects($[253]);
 this._disposeFields($[735],
-$[1480]);
+$[1481]);
 }});
 
 
@@ -23737,7 +23737,7 @@ this._invalidatePreferredInnerHeight();
 
 
 /* ID: qx.ui.layout.impl.FlowLayoutImpl */
-qx.Class.define($[1323],
+qx.Class.define($[1324],
 {extend:qx.ui.layout.impl.LayoutImpl,
 construct:function($0){arguments.callee.base.call(this,
 $0);
@@ -23911,7 +23911,7 @@ cldr_day_abbreviated_thu:"Thu",
 cldr_day_abbreviated_tue:"Tue",
 cldr_day_abbreviated_wed:"Wed",
 cldr_day_narrow_fri:"F",
-cldr_day_narrow_mon:$[1445],
+cldr_day_narrow_mon:$[1446],
 cldr_day_narrow_sat:$[1018],
 cldr_day_narrow_sun:$[1018],
 cldr_day_narrow_thu:"T",
@@ -23937,13 +23937,13 @@ cldr_month_abbreviated_7:"Jul",
 cldr_month_abbreviated_8:"Aug",
 cldr_month_abbreviated_9:"Sep",
 cldr_month_narrow_1:"J",
-cldr_month_narrow_10:$[1298],
+cldr_month_narrow_10:$[1299],
 cldr_month_narrow_11:"N",
 cldr_month_narrow_12:"D",
 cldr_month_narrow_2:"F",
-cldr_month_narrow_3:$[1445],
+cldr_month_narrow_3:$[1446],
 cldr_month_narrow_4:$[181],
-cldr_month_narrow_5:$[1445],
+cldr_month_narrow_5:$[1446],
 cldr_month_narrow_6:"J",
 cldr_month_narrow_7:"J",
 cldr_month_narrow_8:$[181],
@@ -24002,8 +24002,8 @@ cldr_day_narrow_mon:"L",
 cldr_day_narrow_sat:$[1018],
 cldr_day_narrow_sun:"D",
 cldr_day_narrow_thu:"J",
-cldr_day_narrow_tue:$[1445],
-cldr_day_narrow_wed:$[1445],
+cldr_day_narrow_tue:$[1446],
+cldr_day_narrow_wed:$[1446],
 cldr_day_wide_fri:"vendredi",
 cldr_day_wide_mon:"lundi",
 cldr_day_wide_sat:"samedi",
@@ -24024,13 +24024,13 @@ cldr_month_abbreviated_7:"juil.",
 cldr_month_abbreviated_8:"août",
 cldr_month_abbreviated_9:"sept.",
 cldr_month_narrow_1:"J",
-cldr_month_narrow_10:$[1298],
+cldr_month_narrow_10:$[1299],
 cldr_month_narrow_11:"N",
 cldr_month_narrow_12:"D",
 cldr_month_narrow_2:"F",
-cldr_month_narrow_3:$[1445],
+cldr_month_narrow_3:$[1446],
 cldr_month_narrow_4:$[181],
-cldr_month_narrow_5:$[1445],
+cldr_month_narrow_5:$[1446],
 cldr_month_narrow_6:"J",
 cldr_month_narrow_7:"J",
 cldr_month_narrow_8:$[181],
@@ -24096,29 +24096,29 @@ qx.locale.Locale.define("vigigraph.translation.C",
 "Timeframe":$[1958],
 "Show graph":$[1749],
 "Show Nagios page":$[1222],
-"Next section":$[1338],
+"Next section":$[1339],
 "Last 3 months":$[893],
 "Reload graph":$[962],
-"Search for a service (\"*\" for all, 100 max)":$[1532],
+"Search for a service (\"*\" for all, 100 max)":$[1533],
 "Graph start":$[843],
-"Last 24 hours":$[1565],
+"Last 24 hours":$[1566],
 "Host:":$[960],
-"Main Group":$[1444],
+"Main Group":$[1445],
 "Zoom out":$[715],
 "Host":$[2056],
 "Last 48 hours":$[2046],
 "\"%1\" Graph for host %2":$[1741],
-"Host Group":$[1376],
+"Host Group":$[1377],
 "Host Picker":$[653],
 "Search":$[419],
 "Timeframe menu":$[1764],
-"Zoom in":$[1484],
+"Zoom in":$[1485],
 "Reports":$[1090],
-"Last 12 hours":$[1414],
+"Last 12 hours":$[1415],
 "Graph Group":$[1710],
 "Last 14 days":$[2060],
 "Graph Name":$[1026],
-"Service:":$[1591],
+"Service:":$[1592],
 "Host Name":$[1767],
 "Search for a host (\"*\" for all, 100 max)":$[1186],
 "Last year":$[970],

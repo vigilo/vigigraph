@@ -15,7 +15,7 @@ metadata.bind = DBSession.bind
 ######
 
 from vigilo.models import User, UserGroup, Permission
-from vigilo.models import Host, HostGroup, ServiceLowLevel, ServiceGroup
+from vigilo.models import Host, HostGroup, ServiceLowLevel, ServiceGroup, PerfDataSource
 #from vigilo.models import Service, ServiceGroup
 from vigilo.models import Tag, CustomGraphView, BoardViewFilter
 from vigilo.models import Graph

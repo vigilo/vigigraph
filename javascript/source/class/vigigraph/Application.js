@@ -41,7 +41,8 @@ var urls = {
     "maingroups": "/rpc/maingroups",
     "hostgroups": "/rpc/hostgroups",
     "hosts": "/rpc/hosts",
-    "graphgroups": "/rpc/graphgroups",
+    // NOTE Graph Groups (frontend) -> ServiceGroup (backend)
+    "graphgroups": "/rpc/servicegroups",
     "graphs": "/rpc/graphs",
     "reports": "/rpc/reports"
 };
@@ -467,7 +468,7 @@ qx.Class.define("vigigraph.Application",
       }
       function _updateGraphGroupList(hostname)
       {
-        _genericListUpdater(urls.graphs+"?hostname="+hostname,combo4);
+        _genericListUpdater(urls.graphgroups+"?hostname="+hostname,combo4);
         combo5.getList().removeAll();
         combo5.setSelected(null);
         r4.setEnabled(true);
