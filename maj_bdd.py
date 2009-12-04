@@ -40,13 +40,24 @@ def add_Host2HostGroup(host, group):
                  'g': group.name}
         group.hosts.append(host)
 
+
+#Rechercherche de l'objet Host à partir du name
+def get_host(hostname):
+    hosts = []
+    for h in DBSession.query(Host).all():
+        if h.name == hostname:
+            return h 
+    return None
+
+
 def create_ServiceLowLevel(hostname, servicename):
     s = DBSession.query(ServiceLowLevel) \
+            .join((Host, ServiceLowLevel.idhost == Host.idhost)) \
             .filter(ServiceLowLevel.servicename == servicename) \
-            .filter(ServiceLowLevel.hostname == hostname) \
+            .filter(Host.name == hostname) \
             .first()
     if not s:
-        s = ServiceLowLevel(hostname=hostname,
+        s = ServiceLowLevel(idhost=get_host(hostname).idhost,
                 servicename=servicename,
                 priority = 42, 
                 op_dep=u"?")
