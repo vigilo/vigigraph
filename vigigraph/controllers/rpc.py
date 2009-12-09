@@ -4,7 +4,7 @@
 from tg import request, expose
 from vigigraph.lib.base import BaseController
 from vigigraph.model import DBSession
-from vigigraph.model import HostGroup, Host, ServiceGroup, ServiceLowLevel
+from vigigraph.model import HostGroup, Host, ServiceGroup, ServiceLowLevel, PerfDataSource
 from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
 
 
@@ -50,19 +50,13 @@ class RpcController(BaseController):
                 .filter(HostGroup.idgroup == othergroupid) \
                 .first()
         if hostgroup is not None and hostgroup.hosts is not None:
-            return dict(items=[(h.name, h.name) for h in hostgroup.hosts])
+            return dict(items=[(h.name, str(h.idhost)) for h in hostgroup.hosts])
         return None
 
     @expose('json')
-    def servicegroups(self, hostname, nocache=None):
+    def servicegroups(self, idhost, nocache=None):
         """Render the JSON document for the combobox Graph Group"""
-                #.join(ServiceLowLevel) \
         # passage par une table intermédiaire à cause de l'héritage
-        h = self._get_host(hostname)
-        if h:
-            idhost = h.idhost
-        else:
-            return None
         servicegroups = DBSession.query(ServiceGroup.name, ServiceGroup.idgroup) \
                 .join((SERVICE_GROUP_TABLE, SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
                 .join((ServiceLowLevel, SERVICE_GROUP_TABLE.c.idservice == ServiceLowLevel.idservice)) \
@@ -70,5 +64,15 @@ class RpcController(BaseController):
                 .all()
         if servicegroups is not None :
             return dict(items=[(sg[0], str(sg[1])) for sg in set(servicegroups)])
+        return None
+
+    @expose('json')
+    def graphs(self, idservice, nocache=None):
+        """Render the JSON document for the combobox Graph Name"""
+        perfdatasource = DBSession.query(PerfDataSource.name, PerfDataSource.idperfdatasource) \
+                .filter(PerfDataSource._idservice == idservice) \
+                .all()
+        if perfdatasource is not None:
+            return dict(items=[(pds[0], str(pds[1])) for pds in set(perfdatasource)])
         return None
 

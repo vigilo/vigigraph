@@ -399,6 +399,8 @@ qx.Class.define("vigigraph.Application",
           r=e.getContent().items;
           for(var i=0 ; i<r.length ; i++) // does not work in IE with "for (i in r)"
           {
+            //var label = r[i][0];
+            //var id = r[i][1];
             combobox.add(new qx.ui.form.ListItem(r[i][0], null, r[i][1]));
           }
           combobox.setSelected(null);
@@ -466,9 +468,9 @@ qx.Class.define("vigigraph.Application",
         r5.setEnabled(false);
         r6.setEnabled(false);
       }
-      function _updateGraphGroupList(hostname)
+      function _updateGraphGroupList(idhost)
       {
-        _genericListUpdater(urls.graphgroups+"?hostname="+hostname,combo4);
+        _genericListUpdater(urls.graphgroups+"?idhost="+idhost,combo4);
         combo5.getList().removeAll();
         combo5.setSelected(null);
         r4.setEnabled(true);
@@ -476,9 +478,10 @@ qx.Class.define("vigigraph.Application",
         r6.setEnabled(true);
         b5.setEnabled(false);
       }
-      function _updateGraphList(host,graphGroup)
+      function _updateGraphList(idservice)
       {
-        _genericListUpdater("Vigigraph.py/getJSONGraphList?host="+encodeURIComponent(host)+"&graphgroup="+encodeURIComponent(graphGroup),combo5);
+        _genericListUpdater(urls.graphs+"?idservice="+idservice,combo5)
+  //+Vigigraph.py/getJSONGraphList?host="+encodeURIComponent(host)+"&graphgroup="+encodeURIComponent(graphGroup),combo5);
         r5.setEnabled(true);
         b5.setEnabled(false);
       }
@@ -490,8 +493,9 @@ qx.Class.define("vigigraph.Application",
       }
       combo1.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostGroupList(e.getValue().getValue()); });
       combo2.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostList(     e.getValue().getValue()); });
-      combo3.addEventListener("changeSelected", function(e) { if(e.getValue()) { b3.setEnabled(true);_updateGraphGroupList(e.getValue().getLabel()); _updateReports(combo3.getSelected().getLabel());} });
-      combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(combo3.getSelected().getLabel(),e.getValue().getLabel());} });
+      combo3.addEventListener("changeSelected", function(e) { if(e.getValue()) { b3.setEnabled(true);_updateGraphGroupList(e.getValue().getValue()); _updateReports(combo3.getSelected().getLabel());} });
+      combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(e.getValue().getValue());} });
+      //combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(combo3.getSelected().getLabel(),e.getValue().getLabel());} });
       combo5.addEventListener("changeSelected", function(e) { if(e.getValue()) b5.setEnabled(true); });
       combo6.addEventListener("changeSelected", function(e) { if(e.getValue()) b6.setEnabled(true); });
       r1.addEventListener("execute",function(e) { _updateServerGroupList();});
