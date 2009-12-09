@@ -41,14 +41,12 @@ def add_Host2HostGroup(host, group):
         group.hosts.append(host)
 
 
-#Rechercherche de l'objet Host à partir du name
+#Recherche de l'objet Host à partir du name
 def get_host(hostname):
-    hosts = []
-    for h in DBSession.query(Host).all():
-        if h.name == hostname:
-            return h 
-    return None
-
+    """ Return Host object from hostname, None if not available"""
+    return DBSession.query(Host) \
+            .filter(Host.name == hostname) \
+            .first()
 
 def create_ServiceLowLevel(hostname, servicename):
     s = DBSession.query(ServiceLowLevel) \

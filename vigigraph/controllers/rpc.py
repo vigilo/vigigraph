@@ -16,6 +16,11 @@ class RpcController(BaseController):
     """
     Class Gérant la lecture des différents champs des combobox de vigigraph.
     """
+    def _get_host(self, hostname):
+        """ Return Host object from hostname, None if not available"""
+        return DBSession.query(Host) \
+                .filter(Host.name == hostname) \
+                .first()
 
     @expose('json')
     def maingroups(self, nocache=None):
@@ -52,11 +57,16 @@ class RpcController(BaseController):
     def servicegroups(self, hostname, nocache=None):
         """Render the JSON document for the combobox Graph Group"""
                 #.join(ServiceLowLevel) \
-
+        # passage par une table intermédiaire à cause de l'héritage
+        h = self._get_host(hostname)
+        if h:
+            idhost = h.idhost
+        else:
+            return None
         servicegroups = DBSession.query(ServiceGroup.name, ServiceGroup.idgroup) \
                 .join((SERVICE_GROUP_TABLE, SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
                 .join((ServiceLowLevel, SERVICE_GROUP_TABLE.c.idservice == ServiceLowLevel.idservice)) \
-                .filter(ServiceLowLevel.hostname == hostname) \
+                .filter(ServiceLowLevel.idhost == idhost) \
                 .all()
         if servicegroups is not None :
             return dict(items=[(sg[0], str(sg[1])) for sg in set(servicegroups)])
