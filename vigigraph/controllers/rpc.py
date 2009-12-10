@@ -29,9 +29,10 @@ class RpcController(BaseController):
                 .filter(HostGroup.parent == None) \
                 .order_by(HostGroup.name) \
                 .all()
-        if topgroups is not None:
+        if topgroups is not None and topgroups != []:
             return dict(items=[(tpg[0], str(tpg[1])) for tpg in topgroups])
-        return None
+        else:
+            return dict(items=[])
     
     @expose('json')
     def hostgroups(self, maingroupid, nocache=None):
@@ -39,9 +40,10 @@ class RpcController(BaseController):
         hostgroups = DBSession.query(HostGroup.name, HostGroup.idgroup)\
                      .filter(HostGroup.idparent == maingroupid) \
                      .all()
-        if hostgroups is not None:
+        if hostgroups is not None and hostgroups != []:
             return dict(items=[(hg[0], str(hg[1])) for hg in hostgroups])
-        return None
+        else:
+            return dict(items=[])
 
     @expose('json')
     def hosts(self, othergroupid, nocache=None):
@@ -51,7 +53,8 @@ class RpcController(BaseController):
                 .first()
         if hostgroup is not None and hostgroup.hosts is not None:
             return dict(items=[(h.name, str(h.idhost)) for h in hostgroup.hosts])
-        return None
+        else:
+            return dict(items=[])
 
     @expose('json')
     def servicegroups(self, idhost, nocache=None):
@@ -62,17 +65,19 @@ class RpcController(BaseController):
                 .join((ServiceLowLevel, SERVICE_GROUP_TABLE.c.idservice == ServiceLowLevel.idservice)) \
                 .filter(ServiceLowLevel.idhost == idhost) \
                 .all()
-        if servicegroups is not None :
+        if servicegroups is not None and servicegroups != []:
             return dict(items=[(sg[0], str(sg[1])) for sg in set(servicegroups)])
-        return None
+        else:
+            return dict(items=[])
 
     @expose('json')
     def graphs(self, idservice, nocache=None):
         """Render the JSON document for the combobox Graph Name"""
-        perfdatasource = DBSession.query(PerfDataSource.name, PerfDataSource.idperfdatasource) \
+        perfdatasources = DBSession.query(PerfDataSource.name, PerfDataSource.idperfdatasource) \
                 .filter(PerfDataSource._idservice == idservice) \
                 .all()
-        if perfdatasource is not None:
-            return dict(items=[(pds[0], str(pds[1])) for pds in set(perfdatasource)])
-        return None
+        if perfdatasources is not None or perfdatasources != []:
+            return dict(items=[(pds[0], str(pds[1])) for pds in set(perfdatasources)])
+        else:
+            return dict(items=[])
 
