@@ -96,6 +96,21 @@ def create_ds(name, type, service, label):
         DBSession.add(ds)
     return ds
 
+
+#Recherche de l'objet ServiceGroup à partir du name
+def get_ServiceGroup(name):
+    return DBSession.query(ServiceGroup).filter(ServiceGroup.name == name).first()
+
+#Recherche de l'objet ServiceLowLevel à partir du name
+def get_ServiceLowLevel(hostname, servicename):
+    s = DBSession.query(ServiceLowLevel) \
+            .join((Host, ServiceLowLevel.idhost == Host.idhost)) \
+            .filter(ServiceLowLevel.servicename == servicename) \
+            .filter(Host.name == hostname) \
+            .first()
+    return s
+
+
 hg1 = create_HostGroup(u'Serveurs')
 hg2 = create_HostGroup(u'Telecoms')
 hg3 = create_HostGroup(u'Serveurs Linux', hg1)
@@ -124,13 +139,16 @@ sg5 = create_ServiceGroup(u'Processus')
 s1 = create_ServiceLowLevel(h1.name, u'Interface eth0')
 s2 = create_ServiceLowLevel(h1.name, u'Interface eth1')
 s3 = create_ServiceLowLevel(h1.name, u'Interface série')
+s4 = create_ServiceLowLevel(h4.name, u'Interface')
 
 add_ServiceLowLevel2ServiceGroup(s1, sg2)
 add_ServiceLowLevel2ServiceGroup(s2, sg2)
 add_ServiceLowLevel2ServiceGroup(s3, sg1)
+add_ServiceLowLevel2ServiceGroup(s4, sg2)
 
 ds1 = create_ds(u'ineth0', u'GAUGE', s1, u'Données en entrée sur eth0')
 ds2 = create_ds(u'outeth0', u'GAUGE', s1, u'Données en sortie sur eth0')
-ds3 = create_ds(u'outeth0', u'GAUGE', s1, u'Données en sortie sur eth0')
+ds3 = create_ds(u'outeth1', u'GAUGE', s1, u'Données en sortie sur eth0')
+ds4 = create_ds(u'ineth1', u'GAUGE', s4, u'Données en entrée sur eth0')
 
 transaction.commit()
