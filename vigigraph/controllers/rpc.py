@@ -4,8 +4,13 @@
 from tg import request, expose
 from vigigraph.lib.base import BaseController
 from vigigraph.model import DBSession
-from vigigraph.model import HostGroup, Host, ServiceGroup, ServiceLowLevel, PerfDataSource
+from vigigraph.model import Host, HostGroup
+from vigigraph.model import Service, ServiceGroup, ServiceLowLevel
+from vigigraph.model import PerfDataSource
 from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
+from vigilo.models.secondary_tables import HOST_GROUP_TABLE
+
+from sqlalchemy.orm import aliased
 
 import time
 
@@ -52,7 +57,8 @@ class RpcController(BaseController):
         hostgroup = DBSession.query(HostGroup) \
                 .filter(HostGroup.idgroup == othergroupid) \
                 .first()
-        if hostgroup is not None and hostgroup.hosts is not None:
+        if hostgroup is not None and \
+        hostgroup.hosts is not None:
             return dict(items=[(h.name, str(h.idhost)) for h in hostgroup.hosts])
         else:
             return dict(items=[])
@@ -83,63 +89,118 @@ class RpcController(BaseController):
             return dict(items=[])
 
     @expose('json')
-    def selectHostAndService(self, idhost, idservice):
+    def selectHostAndService(self, **kwargs):
         """Render the JSON document for the Host and Service"""
-        if idservice:
-            servicegroups(idhost)
-        else:
-            # passage par une table intermédiaire à cause de l'héritage
-            servicegroups = DBSession.query(ServiceGroup.name, ServiceGroup.idgroup) \
-                .join((SERVICE_GROUP_TABLE, SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
-                .join((ServiceLowLevel, SERVICE_GROUP_TABLE.c.idservice == ServiceLowLevel.idservice)) \
-                .filter(ServiceLowLevel.idhost == idhost) \
-                .filter(ServiceLowLevel.idservice == idservice) \
-                .all()
-            if servicegroups is not None and servicegroups != []:
-                return dict(items=[(sg[0], str(sg[1])) for sg in set(servicegroups)])
+        host = kwargs.get('host');
+        service = kwargs.get('service');
+
+        groups = []
+        services = None
+
+        if host is not None:
+            hg1 = aliased(HostGroup)
+            hg2 = aliased(HostGroup)
+            sg =  aliased(ServiceGroup)
+            if service is not None:
+                for hg1_r, hg2_r, sg_r in \
+                    DBSession.query(hg1, hg2, sg) \
+                    .filter(hg1.parent == None) \
+                    .filter(hg2.parent != None) \
+                    .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
+                    .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
+                    .filter(SERVICE_GROUP_TABLE.c.idservice == Service.idservice) \
+                    .filter(SERVICE_GROUP_TABLE.c.idgroup == sg.idgroup) \
+                    .filter(Host.idhost == ServiceLowLevel.idhost) \
+                    .filter(Service.idservice == ServiceLowLevel.idservice) \
+                    .filter(Host.name == host ) \
+                    .filter(Service.servicename == service):
+                    if hg1_r.idgroup == hg2_r.parent.idgroup:
+                        groups.append(hg1_r.name)
+                        groups.append(hg2_r.name)
+                        groups.append(sg_r.name)
             else:
-                return dict(items=[])
+                for hg1_r, hg2_r in \
+                    DBSession.query(hg1, hg2) \
+                    .filter(hg1.parent == None) \
+                    .filter(hg2.parent != None) \
+                    .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
+                    .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
+                    .filter(Host.name == host ):
+                    if hg1_r.idgroup == hg2_r.parent.idgroup:
+                        groups.append(hg1_r.name)
+                        groups.append(hg2_r.name)
+                        groups.append(None)
+
+        if groups is not None and groups != []:
+            return dict(items=groups)
+        else:
+            return dict(items=[])
 
     @expose('json')
-    def searchHostAndService(self, idhost, idservice):
+    def searchHostAndService(self, **kwargs):
         """Render the JSON document for the Host and Service"""
-        if idservice:
-            servicegroups(idhost)
+        host = kwargs.get('host');
+        service = kwargs.get('service');
+
+        servicegroups_l = None
+        if host is not None and service is not None:
+            servicegroups_l = DBSession.query(Host.name, ServiceLowLevel.servicename) \
+                    .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+                    .filter(Host.name.like('%'+host+'%')) \
+                    .filter(ServiceLowLevel.servicename.like('%'+service+'%')) \
+                    .all()
+        elif host is not None and service is None:
+            servicegroups_l = DBSession.query(Host.name, ServiceLowLevel.servicename) \
+                    .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+                    .filter(Host.name.like('%'+host+'%')) \
+                    .all()
+        elif host is None and service is not None:
+            servicegroups_l = DBSession.query(Host.name, ServiceLowLevel.servicename) \
+                    .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+                    .filter(ServiceLowLevel.servicename.like('%'+service+'%')) \
+                    .all()
+        elif host is None and service is None:
+            servicegroups_l = DBSession.query(Host.name, ServiceLowLevel.servicename) \
+                    .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+                    .all()
+
+        if servicegroups_l is not None and servicegroups_l != []:
+            return dict(items=[(sg[0], sg[1]) for sg in set(servicegroups_l)])
         else:
-            # passage par une table intermédiaire à cause de l'héritage
-            servicegroups = DBSession.query(ServiceGroup.name, ServiceGroup.idgroup) \
-                .join((SERVICE_GROUP_TABLE, SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
-                .join((ServiceLowLevel, SERVICE_GROUP_TABLE.c.idservice == ServiceLowLevel.idservice)) \
-                .filter(ServiceLowLevel.idhost == idhost) \
-                .filter(ServiceLowLevel.idservice == idservice) \
-                .all()
-            if servicegroups is not None and servicegroups != []:
-                return dict(items=[(sg[0], str(sg[1])) for sg in set(servicegroups)])
-            else:
-                return dict(items=[])
+            return dict(items=[])
 
     @expose('')
     def subPage(self, host):
+        '''subPage'''
         #try:
-        #    #util.redirect(req,"/%s/cgi-bin/nagios2/status.cgi?host=%s&style=detail&supNav=1"%(navconf.hosts[host]['supServer'],host))
+        #    #util.redirect(req,"/%s/cgi-bin/nagios2/status.cgi?host=%s \
+        #&style=detail&supNav=1"%(navconf.hosts[host]['supServer'],host))
         #except:
         #    req.content_type = "text/html"
-        #    req.write("<html><body bgcolor='#C3C7D3'><p>Unable to find supervision page for %s.<br/>Are You sure it has been inserted into the supervision configuration ?</p></body></html>\n"%host)
+        #    req.write("<html><body bgcolor='#C3C7D3'> \
+        #<p>Unable to find supervision page for %s.<br/>Are You sure \
+        #it has been inserted into the supervision configuration ? \
+        #</p></body></html>\n"%host)
 
         return 'subPage'
 
     @expose('')
-    def getImage(self, req, host, graph, start=None,duration=86400,details=1):
+    def getImage(self, req, host, graph, start=None, duration=86400, details=1):
+        '''getImage'''
         if start is None:
             start = int(time.time()) - 24*3600
-        #req.internal_redirect("/%s/rrdgraph/rrdgraph.py?server=%s&graphtemplate=%s&direct=1&start=%s&duration=%s&details=%d&fakeIncr=%d"%(navconf.hosts[host]['metroServer'],host,urllib.quote_plus(graph),start,duration,int(details),random.randint(0,9999999999)))
+        #req.internal_redirect("/%s/rrdgraph/rrdgraph.py? \
+        #server=%s&graphtemplate=%s&direct=1&start=%s&duration=%s&details=%d& \
+        #fakeIncr=%d"%(navconf.hosts[host]['metroServer'],host, \
+        #urllib.quote_plus(graph),start,duration,int(details), \
+        #random.randint(0,9999999999)))
         return 'getImage'
 
     @expose('')
-    def getReport(self):
-        return 'getReport'
-
-    @expose('')
     def getStartTime(self, req, host):
-        #req.internal_redirect("/%s/rrdgraph/rrdgraph.py?server=%s&getstarttime=1&fakeIncr=%d"%(navconf.hosts[host]['metroServer'],host,random.randint(0,9999999999)))
+        '''getStartTime'''
+        #req.internal_redirect("/%s/rrdgraph/rrdgraph.py? \
+        #server=%s&getstarttime=1&fakeIncr=%d \
+        #"%(navconf.hosts[host]['metroServer'],host, \
+        #random.randint(0,9999999999)))
         return 'getStartTime'
