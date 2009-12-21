@@ -44,12 +44,13 @@ var urls = {
     // NOTE Graph Groups (frontend) -> ServiceGroup (backend)
     "graphgroups": "/rpc/servicegroups",
     "graphs": "/rpc/graphs",
-    "selectHostAndService": "rpc/selectHostAndService",
-    "searchHostAndService": "rpc/searchHostAndService",
-    "subPage": "rpc/subPage",
-    "getImage": "rpc/getImage",
-    "getReport": "rpc/getReport",
-    "getStartTime": "rpc/getStartTime"
+    "selectHostAndService": "/rpc/selectHostAndService",
+    "searchHostAndService": "/rpc/searchHostAndService",
+    "subPage": "/rpc/subPage",
+    "getImage": "/rpc/getImage",
+    "getStartTime": "/rpc/getStartTime",
+    "getIdHost": "/rpc/getIdHost",
+    "getIdService": "/rpc/getIdService"
 };
 
 /**
@@ -145,6 +146,10 @@ qx.Class.define("vigigraph.Application",
       b5.setToolTip(new qx.ui.popup.ToolTip(this.tr("Show graph")));
       b5.setEnabled(false);
 
+      var bp=new qx.ui.form.Button("","icon/16/actions/document-print.png");
+      bp.setToolTip(new qx.ui.popup.ToolTip(this.tr("Print")));
+      bp.setEnabled(true);
+
       gl.add(r1,2,0);
       gl.add(r2,2,1);
       gl.add(r3,2,2);
@@ -154,6 +159,8 @@ qx.Class.define("vigigraph.Application",
       gl.add(b1,3,0);
       gl.add(b3,3,2);
       gl.add(b5,3,4);
+
+      gl.add(bp,3,5);
 
       // Buttons
       b3.addEventListener("execute",function(e) {
@@ -237,13 +244,16 @@ qx.Class.define("vigigraph.Application",
         //search_results.setLocation(10, 40);
         function _searchResultsUpdater(host,service)
         {
-          var url = urls.searchHostAndService+"?host="+host+"&service=";
-          if (service) { url += service };
+          var url = urls.searchHostAndService;
+          if (host && service) { url = url+"?host="+host+"&service="+service };
+          else if (host) { url = url+"?host="+host };
+          else if (service) { url = url+"?service="+service };
+
           search_results_model.setData([]);
           var g=new qx.io.remote.Request(url,"GET","application/json");
           g.addEventListener("completed", function(e) {
             var rowData = [];
-            r=e.getContent();
+            r=e.getContent().items;
             for(var i=0,l=r.length ; i<l ; i++) // does not work in IE with "for (i in r)"
             {
               rowData.push(r[i]);
@@ -256,6 +266,7 @@ qx.Class.define("vigigraph.Application",
         }
         function _chooseInCombos(host, host_main_group, host_sec_group, service, service_group) {
           function _selectItem(o, item) {
+            // 
             var c_list = o.getList();
             var c_item = c_list.findValueExact(item);
             if (c_item) {
@@ -296,18 +307,23 @@ qx.Class.define("vigigraph.Application",
           }
           _updateServerGroupList();
         }
-        function _selectHostAndService(host,service,mainObj)
+        function _selectHostAndService(host, service, mainObj)
         {
-          var url = urls.selectHostAndService+"?host="+host+"&service=";
-          if (service) { url += service };
+          var url = urls.selectHostAndService;
+          if (host && service) { url = url+"?host="+host+"&service="+service };
+          else if (host) { url = url+"?host="+host };
+          else if (service) { url = url+"?service="+service };
+
           var g=new qx.io.remote.Request(url,"GET","application/json");
           g.addEventListener("completed", function(e) {
-            r=e.getContent();
+            r=e.getContent().items;
             var host_main_group = r[0];
             var host_sec_group = r[1];
+
             if (r.length < 3) { 
               _chooseInCombos(host, host_main_group, host_sec_group, null, null);
-            } else {
+            }
+            else {
               var srv_group = r[2];
               _chooseInCombos(host, host_main_group, host_sec_group, service, srv_group);
               mainObj.openGraph(host, service, null, null, true);
@@ -323,9 +339,9 @@ qx.Class.define("vigigraph.Application",
           var value_host = search_results_model.getValue(0, row);
           var value_service = search_results_model.getValue(1, row);
           if (!value_service) {
-            _selectHostAndService(value_host,null,this);
+            _selectHostAndService(value_host, null, this);
           } else {
-            _selectHostAndService(value_host, value_service,this);
+            _selectHostAndService(value_host, value_service, this);
           }
         }, this);
         // Give keyboard focus to the search field
@@ -457,7 +473,7 @@ qx.Class.define("vigigraph.Application",
         b5.setEnabled(false);
       }
       combo1.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostGroupList(e.getValue().getValue()); });
-      combo2.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostList(     e.getValue().getValue()); });
+      combo2.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostList(e.getValue().getValue()); });
       combo3.addEventListener("changeSelected", function(e) { if(e.getValue()) { b3.setEnabled(true);_updateGraphGroupList(e.getValue().getValue()); _updateReports(combo3.getSelected().getLabel());} });
       combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(e.getValue().getValue());} });
       //combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(combo3.getSelected().getLabel(),e.getValue().getLabel());} });
