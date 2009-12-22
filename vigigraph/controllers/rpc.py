@@ -2,18 +2,23 @@
 """RPC controller for the combobox of vigigraph"""
 
 from tg import request, expose
+
 from vigigraph.lib.base import BaseController
 from vigigraph.model import DBSession
 from vigigraph.model import Host, HostGroup
 from vigigraph.model import Service, ServiceGroup, ServiceLowLevel
 from vigigraph.model import PerfDataSource
+
 from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.secondary_tables import HOST_GROUP_TABLE
 
 from sqlalchemy.orm import aliased
 
-import time
+from pylons.i18n import ugettext as _
 
+import time
+import random
+import urllib2
 
 __all__ = ['RpcController']
 
@@ -169,6 +174,51 @@ class RpcController(BaseController):
         else:
             return dict(items=[])
 
+    @expose(content_type='image/png')
+    def getImage(self, host, start=None, duration=86400, graph=None, details=1):
+        '''getImage'''
+        if start is None:
+            start = int(time.time()) - 24*3600
+
+        # valeurs particulieres
+        direct = 1
+        fakeIncr = random.randint(0,9999999999)
+
+        # TODO : url_l : selon configuration
+        url_l = 'http://localhost/rrdgraph'
+
+        rrdproxy = RRDProxy(url_l)
+        try:
+            #result = rrdproxy.rrd_img_ap(host, graph, direct, start, duration, int(details), fakeincr)
+            result = rrdproxy.rrd_img_ap(host, graph, direct, duration, start, int(details))
+        except urllib2.URLError, e:
+            print _("Can't get RRD graph \"%s\" on host \"%s\"") \
+                    % (graph, host)
+            result = None
+
+        return result
+
+    @expose('')
+    def getStartTime(self, host):
+        '''getStartTime'''
+
+        getstarttime = 1
+        fakeincr = random.randint(0,9999999999)
+
+        # TODO : url_l : selon configuration
+        url_l = 'http://localhost/rrdgraph'
+
+        rrdproxy = RRDProxy(url_l)
+        try:
+            #result = rrdproxy.rrd_getstarttime(host, getstarttime, fakeincr)
+            result = rrdproxy.rrd_getstarttime(host, getstarttime)
+        except urllib2.URLError, e:
+            print _("Can't get RRD data on host \"%s\"") \
+                    % (host)
+            result = -1
+
+        return result
+
     @expose('')
     def subPage(self, host):
         '''subPage'''
@@ -184,23 +234,3 @@ class RpcController(BaseController):
 
         return 'subPage'
 
-    @expose('')
-    def getImage(self, req, host, graph, start=None, duration=86400, details=1):
-        '''getImage'''
-        if start is None:
-            start = int(time.time()) - 24*3600
-        #req.internal_redirect("/%s/rrdgraph/rrdgraph.py? \
-        #server=%s&graphtemplate=%s&direct=1&start=%s&duration=%s&details=%d& \
-        #fakeIncr=%d"%(navconf.hosts[host]['metroServer'],host, \
-        #urllib.quote_plus(graph),start,duration,int(details), \
-        #random.randint(0,9999999999)))
-        return 'getImage'
-
-    @expose('')
-    def getStartTime(self, req, host):
-        '''getStartTime'''
-        #req.internal_redirect("/%s/rrdgraph/rrdgraph.py? \
-        #server=%s&getstarttime=1&fakeIncr=%d \
-        #"%(navconf.hosts[host]['metroServer'],host, \
-        #random.randint(0,9999999999)))
-        return 'getStartTime'
