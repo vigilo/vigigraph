@@ -188,6 +188,6 @@ ds2 = create_ds(u'outeth0', u'GAUGE', s2 \
 ds3 = create_ds(u'outeth1', u'GAUGE', s3 \
                 , u'Données en sortie sur eth1', graphs[2:4])
 ds4 = create_ds(u'ineth1', u'GAUGE', s4 \
-                , u'Données en entrée sur eth0', graphs[3:3])
+                , u'Données en entrée sur eth0', graphs[3:4])
 
 transaction.commit()
