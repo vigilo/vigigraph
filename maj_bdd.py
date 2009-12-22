@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import and_
 
-from vigigraph.model import Host, HostGroup, ServiceLowLevel, ServiceGroup, PerfDataSource
+from vigigraph.model import Host, HostGroup
+from vigigraph.model import ServiceLowLevel, ServiceGroup
+from vigigraph.model import PerfDataSource, Graph
 from vigigraph.model import DBSession
 
 from datetime import datetime
@@ -23,14 +25,27 @@ def create_HostGroup(name, parent=None):
     return g
 
 # Hôte (Host)
-def create_Host(name, checkhostcmd, hosttpl, snmpcommunity, mainip, snmpport):
+#def create_Host(name, checkhostcmd, hosttpl, snmpcommunity, mainip, snmpport):
+def create_Host(name):
     h = DBSession.query(Host).filter(Host.name == name).first()
     if not h:
-        h = Host(name=name, checkhostcmd=checkhostcmd, 
-                       hosttpl=hosttpl, snmpcommunity=snmpcommunity, mainip=mainip, snmpport=snmpport)
+        h = Host(name=name,
+                 checkhostcmd=u'dummy',
+                 hosttpl=u'linux',
+                 mainip=u"127.0.0.1",
+                 snmpcommunity=u"public",
+                 snmpport=161,
+                 weight=0)
         print "Ajout de l'hôte: ", name
         DBSession.add(h)
     return h
+
+#Recherche de l'objet Host à partir du name
+def get_host(hostname):
+    """ Return Host object from hostname, None if not available"""
+    return DBSession.query(Host) \
+            .filter(Host.name == hostname) \
+            .first()
 
 # Ajout d'un hôte dans un groupe d'hôtes (Host -> HostGroup)
 def add_Host2HostGroup(host, group):
@@ -39,14 +54,6 @@ def add_Host2HostGroup(host, group):
                 {'h': host.name,
                  'g': group.name}
         group.hosts.append(host)
-
-
-#Recherche de l'objet Host à partir du name
-def get_host(hostname):
-    """ Return Host object from hostname, None if not available"""
-    return DBSession.query(Host) \
-            .filter(Host.name == hostname) \
-            .first()
 
 def create_ServiceLowLevel(hostname, servicename):
     s = DBSession.query(ServiceLowLevel) \
@@ -57,7 +64,7 @@ def create_ServiceLowLevel(hostname, servicename):
     if not s:
         s = ServiceLowLevel(idhost=get_host(hostname).idhost,
                 servicename=servicename,
-                priority = 42, 
+                weight = 42, 
                 op_dep=u"?")
         print "Ajout du service", servicename
         DBSession.add(s)
@@ -75,7 +82,6 @@ def create_ServiceGroup(name, parent=None):
         DBSession.add(g)
     return g
 
-
 # Ajout d'un hôte dans un groupe d'hôtes (Host -> HostGroup)
 def add_ServiceLowLevel2ServiceGroup(service, group):
     if service not in group.services:
@@ -84,18 +90,13 @@ def add_ServiceLowLevel2ServiceGroup(service, group):
                  'g': group.name}
         group.services.append(service)
 
-# DS (PerfDataSource)
-def create_ds(name, type, service, label):
-    ds = DBSession.query(PerfDataSource) \
-            .filter(PerfDataSource.service == service) \
-            .filter(PerfDataSource.name == name) \
+def _get_service(hostname, servicename):
+    """ Return Host object from hostname, None if not available"""
+    return DBSession.query(ServiceLowLevel) \
+            .join((Host, Host.idhost == ServiceLowLevel.idhost)) \
+            .filter(Host.name == hostname) \
+            .filter(ServiceLowLevel.servicename == servicename) \
             .first()
-    if not ds:
-        ds = PerfDataSource(name=name, type=type, service=service, label=label)
-        print "Ajout de la datasource: ", label
-        DBSession.add(ds)
-    return ds
-
 
 #Recherche de l'objet ServiceGroup à partir du name
 def get_ServiceGroup(name):
@@ -110,6 +111,29 @@ def get_ServiceLowLevel(hostname, servicename):
             .first()
     return s
 
+# DS (Graph)
+def create_graph(name, vlabel, perfdatasources):
+    gr = DBSession.query(Graph) \
+            .filter(Graph.name == name) \
+            .first()
+    if not gr:
+        gr = Graph(name=name, vlabel=vlabel)
+        print "Ajout du graph: ", vlabel
+        DBSession.add(gr)
+    return gr
+
+# DS (PerfDataSource)
+def create_ds(name, type, service, label, graphs):
+    ds = DBSession.query(PerfDataSource) \
+            .filter(PerfDataSource.service == service) \
+            .filter(PerfDataSource.name == name) \
+            .first()
+    if not ds:
+        ds = PerfDataSource(name=name, type=type, service=service, label=label, graphs=graphs)
+        print "Ajout de la datasource: ", label
+        DBSession.add(ds)
+    return ds
+
 
 hg1 = create_HostGroup(u'Serveurs')
 hg2 = create_HostGroup(u'Telecoms')
@@ -117,11 +141,10 @@ hg3 = create_HostGroup(u'Serveurs Linux', hg1)
 hg4 = create_HostGroup(u'NORTEL', hg2)
 hg5 = create_HostGroup(u'CISCO', hg2)
 
-
-h1 = create_Host(u'proto4.si.c-s.fr', u'dummy', u'linuxserver', u'public', u'127.0.0.1', u'12')
-h2 = create_Host(u'messagerie.si.c-s.fr', u'dummy', u'linuxserver', u'public', u'127.0.0.1', u'12')
-h3 = create_Host(u'testnortel.si.c-s.fr', u'dummy', u'switch', u'public', u'127.0.0.1', u'12')
-h4 = create_Host(u'proto6.si.c-s.fr', u'dummy', u'ciscorouter', u'public', u'127.0.0.1', u'12')
+h1 = create_Host(u'proto4.si.c-s.fr')
+h2 = create_Host(u'messagerie.si.c-s.fr')
+h3 = create_Host(u'testnortel.si.c-s.fr')
+h4 = create_Host(u'proto6.si.c-s.fr')
 
 add_Host2HostGroup(h1, hg3)
 add_Host2HostGroup(h2, hg3)
@@ -146,9 +169,25 @@ add_ServiceLowLevel2ServiceGroup(s2, sg2)
 add_ServiceLowLevel2ServiceGroup(s3, sg1)
 add_ServiceLowLevel2ServiceGroup(s4, sg2)
 
-ds1 = create_ds(u'ineth0', u'GAUGE', s1, u'Données en entrée sur eth0')
-ds2 = create_ds(u'outeth0', u'GAUGE', s1, u'Données en sortie sur eth0')
-ds3 = create_ds(u'outeth1', u'GAUGE', s1, u'Données en sortie sur eth0')
-ds4 = create_ds(u'ineth1', u'GAUGE', s4, u'Données en entrée sur eth0')
+gr1 = create_graph(u'graph1',u'Graph1', None)
+gr2 = create_graph(u'graph2',u'Graph2', None)
+gr3 = create_graph(u'graph3',u'Graph3', None)
+gr4 = create_graph(u'graph4',u'Graph4', None)
+gr5 = create_graph(u'graph5',u'Graph5', None)
+
+graphs = []
+for g in DBSession.query(Graph).all():
+    graphs.append(g)
+
+print 'graphs %s' % graphs
+
+ds1 = create_ds(u'ineth0', u'GAUGE', s1 \
+                , u'Données en entrée sur eth0', graphs[1:3])
+ds2 = create_ds(u'outeth0', u'GAUGE', s2 \
+                , u'Données en sortie sur eth0', graphs[1:3])
+ds3 = create_ds(u'outeth1', u'GAUGE', s3 \
+                , u'Données en sortie sur eth1', graphs[2:4])
+ds4 = create_ds(u'ineth1', u'GAUGE', s4 \
+                , u'Données en entrée sur eth0', graphs[3:3])
 
 transaction.commit()
