@@ -145,13 +145,14 @@ h1 = create_Host(u'proto4.si.c-s.fr')
 h2 = create_Host(u'messagerie.si.c-s.fr')
 h3 = create_Host(u'testnortel.si.c-s.fr')
 h4 = create_Host(u'proto6.si.c-s.fr')
+h5 = create_Host(u'par.linux0')
 
 add_Host2HostGroup(h1, hg3)
 add_Host2HostGroup(h2, hg3)
 add_Host2HostGroup(h3, hg4)
 add_Host2HostGroup(h4, hg5)
 add_Host2HostGroup(h4, hg3)
-add_Host2HostGroup(h4, hg3)
+add_Host2HostGroup(h5, hg3)
 
 sg1 = create_ServiceGroup(u'Général')
 sg2 = create_ServiceGroup(u'Interface Réseau')
@@ -163,23 +164,24 @@ s1 = create_ServiceLowLevel(h1.name, u'Interface eth0')
 s2 = create_ServiceLowLevel(h1.name, u'Interface eth1')
 s3 = create_ServiceLowLevel(h1.name, u'Interface série')
 s4 = create_ServiceLowLevel(h4.name, u'Interface')
+s5 = create_ServiceLowLevel(h5.name, u'Interface Linux')
 
 add_ServiceLowLevel2ServiceGroup(s1, sg2)
 add_ServiceLowLevel2ServiceGroup(s2, sg2)
 add_ServiceLowLevel2ServiceGroup(s3, sg1)
 add_ServiceLowLevel2ServiceGroup(s4, sg2)
+add_ServiceLowLevel2ServiceGroup(s5, sg2)
 
 gr1 = create_graph(u'graph1',u'Graph1', None)
 gr2 = create_graph(u'graph2',u'Graph2', None)
 gr3 = create_graph(u'graph3',u'Graph3', None)
 gr4 = create_graph(u'graph4',u'Graph4', None)
-gr5 = create_graph(u'graph5',u'Graph5', None)
+#gr5 = create_graph(u'graph5',u'Graph5', None)
+gr5 = create_graph(u'IO',u'IO', None)
 
 graphs = []
 for g in DBSession.query(Graph).all():
     graphs.append(g)
-
-print 'graphs %s' % graphs
 
 ds1 = create_ds(u'ineth0', u'GAUGE', s1 \
                 , u'Données en entrée sur eth0', graphs[1:3])
@@ -189,5 +191,7 @@ ds3 = create_ds(u'outeth1', u'GAUGE', s3 \
                 , u'Données en sortie sur eth1', graphs[2:4])
 ds4 = create_ds(u'ineth1', u'GAUGE', s4 \
                 , u'Données en entrée sur eth0', graphs[3:4])
+ds5 = create_ds(u'IO', u'GAUGE', s5 \
+                , u'IO', graphs[5:6])
 
 transaction.commit()
