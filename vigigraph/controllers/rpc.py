@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-from tg import request, expose
+from tg import request, expose, response
 
 from vigigraph.lib.base import BaseController
 from vigigraph.model import DBSession
@@ -13,6 +13,9 @@ from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.secondary_tables import HOST_GROUP_TABLE
 
 from sqlalchemy.orm import aliased
+
+from rrdproxy import RRDProxy
+from nagiosproxy import NagiosProxy
 
 from pylons.i18n import ugettext as _
 
@@ -64,7 +67,8 @@ class RpcController(BaseController):
                 .first()
         if hostgroup is not None and \
         hostgroup.hosts is not None:
-            return dict(items=[(h.name, str(h.idhost)) for h in hostgroup.hosts])
+            return dict(items=[(h.name, str(h.idhost)) \
+            for h in hostgroup.hosts])
         else:
             return dict(items=[])
 
@@ -73,31 +77,34 @@ class RpcController(BaseController):
         """Render the JSON document for the combobox Graph Group"""
         # passage par une table intermédiaire à cause de l'héritage
         servicegroups = DBSession.query(ServiceGroup.name, ServiceLowLevel.idservice) \
-                .join((SERVICE_GROUP_TABLE, SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
-                .join((ServiceLowLevel, SERVICE_GROUP_TABLE.c.idservice == ServiceLowLevel.idservice)) \
-                .filter(ServiceLowLevel.idhost == idhost) \
-                .all()
+            .join((SERVICE_GROUP_TABLE, SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
+            .join((ServiceLowLevel, SERVICE_GROUP_TABLE.c.idservice == ServiceLowLevel.idservice)) \
+            .filter(ServiceLowLevel.idhost == idhost) \
+            .all()
         if servicegroups is not None and servicegroups != []:
-            return dict(items=[(sg[0], str(sg[1])) for sg in set(servicegroups)])
+            return dict(items=[(sg[0], str(sg[1])) \
+            for sg in set(servicegroups)])
         else:
             return dict(items=[])
 
     @expose('json')
     def graphs(self, idservice, nocache=None):
         """Render the JSON document for the combobox Graph Name"""
-        perfdatasources = DBSession.query(PerfDataSource.name, PerfDataSource.idperfdatasource) \
-                .filter(PerfDataSource.idservice == idservice) \
-                .all()
+        perfdatasources = DBSession.query( \
+            PerfDataSource.name, PerfDataSource.idperfdatasource) \
+            .filter(PerfDataSource.idservice == idservice) \
+            .all()
         if perfdatasources is not None or perfdatasources != []:
-            return dict(items=[(pds[0], str(pds[1])) for pds in set(perfdatasources)])
+            return dict(items=[(pds[0], str(pds[1])) \
+            for pds in set(perfdatasources)])
         else:
             return dict(items=[])
 
     @expose('json')
     def selectHostAndService(self, **kwargs):
         """Render the JSON document for the Host and Service"""
-        host = kwargs.get('host');
-        service = kwargs.get('service');
+        host = kwargs.get('host')
+        service = kwargs.get('service')
 
         groups = []
         services = None
@@ -108,29 +115,29 @@ class RpcController(BaseController):
             sg =  aliased(ServiceGroup)
             if service is not None:
                 for hg1_r, hg2_r, sg_r in \
-                    DBSession.query(hg1, hg2, sg) \
-                    .filter(hg1.parent == None) \
-                    .filter(hg2.parent != None) \
-                    .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
-                    .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
-                    .filter(SERVICE_GROUP_TABLE.c.idservice == Service.idservice) \
-                    .filter(SERVICE_GROUP_TABLE.c.idgroup == sg.idgroup) \
-                    .filter(Host.idhost == ServiceLowLevel.idhost) \
-                    .filter(Service.idservice == ServiceLowLevel.idservice) \
-                    .filter(Host.name == host ) \
-                    .filter(Service.servicename == service):
+                DBSession.query(hg1, hg2, sg) \
+                .filter(hg1.parent == None) \
+                .filter(hg2.parent != None) \
+                .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
+                .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
+                .filter(SERVICE_GROUP_TABLE.c.idservice == Service.idservice) \
+                .filter(SERVICE_GROUP_TABLE.c.idgroup == sg.idgroup) \
+                .filter(Host.idhost == ServiceLowLevel.idhost) \
+                .filter(Service.idservice == ServiceLowLevel.idservice) \
+                .filter(Host.name == host ) \
+                .filter(Service.servicename == service):
                     if hg1_r.idgroup == hg2_r.parent.idgroup:
                         groups.append(hg1_r.name)
                         groups.append(hg2_r.name)
                         groups.append(sg_r.name)
             else:
                 for hg1_r, hg2_r in \
-                    DBSession.query(hg1, hg2) \
-                    .filter(hg1.parent == None) \
-                    .filter(hg2.parent != None) \
-                    .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
-                    .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
-                    .filter(Host.name == host ):
+                DBSession.query(hg1, hg2) \
+                .filter(hg1.parent == None) \
+                .filter(hg2.parent != None) \
+                .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
+                .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
+                .filter(Host.name == host ):
                     if hg1_r.idgroup == hg2_r.parent.idgroup:
                         groups.append(hg1_r.name)
                         groups.append(hg2_r.name)
@@ -144,53 +151,83 @@ class RpcController(BaseController):
     @expose('json')
     def searchHostAndService(self, **kwargs):
         """Render the JSON document for the Host and Service"""
-        host = kwargs.get('host');
-        service = kwargs.get('service');
+        host = kwargs.get('host')
+        service = kwargs.get('service')
 
         servicegroups_l = None
         if host is not None and service is not None:
-            servicegroups_l = DBSession.query(Host.name, ServiceLowLevel.servicename) \
-                    .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
-                    .filter(Host.name.like('%'+host+'%')) \
-                    .filter(ServiceLowLevel.servicename.like('%'+service+'%')) \
-                    .all()
+            servicegroups_l = DBSession.query( \
+              Host.name, ServiceLowLevel.servicename) \
+              .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+              .filter(Host.name.like('%'+host+'%')) \
+              .filter(ServiceLowLevel.servicename.like('%'+service+'%')) \
+              .all()
         elif host is not None and service is None:
-            servicegroups_l = DBSession.query(Host.name, ServiceLowLevel.servicename) \
-                    .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
-                    .filter(Host.name.like('%'+host+'%')) \
-                    .all()
+            servicegroups_l = DBSession.query( \
+              Host.name, ServiceLowLevel.servicename) \
+              .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+              .filter(Host.name.like('%'+host+'%')) \
+              .all()
         elif host is None and service is not None:
-            servicegroups_l = DBSession.query(Host.name, ServiceLowLevel.servicename) \
-                    .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
-                    .filter(ServiceLowLevel.servicename.like('%'+service+'%')) \
-                    .all()
+            servicegroups_l = DBSession.query( \
+              Host.name, ServiceLowLevel.servicename) \
+              .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+              .filter(ServiceLowLevel.servicename.like('%'+service+'%')) \
+              .all()
         elif host is None and service is None:
-            servicegroups_l = DBSession.query(Host.name, ServiceLowLevel.servicename) \
-                    .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
-                    .all()
+            servicegroups_l = DBSession.query( \
+              Host.name, ServiceLowLevel.servicename) \
+              .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+              .all()
 
         if servicegroups_l is not None and servicegroups_l != []:
             return dict(items=[(sg[0], sg[1]) for sg in set(servicegroups_l)])
         else:
             return dict(items=[])
 
-    @expose(content_type='image/png')
-    def getImage(self, host, start=None, duration=86400, graph=None, details=1):
+    @expose(content_type='text/plain')
+    def getImage(self, host, start=None, duration=86400, graph=None, details=1, nocache=0):
         '''getImage'''
+
         if start is None:
             start = int(time.time()) - 24*3600
 
         # valeurs particulieres
         direct = 1
-        fakeIncr = random.randint(0,9999999999)
+        fakeIncr = random.randint(0, 9999999999)
 
         # TODO : url_l : selon configuration
         url_l = 'http://localhost/rrdgraph'
 
         rrdproxy = RRDProxy(url_l)
         try:
-            #result = rrdproxy.rrd_img_ap(host, graph, direct, start, duration, int(details), fakeincr)
-            result = rrdproxy.rrd_img_ap(host, graph, direct, duration, start, int(details))
+            result = rrdproxy.get_img_name_with_params(host, graph, direct, duration, \
+            start, int(details))
+        except urllib2.URLError, e:
+            print _("Can't get RRD graph \"%s\" on host \"%s\"") \
+                    % (graph, host)
+            result = None
+
+        #result = 'http://localhost/rrdgraph-cache/par.linux0_IO_1261485963_86400_1.png'
+        return result
+
+    @expose(content_type='image/png')
+    def getImage_png(self, host, start=None, duration=86400, graph=None, details=1):
+        '''getImage'''
+        if start is None:
+            start = int(time.time()) - 24*3600
+
+        # valeurs particulieres
+        direct = 1
+        fakeIncr = random.randint(0, 9999999999)
+
+        # TODO : url_l : selon configuration
+        url_l = 'http://localhost/rrdgraph'
+
+        rrdproxy = RRDProxy(url_l)
+        try:
+            result = rrdproxy.get_img_with_params(host, graph, direct, duration, \
+            start, int(details))
         except urllib2.URLError, e:
             print _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
@@ -203,15 +240,15 @@ class RpcController(BaseController):
         '''getStartTime'''
 
         getstarttime = 1
-        fakeincr = random.randint(0,9999999999)
+        fakeincr = random.randint(0, 9999999999)
 
         # TODO : url_l : selon configuration
         url_l = 'http://localhost/rrdgraph'
 
         rrdproxy = RRDProxy(url_l)
         try:
-            #result = rrdproxy.rrd_getstarttime(host, getstarttime, fakeincr)
-            result = rrdproxy.rrd_getstarttime(host, getstarttime)
+            #result = rrdproxy.get_getstarttime(host, getstarttime, fakeincr)
+            result = rrdproxy.get_getstarttime(host, getstarttime)
         except urllib2.URLError, e:
             print _("Can't get RRD data on host \"%s\"") \
                     % (host)
@@ -222,15 +259,110 @@ class RpcController(BaseController):
     @expose('')
     def subPage(self, host):
         '''subPage'''
-        #try:
-        #    #util.redirect(req,"/%s/cgi-bin/nagios2/status.cgi?host=%s \
-        #&style=detail&supNav=1"%(navconf.hosts[host]['supServer'],host))
-        #except:
-        #    req.content_type = "text/html"
-        #    req.write("<html><body bgcolor='#C3C7D3'> \
-        #<p>Unable to find supervision page for %s.<br/>Are You sure \
-        #it has been inserted into the supervision configuration ? \
-        #</p></body></html>\n"%host)
 
-        return 'subPage'
+        '''  
+        try:
+            util.redirect(req,"/%s/cgi-bin/nagios2/status.cgi?host=%s \
+        &style=detail&supNav=1"%(navconf.hosts[host]['supServer'],host))
+        except:
+            req.content_type = "text/html"
+            req.write("<html><body bgcolor='#C3C7D3'> \
+        <p>Unable to find supervision page for %s.<br/>Are You sure \
+        it has been inserted into the supervision configuration ? \
+        </p></body></html>\n" % host)
+        '''
 
+        result = None
+
+        # TODO : url_l : selon configuration
+        url_l = 'http://localhost/cgi-bin/nagios2'
+
+        nagiosproxy = NagiosProxy(url_l)
+        try:
+            result = nagiosproxy.get_status(host)
+        except e:
+            response.content_type = "text/html"
+            response.write("<html><body bgcolor='#C3C7D3'> \
+                <p>Unable to find supervision page for %s.<br/>Are You sure \
+                it has been inserted into the supervision configuration ? \
+                </p></body></html>\n" % host)
+
+        return result
+
+    def servicePage(self, host, service):
+        '''servicePage'''
+
+        '''  
+        try:
+            util.redirect(req,
+            "%s/%s/%s/extinfo.cgi?type=2&host=%s&service=%s&supNav=1" % \
+                (os.path.dirname(os.path.dirname(req.uri)),
+                 navconf.hosts[host]['supServer'],
+                 paths.nagios_web_path,
+                 host,
+                 urllib.quote_plus(service)
+                )
+            )
+        except:
+            req.content_type = "text/html"
+            req.write("<html><body bgcolor='#C3C7D3'> \
+            <p>Unable to find supervision page for %s/%s.<br/>Are You sure \
+            it has been inserted into the supervision configuration ? \
+            </p></body></html>\n" % (host, service))
+        '''  
+
+        result = None
+
+        # TODO : url_l : selon configuration
+        url_l = 'http://localhost/cgi-bin/nagios2'
+
+        nagiosproxy = NagiosProxy(url_l)
+        try:
+            result = nagiosproxy.get_extinfo(host, service)
+        except e:
+            response.content_type = "text/html"
+            response.write("<html><body bgcolor='#C3C7D3'> \
+            <p>Unable to find supervision page for %s.<br/>Are You sure \
+            it has been inserted into the supervision configuration ? \
+            </p></body></html>\n" % (host, service))
+
+        return result
+
+    def metroPage(self, host):
+        '''metroPage'''
+
+        print '&&&&&'
+        print 'metroPage'
+        print '&&&&&'
+
+
+        '''
+        host = re.sub('^_.*?_', '', host)
+        try:
+            #util.redirect(req,"/vigilo/supnavigator/%s/vigilo/rrdgraph/ \
+            rrdgraph.py?server=%s"%(navconf.hosts[host]['metroServer'],host))
+            util.redirect(req,"fullHostPage?host=%s"%host)
+        except:
+            req.content_type = "text/html"
+            req.write("<html><body bgcolor='#C3C7D3'> \
+            <p>Unable to find metrology page for %s.<br/>Are You sure \
+            it has been inserted into the supervision configuration ? \
+            </p></body></html>\n" % host)
+        '''
+
+        result = None
+
+        # TODO : url_l : selon configuration
+        url_l = 'http://localhost/rrdgraph'
+
+        rrdproxy = RRDProxy(url_l)
+        try:
+            result = rrdproxy.get_host(host)
+        except e:
+            response.content_type = "text/html"
+            response.write("<html><body bgcolor='#C3C7D3'> \
+            <p>Unable to find metrology page for %s.<br/>Are You sure \
+            it has been inserted into the supervision configuration ? \
+            </p></body></html>\n" % host)
+
+        return result

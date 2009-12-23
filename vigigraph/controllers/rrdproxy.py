@@ -20,7 +20,7 @@ class RRDProxy(object):
         #" a renseigner selon configuration
         self._url = url
 
-    def rrd_last_value(self, server, indicator):
+    def get_last_value(self, server, indicator):
         '''
         lecture derniere valeur de metrologie associee au parametre indicator
      
@@ -29,6 +29,7 @@ class RRDProxy(object):
         @param indicator : indicateur
         @type indicator : C{str}
 
+        @return :
         @rtype: liste de deux elements
         '''
 
@@ -56,20 +57,54 @@ class RRDProxy(object):
 
         return result
 
-    def rrd_img(self, server, graphtemplate):
+    def get_host(self, server):
+        '''
+        lecture hôte
+
+        @param server : serveur
+        @type server : C{str}
+
+        @return :
+        @rtype : 
+        '''
+
+        values = {'server' : server}
+
+        data = urllib.urlencode(values)
+
+        url = self._url
+        url += '/rrdgraph.py'
+
+        #print 'A - ***** %s' % url
+ 
+        proxy_handler = urllib2.ProxyHandler({'http': url})
+        opener = urllib2.build_opener(proxy_handler)
+
+        result = None
+        handle = opener.open(url, data)
+        if handle is not None:
+            result = handle.read()
+            handle.close()
+
+        #print 'B - ***** %s' % result
+
+        return result
+
+    def get_img(self, server, graph):
         '''
         lecture image
 
         @param server : serveur
         @type server : C{str}
-        @param graphtemplate : graphe
-        @type graphtemplate : C{str}
+        @param graph : graphe
+        @type graph : C{str}
 
+        @return :
         @rtype : image
         '''
 
         values = {'server' : server,
-                  'graphtemplate' : graphtemplate,
+                  'graphtemplate' : graph,
                   'direct' : 1}
 
         data = urllib.urlencode(values)
@@ -92,59 +127,21 @@ class RRDProxy(object):
 
         return result
 
-
-    def rrd_img_data(self, server, graphtemplate):
-        '''
-        lecture donnees image : src et alt
-
-        @param server : serveur
-        @type server : C{str}
-        @param graphtemplate : graphe
-        @type graphtemplate : C{str}
-
-        @rtype : C{str}
-        '''
-
-        result = {}
-
-        values = {'server' : server,
-                  'graphtemplate' : graphtemplate,
-                  'details' : 0}
-
-        data = urllib.urlencode(values)
-
-        url = self._url
-        url += '/rrdgraph.py'
-    
-        proxy_handler = urllib2.ProxyHandler({'http': url})
-        opener = urllib2.build_opener(proxy_handler)
-
-        handle = opener.open(url, data)
-        if handle is not None:
-            text = handle.read()
-
-            imghtmlparser = ImgHTMLParser()
-            result = imghtmlparser.get_src_alt(text)
-            imghtmlparser.close()
-
-            handle.close()
-        return result
-
-
-    def rrd_img_u(self, server, graphtemplate, urlp):
+    def get_img_url(self, server, graph, urlp):
         '''
         lecture image
 
         @param server : serveur
         @type server : C{str}
-        @param graphtemplate : graphe
-        @type graphtemplate : C{str}
+        @param graph : graphe
+        @type graph : C{str}
 
+        @return :
         @rtype : image
         '''
 
         values = {'server' : server,
-                  'graphtemplate' : graphtemplate,
+                  'graphtemplate' : graph,
                   'direct' : 1}
 
         data = urllib.urlencode(values)
@@ -167,14 +164,54 @@ class RRDProxy(object):
 
         return result
 
-    def rrd_img_ap(self, server, graphtemplate, direct, duration, start, details):
+    def get_img_data(self, server, graph):
         '''
-        lecture image avec all parameters
+        lecture donnees image : src et alt
+
+        @param server : serveur
+        @type server : C{str}
+        @param graph : graphe
+        @type graph : C{str}
+
+        @return :
+        @rtype : C{str}
+        '''
+
+        result = {}
+
+        values = {'server' : server,
+                  'graphtemplate' : graph,
+                  'details' : 0}
+
+        data = urllib.urlencode(values)
+
+        url = self._url
+        url += '/rrdgraph.py'
+    
+        #print 'A - ***** %s' % url
+ 
+        proxy_handler = urllib2.ProxyHandler({'http': url})
+        opener = urllib2.build_opener(proxy_handler)
+
+        handle = opener.open(url, data)
+        if handle is not None:
+            text = handle.read()
+
+            imghtmlparser = ImgHTMLParser()
+            result = imghtmlparser.get_src_alt(text)
+            imghtmlparser.close()
+
+            handle.close()
+        return result
+
+    def get_img_with_params(self, server, graph, direct, duration, start, details):
+        '''
+        lecture image avec parametres
      
         @param server : serveur
         @type server : C{str}
-        @param graphtemplate : graphe
-        @type graphtemplate : C{str}
+        @param graph : graphe
+        @type graph : C{str}
         @param direct : 
         @type direct : int
         @param start : 
@@ -184,28 +221,27 @@ class RRDProxy(object):
         @param details : 
         @type details : int
 
-        @rtype:
+        @return : image
+        @rtype :
         '''
 
         values = {'server' : server,
-                  'graphtemplate' : graphtemplate,
+                  'graphtemplate' : graph,
                   'direct' : direct,
                   'duration' : duration,
                   'start' : start,
-                  'details' : details
-        }
+                  'details' : details}
 
         data = urllib.urlencode(values)
-        print 'I - ***** data %s', data
 
         url = self._url
         url += '/rrdgraph.py'
-        print 'I - ***** url %s' % url
     
+        #print 'A - ***** %s' % url
+ 
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        value = None
         handle = opener.open(url, data)
         if handle is not None:
             result = handle.read()
@@ -213,7 +249,60 @@ class RRDProxy(object):
 
         return result
 
-    def rrd_getstarttime(self, server, getstarttime):
+    def get_img_name_with_params(self, server, graph, direct, duration, start, details):
+        '''
+        lecture nom image avec parametres
+     
+        @param server : serveur
+        @type server : C{str}
+        @param graph : graphe
+        @type graph : C{str}
+        @param direct : 
+        @type direct : int
+        @param start : 
+        @type start : int
+        @param duration : 
+        @type duration : int
+        @param details : 
+        @type details : int
+
+        @return : nom image
+        @rtype: C{str}
+        '''
+
+        img_name = ''
+
+        values = {'server' : server,
+                  'graphtemplate' : graph,
+                  'direct' : direct,
+                  'duration' : duration,
+                  'start' : start,
+                  'details' : details}
+
+        data = urllib.urlencode(values)
+
+        url = self._url
+        url += '/rrdgraph.py'
+    
+        print 'A - ***** %s' % url
+        print 'B - ***** %s' % data
+ 
+        proxy_handler = urllib2.ProxyHandler({'http': url})
+        opener = urllib2.build_opener(proxy_handler)
+
+        handle = opener.open(url, data)
+        if handle is not None:
+            result = handle.read()
+            handle.close()
+            img_name = url + data
+
+        print 'C - ***** %s' % opener
+        print 'D - ***** %s' % handle
+        print 'E - ***** %s' % img_name
+
+        return img_name
+
+    def get_getstarttime(self, server, getstarttime):
         '''
         lecture valeur temps
      
