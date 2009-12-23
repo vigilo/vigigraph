@@ -574,7 +574,22 @@ qx.Class.define("vigigraph.Application",
       function loadImage(myUrl,o)
       {
         o.removeAll();
-        o.add(new qx.ui.basic.Image(myUrl+"&fakeIncr="+fakeIncr++));
+
+        // Old
+        // o.add(new qx.ui.basic.Image(myUrl+"&fakeIncr="+fakeIncr++));
+
+        // New
+        var i=new qx.io.remote.Request(url,"GET","text/plain");
+        i.addEventListener("completed", function(e) { 
+          //alert("e.getData() : "+ e.getData());
+          //alert("e.getContent() : "+ e.getContent());
+          img = e.getContent();
+          if (img)
+          {
+            o.add(new qx.ui.basic.Image(e.getContent()));
+          }
+        });
+        i.send();
       }
       function getTime() // we use a function because the window can be opened a long time without reloading
       {
@@ -584,6 +599,7 @@ qx.Class.define("vigigraph.Application",
       function updateGraphOnStartTime()
       {
         var url= urls.getStartTime+"?host="+encodeURIComponent(host);
+        alert("getStartTime : "+url);
         var g=new qx.io.remote.Request(url,"GET","text/plain");
         g.addEventListener("completed", function(e) { 
           start = parseInt(e.getValue().getContent());
