@@ -281,7 +281,7 @@ class RpcController(BaseController):
 
         result = None
 
-        # TODO : url_l : selon configuration
+        # url selon configuration
         #url_l = 'http://localhost/cgi-bin/nagios2'
         url_l = settings.get('NAGIOS_URL')
 
@@ -321,7 +321,7 @@ class RpcController(BaseController):
 
         result = None
 
-        # TODO : url_l : selon configuration
+        # url selon configuration
         #url_l = 'http://localhost/cgi-bin/nagios2'
         url_l = settings.get('NAGIOS_URL')
 
