@@ -14,6 +14,8 @@ from vigilo.models.secondary_tables import HOST_GROUP_TABLE
 
 from sqlalchemy.orm import aliased
 
+from vigilo.common.conf import settings
+        
 from rrdproxy import RRDProxy
 from nagiosproxy import NagiosProxy
 
@@ -189,6 +191,8 @@ class RpcController(BaseController):
     def getImage(self, host, start=None, duration=86400, graph=None, details=1, nocache=0):
         '''getImage'''
 
+        print '&&&&& - getImage'
+
         if start is None:
             start = int(time.time()) - 24*3600
 
@@ -196,8 +200,9 @@ class RpcController(BaseController):
         direct = 1
         fakeIncr = random.randint(0, 9999999999)
 
-        # TODO : url_l : selon configuration
-        url_l = 'http://localhost/rrdgraph'
+        # url selon configuration
+        #url_l = 'http://localhost/rrdgraph'
+        url_l = settings.get('RRD_URL')
 
         rrdproxy = RRDProxy(url_l)
         try:
@@ -221,9 +226,10 @@ class RpcController(BaseController):
         direct = 1
         fakeIncr = random.randint(0, 9999999999)
 
-        # TODO : url_l : selon configuration
-        url_l = 'http://localhost/rrdgraph'
-
+        # url selon configuration
+        #url_l = 'http://localhost/rrdgraph'
+        url_l = settings.get('RRD_URL')
+    
         rrdproxy = RRDProxy(url_l)
         try:
             result = rrdproxy.get_img_with_params(host, graph, direct, duration, \
@@ -242,8 +248,9 @@ class RpcController(BaseController):
         getstarttime = 1
         fakeincr = random.randint(0, 9999999999)
 
-        # TODO : url_l : selon configuration
-        url_l = 'http://localhost/rrdgraph'
+        # url selon configuration
+        #url_l = 'http://localhost/rrdgraph'
+        url_l = settings.get('RRD_URL')
 
         rrdproxy = RRDProxy(url_l)
         try:
@@ -275,7 +282,8 @@ class RpcController(BaseController):
         result = None
 
         # TODO : url_l : selon configuration
-        url_l = 'http://localhost/cgi-bin/nagios2'
+        #url_l = 'http://localhost/cgi-bin/nagios2'
+        url_l = settings.get('NAGIOS_URL')
 
         nagiosproxy = NagiosProxy(url_l)
         try:
@@ -314,7 +322,8 @@ class RpcController(BaseController):
         result = None
 
         # TODO : url_l : selon configuration
-        url_l = 'http://localhost/cgi-bin/nagios2'
+        #url_l = 'http://localhost/cgi-bin/nagios2'
+        url_l = settings.get('NAGIOS_URL')
 
         nagiosproxy = NagiosProxy(url_l)
         try:
@@ -352,8 +361,9 @@ class RpcController(BaseController):
 
         result = None
 
-        # TODO : url_l : selon configuration
-        url_l = 'http://localhost/rrdgraph'
+        # url selon configuration
+        #url_l = 'http://localhost/rrdgraph'
+        url_l = settings.get('RRD_URL')
 
         rrdproxy = RRDProxy(url_l)
         try:
