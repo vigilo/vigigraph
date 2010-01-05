@@ -19,6 +19,7 @@ class RRDProxy(object):
         '''Constructeur'''
         #" a renseigner selon configuration
         self._url = url
+        self._url += '/rrdgraph.py'
 
     def get_last_value(self, server, indicator):
         '''
@@ -40,7 +41,6 @@ class RRDProxy(object):
         print 'data %s', data
 
         url = self._url
-        url += '/rrdgraph.py'
         url += '/outputMetrologie'
     
         proxy_handler = urllib2.ProxyHandler({'http': url})
@@ -54,6 +54,8 @@ class RRDProxy(object):
             #if result is not None:
             #    value = result[0] 
             handle.close()
+
+        #print 'B - ***** %s' % result
 
         return result
 
@@ -73,10 +75,7 @@ class RRDProxy(object):
         data = urllib.urlencode(values)
 
         url = self._url
-        url += '/rrdgraph.py'
 
-        #print 'A - ***** %s' % url
- 
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
@@ -110,10 +109,7 @@ class RRDProxy(object):
         data = urllib.urlencode(values)
 
         url = self._url
-        url += '/rrdgraph.py'
 
-        #print 'A - ***** %s' % url
- 
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
@@ -147,10 +143,7 @@ class RRDProxy(object):
         data = urllib.urlencode(values)
 
         url = urlp
-        url += '/rrdgraph.py'
 
-        #print 'A - ***** %s' % url
- 
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
@@ -186,10 +179,7 @@ class RRDProxy(object):
         data = urllib.urlencode(values)
 
         url = self._url
-        url += '/rrdgraph.py'
     
-        #print 'A - ***** %s' % url
- 
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
@@ -202,6 +192,9 @@ class RRDProxy(object):
             imghtmlparser.close()
 
             handle.close()
+
+        #print 'B - ***** %s' % result
+
         return result
 
     def get_img_with_params(self, server, graph, direct, duration, start, details):
@@ -235,10 +228,7 @@ class RRDProxy(object):
         data = urllib.urlencode(values)
 
         url = self._url
-        url += '/rrdgraph.py'
     
-        #print 'A - ***** %s' % url
- 
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
@@ -246,6 +236,8 @@ class RRDProxy(object):
         if handle is not None:
             result = handle.read()
             handle.close()
+
+        #print 'B - ***** %s' % result
 
         return result
 
@@ -282,11 +274,7 @@ class RRDProxy(object):
         data = urllib.urlencode(values)
 
         url = self._url
-        url += '/rrdgraph.py'
     
-        print 'A - ***** %s' % url
-        print 'B - ***** %s' % data
- 
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
@@ -294,12 +282,10 @@ class RRDProxy(object):
         if handle is not None:
             result = handle.read()
             handle.close()
-            img_name = url + data
+            img_name = url + '?' + data
 
-        print 'C - ***** %s' % opener
-        print 'D - ***** %s' % handle
-        print 'E - ***** %s' % img_name
-
+        #print 'B - ***** %s' % img_name
+ 
         return img_name
 
     def get_getstarttime(self, server, getstarttime):
@@ -322,8 +308,6 @@ class RRDProxy(object):
         print 'T - ***** data %s', data
 
         url = self._url
-        url += '/rrdgraph.py'
-        print 'T - ***** url %s' % url
     
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
@@ -334,7 +318,7 @@ class RRDProxy(object):
             result = handle.read()
             handle.close()
 
-        print 'T - ***** result %s' % result
+        print 'T - ***** %s' % result
 
         return result
 
