@@ -163,6 +163,24 @@ qx.Class.define("vigigraph.Application",
       gl.add(bp,3,5);
 
       // Buttons
+      bp.addEventListener("execute",function(e) {
+        var nb = document.images.length;
+        //nb = document.getElementsByTagName("img").length; // idem à précédent
+
+        alert("document.images.length : "+nb);
+        var src = "";
+        for (i = 0; i < nb; i++)
+        {
+          src = document.images[i].src;
+
+          pos = src.search("/rrdgraph.py");
+          if (pos != -1)
+          {
+            alert("i :"+i+"-"+src+"-"+pos);
+          }
+        }
+      });
+
       b3.addEventListener("execute",function(e) {
         var win = new qx.client.NativeWindow(urls.subPage+"?host="+combo3.getSelected().getLabel());
         win.setDimension(800,600);
@@ -338,7 +356,7 @@ qx.Class.define("vigigraph.Application",
           var col = e.getColumn();
           var value_host = search_results_model.getValue(0, row);
           var value_service = search_results_model.getValue(1, row);
-          if (!value_service) {
+          if (!value_service) {document.body.outerHTML
             _selectHostAndService(value_host, null, this);
           } else {
             _selectHostAndService(value_host, value_service, this);
@@ -356,7 +374,7 @@ qx.Class.define("vigigraph.Application",
           }
         });
         search_host.addEventListener("changeValue", function(e) {
-          _searchResultsUpdater(search_host.getValue(), search_service.getValue());
+          _searchResultsUpdater(search_host.getValue(), search_service.getValue());document.body.outerHTML
         });
         search_service.addEventListener("keydown", function(e) {
           if (e.getKeyIdentifier() == "Enter") {
@@ -371,7 +389,7 @@ qx.Class.define("vigigraph.Application",
           _searchResultsUpdater(search_host.getValue(), search_service.getValue());
         });
         w_search.open();
-        w_search.setTop(w1.getTop());
+        w_search.setTop(w1.getTop());document.body.outerHTML
         w_search.setLeft(qx.html.Location.getPageBoxRight(w1.getElement()));
         // centerToBrowser does not work on window objects (breaks the buttons in the title bar)
         //w_search.centerToBrowser()
@@ -474,10 +492,11 @@ qx.Class.define("vigigraph.Application",
       }
       combo1.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostGroupList(e.getValue().getValue()); });
       combo2.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostList(e.getValue().getValue()); });
-      combo3.addEventListener("changeSelected", function(e) { if(e.getValue()) { b3.setEnabled(true);_updateGraphGroupList(e.getValue().getValue()); _updateReports(combo3.getSelected().getLabel());} });
+      combo3.addEventListener("changeSelected", function(e) { if(e.getValue()) { b3.setEnabled(true);_updateGraphGroupList(e.getValue().getValue());} });
       combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(e.getValue().getValue());} });
       //combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(combo3.getSelected().getLabel(),e.getValue().getLabel());} });
       combo5.addEventListener("changeSelected", function(e) { if(e.getValue()) b5.setEnabled(true); });
+
       r1.addEventListener("execute",function(e) { _updateServerGroupList();});
       r2.addEventListener("execute",function(e) { _updateHostGroupList(combo1.getSelected().getLabel());});
       r3.addEventListener("execute",function(e) { _updateHostList(combo2.getSelected().getLabel());});
@@ -568,21 +587,16 @@ qx.Class.define("vigigraph.Application",
       w.setResizable(false, false, false, false);
       function setUrl(start,duration)
       {
+        //alert("setUrl");
         url= urls.getImage+"?host="+encodeURIComponent(host)+"&start="+start+"&duration="+duration+"&graph="+encodeURIComponent(graph);
         qx.log.Logger.ROOT_LOGGER.debug(url);
       }
       function loadImage(myUrl,o)
       {
+        //alert("loadImage");
         o.removeAll();
-
-        // Old
-        // o.add(new qx.ui.basic.Image(myUrl+"&fakeIncr="+fakeIncr++));
-
-        // New
         var i=new qx.io.remote.Request(url,"GET","text/plain");
         i.addEventListener("completed", function(e) { 
-          //alert("e.getData() : "+ e.getData());
-          //alert("e.getContent() : "+ e.getContent());
           img = e.getContent();
           if (img)
           {
@@ -688,6 +702,38 @@ qx.Class.define("vigigraph.Application",
         var re = new RegExp(host+";"+encodeURIComponent(graph)+';-?[0-9]+;-?[0-9]+')
         var state = state.replace(re, "").replace(/\+\+/, "+").replace(/\+$/,'');
         qx.client.History.getInstance().addToHistory(state, this.tr("Vigilo Graphic"));
+
+        // pour rafraichissement
+        var cdi = qx.ui.core.ClientDocument.getInstance();
+        if (cdi)
+        {
+          var index = -1;
+          var nbc = cdi.getChildren().length;
+          for (i = 0; i < nbc; i++)
+          {
+            var c_l = cdi.getChildren()[i];
+            if (c_l)
+            {
+              if (c_l.name == "qx.ui.window.Window")
+              {
+                /*
+                caption_l = c_l.getCaption();
+                status_l = c_l.getStatus();
+                */
+                if (c_l == w)
+                {
+                  index = i;
+                  break;
+                }
+              }
+            }
+          }
+          // suppression element courant
+          if (index != -1)
+          {
+            cdi.remove(cdi.getChildren()[index]);
+          }
+        }
       });
       w._captionBar.addEventListener("mouseup", function(e) { 
         var state = qx.client.History.getInstance().getState();
@@ -712,6 +758,7 @@ qx.Class.define("vigigraph.Application",
       } else {
         w.setTop(5);
       }
+
       // Add to history if we are opening a new window (not on restore)
       if (add_to_history) {
         var state = qx.client.History.getInstance().getState();
