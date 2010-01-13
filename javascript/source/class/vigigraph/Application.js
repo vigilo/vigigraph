@@ -163,6 +163,8 @@ qx.Class.define("vigigraph.Application",
 
       gl.add(bp,3,5);
 
+      _updateServerGroupList();
+
       var w2 = undefined;
 
       function getIndexWindow (cdi, w)
@@ -725,14 +727,62 @@ qx.Class.define("vigigraph.Application",
         }
         return index_l;
       }
+
+      var t = undefined;
+      function tempoFireRefresh()
+      {
+        // 5 minutes
+        var delay = 5*60*1000;
+        t = setTimeout(tempoFallRefresh, delay);
+      }
+      function tempoFallRefresh()
+      {
+        var now = getTime();
+        start = now - 24 * 3600;
+        duration = 24 * 3600;
+        setUrl(start, duration);
+        loadImage(url,l);
+        // rafraichissement periodique
+        tempoFireRefresh();
+      }
+      function tempoClearRefresh()
+      {
+        if (t != undefined)
+        {
+          clearTimeout(t);
+        }
+      }
+
       // Default
       var now = getTime();
       start = now - 24 * 3600;
       duration = 24 * 3600;
       setUrl(start, duration);
       loadImage(url,l);
+
       // Events
-      bt_refresh.addEventListener("execute",function(e) { loadImage(url,l); });
+      bt_refresh.addEventListener("execute",function(e) {
+        var state = "activated";
+        var label = "";
+        if (bt_refresh.hasState(state))
+        {
+          // bouton actif -> on le rend desactif
+          bt_refresh.removeState(state);
+          label = "removeState";
+          // liberation timer
+          tempoClearRefresh();
+        }
+        else
+        {
+          // bouton desactif -> on le rend actif
+          bt_refresh.addState(state);
+          loadImage(url,l);
+          label = "addState";
+          // armement timer pour rafraichissement periodique
+          tempoFireRefresh();
+        }
+        alert("label state:"+label);          
+      });
       time_menu_bt.addEventListener("click", function(e)
       {
         if ( time_menu.isSeeable() )
