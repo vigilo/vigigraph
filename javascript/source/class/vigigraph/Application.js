@@ -50,7 +50,8 @@ var urls = {
     "getImage": "/rpc/getImage",
     "getStartTime": "/rpc/getStartTime",
     "getIdHost": "/rpc/getIdHost",
-    "getIdService": "/rpc/getIdService"
+    "getIdService": "/rpc/getIdService",
+    "graphsList": "/rpc/graphsList"
 };
 
 /**
@@ -162,21 +163,96 @@ qx.Class.define("vigigraph.Application",
 
       gl.add(bp,3,5);
 
+      var w2 = undefined;
+
+      function getIndexWindow (cdi, w)
+      {
+        // var cdi = qx.ui.core.ClientDocument.getInstance();
+        var index_l = -1;
+        if (cdi)
+        {
+          var nb = cdi.getChildren().length;
+          for (i = 0; i < nb; i++)
+          {
+            var c_l = cdi.getChildren()[i];
+            if (c_l)
+            {
+              if (c_l.name == "qx.ui.window.Window")
+              {
+                caption_l = c_l.getCaption();
+                if (c_l == w)
+                {
+                  //alert("caption_l :"+caption_l+"-");
+                  index_l = i;
+                }
+              }
+            }
+          }
+        }
+        return index_l;
+      }
+
+      function tempoFire(Delay)
+      {
+        //alert("Temporisation:"+Delay);
+        var a = setTimeout(tempoFall, Delay);
+      }
+
+      function tempoFall()
+      {
+        //alert("Tombee Temporisation:"+w2);
+        if ( w2 != undefined)
+        {
+          w2.close();
+        }
+      }
+
       // Buttons
       bp.addEventListener("execute",function(e) {
         var nb = document.images.length;
-        //nb = document.getElementsByTagName("img").length; // idem à précédent
 
-        alert("document.images.length : "+nb);
-        var src = "";
+        // liste src
+        var index_p = -1;
+        var src_l = "";
+        var src_tab = new Array;
+        var j = 0;
         for (i = 0; i < nb; i++)
         {
-          src = document.images[i].src;
+          src_l = document.images[i].src;
+          //alert(src_l);
 
-          pos = src.search("/rrdgraph.py");
+          // graphe rrd ?
+          pos = src_l.search("/rrdgraph.py");
           if (pos != -1)
           {
-            alert("i :"+i+"-"+src+"-"+pos);
+            src_tab[j] = encodeURIComponent(src_l);
+            j += 1; 
+          }
+        }
+
+        // impression à partir nouvelle fenêtre
+        var lh = src_tab.length;
+        if (lh > 0)
+        {
+          var url = urls.graphsList;
+          url += "?";
+          for (i = 0; i < lh; i++)
+          {
+            if (i > 0)
+            {
+              url += "&";
+            }
+            url += i;
+            url += "=";
+            url += src_tab[i];
+          }
+          //alert("url:"+url);
+
+          w2 = window.open(url);
+          w2.onload = function(){
+            w2.print();
+            wDelay = 1000;
+            tempoFire(wDelay);
           }
         }
       });
@@ -623,6 +699,32 @@ qx.Class.define("vigigraph.Application",
         });
         g.send();
       }
+      function getIndexWindow (cdi, w)
+      {
+        // var cdi = qx.ui.core.ClientDocument.getInstance();
+        var index_l = -1;
+        if (cdi)
+        {
+          var nb = cdi.getChildren().length;
+          for (i = 0; i < nb; i++)
+          {
+            var c_l = cdi.getChildren()[i];
+            if (c_l)
+            {
+              if (c_l.name == "qx.ui.window.Window")
+              {
+                caption_l = c_l.getCaption();
+                if (c_l == w)
+                {
+                  //alert("caption_l :"+caption_l+"-");
+                  index_l = i;
+                }
+              }
+            }
+          }
+        }
+        return index_l;
+      }
       // Default
       var now = getTime();
       start = now - 24 * 3600;
@@ -704,35 +806,14 @@ qx.Class.define("vigigraph.Application",
         qx.client.History.getInstance().addToHistory(state, this.tr("Vigilo Graphic"));
 
         // pour rafraichissement
+        var index_l = -1;
         var cdi = qx.ui.core.ClientDocument.getInstance();
-        if (cdi)
+        index_l = getIndexWindow(cdi, w);
+        if (index_l != -1)
         {
-          var index = -1;
-          var nbc = cdi.getChildren().length;
-          for (i = 0; i < nbc; i++)
-          {
-            var c_l = cdi.getChildren()[i];
-            if (c_l)
-            {
-              if (c_l.name == "qx.ui.window.Window")
-              {
-                /*
-                caption_l = c_l.getCaption();
-                status_l = c_l.getStatus();
-                */
-                if (c_l == w)
-                {
-                  index = i;
-                  break;
-                }
-              }
-            }
-          }
           // suppression element courant
-          if (index != -1)
-          {
-            cdi.remove(cdi.getChildren()[index]);
-          }
+          c_l = cdi.getChildren()[index_l];
+          cdi.remove(c_l);
         }
       });
       w._captionBar.addEventListener("mouseup", function(e) { 
