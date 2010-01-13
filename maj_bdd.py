@@ -171,6 +171,7 @@ add_ServiceLowLevel2ServiceGroup(s2, sg2)
 add_ServiceLowLevel2ServiceGroup(s3, sg1)
 add_ServiceLowLevel2ServiceGroup(s4, sg2)
 add_ServiceLowLevel2ServiceGroup(s5, sg2)
+add_ServiceLowLevel2ServiceGroup(s5, sg3)
 
 gr1 = create_graph(u'graph1',u'Graph1', None)
 gr2 = create_graph(u'graph2',u'Graph2', None)
@@ -178,6 +179,7 @@ gr3 = create_graph(u'graph3',u'Graph3', None)
 gr4 = create_graph(u'graph4',u'Graph4', None)
 #gr5 = create_graph(u'graph5',u'Graph5', None)
 gr5 = create_graph(u'IO',u'IO', None)
+gr6 = create_graph(u'RAM',u'RAM', None)
 
 graphs = []
 for g in DBSession.query(Graph).all():
@@ -193,5 +195,7 @@ ds4 = create_ds(u'ineth1', u'GAUGE', s4 \
                 , u'Données en entrée sur eth0', graphs[3:4])
 ds5 = create_ds(u'IO', u'GAUGE', s5 \
                 , u'IO', graphs[5:6])
+ds6 = create_ds(u'RAM', u'GAUGE', s5 \
+                , u'IO', graphs[6:7])
 
 transaction.commit()
