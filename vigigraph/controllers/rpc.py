@@ -255,7 +255,7 @@ class RpcController(BaseController):
         rrdproxy = RRDProxy(url_l)
         try:
             #result = rrdproxy.get_getstarttime(host, getstarttime, fakeincr)
-            result = rrdproxy.get_getstarttime(host, getstarttime)
+            result = rrdproxy.get_starttime(host, getstarttime)
         except urllib2.URLError, e:
             print _("Can't get RRD data on host \"%s\"") \
                     % (host)

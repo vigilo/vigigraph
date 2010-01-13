@@ -288,7 +288,7 @@ class RRDProxy(object):
  
         return img_name
 
-    def get_getstarttime(self, server, getstarttime):
+    def get_starttime(self, server, getstarttime):
         '''
         lecture valeur temps
      
