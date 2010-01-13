@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-from tg import request, expose, response
+from tg import request, expose, response, url
 
 from vigigraph.lib.base import BaseController
 from vigigraph.model import DBSession
@@ -376,3 +376,17 @@ class RpcController(BaseController):
             </p></body></html>\n" % host)
 
         return result
+
+    @expose('graphslist.html', content_type='text/html')
+    def graphsList(self, nocache=None, **kwargs):
+        '''print'''
+        #print kwargs
+        graphslist = []
+        for key in kwargs:
+            #print "%s: %s" % (key, kwargs[key])
+            graph = urllib2.unquote(kwargs[key])
+            #print "%s: %s" % (key, graph)
+            graphslist.append(graph)
+        print graphslist
+
+        return dict(graphslist=graphslist)
