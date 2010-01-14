@@ -242,7 +242,7 @@ class RpcController(BaseController):
         return result
 
     @expose('')
-    def getStartTime(self, host):
+    def getStartTime(self, host, nocache=None):
         '''getStartTime'''
 
         getstarttime = 1
@@ -379,7 +379,7 @@ class RpcController(BaseController):
 
     @expose('graphslist.html', content_type='text/html')
     def graphsList(self, nocache=None, **kwargs):
-        '''print'''
+        '''graphsList'''
         #print kwargs
         graphslist = []
         for key in kwargs:
@@ -390,3 +390,9 @@ class RpcController(BaseController):
         print graphslist
 
         return dict(graphslist=graphslist)
+
+    @expose(content_type='text/plain')
+    def tempoDelayRefresh(self, nocache=None):
+        '''tempoDelayRefresh'''
+        delay = settings.get('DELAY_REFRESH')
+        return str(delay)
