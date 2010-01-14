@@ -51,7 +51,8 @@ var urls = {
     "getStartTime": "/rpc/getStartTime",
     "getIdHost": "/rpc/getIdHost",
     "getIdService": "/rpc/getIdService",
-    "graphsList": "/rpc/graphsList"
+    "graphsList": "/rpc/graphsList",
+    "tempoDelayRefresh": "/rpc/tempoDelayRefresh"
 };
 
 /**
@@ -691,10 +692,9 @@ qx.Class.define("vigigraph.Application",
       function updateGraphOnStartTime()
       {
         var url= urls.getStartTime+"?host="+encodeURIComponent(host);
-        alert("getStartTime : "+url);
         var g=new qx.io.remote.Request(url,"GET","text/plain");
         g.addEventListener("completed", function(e) { 
-          start = parseInt(e.getValue().getContent());
+          start = parseInt(e.getContent());
           setStep(start);
           bt_first.setEnabled(false); 
           bt_prev.setEnabled(false);
@@ -728,11 +728,11 @@ qx.Class.define("vigigraph.Application",
         return index_l;
       }
 
+      // timer pour rafraichissement
+      var delay = 5*60*1000;
       var t = undefined;
       function tempoFireRefresh()
       {
-        // 5 minutes
-        var delay = 5*60*1000;
         t = setTimeout(tempoFallRefresh, delay);
       }
       function tempoFallRefresh()
@@ -752,6 +752,15 @@ qx.Class.define("vigigraph.Application",
           clearTimeout(t);
         }
       }
+      function tempoDelayRefresh()
+      {
+        var url= urls.tempoDelayRefresh;
+        var r = new qx.io.remote.Request(url,"GET","text/plain");
+        r.addEventListener("completed", function(e) { 
+          delay = e.getContent();
+        });
+        r.send();
+      }
 
       // Default
       var now = getTime();
@@ -761,6 +770,7 @@ qx.Class.define("vigigraph.Application",
       loadImage(url,l);
 
       // Events
+      tempoDelayRefresh();
       bt_refresh.addEventListener("execute",function(e) {
         var state = "activated";
         var label = "";
@@ -781,7 +791,7 @@ qx.Class.define("vigigraph.Application",
           // armement timer pour rafraichissement periodique
           tempoFireRefresh();
         }
-        alert("label state:"+label);          
+        //alert("label state:"+label);
       });
       time_menu_bt.addEventListener("click", function(e)
       {
