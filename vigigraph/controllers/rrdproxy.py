@@ -5,7 +5,7 @@
 import urllib
 import urllib2
 from HTMLParser import HTMLParser
-from pylons.i18n import ugettext as _
+#from pylons.i18n import ugettext as _
 
 
 class RRDProxy(object):
@@ -34,6 +34,9 @@ class RRDProxy(object):
         @rtype: liste de deux elements
         '''
 
+        handle = None
+        result = None
+
         values = {'host' : server,
                   'indicator' : indicator}
 
@@ -46,14 +49,18 @@ class RRDProxy(object):
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        value = None
-        handle = opener.open(url, data)
-        if handle is not None:
-            result = handle.read()
-            # result = liste -> on prend le premier element ???
-            #if result is not None:
-            #    value = result[0] 
-            handle.close()
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            #print "build_opener - URLError %s" % (e.reason)
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
+                # result = liste -> on prend le premier element ???
+                #if result is not None:
+                #    value = result[0] 
+                handle.close()
 
         #print 'B - ***** %s' % result
 
@@ -70,6 +77,9 @@ class RRDProxy(object):
         @rtype : 
         '''
 
+        handle = None
+        result = None
+
         values = {'server' : server}
 
         data = urllib.urlencode(values)
@@ -79,11 +89,15 @@ class RRDProxy(object):
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        result = None
-        handle = opener.open(url, data)
-        if handle is not None:
-            result = handle.read()
-            handle.close()
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            #print "build_opener - URLError %s" % (e.reason)
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
+                handle.close()
 
         #print 'B - ***** %s' % result
 
@@ -102,6 +116,9 @@ class RRDProxy(object):
         @rtype : image
         '''
 
+        handle = None
+        result = None
+
         values = {'server' : server,
                   'graphtemplate' : graph,
                   'direct' : 1}
@@ -113,11 +130,15 @@ class RRDProxy(object):
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        result = None
-        handle = opener.open(url, data)
-        if handle is not None:
-            result = handle.read()
-            handle.close()
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            print "build_opener - URLError %s" % (e.reason)
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
+                handle.close()
 
         #print 'B - ***** %s' % result
 
@@ -136,6 +157,9 @@ class RRDProxy(object):
         @rtype : image
         '''
 
+        handle = None
+        result = None
+
         values = {'server' : server,
                   'graphtemplate' : graph,
                   'direct' : 1}
@@ -147,11 +171,15 @@ class RRDProxy(object):
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        result = None
-        handle = opener.open(url, data)
-        if handle is not None:
-            result = handle.read()
-            handle.close()
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            #print "build_opener - URLError %s" % (e.reason)
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
+                handle.close()
 
         #print 'B - ***** %s' % result
 
@@ -170,7 +198,8 @@ class RRDProxy(object):
         @rtype : C{str}
         '''
 
-        result = {}
+        handle = None
+        data = {}
 
         values = {'server' : server,
                   'graphtemplate' : graph,
@@ -183,19 +212,24 @@ class RRDProxy(object):
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        handle = opener.open(url, data)
-        if handle is not None:
-            text = handle.read()
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            #print "build_opener - URLError %s" % (e.reason)
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
 
-            imghtmlparser = ImgHTMLParser()
-            result = imghtmlparser.get_src_alt(text)
-            imghtmlparser.close()
+                imghtmlparser = ImgHTMLParser()
+                data = imghtmlparser.get_src_alt(result)
+                imghtmlparser.close()
 
-            handle.close()
+                handle.close()
 
         #print 'B - ***** %s' % result
 
-        return result
+        return data
 
     def get_img_with_params(self, server, graph, direct, duration, start, details):
         '''
@@ -218,6 +252,9 @@ class RRDProxy(object):
         @rtype :
         '''
 
+        handle = None
+        result = None
+
         values = {'server' : server,
                   'graphtemplate' : graph,
                   'direct' : direct,
@@ -232,10 +269,15 @@ class RRDProxy(object):
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        handle = opener.open(url, data)
-        if handle is not None:
-            result = handle.read()
-            handle.close()
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            #print "build_opener - URLError %s" % (e.reason)
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
+                handle.close()
 
         #print 'B - ***** %s' % result
 
@@ -262,6 +304,7 @@ class RRDProxy(object):
         @rtype: C{str}
         '''
 
+        handle = None
         img_name = ''
 
         values = {'server' : server,
@@ -278,13 +321,17 @@ class RRDProxy(object):
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        handle = opener.open(url, data)
-        if handle is not None:
-            result = handle.read()
-            handle.close()
-            img_name = url + '?' + data
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            print "build_opener - URLError %s" % (e.reason)
+            raise
+        finally:
+            if handle is not None:
+                handle.close()
+                img_name = url + '?' + data
 
-        #print 'B - ***** %s' % img_name
+        print 'B - ***** %s' % img_name
  
         return img_name
 
@@ -300,6 +347,9 @@ class RRDProxy(object):
         @rtype:
         '''
 
+        handle = None
+        result = None
+
         values = {'server' : server,
                   'getstarttime' : getstarttime
                  }
@@ -312,11 +362,15 @@ class RRDProxy(object):
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        value = None
-        handle = opener.open(url, data)
-        if handle is not None:
-            result = handle.read()
-            handle.close()
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            print "build_opener - URLError %s" % (e.reason)
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
+                handle.close()
 
         print 'T - ***** %s' % result
 
@@ -405,7 +459,6 @@ class ImgHTMLParser(HTMLParser):
 
         value = ''
         b_start =  False
-        b_end = False
         for elt in ltext:
             # separateur debut = debut element
             if elt.startswith(start_sep) == True:
@@ -416,7 +469,6 @@ class ImgHTMLParser(HTMLParser):
                 if elt.endswith(end_sep) == True:
                     value = elt[len(start_sep):len(elt)-len(end_sep)]
                     b_start =  False
-                    b_end = True
                     break
 
             # separateur fin = fin element
@@ -426,7 +478,6 @@ class ImgHTMLParser(HTMLParser):
                     value += separator
                 value += value_l
                 b_start = False
-                b_end = True
 
             # autre
             else:

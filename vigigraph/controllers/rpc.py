@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-from tg import request, expose, response, url
+from tg import expose, response
 
 from vigigraph.lib.base import BaseController
 from vigigraph.model import DBSession
@@ -24,6 +24,7 @@ from pylons.i18n import ugettext as _
 import time
 import random
 import urllib2
+import re
 
 __all__ = ['RpcController']
 
@@ -191,8 +192,6 @@ class RpcController(BaseController):
     def getImage(self, host, start=None, duration=86400, graph=None, details=1, nocache=0):
         '''getImage'''
 
-        print '&&&&& - getImage'
-
         if start is None:
             start = int(time.time()) - 24*3600
 
@@ -245,6 +244,8 @@ class RpcController(BaseController):
     def getStartTime(self, host, nocache=None):
         '''getStartTime'''
 
+        result = None
+
         getstarttime = 1
         fakeincr = random.randint(0, 9999999999)
 
@@ -259,7 +260,6 @@ class RpcController(BaseController):
         except urllib2.URLError, e:
             print _("Can't get RRD data on host \"%s\"") \
                     % (host)
-            result = -1
 
         return result
 
@@ -288,7 +288,7 @@ class RpcController(BaseController):
         nagiosproxy = NagiosProxy(url_l)
         try:
             result = nagiosproxy.get_status(host)
-        except e:
+        except urllib2.URLError, e:
             response.content_type = "text/html"
             response.write("<html><body bgcolor='#C3C7D3'> \
                 <p>Unable to find supervision page for %s.<br/>Are You sure \
@@ -297,7 +297,8 @@ class RpcController(BaseController):
 
         return result
 
-    def servicePage(self, host, service):
+    @expose('')
+    def servicePage(self, host, service=None):
         '''servicePage'''
 
         '''  
@@ -328,15 +329,17 @@ class RpcController(BaseController):
         nagiosproxy = NagiosProxy(url_l)
         try:
             result = nagiosproxy.get_extinfo(host, service)
-        except e:
+        except urllib2.URLError, e:
             response.content_type = "text/html"
+
             response.write("<html><body bgcolor='#C3C7D3'> \
-            <p>Unable to find supervision page for %s.<br/>Are You sure \
+            <p>Unable to find supervision page for %s/%s.<br/>Are You sure \
             it has been inserted into the supervision configuration ? \
             </p></body></html>\n" % (host, service))
 
         return result
 
+    @expose('')
     def metroPage(self, host):
         '''metroPage'''
 
@@ -359,6 +362,8 @@ class RpcController(BaseController):
             </p></body></html>\n" % host)
         '''
 
+        host = re.sub('^_.*?_', '', host)
+
         result = None
 
         # url selon configuration
@@ -368,7 +373,7 @@ class RpcController(BaseController):
         rrdproxy = RRDProxy(url_l)
         try:
             result = rrdproxy.get_host(host)
-        except e:
+        except urllib2.URLError, e:
             response.content_type = "text/html"
             response.write("<html><body bgcolor='#C3C7D3'> \
             <p>Unable to find metrology page for %s.<br/>Are You sure \

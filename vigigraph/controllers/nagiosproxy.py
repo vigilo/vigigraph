@@ -30,23 +30,43 @@ class NagiosProxy(object):
         @rtype: 
         '''
 
+        #print "get_status"
+
+        handle = None
+        result = None
+
         values = {'host' : host,
                   'style' : 'detail',
                   'supNav' : 1}
 
         data = urllib.urlencode(values)
-        print 'data %s', data
+        #print "data %s" % data
 
         url = self._url
         url += '/status.cgi'
+        #print "url %s" % url
     
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
+        #print "proxy_handler %s" % proxy_handler
+        #print "opener %s" % opener
 
-        handle = opener.open(url, data)
-        if handle is not None:
-            result = handle.read()
-            handle.close()
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            #print "build_opener - URLError %s" % (e.reason)
+            #print "build_opener - URLError %s" % (e.read())
+            raise
+        except urllib2.HTTPError, e:
+            #print "build_opener - HTTPError %s" % (e.code)
+            #print "build_opener - HTTPError %s" % (e.read())
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
+                handle.close()
+
+        #print "result %s" % result
 
         return result
 
@@ -62,23 +82,39 @@ class NagiosProxy(object):
         @rtype: 
         '''
 
+        #print "get_extinfo"
+
+        handle = None
+        result = None
+
         values = {'host' : host,
                   'service' : service,
                   'type' : 2,
                   'supNav' : 1}
 
         data = urllib.urlencode(values)
-        print 'data %s', data
+        #print "data %s" % data
 
         url = self._url
         url += '/extinfo.cgi'
-    
+        #print "url %s" % url
+
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
-        handle = opener.open(url, data)
-        if handle is not None:
-            result = handle.read()
-            handle.close()
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            #print "build_opener - URLError %s" % (e.reason)
+            raise
+        except urllib2.HTTPError, e:
+            #print "build_opener - HTTPError %s" % (e.code)
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
+                handle.close()
+
+        #print "result %s" % result
 
         return result
