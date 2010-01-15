@@ -22,3 +22,14 @@ While developing you may want the server to reload after changes in package file
     $ paster serve --reload development.ini
 
 Then you are ready to go.
+
+
+Attention !!! :
+- accès aux données nagios:
+  * l'authentification a été retirée des fichiers de configuration suivants
+    ( par rapport à ce qui a été décrit par Vincent sur nagios dans le Wiki )
+    - /etc/nagios/cgi.cfg
+      -> use_authentication=0
+    - /etc/httpd/conf/webapps.d/nagios.conf
+      -> suppression des lignes Auth* et Require valid-user dans <Directory /usr/lib/nagios/cgi>
+  
