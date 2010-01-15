@@ -363,9 +363,11 @@ qx.Class.define("vigigraph.Application",
         }
         function _chooseInCombos(host, host_main_group, host_sec_group, service, service_group) {
           function _selectItem(o, item) {
-            // 
             var c_list = o.getList();
-            var c_item = c_list.findValueExact(item);
+            //alert("c_list.length:"+c_list.getChildren().length);
+            // old -> var c_item = c_list.findValueExact(item);
+            var c_item = c_list.findStringExact(item);
+
             if (c_item) {
               o.setSelected(c_item);
             }
@@ -435,7 +437,7 @@ qx.Class.define("vigigraph.Application",
           var col = e.getColumn();
           var value_host = search_results_model.getValue(0, row);
           var value_service = search_results_model.getValue(1, row);
-          if (!value_service) {document.body.outerHTML
+          if (!value_service) {
             _selectHostAndService(value_host, null, this);
           } else {
             _selectHostAndService(value_host, value_service, this);
@@ -565,7 +567,6 @@ qx.Class.define("vigigraph.Application",
       function _updateGraphList(idservice)
       {
         _genericListUpdater(urls.graphs+"?idservice="+idservice,combo5);
-  //+Vigigraph.py/getJSONGraphList?host="+encodeURIComponent(host)+"&graphgroup="+encodeURIComponent(graphGroup),combo5);
         r5.setEnabled(true);
         b5.setEnabled(false);
       }
@@ -694,7 +695,7 @@ qx.Class.define("vigigraph.Application",
         var url= urls.getStartTime+"?host="+encodeURIComponent(host);
         var g=new qx.io.remote.Request(url,"GET","text/plain");
         g.addEventListener("completed", function(e) { 
-          alert("e.getContent():"+e.getContent());
+          //alert("e.getContent():"+e.getContent());
           start = parseInt(e.getContent());
           setStep(start);
           bt_first.setEnabled(false); 
