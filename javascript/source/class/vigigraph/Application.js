@@ -694,6 +694,7 @@ qx.Class.define("vigigraph.Application",
         var url= urls.getStartTime+"?host="+encodeURIComponent(host);
         var g=new qx.io.remote.Request(url,"GET","text/plain");
         g.addEventListener("completed", function(e) { 
+          alert("e.getContent():"+e.getContent());
           start = parseInt(e.getContent());
           setStep(start);
           bt_first.setEnabled(false); 
