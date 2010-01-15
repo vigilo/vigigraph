@@ -104,56 +104,15 @@ class RpcController(BaseController):
             return dict(items=[])
 
     @expose('json')
-    def selectHostAndService(self, **kwargs):
-        """Render the JSON document for the Host and Service"""
-        host = kwargs.get('host')
-        service = kwargs.get('service')
-
-        groups = []
-        services = None
-
-        if host is not None:
-            hg1 = aliased(HostGroup)
-            hg2 = aliased(HostGroup)
-            sg =  aliased(ServiceGroup)
-            if service is not None:
-                for hg1_r, hg2_r, sg_r in \
-                DBSession.query(hg1, hg2, sg) \
-                .filter(hg1.parent == None) \
-                .filter(hg2.parent != None) \
-                .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
-                .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
-                .filter(SERVICE_GROUP_TABLE.c.idservice == Service.idservice) \
-                .filter(SERVICE_GROUP_TABLE.c.idgroup == sg.idgroup) \
-                .filter(Host.idhost == ServiceLowLevel.idhost) \
-                .filter(Service.idservice == ServiceLowLevel.idservice) \
-                .filter(Host.name == host ) \
-                .filter(Service.servicename == service):
-                    if hg1_r.idgroup == hg2_r.parent.idgroup:
-                        groups.append(hg1_r.name)
-                        groups.append(hg2_r.name)
-                        groups.append(sg_r.name)
-            else:
-                for hg1_r, hg2_r in \
-                DBSession.query(hg1, hg2) \
-                .filter(hg1.parent == None) \
-                .filter(hg2.parent != None) \
-                .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
-                .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
-                .filter(Host.name == host ):
-                    if hg1_r.idgroup == hg2_r.parent.idgroup:
-                        groups.append(hg1_r.name)
-                        groups.append(hg2_r.name)
-                        groups.append(None)
-
-        if groups is not None and groups != []:
-            return dict(items=groups)
-        else:
-            return dict(items=[])
-
-    @expose('json')
     def searchHostAndService(self, **kwargs):
         """Render the JSON document for the Host and Service"""
+
+        print ""
+        print ""
+        print "searchHostAndService"
+        print ""
+        print ""
+
         host = kwargs.get('host')
         service = kwargs.get('service')
 
@@ -185,6 +144,69 @@ class RpcController(BaseController):
 
         if servicegroups_l is not None and servicegroups_l != []:
             return dict(items=[(sg[0], sg[1]) for sg in set(servicegroups_l)])
+        else:
+            return dict(items=[])
+
+    @expose('json')
+    def selectHostAndService(self, **kwargs):
+        """Render the JSON document for the Host and Service"""
+        
+        print ""
+        print ""
+        print "selectHostAndService"
+        print ""
+        print ""
+
+        host = kwargs.get('host')
+        #service = kwargs.get('service')
+        service = None
+
+        groups = []
+        services = None
+
+        if host is not None:
+            hg1 = aliased(HostGroup)
+            hg2 = aliased(HostGroup)
+            sg =  aliased(ServiceGroup)
+            if service is not None:
+                for hg1_r, hg2_r, sg_r in \
+                DBSession.query(hg1, hg2, sg) \
+                .filter(hg1.parent == None) \
+                .filter(hg2.parent != None) \
+                .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
+                .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
+                .filter(SERVICE_GROUP_TABLE.c.idservice == Service.idservice) \
+                .filter(SERVICE_GROUP_TABLE.c.idgroup == sg.idgroup) \
+                .filter(Host.idhost == ServiceLowLevel.idhost) \
+                .filter(Service.idservice == ServiceLowLevel.idservice) \
+                .filter(Host.name == host ) \
+                .filter(Service.servicename == service):
+                    if hg1_r.idgroup == hg2_r.parent.idgroup:
+                        groups.append(hg1_r.name)
+                        groups.append(hg2_r.name)
+                        groups.append(sg_r.name)
+                        # 1 seul ensemble
+                        break
+            else:
+                for hg1_r, hg2_r in \
+                DBSession.query(hg1, hg2) \
+                .filter(hg1.parent == None) \
+                .filter(hg2.parent != None) \
+                .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
+                .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
+                .filter(Host.name == host ):
+                    if hg1_r.idgroup == hg2_r.parent.idgroup:
+                        groups.append(hg1_r.name)
+                        groups.append(hg2_r.name)
+                        # 1 seul ensemble
+                        break
+
+        print ""
+        print "groups %s" % groups
+        print ""
+
+        if groups is not None and groups != []:
+            return dict(items=groups)
         else:
             return dict(items=[])
 
