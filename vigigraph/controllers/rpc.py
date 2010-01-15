@@ -107,12 +107,6 @@ class RpcController(BaseController):
     def searchHostAndService(self, **kwargs):
         """Render the JSON document for the Host and Service"""
 
-        print ""
-        print ""
-        print "searchHostAndService"
-        print ""
-        print ""
-
         host = kwargs.get('host')
         service = kwargs.get('service')
 
@@ -151,12 +145,6 @@ class RpcController(BaseController):
     def selectHostAndService(self, **kwargs):
         """Render the JSON document for the Host and Service"""
         
-        print ""
-        print ""
-        print "selectHostAndService"
-        print ""
-        print ""
-
         host = kwargs.get('host')
         #service = kwargs.get('service')
         service = None
@@ -200,10 +188,6 @@ class RpcController(BaseController):
                         groups.append(hg2_r.name)
                         # 1 seul ensemble
                         break
-
-        print ""
-        print "groups %s" % groups
-        print ""
 
         if groups is not None and groups != []:
             return dict(items=groups)
