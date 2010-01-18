@@ -349,11 +349,6 @@ class RpcController(BaseController):
     def metroPage(self, host):
         '''metroPage'''
 
-        print '&&&&&'
-        print 'metroPage'
-        print '&&&&&'
-
-
         '''
         host = re.sub('^_.*?_', '', host)
         try:
