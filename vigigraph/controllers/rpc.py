@@ -391,11 +391,33 @@ class RpcController(BaseController):
     @expose('graphslist.html', content_type='text/html')
     def graphsList(self, nocache=None, **kwargs):
         '''graphsList'''
-        #print kwargs
+        print kwargs
         graphslist = []
         for key in kwargs:
+
+            # titre
+            title = "Inconnu"
+            graph = ""
+            server = ""
+            lca = kwargs[key].split("?")
+            if len(lca) == 2:
+                largs = lca[1].split("&")
+                for arg in largs:
+                    print arg
+                    larg = arg.split("=")
+                    if len(larg) == 2:
+                        print "- %s" % larg[1]
+                        if larg[0] == "graphtemplate":
+                            graph = larg[1]
+                        elif larg[0] == "server":
+                            server = larg[1]
+            if graph != "" or server != "":
+                title = "'%s' Graph for host %s" %(graph, server)
+
             #print "%s: %s" % (key, kwargs[key])
-            graph = urllib2.unquote(kwargs[key])
+            graph = {}
+            graph['title'] = title
+            graph['src'] = urllib2.unquote(kwargs[key])
             #print "%s: %s" % (key, graph)
             graphslist.append(graph)
         print graphslist
