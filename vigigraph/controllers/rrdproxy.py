@@ -4,6 +4,8 @@
 
 import urllib
 import urllib2
+import os
+
 from HTMLParser import HTMLParser
 #from pylons.i18n import ugettext as _
 
@@ -18,8 +20,8 @@ class RRDProxy(object):
     def __init__(self, url):
         '''Constructeur'''
         #" a renseigner selon configuration
-        self._url = url
-        self._url += '/rrdgraph.py'
+        self._url = os.path.join(url, 'rrdgraph.py')
+        #print "self._url %s" % (self._url)
 
     def get_last_value(self, server, indicator):
         '''
@@ -37,15 +39,16 @@ class RRDProxy(object):
         handle = None
         result = None
 
-        values = {'host' : server,
+        values = {'server' : server,
                   'indicator' : indicator}
 
         data = urllib.urlencode(values)
         print 'data %s', data
 
         url = self._url
-        url += '/outputMetrologie'
-    
+        url = os.path.join(url, 'outputMetrologie')
+        print "url %s" % (url)
+
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
@@ -331,7 +334,7 @@ class RRDProxy(object):
                 handle.close()
                 img_name = url + '?' + data
 
-        print 'B - ***** %s' % img_name
+        #print 'B - ***** %s' % img_name
  
         return img_name
 
@@ -355,7 +358,7 @@ class RRDProxy(object):
                  }
 
         data = urllib.urlencode(values)
-        print 'T - ***** data %s', data
+        #print 'T - ***** data %s', data
 
         url = self._url
     
@@ -372,6 +375,50 @@ class RRDProxy(object):
                 result = handle.read()
                 handle.close()
 
+        #print 'T - ***** %s' % result
+
+        return result
+
+    def exportCSV(self, server, indicator):
+        '''
+        export
+     
+        @param server : serveur
+        @type server : C{str}
+
+        @rtype:
+        '''
+
+        print "rrdproxy - exportCSV"
+
+        handle = None
+        result = None
+
+        values = {'server' : server,
+                  'indicator' : indicator
+                 }
+
+        data = urllib.urlencode(values)
+        print 'T - ***** data %s', data
+
+        url = self._url
+        url = os.path.join(url, 'exportCSV');
+        print "url %s" % url
+    
+        proxy_handler = urllib2.ProxyHandler({'http': url})
+        opener = urllib2.build_opener(proxy_handler)
+
+        try:
+            handle = opener.open(url, data)
+        except urllib2.URLError, e:
+            #print "build_opener - URLError %s" % (e.reason)
+            raise
+        finally:
+            if handle is not None:
+                result = handle.read()
+                handle.close()
+
+        result = "result-export"
         print 'T - ***** %s' % result
 
         return result

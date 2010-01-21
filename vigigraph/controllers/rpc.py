@@ -5,12 +5,15 @@ from tg import expose, response
 
 from vigigraph.lib.base import BaseController
 from vigigraph.model import DBSession
+
 from vigigraph.model import Host, HostGroup
 from vigigraph.model import Service, ServiceGroup, ServiceLowLevel
 from vigigraph.model import PerfDataSource
+from vigigraph.model import Graph
 
 from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.secondary_tables import HOST_GROUP_TABLE
+from vigilo.models.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 
 from sqlalchemy.orm import aliased
 
@@ -93,13 +96,14 @@ class RpcController(BaseController):
     @expose('json')
     def graphs(self, idservice, nocache=None):
         """Render the JSON document for the combobox Graph Name"""
-        perfdatasources = DBSession.query( \
-            PerfDataSource.name, PerfDataSource.idperfdatasource) \
+        graphs_l = DBSession.query(Graph.name, Graph.idgraph) \
+            .join((GRAPH_PERFDATASOURCE_TABLE, GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
+            .join((PerfDataSource, GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
             .filter(PerfDataSource.idservice == idservice) \
             .all()
-        if perfdatasources is not None or perfdatasources != []:
+        if graphs_l is not None or graphs_l != []:
             return dict(items=[(pds[0], str(pds[1])) \
-            for pds in set(perfdatasources)])
+            for pds in set(graphs_l)])
         else:
             return dict(items=[])
 
@@ -386,7 +390,7 @@ class RpcController(BaseController):
     @expose('graphslist.html', content_type='text/html')
     def graphsList(self, nocache=None, **kwargs):
         '''graphsList'''
-        print kwargs
+        #print kwargs
         graphslist = []
         for key in kwargs:
 
@@ -398,10 +402,8 @@ class RpcController(BaseController):
             if len(lca) == 2:
                 largs = lca[1].split("&")
                 for arg in largs:
-                    print arg
                     larg = arg.split("=")
                     if len(larg) == 2:
-                        print "- %s" % larg[1]
                         if larg[0] == "graphtemplate":
                             graph = larg[1]
                         elif larg[0] == "server":
@@ -424,3 +426,52 @@ class RpcController(BaseController):
         '''tempoDelayRefresh'''
         delay = settings.get('DELAY_REFRESH')
         return str(delay)
+
+    @expose('json')
+    def getIndicators(self, nocache=None, graph=None):
+        '''getIndicators'''
+
+        print "rpc - getIndicators"
+
+        indicators = []
+
+        if graph is not None:
+            indicators = DBSession.query(PerfDataSource.name, PerfDataSource.idperfdatasource) \
+              .join((GRAPH_PERFDATASOURCE_TABLE, GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
+              .join((Graph, Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
+              .filter(Graph.name == graph) \
+              .all()
+
+        print ""
+        print "graph %s - indicators %s" % (graph, indicators)
+        print ""
+
+        if indicators is not None and indicators != []:
+            return dict(items=[(ind[0], str(ind[1])) for ind in indicators])
+        else:
+            return dict(items=[])
+
+    @expose('', content_type='text/plain')
+    def exportCSV(self, nocache=None, host=None, indicator=None):
+        '''exportCSV'''
+
+        print "rpc - exportCSV"
+
+        result = None
+
+        # url selon configuration
+        url_l = settings.get('RRD_URL')
+        print "url_l %s" % url_l
+
+        rrdproxy = RRDProxy(url_l)
+        try:
+            result = rrdproxy.exportCSV(host, indicator)
+        except urllib2.URLError, e:
+            response.content_type = "text/html"
+            response.write("<html><body bgcolor='#C3C7D3'> \
+            <p>Unable to export for %s %s.<br/> \
+            </p></body></html>\n" % (host, indicator))
+
+        print "rpc - exportCSV - result %s" % (result)
+
+        return result

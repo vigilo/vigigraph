@@ -4,6 +4,7 @@
 
 import urllib
 import urllib2
+import os
 
 from pylons.i18n import ugettext as _
 
@@ -43,7 +44,7 @@ class NagiosProxy(object):
         #print "data %s" % data
 
         url = self._url
-        url += '/status.cgi'
+        url = os.path.join(url, 'status.cgi')
         #print "url %s" % url
     
         proxy_handler = urllib2.ProxyHandler({'http': url})
@@ -96,7 +97,7 @@ class NagiosProxy(object):
         #print "data %s" % data
 
         url = self._url
-        url += '/extinfo.cgi'
+        url = os.path.join(url, 'extinfo.cgi')
         #print "url %s" % url
 
         proxy_handler = urllib2.ProxyHandler({'http': url})
