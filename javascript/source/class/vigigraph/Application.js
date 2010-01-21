@@ -8,6 +8,7 @@
    Authors: Arnaud MAZIN <arnaud.mazin@c-s.fr>
             Aurelien BOMPARD <aurelien.bompard@c-s.fr>
             Thomas BURGUIERE <thomas.burguiere@c-s.fr>
+            Francis LAHEUGUERE <francis.laheuguere@c-s.fr>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,7 +53,9 @@ var urls = {
     "getIdHost": "/rpc/getIdHost",
     "getIdService": "/rpc/getIdService",
     "graphsList": "/rpc/graphsList",
-    "tempoDelayRefresh": "/rpc/tempoDelayRefresh"
+    "tempoDelayRefresh": "/rpc/tempoDelayRefresh",
+    "exportCSV": "/rpc/exportCSV",
+    "getIndicators": "/rpc/getIndicators"
 };
 
 /**
@@ -496,7 +499,7 @@ qx.Class.define("vigigraph.Application",
           combobox.setEnabled(false);
           combobox.getList().removeAll();
           r=e.getContent().items;
-          for(var i=0 ; i<r.length ; i++) // does not work in IE with "for (i in r)"
+          for(var i = 0 ; i < r.length ; i++) // does not work in IE with "for (i in r)"
           {
             //var label = r[i][0];
             //var id = r[i][1];
@@ -626,6 +629,7 @@ qx.Class.define("vigigraph.Application",
       var l2=new qx.ui.layout.HorizontalBoxLayout;
       var bt_refresh=new qx.ui.form.Button("","icon/16/actions/view-refresh.png");
       bt_refresh.setToolTip(new qx.ui.popup.ToolTip(this.tr("Reload graph")));
+      bt_refresh.setBorder("outset");
       // Timeframe menu
       var time_menu = new qx.ui.menu.Menu();
       var timeframes = [ 
@@ -661,6 +665,12 @@ qx.Class.define("vigigraph.Application",
       var bt_zoomout=new qx.ui.form.Button("","icon/16/actions/zoom-out.png");
       bt_zoomout.setToolTip(new qx.ui.popup.ToolTip(this.tr("Zoom out")));
       var h1=new qx.ui.layout.HorizontalBoxLayout;
+
+      // Export
+      var cb_indicators = new qx.ui.form.ComboBox;
+      var bt_exportCSV = new qx.ui.form.Button("","icon/16/actions/document-export.png");
+      bt_exportCSV.setToolTip(new qx.ui.popup.ToolTip(this.tr("Export CSV")));
+
       w.setDimension("auto", "auto");
       w.setShowMinimize(false);
       w.setShowMaximize(false);
@@ -763,6 +773,26 @@ qx.Class.define("vigigraph.Application",
         });
         r.send();
       }
+      function getIndicators(graph)
+      {
+        //var url= urls.getIndicators+;
+        var url= urls.getIndicators+"?graph="+graph;
+        var r = new qx.io.remote.Request(url,"GET","application/json");
+        r.addEventListener("completed", function(e) { 
+          cb_indicators.setEnabled(false);
+          cb_indicators.getList().removeAll();
+          r = e.getContent().items;
+          for(var i = 0 ; i < r.length ; i++) // does not work in IE with "for (i in r)"
+          {
+            //cb_indicators.add(new qx.ui.form.ListItem(r[i][0], null, r[i][1]));
+            cb_indicators.add(new qx.ui.form.ListItem(r[i][0], null, i.toString()));
+          }
+          cb_indicators.add(new qx.ui.form.ListItem("All", null, (r.length).toString()));
+          cb_indicators.setSelected(null);
+          cb_indicators.setEnabled(true);
+        });
+        r.send();
+      }
 
       // Default
       var now = getTime();
@@ -770,26 +800,26 @@ qx.Class.define("vigigraph.Application",
       duration = 24 * 3600;
       setUrl(start, duration);
       loadImage(url,l);
+      getIndicators(graph);
 
       // Events
       tempoDelayRefresh();
       bt_refresh.addEventListener("execute",function(e) {
         var state = "activated";
-        var label = "";
         if (bt_refresh.hasState(state))
         {
           // bouton actif -> on le rend desactif
+          bt_refresh.setBorder("outset");
           bt_refresh.removeState(state);
-          label = "removeState";
           // liberation timer
           tempoClearRefresh();
         }
         else
         {
           // bouton desactif -> on le rend actif
+          bt_refresh.setBorder("inset");
           bt_refresh.addState(state);
           loadImage(url,l);
-          label = "addState";
           // armement timer pour rafraichissement periodique
           tempoFireRefresh();
         }
@@ -835,6 +865,7 @@ qx.Class.define("vigigraph.Application",
         bt_zoomin.setEnabled(true);
         bt_zoomout.setEnabled(true);
       }
+
       bt_first.addEventListener("execute", function(e) { updateGraphOnStartTime() });
       bt_prev.addEventListener("execute", function(e) { setStep(start-duration); });
       bt_next.addEventListener("execute", function(e) { setStep(start+duration); });
@@ -848,6 +879,19 @@ qx.Class.define("vigigraph.Application",
         duration = duration * 2; 
         setStep(start); 
       });
+      bt_exportCSV.addEventListener("execute",function(e) {
+        var indicator = cb_indicators.getValue();
+        if (indicator != "")
+        {
+          var url= urls.exportCSV+"?host="+encodeURIComponent(host)+"&indicator="+indicator;
+          var r=new qx.io.remote.Request(url,"GET","text/plain");
+          r.addEventListener("completed", function(e) { 
+            alert("bt_exportCSV - completed");
+          });
+          r.send();
+        }
+      });
+
       // Setup the UI
       h1.add(bt_refresh);
       h1.add(time_menu_bt);
@@ -857,11 +901,13 @@ qx.Class.define("vigigraph.Application",
       h1.add(bt_last);
       h1.add(bt_zoomin);
       h1.add(bt_zoomout);
+      h1.add(cb_indicators);
+      h1.add(bt_exportCSV);
       h1.pack();
       l2.add(l);
       l2.add(h1);
       w.add(l2);
-      w.addEventListener("disappear", function(e) { 
+      w.addEventListener("disappear", function(e) {
         var state = qx.client.History.getInstance().getState();
         var re = new RegExp(host+";"+encodeURIComponent(graph)+';-?[0-9]+;-?[0-9]+')
         var state = state.replace(re, "").replace(/\+\+/, "+").replace(/\+$/,'');
