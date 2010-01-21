@@ -20,3 +20,4 @@ from vigilo.models import Service, ServiceGroup, ServiceLowLevel
 from vigilo.models import PerfDataSource
 from vigilo.models import Tag, CustomGraphView, BoardViewFilter
 from vigilo.models import Graph
+from vigilo.models.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
