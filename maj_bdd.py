@@ -2,7 +2,7 @@
 from sqlalchemy import and_
 
 from vigigraph.model import Host, HostGroup
-from vigigraph.model import ServiceLowLevel, ServiceGroup
+from vigigraph.model import LowLevelService, ServiceGroup
 from vigigraph.model import PerfDataSource, Graph
 from vigigraph.model import DBSession
 
@@ -55,14 +55,14 @@ def add_Host2HostGroup(host, group):
                  'g': group.name}
         group.hosts.append(host)
 
-def create_ServiceLowLevel(hostname, servicename):
-    s = DBSession.query(ServiceLowLevel) \
-            .join((Host, ServiceLowLevel.idhost == Host.idhost)) \
-            .filter(ServiceLowLevel.servicename == servicename) \
+def create_LowLevelService(hostname, servicename):
+    s = DBSession.query(LowLevelService) \
+            .join((Host, LowLevelService.idhost == Host.idhost)) \
+            .filter(LowLevelService.servicename == servicename) \
             .filter(Host.name == hostname) \
             .first()
     if not s:
-        s = ServiceLowLevel(idhost=get_host(hostname).idhost,
+        s = LowLevelService(idhost=get_host(hostname).idhost,
                 servicename=servicename,
                 weight = 42, 
                 op_dep=u"?")
@@ -83,7 +83,7 @@ def create_ServiceGroup(name, parent=None):
     return g
 
 # Ajout d'un hôte dans un groupe d'hôtes (Host -> HostGroup)
-def add_ServiceLowLevel2ServiceGroup(service, group):
+def add_LowLevelService2ServiceGroup(service, group):
     if service not in group.services:
         print "Ajout du service: %(s)s dans le group: %(g)s" % \
                 {'s': service.servicename,
@@ -92,21 +92,21 @@ def add_ServiceLowLevel2ServiceGroup(service, group):
 
 def _get_service(hostname, servicename):
     """ Return Host object from hostname, None if not available"""
-    return DBSession.query(ServiceLowLevel) \
-            .join((Host, Host.idhost == ServiceLowLevel.idhost)) \
+    return DBSession.query(LowLevelService) \
+            .join((Host, Host.idhost == LowLevelService.idhost)) \
             .filter(Host.name == hostname) \
-            .filter(ServiceLowLevel.servicename == servicename) \
+            .filter(LowLevelService.servicename == servicename) \
             .first()
 
 #Recherche de l'objet ServiceGroup à partir du name
 def get_ServiceGroup(name):
     return DBSession.query(ServiceGroup).filter(ServiceGroup.name == name).first()
 
-#Recherche de l'objet ServiceLowLevel à partir du name
-def get_ServiceLowLevel(hostname, servicename):
-    s = DBSession.query(ServiceLowLevel) \
-            .join((Host, ServiceLowLevel.idhost == Host.idhost)) \
-            .filter(ServiceLowLevel.servicename == servicename) \
+#Recherche de l'objet LowLevelService à partir du name
+def get_LowLevelService(hostname, servicename):
+    s = DBSession.query(LowLevelService) \
+            .join((Host, LowLevelService.idhost == Host.idhost)) \
+            .filter(LowLevelService.servicename == servicename) \
             .filter(Host.name == hostname) \
             .first()
     return s
@@ -160,18 +160,18 @@ sg3 = create_ServiceGroup(u'Performance')
 sg4 = create_ServiceGroup(u'Partitions')
 sg5 = create_ServiceGroup(u'Processus')
 
-s1 = create_ServiceLowLevel(h1.name, u'Interface eth0')
-s2 = create_ServiceLowLevel(h1.name, u'Interface eth1')
-s3 = create_ServiceLowLevel(h1.name, u'Interface série')
-s4 = create_ServiceLowLevel(h4.name, u'Interface')
-s5 = create_ServiceLowLevel(h5.name, u'Interface Linux')
+s1 = create_LowLevelService(h1.name, u'Interface eth0')
+s2 = create_LowLevelService(h1.name, u'Interface eth1')
+s3 = create_LowLevelService(h1.name, u'Interface série')
+s4 = create_LowLevelService(h4.name, u'Interface')
+s5 = create_LowLevelService(h5.name, u'Interface Linux')
 
-add_ServiceLowLevel2ServiceGroup(s1, sg2)
-add_ServiceLowLevel2ServiceGroup(s2, sg2)
-add_ServiceLowLevel2ServiceGroup(s3, sg1)
-add_ServiceLowLevel2ServiceGroup(s4, sg2)
-add_ServiceLowLevel2ServiceGroup(s5, sg2)
-add_ServiceLowLevel2ServiceGroup(s5, sg3)
+add_LowLevelService2ServiceGroup(s1, sg2)
+add_LowLevelService2ServiceGroup(s2, sg2)
+add_LowLevelService2ServiceGroup(s3, sg1)
+add_LowLevelService2ServiceGroup(s4, sg2)
+add_LowLevelService2ServiceGroup(s5, sg2)
+add_LowLevelService2ServiceGroup(s5, sg3)
 
 gr1 = create_graph(u'graph1',u'Graph1', None)
 gr2 = create_graph(u'graph2',u'Graph2', None)

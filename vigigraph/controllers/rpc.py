@@ -7,7 +7,7 @@ from vigigraph.lib.base import BaseController
 from vigigraph.model import DBSession
 
 from vigigraph.model import Host, HostGroup
-from vigigraph.model import Service, ServiceGroup, ServiceLowLevel
+from vigigraph.model import Service, ServiceGroup, LowLevelService
 from vigigraph.model import PerfDataSource
 from vigigraph.model import Graph
 
@@ -82,10 +82,10 @@ class RpcController(BaseController):
     def servicegroups(self, idhost, nocache=None):
         """Render the JSON document for the combobox Graph Group"""
         # passage par une table intermédiaire à cause de l'héritage
-        servicegroups = DBSession.query(ServiceGroup.name, ServiceLowLevel.idservice) \
+        servicegroups = DBSession.query(ServiceGroup.name, LowLevelService.idservice) \
             .join((SERVICE_GROUP_TABLE, SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
-            .join((ServiceLowLevel, SERVICE_GROUP_TABLE.c.idservice == ServiceLowLevel.idservice)) \
-            .filter(ServiceLowLevel.idhost == idhost) \
+            .join((LowLevelService, SERVICE_GROUP_TABLE.c.idservice == LowLevelService.idservice)) \
+            .filter(LowLevelService.idhost == idhost) \
             .all()
         if servicegroups is not None and servicegroups != []:
             return dict(items=[(sg[0], str(sg[1])) \
@@ -117,27 +117,27 @@ class RpcController(BaseController):
         servicegroups_l = None
         if host is not None and service is not None:
             servicegroups_l = DBSession.query( \
-              Host.name, ServiceLowLevel.servicename) \
-              .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+              Host.name, LowLevelService.servicename) \
+              .join((LowLevelService, LowLevelService.idhost == Host.idhost)) \
               .filter(Host.name.like('%'+host+'%')) \
-              .filter(ServiceLowLevel.servicename.like('%'+service+'%')) \
+              .filter(LowLevelService.servicename.like('%'+service+'%')) \
               .all()
         elif host is not None and service is None:
             servicegroups_l = DBSession.query( \
-              Host.name, ServiceLowLevel.servicename) \
-              .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+              Host.name, LowLevelService.servicename) \
+              .join((LowLevelService, LowLevelService.idhost == Host.idhost)) \
               .filter(Host.name.like('%'+host+'%')) \
               .all()
         elif host is None and service is not None:
             servicegroups_l = DBSession.query( \
-              Host.name, ServiceLowLevel.servicename) \
-              .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
-              .filter(ServiceLowLevel.servicename.like('%'+service+'%')) \
+              Host.name, LowLevelService.servicename) \
+              .join((LowLevelService, LowLevelService.idhost == Host.idhost)) \
+              .filter(LowLevelService.servicename.like('%'+service+'%')) \
               .all()
         elif host is None and service is None:
             servicegroups_l = DBSession.query( \
-              Host.name, ServiceLowLevel.servicename) \
-              .join((ServiceLowLevel, ServiceLowLevel.idhost == Host.idhost)) \
+              Host.name, LowLevelService.servicename) \
+              .join((LowLevelService, LowLevelService.idhost == Host.idhost)) \
               .all()
 
         if servicegroups_l is not None and servicegroups_l != []:
@@ -169,8 +169,8 @@ class RpcController(BaseController):
                 .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
                 .filter(SERVICE_GROUP_TABLE.c.idservice == Service.idservice) \
                 .filter(SERVICE_GROUP_TABLE.c.idgroup == sg.idgroup) \
-                .filter(Host.idhost == ServiceLowLevel.idhost) \
-                .filter(Service.idservice == ServiceLowLevel.idservice) \
+                .filter(Host.idhost == LowLevelService.idhost) \
+                .filter(Service.idservice == LowLevelService.idservice) \
                 .filter(Host.name == host ) \
                 .filter(Service.servicename == service):
                     if hg1_r.idgroup == hg2_r.parent.idgroup:
