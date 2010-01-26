@@ -320,7 +320,7 @@ class RRDProxy(object):
         data = urllib.urlencode(values)
 
         url = self._url
-    
+
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
@@ -379,7 +379,7 @@ class RRDProxy(object):
 
         return result
 
-    def exportCSV(self, server, indicator):
+    def exportCSV(self, server, graph, indicator=None, start=None, end=None):
         '''
         export
      
@@ -395,11 +395,17 @@ class RRDProxy(object):
         result = None
 
         values = {'server' : server,
+                  'graphtemplate': graph,
                   'indicator' : indicator
-                 }
+                  }
+
+        if start is not None:
+            values['start'] = start
+        if end is not None:
+            values['end'] = end
 
         data = urllib.urlencode(values)
-        print 'T - ***** data %s', data
+        print 'T1 - ***** data %s', data
 
         url = self._url
         url = os.path.join(url, 'exportCSV');
@@ -411,15 +417,14 @@ class RRDProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            #print "build_opener - URLError %s" % (e.reason)
+            #print "build_opener - URLError %s" % (e.reason, e.read())
             raise
         finally:
             if handle is not None:
                 result = handle.read()
                 handle.close()
 
-        result = "result-export"
-        print 'T - ***** %s' % result
+        print 'T2 - ***** %s' % result
 
         return result
 
