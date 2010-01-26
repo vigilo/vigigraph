@@ -4,12 +4,12 @@
 from tg import expose, response
 
 from vigigraph.lib.base import BaseController
-from vigigraph.model import DBSession
 
-from vigigraph.model import Host, HostGroup
-from vigigraph.model import Service, ServiceGroup, LowLevelService
-from vigigraph.model import PerfDataSource
-from vigigraph.model import Graph
+from vigilo.models.session import DBSession
+from vigilo.models import Host, HostGroup
+from vigilo.models import Service, ServiceGroup, LowLevelService
+from vigilo.models import PerfDataSource
+from vigilo.models import Graph
 
 from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.secondary_tables import HOST_GROUP_TABLE

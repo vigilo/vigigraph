@@ -4,14 +4,11 @@
 
 from tg import expose, flash, require, url, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
-from repoze.what import predicates
+from repoze.what.predicates import Any, not_anonymous
 
 from vigigraph.lib.base import BaseController
-from vigigraph.model import DBSession, metadata
 from vigigraph.controllers.error import ErrorController
 from vigigraph.controllers.rpc import RpcController
-from vigigraph import model
-from repoze.what.predicates import Any, not_anonymous
 
 __all__ = ['RootController']
 

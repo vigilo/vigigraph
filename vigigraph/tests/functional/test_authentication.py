@@ -25,33 +25,6 @@ class TestAuthentication(TestController):
     
     application_under_test = 'main'
     
-    def test_forced_login(self):
-        """
-        Anonymous users must be redirected to the login form when authorization
-        is denied.
-        
-        Next, upon successful login they should be redirected to the initially
-        requested page.
-        
-        """
-        # Requesting a protected area
-        resp = self.app.get('/secc/', status=302)
-        assert resp.location.startswith('http://localhost/login')
-        # Getting the login form:
-        resp = resp.follow(status=200)
-        form = resp.form
-        # Submitting the login form:
-        form['login'] = u'manager'
-        form['password'] = 'managepass'
-        post_login = form.submit(status=302)
-        # Being redirected to the initially requested page:
-        assert post_login.location.startswith('http://localhost/post_login')
-        initial_page = post_login.follow(status=302)
-        assert 'authtkt' in initial_page.request.cookies, \
-               "Session cookie wasn't defined: %s" % initial_page.request.cookies
-        assert initial_page.location.startswith('http://localhost/secc/'), \
-               initial_page.location
-
     def test_voluntary_login(self):
         """Voluntary logins must work correctly"""
         # Going to the login form voluntarily:
@@ -59,7 +32,7 @@ class TestAuthentication(TestController):
         form = resp.form
         # Submitting the login form:
         form['login'] = u'manager'
-        form['password'] = 'managepass'
+        form['password'] = u'managepass'
         post_login = form.submit(status=302)
         # Being redirected to the home page:
         assert post_login.location.startswith('http://localhost/post_login')
@@ -84,3 +57,4 @@ class TestAuthentication(TestController):
         assert home_page.request.cookies.get('authtkt') == '', \
                'Session cookie was not deleted: %s' % home_page.request.cookies
         assert home_page.location == 'http://localhost/', home_page.location
+

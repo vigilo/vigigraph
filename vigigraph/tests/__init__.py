@@ -9,22 +9,23 @@ from paste.deploy import loadapp
 from paste.script.appinstall import SetupCommand
 from routes import url_for
 from webtest import TestApp
+import nose
 from nose.tools import eq_
 
-from vigigraph import model
+from vigilo.models.vigilo_bdd_config import metadata
+from vigilo.models.session import DBSession
 
 __all__ = ['setup_db', 'teardown_db', 'TestController', 'url_for']
 
+metadata.bind = DBSession.bind
+
 def setup_db():
     """Method used to build a database"""
-    engine = config['pylons.app_globals'].sa_engine 
-    model.init_model(engine)
-    model.metadata.create_all(engine)
+    metadata.create_all()
 
 def teardown_db():
     """Method used to destroy a database"""
-    engine = config['pylons.app_globals'].sa_engine
-    model.metadata.drop_all(engine)
+    metadata.drop_all()
 
 
 class TestController(object):
@@ -46,6 +47,9 @@ class TestController(object):
     
     application_under_test = 'main_without_authn'
     
+    def __init__(self):
+        object.__init__(self)
+    
     def setUp(self):
         """Method called by nose before running each test"""
         # Loading the application:
@@ -62,3 +66,5 @@ class TestController(object):
         """Method called by nose after running each test"""
         # Cleaning up the database:
         teardown_db()
+        del self.app
+
