@@ -43,7 +43,8 @@ vigilo2
     à celle utilisée sur Vigilo1, soit la version 0.7. Dans cette version, les ToggleButton n'existent pas.
     De plus, il n'est pas prévu de migrer sur une version ultérieure de qooxdoo (mais même au contraire de 
     migrer vers motools)
-    -> il ya donc un problème sur le rafraichissement des graphes pour indiquer l'état courant: bouton enfoncé ou relaché !
+    -> utilisation de setBorder avec paramètre inset ou outset pour le rafraichissement des graphes
+       pour indiquer l'état courant: bouton enfoncé ou relaché !
 
 - search et select
   * dans selectHostAndService de rpc.py  

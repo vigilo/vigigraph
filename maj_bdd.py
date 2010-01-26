@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import and_
 
-from vigigraph.model import Host, HostGroup
-from vigigraph.model import LowLevelService, ServiceGroup
-from vigigraph.model import PerfDataSource, Graph
-from vigigraph.model import DBSession
+from vigilo.models import Host, HostGroup
+from vigilo.models import LowLevelService, ServiceGroup
+from vigilo.models import PerfDataSource, Graph
+from vigilo.models.session import DBSession
 
 from datetime import datetime
 
