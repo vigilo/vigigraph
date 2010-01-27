@@ -181,13 +181,15 @@ gr4 = create_graph(u'graph4',u'Graph4', None)
 gr5 = create_graph(u'IO',u'IO', None)
 gr6 = create_graph(u'RAM',u'RAM', None)
 gr7 = create_graph(u'TCP connections',u'TCP connections', None)
+gr8 = create_graph(u'CPU usage (by type)',u'CPU usage (by type)', None)
 
 graphs = []
 for g in DBSession.query(Graph).all():
     graphs.append(g)
 
+
 ds1 = create_ds(u'ineth0', u'GAUGE', s1 \
-                , u'Données en entrée sur eth0', graphs[1:3])
+                , u'Données en entrée sur eth0', graphs[1:2])
 ds2 = create_ds(u'outeth0', u'GAUGE', s2 \
                 , u'Données en sortie sur eth0', graphs[1:3])
 ds3 = create_ds(u'outeth1', u'GAUGE', s3 \
@@ -202,5 +204,7 @@ ds6 = create_ds(u'RAM', u'GAUGE', s5 \
                 , u'RAM', graphs[5:6])
 ds7 = create_ds(u'TCP connections', u'GAUGE', s5 \
                 , u'TCP connections', graphs[6:7])
+ds8 = create_ds(u'CPU usage (by type)', u'GAUGE', s5 \
+                , u'CPU usage (by type)', graphs[7:8])
 
 transaction.commit()
