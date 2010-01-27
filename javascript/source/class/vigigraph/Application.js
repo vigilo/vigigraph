@@ -188,7 +188,6 @@ qx.Class.define("vigigraph.Application",
                 caption_l = c_l.getCaption();
                 if (c_l == w)
                 {
-                  //alert("caption_l :"+caption_l+"-");
                   index_l = i;
                 }
               }
@@ -200,13 +199,11 @@ qx.Class.define("vigigraph.Application",
 
       function tempoFire(Delay)
       {
-        //alert("Temporisation:"+Delay);
         var a = setTimeout(tempoFall, Delay);
       }
 
       function tempoFall()
       {
-        //alert("Tombee Temporisation:"+w2);
         if ( w2 != undefined)
         {
           w2.close();
@@ -225,7 +222,6 @@ qx.Class.define("vigigraph.Application",
         for (i = 0; i < nb; i++)
         {
           src_l = document.images[i].src;
-          //alert(src_l);
 
           // graphe rrd ?
           pos = src_l.search("/rrdgraph.py");
@@ -252,7 +248,6 @@ qx.Class.define("vigigraph.Application",
             url += "=";
             url += src_tab[i];
           }
-          //alert("url:"+url);
 
           w2 = window.open(url);
           w2.onload = function(){
@@ -367,8 +362,6 @@ qx.Class.define("vigigraph.Application",
         function _chooseInCombos(host, host_main_group, host_sec_group, service, service_group) {
           function _selectItem(o, item) {
             var c_list = o.getList();
-            //alert("c_list.length:"+c_list.getChildren().length);
-            // old -> var c_item = c_list.findValueExact(item);
             var c_item = c_list.findStringExact(item);
 
             if (c_item) {
@@ -678,13 +671,11 @@ qx.Class.define("vigigraph.Application",
       w.setResizable(false, false, false, false);
       function setUrl(start,duration)
       {
-        //alert("setUrl");
         url= urls.getImage+"?host="+encodeURIComponent(host)+"&start="+start+"&duration="+duration+"&graph="+encodeURIComponent(graph);
         qx.log.Logger.ROOT_LOGGER.debug(url);
       }
       function loadImage(myUrl,o)
       {
-        //alert("loadImage");
         o.removeAll();
         var i=new qx.io.remote.Request(url,"GET","text/plain");
         i.addEventListener("completed", function(e) { 
@@ -706,11 +697,7 @@ qx.Class.define("vigigraph.Application",
         var url= urls.getStartTime+"?host="+encodeURIComponent(host);
         var g=new qx.io.remote.Request(url,"GET","text/plain");
         g.addEventListener("completed", function(e) { 
-          //alert("e.getContent():"+e.getContent());
           start = parseInt(e.getContent());
-
-          //alert("updateGraphOnStartTime - start:"+start);
-
           setStep(start);
           bt_first.setEnabled(false); 
           bt_prev.setEnabled(false);
@@ -734,7 +721,6 @@ qx.Class.define("vigigraph.Application",
                 caption_l = c_l.getCaption();
                 if (c_l == w)
                 {
-                  //alert("caption_l :"+caption_l+"-");
                   index_l = i;
                 }
               }
@@ -829,7 +815,6 @@ qx.Class.define("vigigraph.Application",
           // armement timer pour rafraichissement periodique
           tempoFireRefresh();
         }
-        //alert("label state:"+label);
       });
 
       time_menu_bt.addEventListener("click", function(e)
@@ -912,15 +897,7 @@ qx.Class.define("vigigraph.Application",
         if (indicator != "")
         {
           var end = start + duration;
-          //alert("host="+encodeURIComponent(host)+"-graph="+graph+"-indicator="+indicator+"-start="+start+"-end="+end);
           var url= urls.exportCSV+"?host="+encodeURIComponent(host)+"&graph="+graph+"&indicator="+indicator+"&start="+start+"&end="+end;
-          /*
-          var r=new qx.io.remote.Request(url,"GET","text/plain");
-          r.addEventListener("completed", function(e) { 
-            alert("bt_exportCSV - completed");
-          });
-          r.send();
-          */
           var w3 = window.open(url);
         }
       }
