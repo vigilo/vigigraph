@@ -31,8 +31,6 @@ class NagiosProxy(object):
         @rtype: 
         '''
 
-        #print "get_status"
-
         handle = None
         result = None
 
@@ -41,33 +39,23 @@ class NagiosProxy(object):
                   'supNav' : 1}
 
         data = urllib.urlencode(values)
-        #print "data %s" % data
 
         url = self._url
         url = os.path.join(url, 'status.cgi')
-        #print "url %s" % url
     
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
-        #print "proxy_handler %s" % proxy_handler
-        #print "opener %s" % opener
 
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            #print "build_opener - URLError %s" % (e.reason)
-            #print "build_opener - URLError %s" % (e.read())
             raise
         except urllib2.HTTPError, e:
-            #print "build_opener - HTTPError %s" % (e.code)
-            #print "build_opener - HTTPError %s" % (e.read())
             raise
         finally:
             if handle is not None:
                 result = handle.read()
                 handle.close()
-
-        #print "result %s" % result
 
         return result
 
@@ -83,8 +71,6 @@ class NagiosProxy(object):
         @rtype: 
         '''
 
-        #print "get_extinfo"
-
         handle = None
         result = None
 
@@ -94,11 +80,9 @@ class NagiosProxy(object):
                   'supNav' : 1}
 
         data = urllib.urlencode(values)
-        #print "data %s" % data
 
         url = self._url
         url = os.path.join(url, 'extinfo.cgi')
-        #print "url %s" % url
 
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
@@ -106,16 +90,12 @@ class NagiosProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            #print "build_opener - URLError %s" % (e.reason)
             raise
         except urllib2.HTTPError, e:
-            #print "build_opener - HTTPError %s" % (e.code)
             raise
         finally:
             if handle is not None:
                 result = handle.read()
                 handle.close()
-
-        #print "result %s" % result
 
         return result

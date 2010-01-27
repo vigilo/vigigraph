@@ -202,7 +202,7 @@ class RpcController(BaseController):
 
     @expose(content_type='text/plain')
     def getImage(self, host, start=None, duration=86400, graph=None, details=1, nocache=0):
-        '''getImage'''
+        '''Image - as Text'''
 
         if start is None:
             start = int(time.time()) - 24*3600
@@ -211,10 +211,9 @@ class RpcController(BaseController):
         direct = 1
         fakeIncr = random.randint(0, 9999999999)
 
-        # url selon configuration
-        #url_l = 'http://localhost/rrdgraph'
+        # url
         url_l = settings.get('RRD_URL')
-
+        # proxy
         rrdproxy = RRDProxy(url_l)
         try:
             result = rrdproxy.get_img_name_with_params(host, graph, direct, duration, \
@@ -228,7 +227,7 @@ class RpcController(BaseController):
 
     @expose(content_type='image/png')
     def getImage_png(self, host, start=None, duration=86400, graph=None, details=1):
-        '''getImage'''
+        '''Image - as png'''
         if start is None:
             start = int(time.time()) - 24*3600
 
@@ -236,10 +235,9 @@ class RpcController(BaseController):
         direct = 1
         fakeIncr = random.randint(0, 9999999999)
 
-        # url selon configuration
-        #url_l = 'http://localhost/rrdgraph'
+        # url
         url_l = settings.get('RRD_URL')
-    
+        # proxy    
         rrdproxy = RRDProxy(url_l)
         try:
             result = rrdproxy.get_img_with_params(host, graph, direct, duration, \
@@ -253,17 +251,16 @@ class RpcController(BaseController):
 
     @expose('')
     def getStartTime(self, host, nocache=None):
-        '''getStartTime'''
+        '''StartTime RRD'''
 
         result = None
 
         getstarttime = 1
         fakeincr = random.randint(0, 9999999999)
 
-        # url selon configuration
-        #url_l = 'http://localhost/rrdgraph'
+        # url
         url_l = settings.get('RRD_URL')
-
+        # proxy
         rrdproxy = RRDProxy(url_l)
         try:
             #result = rrdproxy.get_getstarttime(host, getstarttime, fakeincr)
@@ -278,24 +275,11 @@ class RpcController(BaseController):
     def subPage(self, host):
         '''subPage'''
 
-        '''  
-        try:
-            util.redirect(req,"/%s/cgi-bin/nagios2/status.cgi?host=%s \
-        &style=detail&supNav=1"%(navconf.hosts[host]['supServer'],host))
-        except:
-            req.content_type = "text/html"
-            req.write("<html><body bgcolor='#C3C7D3'> \
-        <p>Unable to find supervision page for %s.<br/>Are You sure \
-        it has been inserted into the supervision configuration ? \
-        </p></body></html>\n" % host)
-        '''
-
         result = None
 
-        # url selon configuration
-        #url_l = 'http://localhost/cgi-bin/nagios2'
+        # url
         url_l = settings.get('NAGIOS_URL')
-
+        # proxy
         nagiosproxy = NagiosProxy(url_l)
         try:
             result = nagiosproxy.get_status(host)
@@ -312,31 +296,11 @@ class RpcController(BaseController):
     def servicePage(self, host, service=None):
         '''servicePage'''
 
-        '''  
-        try:
-            util.redirect(req,
-            "%s/%s/%s/extinfo.cgi?type=2&host=%s&service=%s&supNav=1" % \
-                (os.path.dirname(os.path.dirname(req.uri)),
-                 navconf.hosts[host]['supServer'],
-                 paths.nagios_web_path,
-                 host,
-                 urllib.quote_plus(service)
-                )
-            )
-        except:
-            req.content_type = "text/html"
-            req.write("<html><body bgcolor='#C3C7D3'> \
-            <p>Unable to find supervision page for %s/%s.<br/>Are You sure \
-            it has been inserted into the supervision configuration ? \
-            </p></body></html>\n" % (host, service))
-        '''  
-
         result = None
 
-        # url selon configuration
-        #url_l = 'http://localhost/cgi-bin/nagios2'
+        # url
         url_l = settings.get('NAGIOS_URL')
-
+        # proxy
         nagiosproxy = NagiosProxy(url_l)
         try:
             result = nagiosproxy.get_extinfo(host, service)
@@ -354,28 +318,13 @@ class RpcController(BaseController):
     def metroPage(self, host):
         '''metroPage'''
 
-        '''
-        host = re.sub('^_.*?_', '', host)
-        try:
-            #util.redirect(req,"/vigilo/supnavigator/%s/vigilo/rrdgraph/ \
-            rrdgraph.py?server=%s"%(navconf.hosts[host]['metroServer'],host))
-            util.redirect(req,"fullHostPage?host=%s"%host)
-        except:
-            req.content_type = "text/html"
-            req.write("<html><body bgcolor='#C3C7D3'> \
-            <p>Unable to find metrology page for %s.<br/>Are You sure \
-            it has been inserted into the supervision configuration ? \
-            </p></body></html>\n" % host)
-        '''
-
         host = re.sub('^_.*?_', '', host)
 
         result = None
 
-        # url selon configuration
-        #url_l = 'http://localhost/rrdgraph'
+        # url
         url_l = settings.get('RRD_URL')
-
+        # proxy
         rrdproxy = RRDProxy(url_l)
         try:
             result = rrdproxy.get_host(host)
@@ -391,10 +340,8 @@ class RpcController(BaseController):
     @expose('graphslist.html', content_type='text/html')
     def graphsList(self, nocache=None, **kwargs):
         '''graphsList'''
-        #print kwargs
         graphslist = []
         for key in kwargs:
-
             # titre
             title = "Inconnu"
             graph = ""
@@ -411,59 +358,41 @@ class RpcController(BaseController):
                             server = larg[1]
             if graph != "" or server != "":
                 title = "'%s' Graph for host %s" %(graph, server)
-
-            #print "%s: %s" % (key, kwargs[key])
             graph = {}
             graph['title'] = title
             graph['src'] = urllib2.unquote(kwargs[key])
-            #print "%s: %s" % (key, graph)
             graphslist.append(graph)
-        print graphslist
-
         return dict(graphslist=graphslist)
 
     @expose(content_type='text/plain')
     def tempoDelayRefresh(self, nocache=None):
-        '''tempoDelayRefresh'''
+        '''tempo pour rafraichissement'''
         delay = settings.get('DELAY_REFRESH')
         return str(delay)
 
     @expose('json')
     def getIndicators(self, nocache=None, graph=None):
-        '''getIndicators'''
-
-        print "rpc - getIndicators"
-
+        '''Indicators for graph'''
         indicators = self.getListIndicators(graph)
-
-        print ""
-        print "graph %s - indicators %s" % (graph, indicators)
-        print ""
-
         if indicators is not None and indicators != []:
             return dict(items=[(ind[0], str(ind[1])) for ind in indicators])
         else:
             return dict(items=[])
 
     def getListIndicators(self, graph=None):
-        '''getListIndicators'''
-
-        print "rpc - getListIndicators"
-
+        '''List of Indicators'''
         indicators = []
-
         if graph is not None:
             indicators = DBSession.query(PerfDataSource.name, PerfDataSource.idperfdatasource) \
               .join((GRAPH_PERFDATASOURCE_TABLE, GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
               .join((Graph, Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
               .filter(Graph.name == graph) \
               .all()
-
         return indicators
 
     @expose('', content_type='text/csv')
     def exportCSV(self, nocache=None, host=None, graph=None, indicator=None, start=None, end=None):
-
+        '''export CSV'''
         result = None
         b_export = False
 
@@ -551,141 +480,3 @@ class RpcController(BaseController):
 
         if b_export == False:
             return 'KO'
-
-
-    #  particularites :
-    # - dans rrdproxy : appel a rrdgraph en commentaires
-    # - ici : result renseigne 
-    # -> resultat : OK
-    @expose('', content_type='text/csv')
-    def exportCSV_a(self, nocache=None):
-
-        dict_values = {}
-
-        host = "par.linux0"
-        graph = "IO"
-        indicator = "All"
-        start = 1256037900
-        end = start + 3600
-
-        # url selon configuration
-        url_l = settings.get('RRD_URL')
-        print "url_l %s" % url_l
-
-        print "##### D rpc"
-
-        # donnees
-        rrdproxy = RRDProxy(url_l)
-        try:
-            result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
-        except urllib2.URLError, e:
-            response.content_type = "text/html"
-            response.write("<html><body bgcolor='#C3C7D3'> \
-            <p>Unable to export for %s %s %s.<br/> \
-            </p></body></html>\n" % (host, graph, indicator))
-
-        finally:
-            result = "{0: [1256037900, 5.0, 0.0], 1: [1256038200, 7.0, 1.0] }"
-            print "\ retour sur rpc - result %s" % result
-            print "##### F rpc"
-            print "result %s type(result) %s" % (result, type(result))
-
-            # conversion sous forme de dictionnaire
-            dict_values = eval(result)
-            print "dict_values %s type(dict_values) %s" % (dict_values, type(dict_values))
-            print ""
-
-        return 'OK'
-
-
-    #  particularites :
-    # - dans rrdproxy : appel a handle.read en commentaires
-    # - dans rrdproxy : result renseigne
-    # -> resultat : OK
-    @expose('', content_type='text/csv')
-    def exportCSV_b(self, nocache=None):
-
-        dict_values = {}
-        result = None
-    
-        host = "par.linux0"
-        graph = "IO"
-        indicator = "All"
-        start = 1256037900
-        end = start + 3600
-
-        # url selon configuration
-        url_l = settings.get('RRD_URL')
-        print "url_l %s" % url_l
-
-        print "##### D rpc"
-
-        # donnees
-        rrdproxy = RRDProxy(url_l)
-        try:
-            result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
-        except urllib2.URLError, e:
-            response.content_type = "text/html"
-            response.write("<html><body bgcolor='#C3C7D3'> \
-            <p>Unable to export for %s %s %s.<br/> \
-            </p></body></html>\n" % (host, graph, indicator))
-
-        finally:
-            print "\ retour sur rpc - result %s" % result
-            print "##### F rpc"
-            print "result %s type(result) %s" % (result, type(result))
-
-            # conversion sous forme de dictionnaire
-            dict_values = eval(result)
-            print "dict_values %s type(dict_values) %s" % (dict_values, type(dict_values))
-            print ""
-
-        return 'OK'
-
-
-    #  particularites :
-    # - dans rrdproxy : appel a handle.read
-    # -> resultat : 
-    @expose('', content_type='text/csv')
-    def exportCSV_c(self, nocache=None):
-
-        dict_values = {}
-        result = None
-
-        host = "par.linux0"
-        graph = "IO"
-        indicator = "All"
-        start = 1256037900
-        end = start + 3600
-
-        # url selon configuration
-        url_l = settings.get('RRD_URL')
-        print "url_l %s" % url_l
-
-        print "##### D rpc"
-
-        # donnees
-        rrdproxy = RRDProxy(url_l)
-        try:
-            result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
-        except urllib2.URLError, e:
-            response.content_type = "text/html"
-            response.write("<html><body bgcolor='#C3C7D3'> \
-            <p>Unable to export for %s %s %s.<br/> \
-            </p></body></html>\n" % (host, graph, indicator))
-
-        finally:
-            print "\ retour sur rpc - result %s" % result
-            print "##### F rpc"
-            if result is not None:
-                # conversion sous forme de dictionnaire
-                dict_values = {}
-                if result != "{}":
-                    if result.startswith("{") and result.endswith("}"):
-                        dict_values = eval(result)
-                print ""
-                print "result %s type(result) %s" % (result, type(result))
-                print "dict_values %s type(dict_values) %s" % (dict_values, type(dict_values))
-                print ""
-
-        return 'OK'
