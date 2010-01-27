@@ -19,9 +19,7 @@ class RRDProxy(object):
 
     def __init__(self, url):
         '''Constructeur'''
-        #" a renseigner selon configuration
         self._url = os.path.join(url, 'rrdgraph.py')
-        #print "self._url %s" % (self._url)
 
     def get_last_value(self, server, indicator):
         '''
@@ -43,11 +41,9 @@ class RRDProxy(object):
                   'indicator' : indicator}
 
         data = urllib.urlencode(values)
-        print 'data %s', data
 
         url = self._url
         url = os.path.join(url, 'outputMetrologie')
-        print "url %s" % (url)
 
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
@@ -55,7 +51,6 @@ class RRDProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            #print "build_opener - URLError %s" % (e.reason)
             raise
         finally:
             if handle is not None:
@@ -64,8 +59,6 @@ class RRDProxy(object):
                 #if result is not None:
                 #    value = result[0] 
                 handle.close()
-
-        #print 'B - ***** %s' % result
 
         return result
 
@@ -95,14 +88,11 @@ class RRDProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            #print "build_opener - URLError %s" % (e.reason)
             raise
         finally:
             if handle is not None:
                 result = handle.read()
                 handle.close()
-
-        #print 'B - ***** %s' % result
 
         return result
 
@@ -136,14 +126,11 @@ class RRDProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            print "build_opener - URLError %s" % (e.reason)
             raise
         finally:
             if handle is not None:
                 result = handle.read()
                 handle.close()
-
-        #print 'B - ***** %s' % result
 
         return result
 
@@ -177,14 +164,11 @@ class RRDProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            #print "build_opener - URLError %s" % (e.reason)
             raise
         finally:
             if handle is not None:
                 result = handle.read()
                 handle.close()
-
-        #print 'B - ***** %s' % result
 
         return result
 
@@ -218,7 +202,6 @@ class RRDProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            #print "build_opener - URLError %s" % (e.reason)
             raise
         finally:
             if handle is not None:
@@ -229,8 +212,6 @@ class RRDProxy(object):
                 imghtmlparser.close()
 
                 handle.close()
-
-        #print 'B - ***** %s' % result
 
         return data
 
@@ -275,14 +256,11 @@ class RRDProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            #print "build_opener - URLError %s" % (e.reason)
             raise
         finally:
             if handle is not None:
                 result = handle.read()
                 handle.close()
-
-        #print 'B - ***** %s' % result
 
         return result
 
@@ -327,15 +305,12 @@ class RRDProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            print "build_opener - URLError %s" % (e.reason)
             raise
         finally:
             if handle is not None:
                 handle.close()
                 img_name = url + '?' + data
 
-        #print 'B - ***** %s' % img_name
- 
         return img_name
 
     def get_starttime(self, server, getstarttime):
@@ -358,7 +333,6 @@ class RRDProxy(object):
                  }
 
         data = urllib.urlencode(values)
-        #print 'T - ***** data %s', data
 
         url = self._url
     
@@ -368,14 +342,11 @@ class RRDProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            print "build_opener - URLError %s" % (e.reason)
             raise
         finally:
             if handle is not None:
                 result = handle.read()
                 handle.close()
-
-        #print 'T - ***** %s' % result
 
         return result
 
@@ -385,46 +356,45 @@ class RRDProxy(object):
      
         @param server : serveur
         @type server : C{str}
+        @param graph : graphe
+        @type graph : C{str}
+        @param indicator : indicateur graphe
+        @type indicator : C{str}
+        @param start : debut plage export
+        @type start : C{str}
+        @param end : fin plage export
+        @type end : C{str}
 
-        @rtype:
+        @return : donnees RRD d apres server, indicateur et plage
+        @rtype: C{str}
         '''
-
-        print "rrdproxy - exportCSV"
 
         handle = None
         result = None
 
         values = {'server' : server,
                   'graphtemplate': graph,
-                  'indicator' : indicator
-                  }
-
-        if start is not None:
-            values['start'] = start
-        if end is not None:
-            values['end'] = end
+                  'indicator' : indicator,
+                  'start' : start,
+                  'end' : end
+                 }
 
         data = urllib.urlencode(values)
-        print 'T1 - ***** data %s', data
 
         url = self._url
         url = os.path.join(url, 'exportCSV');
-        print "url %s" % url
-    
+
         proxy_handler = urllib2.ProxyHandler({'http': url})
         opener = urllib2.build_opener(proxy_handler)
 
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            #print "build_opener - URLError %s" % (e.reason, e.read())
             raise
         finally:
             if handle is not None:
                 result = handle.read()
                 handle.close()
-
-        print 'T2 - ***** %s' % result
 
         return result
 

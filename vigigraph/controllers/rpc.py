@@ -28,6 +28,8 @@ import time
 import random
 import urllib2
 import re
+import csv
+import sys
 
 __all__ = ['RpcController']
 
@@ -222,7 +224,6 @@ class RpcController(BaseController):
                     % (graph, host)
             result = None
 
-        #result = 'http://localhost/rrdgraph-cache/par.linux0_IO_1261485963_86400_1.png'
         return result
 
     @expose(content_type='image/png')
@@ -433,14 +434,7 @@ class RpcController(BaseController):
 
         print "rpc - getIndicators"
 
-        indicators = []
-
-        if graph is not None:
-            indicators = DBSession.query(PerfDataSource.name, PerfDataSource.idperfdatasource) \
-              .join((GRAPH_PERFDATASOURCE_TABLE, GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
-              .join((Graph, Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
-              .filter(Graph.name == graph) \
-              .all()
+        indicators = self.getListIndicators(graph)
 
         print ""
         print "graph %s - indicators %s" % (graph, indicators)
@@ -451,27 +445,247 @@ class RpcController(BaseController):
         else:
             return dict(items=[])
 
-    @expose('', content_type='text/plain')
-    def exportCSV(self, nocache=None, host=None, indicator=None):
-        '''exportCSV'''
+    def getListIndicators(self, graph=None):
+        '''getListIndicators'''
 
-        print "rpc - exportCSV"
+        print "rpc - getListIndicators"
+
+        indicators = []
+
+        if graph is not None:
+            indicators = DBSession.query(PerfDataSource.name, PerfDataSource.idperfdatasource) \
+              .join((GRAPH_PERFDATASOURCE_TABLE, GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
+              .join((Graph, Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
+              .filter(Graph.name == graph) \
+              .all()
+
+        return indicators
+
+    @expose('', content_type='text/csv')
+    def exportCSV(self, nocache=None, host=None, graph=None, indicator=None, start=None, end=None):
 
         result = None
+        b_export = False
+
+        # indicateurs
+        if indicator is not None:
+            dict_indicators = {}
+            indicators = self.getListIndicators(graph)
+            indicators_l = []
+
+            if indicator == "All":
+                b_export = True
+                for i in range(len(indicators)):
+                    indicators_l.append(indicators[i][0])
+            else:
+                for i in range(len(indicators)):
+                    if indicator == indicators[i][0]:
+                        indicators_l.append(indicator)
+                        b_export = True
+                        break
+
+            if b_export:
+                idx = 0
+                dict_indicators[idx] = 'TimeStamp'
+
+                for i in range(len(indicators_l)):
+                    idx += 1
+                    dict_indicators[idx] = indicators_l[i]
+
+                # url selon configuration
+                url_l = settings.get('RRD_URL')
+
+                # donnees
+                rrdproxy = RRDProxy(url_l)
+                try:
+                    result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
+                except urllib2.URLError, e:
+                    b_export = False
+                    response.content_type = "text/html"
+                    response.write("<html><body bgcolor='#C3C7D3'> \
+                    <p>Unable to export for %s %s %s.<br/> \
+                    </p></body></html>\n" % (host, graph, indicator))
+
+                finally:
+                    if b_export:
+                        # conversion sous forme de dictionnaire
+                        dict_values = {}
+                        if result is not None:
+                            if result != "{}":
+                                if result.startswith("{") and result.endswith("}"):
+                                    dict_values = eval(result)
+ 
+                        fieldnames = tuple([dict_indicators[k] for k in dict_indicators])
+
+                        # fichier
+                        filename = "export.csv"
+                        f = open(filename, 'wt')
+                        try:
+                            writer = csv.DictWriter(f, fieldnames=fieldnames)
+
+                            # entête
+
+                            headers = dict( (n,n) for n in fieldnames )
+                            writer.writerow(headers)
+                            '''
+                            dict_data = {}
+                            for key_i in dict_indicators:
+                                iv = dict_indicators[key_i]
+                                dict_data[iv] = iv
+                            writer.writerow(dict_data)
+                            '''
+
+                            # valeurs
+                            if dict_values is not None or dict_values != "{}":
+                                for key_tv in dict_values:
+                                    tv = dict_values[key_tv]
+                                    dict_data = {}                                        
+                                    for key_i in dict_indicators:
+                                        iv = dict_indicators[key_i]
+                                        dict_data[iv] = tv[key_i]
+                                    writer.writerow(dict_data)
+                        finally:
+                            f.close()
+
+                        return open(filename, 'rt').read()
+
+        if b_export == False:
+            return 'KO'
+
+
+    #  particularites :
+    # - dans rrdproxy : appel a rrdgraph en commentaires
+    # - ici : result renseigne 
+    # -> resultat : OK
+    @expose('', content_type='text/csv')
+    def exportCSV_a(self, nocache=None):
+
+        dict_values = {}
+
+        host = "par.linux0"
+        graph = "IO"
+        indicator = "All"
+        start = 1256037900
+        end = start + 3600
 
         # url selon configuration
         url_l = settings.get('RRD_URL')
         print "url_l %s" % url_l
 
+        print "##### D rpc"
+
+        # donnees
         rrdproxy = RRDProxy(url_l)
         try:
-            result = rrdproxy.exportCSV(host, indicator)
+            result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
         except urllib2.URLError, e:
             response.content_type = "text/html"
             response.write("<html><body bgcolor='#C3C7D3'> \
-            <p>Unable to export for %s %s.<br/> \
-            </p></body></html>\n" % (host, indicator))
+            <p>Unable to export for %s %s %s.<br/> \
+            </p></body></html>\n" % (host, graph, indicator))
 
-        print "rpc - exportCSV - result %s" % (result)
+        finally:
+            result = "{0: [1256037900, 5.0, 0.0], 1: [1256038200, 7.0, 1.0] }"
+            print "\ retour sur rpc - result %s" % result
+            print "##### F rpc"
+            print "result %s type(result) %s" % (result, type(result))
 
-        return result
+            # conversion sous forme de dictionnaire
+            dict_values = eval(result)
+            print "dict_values %s type(dict_values) %s" % (dict_values, type(dict_values))
+            print ""
+
+        return 'OK'
+
+
+    #  particularites :
+    # - dans rrdproxy : appel a handle.read en commentaires
+    # - dans rrdproxy : result renseigne
+    # -> resultat : OK
+    @expose('', content_type='text/csv')
+    def exportCSV_b(self, nocache=None):
+
+        dict_values = {}
+        result = None
+    
+        host = "par.linux0"
+        graph = "IO"
+        indicator = "All"
+        start = 1256037900
+        end = start + 3600
+
+        # url selon configuration
+        url_l = settings.get('RRD_URL')
+        print "url_l %s" % url_l
+
+        print "##### D rpc"
+
+        # donnees
+        rrdproxy = RRDProxy(url_l)
+        try:
+            result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
+        except urllib2.URLError, e:
+            response.content_type = "text/html"
+            response.write("<html><body bgcolor='#C3C7D3'> \
+            <p>Unable to export for %s %s %s.<br/> \
+            </p></body></html>\n" % (host, graph, indicator))
+
+        finally:
+            print "\ retour sur rpc - result %s" % result
+            print "##### F rpc"
+            print "result %s type(result) %s" % (result, type(result))
+
+            # conversion sous forme de dictionnaire
+            dict_values = eval(result)
+            print "dict_values %s type(dict_values) %s" % (dict_values, type(dict_values))
+            print ""
+
+        return 'OK'
+
+
+    #  particularites :
+    # - dans rrdproxy : appel a handle.read
+    # -> resultat : 
+    @expose('', content_type='text/csv')
+    def exportCSV_c(self, nocache=None):
+
+        dict_values = {}
+        result = None
+
+        host = "par.linux0"
+        graph = "IO"
+        indicator = "All"
+        start = 1256037900
+        end = start + 3600
+
+        # url selon configuration
+        url_l = settings.get('RRD_URL')
+        print "url_l %s" % url_l
+
+        print "##### D rpc"
+
+        # donnees
+        rrdproxy = RRDProxy(url_l)
+        try:
+            result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
+        except urllib2.URLError, e:
+            response.content_type = "text/html"
+            response.write("<html><body bgcolor='#C3C7D3'> \
+            <p>Unable to export for %s %s %s.<br/> \
+            </p></body></html>\n" % (host, graph, indicator))
+
+        finally:
+            print "\ retour sur rpc - result %s" % result
+            print "##### F rpc"
+            if result is not None:
+                # conversion sous forme de dictionnaire
+                dict_values = {}
+                if result != "{}":
+                    if result.startswith("{") and result.endswith("}"):
+                        dict_values = eval(result)
+                print ""
+                print "result %s type(result) %s" % (result, type(result))
+                print "dict_values %s type(dict_values) %s" % (dict_values, type(dict_values))
+                print ""
+
+        return 'OK'
