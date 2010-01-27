@@ -54,8 +54,8 @@ var urls = {
     "getIdService": "/rpc/getIdService",
     "graphsList": "/rpc/graphsList",
     "tempoDelayRefresh": "/rpc/tempoDelayRefresh",
-    "exportCSV": "/rpc/exportCSV",
-    "getIndicators": "/rpc/getIndicators"
+    "getIndicators": "/rpc/getIndicators",
+    "exportCSV": "/rpc/exportCSV"
 };
 
 /**
@@ -666,10 +666,11 @@ qx.Class.define("vigigraph.Application",
       bt_zoomout.setToolTip(new qx.ui.popup.ToolTip(this.tr("Zoom out")));
       var h1=new qx.ui.layout.HorizontalBoxLayout;
 
-      // Export
-      var cb_indicators = new qx.ui.form.ComboBox;
-      var bt_exportCSV = new qx.ui.form.Button("","icon/16/actions/document-export.png");
-      bt_exportCSV.setToolTip(new qx.ui.popup.ToolTip(this.tr("Export CSV")));
+      // Export Menu
+      var indicator_menu = new qx.ui.menu.Menu();
+      indicator_menu.addToDocument();
+      var indicator_menu_bt = new qx.ui.form.Button(this.tr("Export CSV"),"icon/16/actions/document-export.png");
+      indicator_menu_bt.setToolTip(new qx.ui.popup.ToolTip(this.tr("Export CSV")));
 
       w.setDimension("auto", "auto");
       w.setShowMinimize(false);
@@ -697,7 +698,7 @@ qx.Class.define("vigigraph.Application",
       }
       function getTime() // we use a function because the window can be opened a long time without reloading
       {
-        var now_obj = new Date()
+        var now_obj = new Date();
         return parseInt(now_obj.getTime() / 1000);
       }
       function updateGraphOnStartTime()
@@ -707,6 +708,9 @@ qx.Class.define("vigigraph.Application",
         g.addEventListener("completed", function(e) { 
           //alert("e.getContent():"+e.getContent());
           start = parseInt(e.getContent());
+
+          //alert("updateGraphOnStartTime - start:"+start);
+
           setStep(start);
           bt_first.setEnabled(false); 
           bt_prev.setEnabled(false);
@@ -775,21 +779,23 @@ qx.Class.define("vigigraph.Application",
       }
       function getIndicators(graph)
       {
-        //var url= urls.getIndicators+;
         var url= urls.getIndicators+"?graph="+graph;
         var r = new qx.io.remote.Request(url,"GET","application/json");
         r.addEventListener("completed", function(e) { 
-          cb_indicators.setEnabled(false);
-          cb_indicators.getList().removeAll();
           r = e.getContent().items;
-          for(var i = 0 ; i < r.length ; i++) // does not work in IE with "for (i in r)"
+          var txt = "";
+          for(var i = 0; i <= r.length; i++)
           {
-            //cb_indicators.add(new qx.ui.form.ListItem(r[i][0], null, r[i][1]));
-            cb_indicators.add(new qx.ui.form.ListItem(r[i][0], null, i.toString()));
+            txt = "All";
+            if (i < r.length)
+            {
+              txt = r[i][0];
+            }
+            var menu_bt = new qx.ui.menu.Button(txt);
+            menu_bt.title = txt
+            menu_bt.addEventListener("execute",function(e) { getExport(this.title); });
+            indicator_menu.add(menu_bt);
           }
-          cb_indicators.add(new qx.ui.form.ListItem("All", null, (r.length).toString()));
-          cb_indicators.setSelected(null);
-          cb_indicators.setEnabled(true);
         });
         r.send();
       }
@@ -825,6 +831,7 @@ qx.Class.define("vigigraph.Application",
         }
         //alert("label state:"+label);
       });
+
       time_menu_bt.addEventListener("click", function(e)
       {
         if ( time_menu.isSeeable() )
@@ -841,11 +848,13 @@ qx.Class.define("vigigraph.Application",
         e.setPropagationStopped(true);
       });
       time_menu_bt.addEventListener("mousedown", function(e) { e.setPropagationStopped(true); });
+
       function setTail(hours)
       {
         now = getTime();
         start=now-hours*3600; 
         duration=hours*3600; 
+
         setUrl(start,duration);
         loadImage(url,l);
         bt_first.setEnabled(true);
@@ -857,6 +866,7 @@ qx.Class.define("vigigraph.Application",
       {
         start = start_ts;
         setUrl(start, duration);
+
         loadImage(url,l);
         bt_first.setEnabled(true);
         bt_prev.setEnabled(true);
@@ -879,18 +889,41 @@ qx.Class.define("vigigraph.Application",
         duration = duration * 2; 
         setStep(start); 
       });
-      bt_exportCSV.addEventListener("execute",function(e) {
-        var indicator = cb_indicators.getValue();
+
+      indicator_menu_bt.addEventListener("click", function(e)
+      {
+        if ( indicator_menu.isSeeable() )
+        {
+          indicator_menu.hide();
+        }
+        else
+        {
+          var el = this.getElement();
+          indicator_menu.setLeft(qx.html.Location.getPageBoxLeft(el));
+          indicator_menu.setTop(qx.html.Location.getPageBoxBottom(el));
+          indicator_menu.show();
+        }
+        e.setPropagationStopped(true);
+      });
+      indicator_menu_bt.addEventListener("mousedown", function(e) { e.setPropagationStopped(true); });
+
+      function getExport(indicator)
+      {
         if (indicator != "")
         {
-          var url= urls.exportCSV+"?host="+encodeURIComponent(host)+"&indicator="+indicator;
+          var end = start + duration;
+          //alert("host="+encodeURIComponent(host)+"-graph="+graph+"-indicator="+indicator+"-start="+start+"-end="+end);
+          var url= urls.exportCSV+"?host="+encodeURIComponent(host)+"&graph="+graph+"&indicator="+indicator+"&start="+start+"&end="+end;
+          /*
           var r=new qx.io.remote.Request(url,"GET","text/plain");
           r.addEventListener("completed", function(e) { 
             alert("bt_exportCSV - completed");
           });
           r.send();
+          */
+          var w3 = window.open(url);
         }
-      });
+      }
 
       // Setup the UI
       h1.add(bt_refresh);
@@ -901,8 +934,7 @@ qx.Class.define("vigigraph.Application",
       h1.add(bt_last);
       h1.add(bt_zoomin);
       h1.add(bt_zoomout);
-      h1.add(cb_indicators);
-      h1.add(bt_exportCSV);
+      h1.add(indicator_menu_bt);
       h1.pack();
       l2.add(l);
       l2.add(h1);
