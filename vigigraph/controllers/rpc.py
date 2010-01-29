@@ -29,7 +29,6 @@ import random
 import urllib2
 import re
 import csv
-import sys
 
 __all__ = ['RpcController']
 
@@ -203,6 +202,7 @@ class RpcController(BaseController):
     @expose(content_type='text/plain')
     def getImage(self, host, start=None, duration=86400, graph=None, details=1, nocache=0):
         '''Image - as Text'''
+        result = None
 
         if start is None:
             start = int(time.time()) - 24*3600
@@ -213,21 +213,23 @@ class RpcController(BaseController):
 
         # url
         url_l = settings.get('RRD_URL')
-        # proxy
-        rrdproxy = RRDProxy(url_l)
-        try:
-            result = rrdproxy.get_img_name_with_params(host, graph, direct, duration, \
-            start, int(details))
-        except urllib2.URLError, e:
-            print _("Can't get RRD graph \"%s\" on host \"%s\"") \
+        if url_l is not None:
+            # proxy
+            rrdproxy = RRDProxy(url_l)
+            try:
+                result = rrdproxy.get_img_name_with_params(host, graph, direct, duration, \
+                start, int(details))
+            except urllib2.URLError, e:
+                print _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
-            result = None
 
         return result
 
     @expose(content_type='image/png')
     def getImage_png(self, host, start=None, duration=86400, graph=None, details=1):
         '''Image - as png'''
+        result = None
+
         if start is None:
             start = int(time.time()) - 24*3600
 
@@ -237,22 +239,21 @@ class RpcController(BaseController):
 
         # url
         url_l = settings.get('RRD_URL')
-        # proxy    
-        rrdproxy = RRDProxy(url_l)
-        try:
-            result = rrdproxy.get_img_with_params(host, graph, direct, duration, \
-            start, int(details))
-        except urllib2.URLError, e:
-            print _("Can't get RRD graph \"%s\" on host \"%s\"") \
+        if url_l is not None:
+            # proxy
+            rrdproxy = RRDProxy(url_l)
+            try:
+                result = rrdproxy.get_img_with_params(host, graph, direct, duration, \
+                start, int(details))
+            except urllib2.URLError, e:
+                print _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
-            result = None
 
         return result
 
     @expose('')
     def getStartTime(self, host, nocache=None):
         '''StartTime RRD'''
-
         result = None
 
         getstarttime = 1
@@ -260,13 +261,14 @@ class RpcController(BaseController):
 
         # url
         url_l = settings.get('RRD_URL')
-        # proxy
-        rrdproxy = RRDProxy(url_l)
-        try:
-            #result = rrdproxy.get_getstarttime(host, getstarttime, fakeincr)
-            result = rrdproxy.get_starttime(host, getstarttime)
-        except urllib2.URLError, e:
-            print _("Can't get RRD data on host \"%s\"") \
+        if url_l is not None:
+            # proxy
+            rrdproxy = RRDProxy(url_l)
+            try:
+                #result = rrdproxy.get_getstarttime(host, getstarttime, fakeincr)
+                result = rrdproxy.get_starttime(host, getstarttime)
+            except urllib2.URLError, e:
+                print _("Can't get RRD data on host \"%s\"") \
                     % (host)
 
         return result
@@ -274,18 +276,18 @@ class RpcController(BaseController):
     @expose('')
     def subPage(self, host):
         '''subPage'''
-
         result = None
 
         # url
         url_l = settings.get('NAGIOS_URL')
-        # proxy
-        nagiosproxy = NagiosProxy(url_l)
-        try:
-            result = nagiosproxy.get_status(host)
-        except urllib2.URLError, e:
-            response.content_type = "text/html"
-            response.write("<html><body bgcolor='#C3C7D3'> \
+        if url_l is not None:
+            # proxy
+            nagiosproxy = NagiosProxy(url_l)
+            try:
+                result = nagiosproxy.get_status(host)
+            except urllib2.URLError, e:
+                response.content_type = "text/html"
+                response.write("<html><body bgcolor='#C3C7D3'> \
                 <p>Unable to find supervision page for %s.<br/>Are You sure \
                 it has been inserted into the supervision configuration ? \
                 </p></body></html>\n" % host)
@@ -295,45 +297,44 @@ class RpcController(BaseController):
     @expose('')
     def servicePage(self, host, service=None):
         '''servicePage'''
-
         result = None
 
         # url
         url_l = settings.get('NAGIOS_URL')
-        # proxy
-        nagiosproxy = NagiosProxy(url_l)
-        try:
-            result = nagiosproxy.get_extinfo(host, service)
-        except urllib2.URLError, e:
-            response.content_type = "text/html"
-
-            response.write("<html><body bgcolor='#C3C7D3'> \
-            <p>Unable to find supervision page for %s/%s.<br/>Are You sure \
-            it has been inserted into the supervision configuration ? \
-            </p></body></html>\n" % (host, service))
+        if url_l is not None:
+            # proxy
+            nagiosproxy = NagiosProxy(url_l)
+            try:
+                result = nagiosproxy.get_extinfo(host, service)
+            except urllib2.URLError, e:
+                response.content_type = "text/html"
+                response.write("<html><body bgcolor='#C3C7D3'> \
+                <p>Unable to find supervision page for %s/%s.<br/>Are You sure \
+                it has been inserted into the supervision configuration ? \
+                </p></body></html>\n" % (host, service))
 
         return result
 
     @expose('')
     def metroPage(self, host):
         '''metroPage'''
+        result = None
 
         host = re.sub('^_.*?_', '', host)
 
-        result = None
-
         # url
         url_l = settings.get('RRD_URL')
-        # proxy
-        rrdproxy = RRDProxy(url_l)
-        try:
-            result = rrdproxy.get_host(host)
-        except urllib2.URLError, e:
-            response.content_type = "text/html"
-            response.write("<html><body bgcolor='#C3C7D3'> \
-            <p>Unable to find metrology page for %s.<br/>Are You sure \
-            it has been inserted into the supervision configuration ? \
-            </p></body></html>\n" % host)
+        if url_l is not None:
+            # proxy
+            rrdproxy = RRDProxy(url_l)
+            try:
+                result = rrdproxy.get_host(host)
+            except urllib2.URLError, e:
+                response.content_type = "text/html"
+                response.write("<html><body bgcolor='#C3C7D3'> \
+                <p>Unable to find metrology page for %s.<br/>Are You sure \
+                it has been inserted into the supervision configuration ? \
+                </p></body></html>\n" % host)
 
         return result
 
@@ -357,7 +358,7 @@ class RpcController(BaseController):
                         elif larg[0] == "server":
                             server = larg[1]
             if graph != "" or server != "":
-                title = "'%s' Graph for host %s" %(graph, server)
+                title = "'%s' Graph for host %s" % (graph, server)
             graph = {}
             graph['title'] = title
             graph['src'] = urllib2.unquote(kwargs[key])
@@ -423,60 +424,58 @@ class RpcController(BaseController):
 
                 # url selon configuration
                 url_l = settings.get('RRD_URL')
-
-                # donnees
-                rrdproxy = RRDProxy(url_l)
-                try:
-                    result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
-                except urllib2.URLError, e:
-                    b_export = False
-                    response.content_type = "text/html"
-                    response.write("<html><body bgcolor='#C3C7D3'> \
-                    <p>Unable to export for %s %s %s.<br/> \
-                    </p></body></html>\n" % (host, graph, indicator))
-
-                finally:
-                    if b_export:
-                        # conversion sous forme de dictionnaire
-                        dict_values = {}
-                        if result is not None:
-                            if result != "{}":
-                                if result.startswith("{") and result.endswith("}"):
-                                    dict_values = eval(result)
+                if url_l is not None:
+                    # donnees
+                    rrdproxy = RRDProxy(url_l)
+                    try:
+                        result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
+                    except urllib2.URLError, e:
+                        b_export = False
+                        response.content_type = "text/html"
+                        response.write("<html><body bgcolor='#C3C7D3'> \
+                        <p>Unable to export for %s %s %s.<br/> \
+                        </p></body></html>\n" % (host, graph, indicator))
+                    finally:
+                        if b_export:
+                            # conversion sous forme de dictionnaire
+                            dict_values = {}
+                            if result is not None:
+                                if result != "{}":
+                                    if result.startswith("{") and result.endswith("}"):
+                                        dict_values = eval(result)
  
-                        fieldnames = tuple([dict_indicators[k] for k in dict_indicators])
+                            fieldnames = tuple([dict_indicators[k] for k in dict_indicators])
 
-                        # fichier
-                        filename = "export.csv"
-                        f = open(filename, 'wt')
-                        try:
-                            writer = csv.DictWriter(f, fieldnames=fieldnames)
+                            # fichier
+                            filename = "export.csv"
+                            f = open(filename, 'wt')
+                            try:
+                                writer = csv.DictWriter(f, fieldnames=fieldnames)
 
-                            # entête
+                                # entête
+                                headers = dict( (n, n) for n in fieldnames )
+                                writer.writerow(headers)
+                                '''
+                                dict_data = {}
+                                for key_i in dict_indicators:
+                                    iv = dict_indicators[key_i]
+                                    dict_data[iv] = iv
+                                writer.writerow(dict_data)
+                                '''
 
-                            headers = dict( (n,n) for n in fieldnames )
-                            writer.writerow(headers)
-                            '''
-                            dict_data = {}
-                            for key_i in dict_indicators:
-                                iv = dict_indicators[key_i]
-                                dict_data[iv] = iv
-                            writer.writerow(dict_data)
-                            '''
+                                # valeurs
+                                if dict_values is not None or dict_values != "{}":
+                                    for key_tv in dict_values:
+                                        tv = dict_values[key_tv]
+                                        dict_data = {}                                        
+                                        for key_i in dict_indicators:
+                                            iv = dict_indicators[key_i]
+                                            dict_data[iv] = tv[key_i]
+                                        writer.writerow(dict_data)
+                            finally:
+                                f.close()
 
-                            # valeurs
-                            if dict_values is not None or dict_values != "{}":
-                                for key_tv in dict_values:
-                                    tv = dict_values[key_tv]
-                                    dict_data = {}                                        
-                                    for key_i in dict_indicators:
-                                        iv = dict_indicators[key_i]
-                                        dict_data[iv] = tv[key_i]
-                                    writer.writerow(dict_data)
-                        finally:
-                            f.close()
-
-                        return open(filename, 'rt').read()
+                            return open(filename, 'rt').read()
 
         if b_export == False:
             return 'KO'
