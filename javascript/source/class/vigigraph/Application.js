@@ -609,8 +609,13 @@ qx.Class.define("vigigraph.Application",
      *
      * @type member
      */
+
     openGraph: function(host, graph, wleft, wtop, add_to_history)
     {
+      //  position - sauvegarde valeurs courantes
+      var wleft_c = wleft;
+      var wtop_c = wtop;
+
       var url;
       var start;
       var duration;
@@ -669,6 +674,7 @@ qx.Class.define("vigigraph.Application",
       w.setShowMinimize(false);
       w.setShowMaximize(false);
       w.setResizable(false, false, false, false);
+
       function setUrl(start,duration)
       {
         url= urls.getImage+"?host="+encodeURIComponent(host)+"&start="+start+"&duration="+duration+"&graph="+encodeURIComponent(graph);
@@ -916,11 +922,24 @@ qx.Class.define("vigigraph.Application",
       l2.add(l);
       l2.add(h1);
       w.add(l2);
+
+      w.addEventListener("appear", function(e) {
+        wleft_c = this.getLeft();
+        wtop_c = this.getTop();
+      });
+
       w.addEventListener("disappear", function(e) {
         var state = qx.client.History.getInstance().getState();
-        var re = new RegExp(host+";"+encodeURIComponent(graph)+';-?[0-9]+;-?[0-9]+')
-        var state = state.replace(re, "").replace(/\+\+/, "+").replace(/\+$/,'');
-        qx.client.History.getInstance().addToHistory(state, this.tr("Vigilo Graphic"));
+
+        // parametres courants
+        var cp = host+";"+encodeURIComponent(graph)+";"+wleft_c+";"+wtop_c+"+";
+        var pos = state.indexOf(cp);
+        if (pos >= 0)
+        {
+          // actualisation etat
+          var state = state.replace(cp, "");
+          qx.client.History.getInstance().addToHistory(state, this.tr("Vigilo Graphic"));
+        }
 
         // pour rafraichissement
         var index_l = -1;
@@ -935,11 +954,23 @@ qx.Class.define("vigigraph.Application",
       });
       w._captionBar.addEventListener("mouseup", function(e) { 
         var state = qx.client.History.getInstance().getState();
+
         var wleft = this.getLeft();
         var wtop = this.getTop();
-        var re = new RegExp(host+";"+encodeURIComponent(graph)+';-?[0-9]+;-?[0-9]+')
-        var state = state.replace(re, host+";"+encodeURIComponent(graph)+';'+wleft+';'+wtop);
-        qx.client.History.getInstance().addToHistory(state, this.tr("Vigilo Graphic"));
+
+        // parametres courants et actuels
+        var cp = host+";"+encodeURIComponent(graph)+";"+wleft_c+";"+wtop_c+"+";
+        var ap = host+";"+encodeURIComponent(graph)+";"+wleft+";"+wtop+"+";
+
+        var pos = state.indexOf(cp);
+        if (pos >= 0)
+        {
+          // actualisation etat
+          var state = state.replace(cp, ap);
+          qx.client.History.getInstance().addToHistory(state, this.tr("Vigilo Graphic"));
+          wleft_c = wleft;
+          wtop_c = wtop;
+        }
       }, w);
       w.addToDocument();
       w.open();
