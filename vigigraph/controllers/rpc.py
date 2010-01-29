@@ -29,6 +29,7 @@ import random
 import urllib2
 import re
 import csv
+import re
 
 __all__ = ['RpcController']
 
@@ -394,8 +395,23 @@ class RpcController(BaseController):
     @expose('', content_type='text/csv')
     def exportCSV(self, nocache=None, host=None, graph=None, indicator=None, start=None, end=None):
         '''export CSV'''
+
         result = None
         b_export = False
+
+        # separateurs
+        sep_values = "&&&"
+        sep_value = "###"
+
+        sep = settings.get("EXPORT_CSV_SEP_VALUES")
+        if sep is not None:
+            sep_values = sep
+            
+        sep = settings.get("EXPORT_CSV_SEP_VALUE")
+        if sep is not None:
+            sep_value = sep
+
+        filename = None
 
         # indicateurs
         if indicator is not None:
@@ -407,14 +423,24 @@ class RpcController(BaseController):
                 b_export = True
                 for i in range(len(indicators)):
                     indicators_l.append(indicators[i][0])
+                filename = graph
             else:
                 for i in range(len(indicators)):
                     if indicator == indicators[i][0]:
-                        indicators_l.append(indicator)
                         b_export = True
+                        indicators_l.append(indicator)
+                        filename = indicator
                         break
 
             if b_export:
+                # nom fichier final
+                ''' 
+                print "filename %s" % filename
+                filename = p.sub(filename, "_")
+                re.sub(r" \|/:?"*<>", filename)
+                ''' 
+                filename += ".csv"
+
                 idx = 0
                 dict_indicators[idx] = 'TimeStamp'
 
@@ -442,16 +468,19 @@ class RpcController(BaseController):
                             dict_values = {}
                             if result is not None:
                                 if result != "{}":
-                                    if result.startswith("{") and result.endswith("}"):
+                                    if result.startswith("{") and \
+                                    result.endswith("}"):
                                         dict_values = eval(result)
  
                             fieldnames = tuple([dict_indicators[k] for k in dict_indicators])
 
                             # fichier
-                            filename = "export.csv"
                             f = open(filename, 'wt')
+                            fn = 'attachment;filename='+filename+"'"
+                            response.headerlist.append(('Content-Disposition', fn))
                             try:
-                                writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';', quoting=csv.QUOTE_ALL)
+                                writer = csv.DictWriter(f, fieldnames=fieldnames, \
+                                delimiter=sep_values, quoting=csv.QUOTE_ALL)
 
                                 # entête
                                 headers = dict( (n, n) for n in fieldnames )
@@ -465,13 +494,17 @@ class RpcController(BaseController):
                                 '''
 
                                 # valeurs
-                                if dict_values is not None or dict_values != "{}":
+                                if dict_values is not None or \
+                                dict_values != "{}":
                                     for key_tv in dict_values:
                                         tv = dict_values[key_tv]
                                         dict_data = {}                                        
                                         for key_i in dict_indicators:
                                             iv = dict_indicators[key_i]
-                                            dict_data[iv] = tv[key_i]
+                                            # remplacement . par ,
+                                            v = str(tv[key_i])
+                                            v = v.replace(".", sep_value)
+                                            dict_data[iv] = v
                                         writer.writerow(dict_data)
                             finally:
                                 f.close()
