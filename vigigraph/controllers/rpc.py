@@ -425,10 +425,11 @@ class RpcController(BaseController):
                 # url selon configuration
                 url_l = settings.get('RRD_URL')
                 if url_l is not None:
-                    # donnees
+                    # donnees via proxy
                     rrdproxy = RRDProxy(url_l)
                     try:
-                        result = rrdproxy.exportCSV(server=host, graph=graph, indicator=indicator, start=start, end=end)
+                        result = rrdproxy.exportCSV(server=host, graph=graph, \
+                        indicator=indicator, start=start, end=end)
                     except urllib2.URLError, e:
                         b_export = False
                         response.content_type = "text/html"
@@ -450,7 +451,7 @@ class RpcController(BaseController):
                             filename = "export.csv"
                             f = open(filename, 'wt')
                             try:
-                                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                                writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';', quoting=csv.QUOTE_ALL)
 
                                 # entête
                                 headers = dict( (n, n) for n in fieldnames )
