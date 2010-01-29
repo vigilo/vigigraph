@@ -6,8 +6,6 @@ import urllib
 import urllib2
 import os
 
-from pylons.i18n import ugettext as _
-
 
 class NagiosProxy(object):
     '''
@@ -50,8 +48,6 @@ class NagiosProxy(object):
             handle = opener.open(url, data)
         except urllib2.URLError, e:
             raise
-        except urllib2.HTTPError, e:
-            raise
         finally:
             if handle is not None:
                 result = handle.read()
@@ -90,8 +86,6 @@ class NagiosProxy(object):
         try:
             handle = opener.open(url, data)
         except urllib2.URLError, e:
-            raise
-        except urllib2.HTTPError, e:
             raise
         finally:
             if handle is not None:

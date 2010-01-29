@@ -128,9 +128,6 @@ class RRDProxy(object):
         @rtype : C{str}
         '''
 
-        handle = None
-        data = {}
-
         values = {'server' : server,
                   'graphtemplate' : graph,
                   'details' : 0}
@@ -251,7 +248,7 @@ class RRDProxy(object):
                   'end' : end
                  }
         url = self._url
-        url = os.path.join(url, 'exportCSV');
+        url = os.path.join(url, 'exportCSV')
 
         return self._retrieve_content(url, values)
 
