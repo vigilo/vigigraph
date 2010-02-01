@@ -19,7 +19,7 @@ from sqlalchemy.orm import aliased
 
 from vigilo.common.conf import settings
         
-from rrdproxy import RRDProxy
+from vigilo.turbogears.rrdproxy import RRDProxy
 from nagiosproxy import NagiosProxy
 
 from pylons.i18n import ugettext as _
