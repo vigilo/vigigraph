@@ -28,8 +28,8 @@ class TestNagiosProxy(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestNagiosProxy, self).__init__(*args, **kwargs)
-        #self.url = settings.get('RRD_URL') -> ne marche pas
-        self.url = 'http://localhost'
+        #self.url = settings.get('NAGIOS_URL') -> ne marche pas
+        self.url = 'http://localhost/nagios/cgi-bin'
 
     def test_subPage(self):
         '''fonction vérification subPage'''
