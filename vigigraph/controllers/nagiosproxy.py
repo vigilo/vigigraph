@@ -16,8 +16,28 @@ class NagiosProxy(object):
 
     def __init__(self, url):
         '''Constructeur'''
-        #" a renseigner selon configuration
         self._url = url
+
+    def _retrieve_content(self, url, values):
+        ''' Lecture du contenu Nagios à partir d'un dictionnaire de valeurs'''
+
+        handle = None
+        result = None
+        data = urllib.urlencode(values)
+        proxy_handler = urllib2.ProxyHandler({'http': url})
+        opener = urllib2.build_opener(proxy_handler)
+
+        try:
+            handle = opener.open(url, data)
+            result = handle.read()
+        except urllib2.URLError, e:
+            raise
+        finally:
+            if handle:
+                handle.close()
+            
+        return result
+
 
     def get_status(self, host):
         '''
@@ -26,34 +46,19 @@ class NagiosProxy(object):
         @param host : hôte
         @type host : C{str}
 
+        @return : donnees Nagios
         @rtype: 
         '''
-
-        handle = None
-        result = None
 
         values = {'host' : host,
                   'style' : 'detail',
                   'supNav' : 1}
 
-        data = urllib.urlencode(values)
-
         url = self._url
         url = os.path.join(url, 'status.cgi')
-    
-        proxy_handler = urllib2.ProxyHandler({'http': url})
-        opener = urllib2.build_opener(proxy_handler)
 
-        try:
-            handle = opener.open(url, data)
-        except urllib2.URLError, e:
-            raise
-        finally:
-            if handle is not None:
-                result = handle.read()
-                handle.close()
+        return self._retrieve_content(url, values)
 
-        return result
 
     def get_extinfo(self, host, service):
         '''
@@ -64,32 +69,16 @@ class NagiosProxy(object):
         @param service : service
         @type service : C{str}
 
+        @return : donnees Nagios
         @rtype: 
         '''
-
-        handle = None
-        result = None
 
         values = {'host' : host,
                   'service' : service,
                   'type' : 2,
                   'supNav' : 1}
 
-        data = urllib.urlencode(values)
-
         url = self._url
         url = os.path.join(url, 'extinfo.cgi')
 
-        proxy_handler = urllib2.ProxyHandler({'http': url})
-        opener = urllib2.build_opener(proxy_handler)
-
-        try:
-            handle = opener.open(url, data)
-        except urllib2.URLError, e:
-            raise
-        finally:
-            if handle is not None:
-                result = handle.read()
-                handle.close()
-
-        return result
+        return self._retrieve_content(url, values)

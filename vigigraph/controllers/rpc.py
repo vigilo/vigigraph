@@ -27,7 +27,6 @@ from pylons.i18n import ugettext as _
 import time
 import random
 import urllib2
-import re
 import csv
 
 __all__ = ['RpcController']
@@ -399,8 +398,8 @@ class RpcController(BaseController):
         b_export = False
 
         # separateurs
-        sep_values = "&&&"
-        sep_value = "###"
+        sep_values = ";"
+        sep_value = ","
 
         sep = settings.get("EXPORT_CSV_SEP_VALUES")
         if sep is not None:
