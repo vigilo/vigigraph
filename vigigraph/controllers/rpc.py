@@ -29,7 +29,6 @@ import random
 import urllib2
 import re
 import csv
-import re
 
 __all__ = ['RpcController']
 
@@ -434,11 +433,9 @@ class RpcController(BaseController):
 
             if b_export:
                 # nom fichier final
-                ''' 
-                print "filename %s" % filename
-                filename = p.sub(filename, "_")
-                re.sub(r" \|/:?"*<>", filename)
-                ''' 
+                lc = [' ', '|', '/', '\\', ':', '?', '*', '<', '>', '"']
+                for c in lc:
+                    filename = filename.replace(c, "_")
                 filename += ".csv"
 
                 idx = 0
