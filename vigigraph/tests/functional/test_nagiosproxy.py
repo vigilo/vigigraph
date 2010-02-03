@@ -14,8 +14,10 @@ from vigigraph.controllers.nagiosproxy import NagiosProxy
 
 
 class NagiosProxy_without_nagios(NagiosProxy):
-    """ Classe de substitution de NagiosProxy 
-    pour effectuer les tests sans nagios"""
+    """
+    Classe de substitution de NagiosProxy pour effectuer les tests
+    sans nagios
+    """
     def __init__(self, content, *args, **kwargs):
         '''Constructeur'''
         super(NagiosProxy_without_nagios, self).__init__(*args, **kwargs)
