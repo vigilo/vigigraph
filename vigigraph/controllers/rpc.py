@@ -82,9 +82,12 @@ class RpcController(BaseController):
     def servicegroups(self, idhost, nocache=None):
         """Render the JSON document for the combobox Graph Group"""
         # passage par une table intermédiaire à cause de l'héritage
-        servicegroups = DBSession.query(ServiceGroup.name, LowLevelService.idservice) \
-            .join((SERVICE_GROUP_TABLE, SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
-            .join((LowLevelService, SERVICE_GROUP_TABLE.c.idservice == LowLevelService.idservice)) \
+        servicegroups = DBSession.query \
+            (ServiceGroup.name, LowLevelService.idservice) \
+            .join((SERVICE_GROUP_TABLE, \
+            SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
+            .join((LowLevelService, \
+            SERVICE_GROUP_TABLE.c.idservice == LowLevelService.idservice)) \
             .filter(LowLevelService.idhost == idhost) \
             .all()
         if servicegroups is not None and servicegroups != []:
@@ -97,8 +100,10 @@ class RpcController(BaseController):
     def graphs(self, idservice, nocache=None):
         """Render the JSON document for the combobox Graph Name"""
         graphs_l = DBSession.query(Graph.name, Graph.idgraph) \
-            .join((GRAPH_PERFDATASOURCE_TABLE, GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
-            .join((PerfDataSource, GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
+            .join((GRAPH_PERFDATASOURCE_TABLE, \
+            GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
+            .join((PerfDataSource, \
+            GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
             .filter(PerfDataSource.idservice == idservice) \
             .all()
         if graphs_l is not None or graphs_l != []:
@@ -199,7 +204,8 @@ class RpcController(BaseController):
             return dict(items=[])
 
     @expose(content_type='text/plain')
-    def getImage(self, host, start=None, duration=86400, graph=None, details=1, nocache=0):
+    def getImage(self, host, start=None, duration=86400, graph=None, \
+    details=1, nocache=0):
         '''Image - as Text'''
         result = None
 
@@ -216,8 +222,8 @@ class RpcController(BaseController):
             # proxy
             rrdproxy = RRDProxy(url_l)
             try:
-                result = rrdproxy.get_img_name_with_params(host, graph, direct, duration, \
-                start, int(details))
+                result = rrdproxy.get_img_name_with_params(host, graph, \
+                direct, duration, start, int(details))
             except urllib2.URLError, e:
                 print _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
@@ -225,7 +231,8 @@ class RpcController(BaseController):
         return result
 
     @expose(content_type='image/png')
-    def getImage_png(self, host, start=None, duration=86400, graph=None, details=1):
+    def getImage_png(self, host, start=None, duration=86400, graph=None, \
+    details=1):
         '''Image - as png'''
         result = None
 
@@ -242,8 +249,8 @@ class RpcController(BaseController):
             # proxy
             rrdproxy = RRDProxy(url_l)
             try:
-                result = rrdproxy.get_img_with_params(host, graph, direct, duration, \
-                start, int(details))
+                result = rrdproxy.get_img_with_params(host, graph, direct, \
+                duration, start, int(details))
             except urllib2.URLError, e:
                 print _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
@@ -264,7 +271,7 @@ class RpcController(BaseController):
             # proxy
             rrdproxy = RRDProxy(url_l)
             try:
-                #result = rrdproxy.get_getstarttime(host, getstarttime, fakeincr)
+                #result=rrdproxy.get_getstarttime(host, getstarttime, fakeincr)
                 result = rrdproxy.get_starttime(host, getstarttime)
             except urllib2.URLError, e:
                 print _("Can't get RRD data on host \"%s\"") \
@@ -383,15 +390,19 @@ class RpcController(BaseController):
         '''List of Indicators'''
         indicators = []
         if graph is not None:
-            indicators = DBSession.query(PerfDataSource.name, PerfDataSource.idperfdatasource) \
-              .join((GRAPH_PERFDATASOURCE_TABLE, GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
-              .join((Graph, Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
+            indicators = DBSession.query \
+              (PerfDataSource.name, PerfDataSource.idperfdatasource) \
+              .join((GRAPH_PERFDATASOURCE_TABLE, \
+              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
+              .join((Graph, \
+              Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
               .filter(Graph.name == graph) \
               .all()
         return indicators
 
     @expose('', content_type='text/csv')
-    def exportCSV(self, nocache=None, host=None, graph=None, indicator=None, start=None, end=None):
+    def exportCSV(self, nocache=None, host=None, graph=None, indicator=None, \
+    start=None, end=None):
         '''export CSV'''
 
         result = None
@@ -468,15 +479,18 @@ class RpcController(BaseController):
                                     result.endswith("}"):
                                         dict_values = eval(result)
  
-                            fieldnames = tuple([dict_indicators[k] for k in dict_indicators])
+                            fieldnames = tuple([dict_indicators[k] \
+                            for k in dict_indicators])
 
                             # fichier
                             f = open(filename, 'wt')
                             fn = 'attachment;filename='+filename+"'"
-                            response.headerlist.append(('Content-Disposition', fn))
+                            response.headerlist.append \
+                            (('Content-Disposition', fn))
                             try:
-                                writer = csv.DictWriter(f, fieldnames=fieldnames, \
-                                delimiter=sep_values, quoting=csv.QUOTE_ALL)
+                                writer = csv.DictWriter(f, \
+                                fieldnames=fieldnames, delimiter=sep_values, \
+                                quoting=csv.QUOTE_ALL)
 
                                 # entête
                                 headers = dict( (n, n) for n in fieldnames )
@@ -494,7 +508,7 @@ class RpcController(BaseController):
                                 dict_values != "{}":
                                     for key_tv in dict_values:
                                         tv = dict_values[key_tv]
-                                        dict_data = {}                                        
+                                        dict_data = {}
                                         for key_i in dict_indicators:
                                             iv = dict_indicators[key_i]
                                             # remplacement . par ,
