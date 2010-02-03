@@ -10,23 +10,27 @@ import unittest
 
 from vigigraph.controllers.nagiosproxy import NagiosProxy
 
-from vigilo.common.conf import settings
+#from vigilo.common.conf import settings
 
 
 class NagiosProxy_without_nagios(NagiosProxy):
-    """ Classe de substitution de NagiosProxy pour effectuer les tests sans nagios"""
+    """ Classe de substitution de NagiosProxy 
+    pour effectuer les tests sans nagios"""
     def __init__(self, content, *args, **kwargs):
+        '''Constructeur'''
         super(NagiosProxy_without_nagios, self).__init__(*args, **kwargs)
         self.content = content
 
     def _retrieve_content(self, *args, **kwargs):
+        '''Retour - Surcharge'''
         return self.content
 
 
 class TestNagiosProxy(unittest.TestCase):
-    """ Test Gestion Valeur Metrologie """  
+    """ Test Gestion Valeur Nagios """  
 
     def __init__(self, *args, **kwargs):
+        '''Constructeur'''
         super(TestNagiosProxy, self).__init__(*args, **kwargs)
         #self.url = settings.get('NAGIOS_URL') -> ne marche pas
         self.url = 'http://localhost/nagios/cgi-bin'
