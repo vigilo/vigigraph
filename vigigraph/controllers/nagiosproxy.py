@@ -18,23 +18,29 @@ class NagiosProxy(object):
         '''Constructeur'''
         self._url = url
 
-    def _retrieve_content(self, url, values):
+    #def _retrieve_content(self, url, values):
+    def _retrieve_content(self, *args, **kwargs):
         ''' Lecture du contenu Nagios à partir d'un dictionnaire de valeurs'''
 
         handle = None
         result = None
-        data = urllib.urlencode(values)
-        proxy_handler = urllib2.ProxyHandler({'http': url})
-        opener = urllib2.build_opener(proxy_handler)
 
-        try:
-            handle = opener.open(url, data)
-            result = handle.read()
-        except urllib2.URLError, e:
-            raise
-        finally:
-            if handle:
-                handle.close()
+        if kwargs is not None:
+            url = kwargs.get('url')
+            values = kwargs.get('values')
+            if url is not None and values is not None:
+                data = urllib.urlencode(values)
+                proxy_handler = urllib2.ProxyHandler({'http': url})
+                opener = urllib2.build_opener(proxy_handler)
+
+                try:
+                    handle = opener.open(url, data)
+                    result = handle.read()
+                except urllib2.URLError, e:
+                    raise
+                finally:
+                    if handle:
+                        handle.close()
             
         return result
 
@@ -57,7 +63,7 @@ class NagiosProxy(object):
         url = self._url
         url = os.path.join(url, 'status.cgi')
 
-        return self._retrieve_content(url, values)
+        return self._retrieve_content(url=url, values=values)
 
 
     def get_extinfo(self, host, service):
@@ -81,4 +87,4 @@ class NagiosProxy(object):
         url = self._url
         url = os.path.join(url, 'extinfo.cgi')
 
-        return self._retrieve_content(url, values)
+        return self._retrieve_content(url=url, values=values)
