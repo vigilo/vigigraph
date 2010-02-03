@@ -26,6 +26,7 @@ from pylons.i18n import ugettext as _
 
 import time
 import random
+import urllib
 import urllib2
 import csv
 
@@ -364,7 +365,8 @@ class RpcController(BaseController):
                         elif larg[0] == "server":
                             server = larg[1]
             if graph != "" or server != "":
-                title = "'%s' Graph for host %s" % (graph, server)
+                title = "'%s' Graph for host %s" % \
+                  (urllib.unquote_plus(graph), server)
             graph = {}
             graph['title'] = title
             graph['src'] = urllib2.unquote(kwargs[key])
