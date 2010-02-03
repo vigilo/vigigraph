@@ -32,7 +32,6 @@ class NagiosProxy(object):
                 data = urllib.urlencode(values)
                 proxy_handler = urllib2.ProxyHandler({'http': url})
                 opener = urllib2.build_opener(proxy_handler)
-
                 try:
                     handle = opener.open(url, data)
                     result = handle.read()
