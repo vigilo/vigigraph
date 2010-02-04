@@ -152,7 +152,7 @@ qx.Class.define("vigigraph.Application",
       b5.setEnabled(false);
 
       var bp=new qx.ui.form.Button("","icon/16/actions/document-print.png");
-      bp.setToolTip(new qx.ui.popup.ToolTip(this.tr("Print")));
+      bp.setToolTip(new qx.ui.popup.ToolTip(this.tr("Print Graph(s)")));
       bp.setEnabled(true);
 
       gl.add(r1,2,0);
@@ -224,7 +224,7 @@ qx.Class.define("vigigraph.Application",
           src_l = document.images[i].src;
 
           // graphe rrd ?
-          pos = src_l.search("/rrdgraph.py");
+          pos = src_l.indexOf("/rrdgraph.py");
           if (pos != -1)
           {
             src_tab[j] = encodeURIComponent(src_l);
@@ -662,6 +662,8 @@ qx.Class.define("vigigraph.Application",
       bt_zoomin.setToolTip(new qx.ui.popup.ToolTip(this.tr("Zoom in")));
       var bt_zoomout=new qx.ui.form.Button("","icon/16/actions/zoom-out.png");
       bt_zoomout.setToolTip(new qx.ui.popup.ToolTip(this.tr("Zoom out")));
+      var bt_print=new qx.ui.form.Button("","icon/16/actions/document-print.png");
+      bt_print.setToolTip(new qx.ui.popup.ToolTip(this.tr("Print Graph")));
       var h1=new qx.ui.layout.HorizontalBoxLayout;
 
       // Export Menu
@@ -750,6 +752,14 @@ qx.Class.define("vigigraph.Application",
         duration = 24 * 3600;
         setUrl(start, duration);
         loadImage(url,l);
+
+        bt_first.setEnabled(true);
+        bt_prev.setEnabled(true);
+        bt_next.setEnabled(true);
+        bt_last.setEnabled(true);
+        bt_zoomin.setEnabled(true);
+        bt_zoomout.setEnabled(true);
+
         // rafraichissement periodique
         tempoFireRefresh();
       }
@@ -820,6 +830,93 @@ qx.Class.define("vigigraph.Application",
           loadImage(url,l);
           // armement timer pour rafraichissement periodique
           tempoFireRefresh();
+        }
+      });
+
+      bt_print.addEventListener("execute",function(e) {
+        var w3 = undefined;
+
+        function tempoFirePrint(Delay)
+        {
+          var a = setTimeout(tempoFallPrint, Delay);
+        }
+
+        function tempoFallPrint()
+        {
+          if ( w3 != undefined)
+          {
+            w3.close();
+          }
+        }
+
+        var nb = document.images.length;
+
+        // liste src
+        var index_p = -1;
+        var src_l = "";
+        var src_tab = new Array;
+        var j = 0;
+        for (i = 0; i < nb; i++)
+        {
+          src_l = document.images[i].src;
+
+          // correspondance selon parametres ?
+          pos = src_l.indexOf("/rrdgraph.py");
+          if (pos != -1)
+          {
+            pos = src_l.indexOf(host);
+            if (pos != -1)
+            {
+              var graph_l = graph;
+              var sc = " ";
+              var rc = "+";
+              while (graph_l.indexOf(sc) > 0)
+              {
+                graph_l = graph_l.replace(sc, rc);
+              }
+
+              var src_d = decodeURIComponent(src_l);
+              pos = src_d.indexOf(graph_l);
+            }
+            if (pos != -1)
+            {
+              pos = src_l.indexOf(start);
+            }
+            if (pos != -1)
+            {
+              pos = src_l.indexOf(duration);
+            }
+            if (pos != -1)
+            {
+              src_tab[j] = encodeURIComponent(src_l);
+              j += 1; 
+            }
+          }
+        }
+
+        // impression à partir nouvelle fenêtre
+        var lh = src_tab.length;
+        if (lh > 0)
+        {
+          var url = urls.graphsList;
+          url += "?";
+          for (i = 0; i < lh; i++)
+          {
+            if (i > 0)
+            {
+              url += "&";
+            }
+            url += i;
+            url += "=";
+            url += src_tab[i];
+          }
+
+          w3 = window.open(url);
+          w3.onload = function(){
+            w3.print();
+            wDelay = 1000;
+            tempoFirePrint(wDelay);
+          }
         }
       });
 
@@ -918,6 +1015,7 @@ qx.Class.define("vigigraph.Application",
       h1.add(bt_zoomin);
       h1.add(bt_zoomout);
       h1.add(indicator_menu_bt);
+      h1.add(bt_print);
       h1.pack();
       l2.add(l);
       l2.add(h1);
