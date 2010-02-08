@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-from tg import expose, response, request
+from tg import expose, response, request, redirect
 
 from vigigraph.lib.base import BaseController
 
@@ -284,8 +284,8 @@ class RpcController(BaseController):
         return result
 
     @expose('')
-    def subPage(self, host):
-        '''subPage'''
+    def supPage(self, host):
+        '''supPage'''
         result = None
 
         # url
@@ -329,8 +329,6 @@ class RpcController(BaseController):
     def metroPage(self, host):
         '''metroPage'''
         result = None
-
-        host = re.sub('^_.*?_', '', host)
 
         # url
         url_l = settings.get('RRD_URL')
@@ -377,8 +375,10 @@ class RpcController(BaseController):
                   (urllib.unquote_plus(graph), server)
             graph = {}
             graph['title'] = title
-            graph['sts'] = _(strftime(format, gmtime(int(start))))
-            graph['ets'] = _(strftime(format, gmtime(int(start) + int(duration))))
+            v = int(start)
+            graph['sts'] = _(strftime(format, gmtime(v)))
+            v = int(start) + int(duration)
+            graph['ets'] = _(strftime(format, gmtime(v)))
             graph['src'] = urllib2.unquote(kwargs[key])
             graphslist.append(graph)
         return dict(graphslist=graphslist)
@@ -536,11 +536,13 @@ class RpcController(BaseController):
         if b_export == False:
             return 'KO'
 
-    @expose('')
+    @expose('fullhostpage.html')
     def fullHostPage(self, host, start=None, duration=86400):
         """
+        fullHostPage
         """
-        presels=[
+
+        presels = [
             {"caption" : "Last 12h", "duration" : 43200},
             {"caption" : "Last 24h", "duration" : 86400},
             {"caption" : "Last 2d",  "duration" : 192800},
@@ -550,47 +552,51 @@ class RpcController(BaseController):
             {"caption" : "Last 6m", "duration" : 86400*183},
             {"caption" : "Last year", "duration" : 86400*365},
         ]
+
         if start is None:
             start = int(time.time()) - int(duration)
-        request.content_type = "text/html"
-        ret = """
-        <html>
-            <head>
-                <title>Graph Page for %s</title>
-                <meta http-equiv="Refresh" content="300">
-                <meta http-equiv="Pragma" content="no-cache">
-                <meta http-equiv="Cache-Control" content="no-cache">
-                <link rel="search" type="application/opensearchdescription+xml" title="Supervision search" href="SupNavigator.py/getOpenSearch">
-                <style type="text/css"><!--@import url(../styles/style.css); --></style>
-            </head>
-            <body class='main'>
-            <div class="header"><style type="text/css"><!--@import url(../styles/tmpl.default.css); --></style>
-                <table class="header_table">
-                    <tr>
-                        <td class="logo">
-                            <a href="/proto4">
-                            <img class="logo" src="../styles/red15-logo-vigilo.png" alt="Vigilo"/>
-                            </a> v2.0
-                        </td>
-                    </tr>
-                </table>
-            </div>
-                <h2>Graph Page for %s</h2>
-        """%(host,host)
-        ret += """[<a href="supPage?host=%s">%s's monitoring page</a>]"""%(host, host)
-        for h in presels:
-            ret += """[<a href="fullHostPage?host=%s&duration=%s">%s</a>]"""%(host,h["duration"],h["caption"])
-        ret += "<br />"
-        '''
-        l = navconf.hosts[host]['graphs'].keys()
-        l.sort()
-        for i in l:
-#            ret += "<h3>%s</h3>\n"%i
-            v1 = navconf.hosts[host]['graphs'][i]
-            v1.sort()
-            for j in v1:
-                ret += """<a href="singleGraph?host=%s&graph=%s&start=%s&duration=%s"><img border="0" src="getImage?host=%s&graph=%s&start=%s&duration=%s&details=0" title="%s"/></a>\n"""%(host,urllib.quote_plus(j),start,duration,host,urllib.quote_plus(j),start,duration,j)
-        '''
-        ret += "</body></html>"
-        #request.write(ret)
-        return ret
+
+        # graphes pour hote
+        hgs = DBSession.query(Graph.name) \
+              .join((GRAPH_PERFDATASOURCE_TABLE, \
+              GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
+              .join((PerfDataSource, \
+              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
+              .join((LowLevelService, \
+              PerfDataSource.idservice == LowLevelService.idservice)) \
+              .join((Host, \
+              LowLevelService.idhost == Host.idhost)) \
+              .filter(Host.name == host) \
+              .all()
+
+        # dictionnaire -> {0 : [hote, graph_0], ..., n: [hote, graph_n] }
+        i = 0
+        dhgs = {}
+        for hg in hgs:
+            elt = [host, hg]
+            dhgs[i] = elt
+            i += 1
+
+        return dict(host=host, start=start, duration=duration, presels=presels, dhgs=dhgs)
+
+    @expose ('singlegraph.html')
+    def singleGraph(self, host, graph, start=None, duration=86400):
+        """
+        singleGraph
+        """
+
+        presels=[
+        {"caption" : "Last 12h", "duration" : 43200},
+        {"caption" : "Last 24h", "duration" : 86400},
+        {"caption" : "Last 2d",  "duration" : 192800},
+        {"caption" : "Last 7d",  "duration" : 604800},
+        {"caption" : "Last 14d", "duration" : 1209600},
+        {"caption" : "Last 3m", "duration" : 86400*31*3},
+        {"caption" : "Last 6m", "duration" : 86400*183},
+        {"caption" : "Last year", "duration" : 86400*365},
+        ]
+
+        if start is None:
+            start = int(time.time()) - int(duration)
+
+        return dict(host=host, graph=graph, start=start, duration=duration, presels=presels)
