@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-from tg import expose, response, request, redirect
+from tg import expose, validate, response, request, redirect
 
 from vigigraph.lib.base import BaseController
 
@@ -32,6 +32,7 @@ import csv
 
 from time import gmtime, strftime
 
+from searchhostform import SearchHostForm
 
 __all__ = ['RpcController']
 
@@ -600,3 +601,48 @@ class RpcController(BaseController):
             start = int(time.time()) - int(duration)
 
         return dict(host=host, graph=graph, start=start, duration=duration, presels=presels)
+
+    @expose('searchhostform.html')
+    def searchHostForm(self, **kwargs):
+        '''searchhostform'''
+        searchhostform = SearchHostForm('search_host_form', \
+            submit_text=None)
+
+        return dict(searchhostform=searchhostform)
+
+    @expose ('searchhost.html')
+    def searchHost(self, query=None):
+        '''
+        searchHost
+        '''
+
+        hosts = []
+        if query is not None:
+            r = urllib.unquote_plus(query)
+            rl = r.split(',')
+
+            headings = []
+            for i in range(len(rl)):
+                headings.append(rl[i].strip() + '%')
+
+            # hotes
+            for i in range(len(headings)):
+                hosts += DBSession.query(Host.name) \
+                        .filter(Host.name.like(headings[i])) \
+                        .all()
+
+            if hosts is not None and hosts != []:
+                return dict(hosts=hosts)
+            else:
+                return dict(hosts=[])
+        else:
+            redirect("searchHostForm")
+
+
+    @expose ('getopensearch.html')
+    def getOpenSearch(self):
+        '''
+        getOpenSearch
+        '''
+        result = "OK"
+        return result
