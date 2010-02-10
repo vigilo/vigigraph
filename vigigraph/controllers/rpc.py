@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-from tg import expose, validate, response, request, redirect
+from tg import expose, response, request, redirect
 
 from vigigraph.lib.base import BaseController
 
@@ -29,6 +29,7 @@ import random
 import urllib
 import urllib2
 import csv
+import os
 
 from time import gmtime, strftime
 
@@ -108,7 +109,8 @@ class RpcController(BaseController):
             .join((GRAPH_PERFDATASOURCE_TABLE, \
             GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
             .join((PerfDataSource, \
-            GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
+            GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
+            PerfDataSource.idperfdatasource)) \
             .filter(PerfDataSource.idservice == idservice) \
             .all()
         if graphs_l is not None or graphs_l != []:
@@ -406,7 +408,8 @@ class RpcController(BaseController):
             indicators = DBSession.query \
               (PerfDataSource.name, PerfDataSource.idperfdatasource) \
               .join((GRAPH_PERFDATASOURCE_TABLE, \
-              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
+              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
+              PerfDataSource.idperfdatasource)) \
               .join((Graph, \
               Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
               .filter(Graph.name == graph) \
@@ -562,7 +565,8 @@ class RpcController(BaseController):
               .join((GRAPH_PERFDATASOURCE_TABLE, \
               GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
               .join((PerfDataSource, \
-              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == PerfDataSource.idperfdatasource)) \
+              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
+              PerfDataSource.idperfdatasource)) \
               .join((LowLevelService, \
               PerfDataSource.idservice == LowLevelService.idservice)) \
               .join((Host, \
@@ -578,7 +582,8 @@ class RpcController(BaseController):
             dhgs[i] = elt
             i += 1
 
-        return dict(host=host, start=start, duration=duration, presels=presels, dhgs=dhgs)
+        return dict(host=host, start=start, duration=duration, \
+        presels=presels, dhgs=dhgs)
 
     @expose ('singlegraph.html')
     def singleGraph(self, host, graph, start=None, duration=86400):
@@ -586,7 +591,7 @@ class RpcController(BaseController):
         singleGraph
         """
 
-        presels=[
+        presels = [
         {"caption" : "Last 12h", "duration" : 43200},
         {"caption" : "Last 24h", "duration" : 86400},
         {"caption" : "Last 2d",  "duration" : 192800},
@@ -600,10 +605,11 @@ class RpcController(BaseController):
         if start is None:
             start = int(time.time()) - int(duration)
 
-        return dict(host=host, graph=graph, start=start, duration=duration, presels=presels)
+        return dict(host=host, graph=graph, start=start, duration=duration, \
+        presels=presels)
 
     @expose('searchhostform.html')
-    def searchHostForm(self, **kwargs):
+    def searchHostForm(self):
         '''searchhostform'''
         searchhostform = SearchHostForm('search_host_form', \
             submit_text=None)
@@ -639,10 +645,17 @@ class RpcController(BaseController):
             redirect("searchHostForm")
 
 
-    @expose ('getopensearch.html')
+    @expose ('getopensearch.xml', content_type='text/xml')
     def getOpenSearch(self):
         '''
         getOpenSearch
         '''
-        result = "OK"
+
+        here = "http://"
+        here += request.host
+        here += '/rpc'
+
+        dir = os.path.join(os.getcwd(), 'vigigraph/public')
+        result = dict(here=here, dir=dir)
+
         return result
