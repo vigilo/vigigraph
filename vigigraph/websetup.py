@@ -19,3 +19,17 @@ def setup_app(command, conf, variables):
     load_environment(conf.global_conf, conf.local_conf)
     populate_db()
 
+def init_db():
+    """
+    Cette fonction est appelée par le script vigigraph-init-db
+    pour initialiser la base de données de VigiGraph.
+    """
+    from paste.script.appinstall import SetupCommand
+    import os.path
+
+    ini_file = '/etc/vigilo/vigigraph/settings.ini'
+    ini_file = os.path.join('/', *ini_file.split('/'))
+
+    cmd = SetupCommand('setup-app')
+    cmd.run([ini_file])
+

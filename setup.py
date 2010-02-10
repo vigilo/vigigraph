@@ -53,5 +53,8 @@ setup(
 
     [paste.app_install]
     main = pylons.util:PylonsInstaller
+
+    [console_scripts]
+    vigigraph-init-db = vigigraph.websetup:init_db
     """,
 )
