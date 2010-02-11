@@ -7,6 +7,12 @@ except ImportError:
     use_setuptools()
     from setuptools import setup, find_packages
 
+tests_require = [
+    'WebTest',
+    'BeautifulSoup',
+    'coverage',
+]
+
 setup(
     name='vigigraph',
     version='0.1',
@@ -21,23 +27,18 @@ setup(
         "Babel >=0.9.4",
         #can be removed iif use_toscawidgets = False
         "ToscaWidgets >= 0.9.7.1",
-        "zope.sqlalchemy >= 0.4 ",
-        "repoze.tm2 >= 1.0a4",
-        "repoze.what-quickstart >= 1.0",
-        "psycopg2",
         "vigilo-models",
         "vigilo-themes-default",
         "vigilo-turbogears",
-        "PasteScript >= 1.7", # setup_requires has issues
-        "PasteDeploy",
-        "Paste",
-        "decorator != 3.1.0", # Blacklist bad version
         ],
     paster_plugins=['PasteScript', 'Pylons', 'TurboGears2', 'tg.devtools'],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
     test_suite='nose.collector',
-    tests_require=['WebTest', 'BeautifulSoup'],
+    tests_require=tests_require,
+    extras_require={
+        'tests': tests_require,
+    },
     package_data={'vigigraph': ['i18n/*/LC_MESSAGES/*.mo',
                                  'templates/*/*',
                                  'public/*/*']},

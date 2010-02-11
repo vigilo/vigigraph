@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-from tg import expose, response, request, redirect
+from tg import expose, response, request, redirect, config
 
 from vigigraph.lib.base import BaseController
 
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession
 from vigilo.models import Host, HostGroup
 from vigilo.models import Service, ServiceGroup, LowLevelService
 from vigilo.models import PerfDataSource
@@ -16,8 +16,6 @@ from vigilo.models.secondary_tables import HOST_GROUP_TABLE
 from vigilo.models.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 
 from sqlalchemy.orm import aliased
-
-from vigilo.common.conf import settings
         
 from vigilo.turbogears.rrdproxy import RRDProxy
 from nagiosproxy import NagiosProxy
@@ -224,7 +222,7 @@ class RpcController(BaseController):
         fakeIncr = random.randint(0, 9999999999)
 
         # url
-        url_l = settings.get('RRD_URL')
+        url_l = config.get('rrd_url')
         if url_l is not None:
             # proxy
             rrdproxy = RRDProxy(url_l)
@@ -251,7 +249,7 @@ class RpcController(BaseController):
         fakeIncr = random.randint(0, 9999999999)
 
         # url
-        url_l = settings.get('RRD_URL')
+        url_l = config.get('rrd_url')
         if url_l is not None:
             # proxy
             rrdproxy = RRDProxy(url_l)
@@ -273,7 +271,7 @@ class RpcController(BaseController):
         fakeincr = random.randint(0, 9999999999)
 
         # url
-        url_l = settings.get('RRD_URL')
+        url_l = config.get('rrd_url')
         if url_l is not None:
             # proxy
             rrdproxy = RRDProxy(url_l)
@@ -292,7 +290,7 @@ class RpcController(BaseController):
         result = None
 
         # url
-        url_l = settings.get('NAGIOS_URL')
+        url_l = config.get('nagios_url')
         if url_l is not None:
             # proxy
             nagiosproxy = NagiosProxy(url_l)
@@ -313,7 +311,7 @@ class RpcController(BaseController):
         result = None
 
         # url
-        url_l = settings.get('NAGIOS_URL')
+        url_l = config.get('nagios_url')
         if url_l is not None:
             # proxy
             nagiosproxy = NagiosProxy(url_l)
@@ -334,7 +332,7 @@ class RpcController(BaseController):
         result = None
 
         # url
-        url_l = settings.get('RRD_URL')
+        url_l = config.get('rrd_url')
         if url_l is not None:
             # proxy
             rrdproxy = RRDProxy(url_l)
@@ -389,7 +387,7 @@ class RpcController(BaseController):
     @expose(content_type='text/plain')
     def tempoDelayRefresh(self, nocache=None):
         '''tempo pour rafraichissement'''
-        delay = settings.get('DELAY_REFRESH')
+        delay = config.get('delay_refresh')
         return str(delay)
 
     @expose('json')
@@ -428,11 +426,11 @@ class RpcController(BaseController):
         sep_values = ";"
         sep_value = ","
 
-        sep = settings.get("EXPORT_CSV_SEP_VALUES")
+        sep = config.get("export_csv_sep_values")
         if sep is not None:
             sep_values = sep
             
-        sep = settings.get("EXPORT_CSV_SEP_VALUE")
+        sep = config.get("export_csv_sep_value")
         if sep is not None:
             sep_value = sep
 
@@ -472,7 +470,7 @@ class RpcController(BaseController):
                     dict_indicators[idx] = indicators_l[i]
 
                 # url selon configuration
-                url_l = settings.get('RRD_URL')
+                url_l = config.get('rrd_url')
                 if url_l is not None:
                     # donnees via proxy
                     rrdproxy = RRDProxy(url_l)

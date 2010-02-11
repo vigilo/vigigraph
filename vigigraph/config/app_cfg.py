@@ -15,9 +15,6 @@ convert them into boolean, for example, you should use the
 """
 
 from vigilo import models
-from vigilo.models.session import DBSession
-from vigilo.models.vigilo_bdd_config import metadata
-metadata.bind = DBSession.bind
 
 import vigigraph
 from vigilo.turbogears import VigiloAppConfig
@@ -43,11 +40,9 @@ base_config.renderers.append('genshi')
 #Configure the base SQLALchemy Setup
 base_config.use_sqlalchemy = True
 base_config.model = models
-base_config.DBSession = DBSession
 
 # Configure the authentication backend
 base_config.auth_backend = 'sqlalchemy'
-base_config.sa_auth.dbsession = DBSession
 
 # what is the class you want to use to search for users in the database
 base_config.sa_auth.user_class = models.User
