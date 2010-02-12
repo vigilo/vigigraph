@@ -14,8 +14,6 @@ convert them into boolean, for example, you should use the
  
 """
 
-from vigilo import models
-
 import vigigraph
 from vigilo.turbogears import VigiloAppConfig
 from vigigraph.lib import app_globals, helpers
@@ -23,36 +21,17 @@ from vigigraph.lib import app_globals, helpers
 base_config = VigiloAppConfig('vigigraph')
 base_config.renderers = []
 
-# XXX semble requis pour le déploiement sur Apache.
-# Il faudrait comprendre pourquoi (je soupçonne une dépendance de Rum).
-base_config.use_toscawidgets = True
-
 base_config.package = vigigraph
 
 #Set the default renderer
 base_config.default_renderer = 'genshi'
 base_config.renderers.append('genshi')
-# if you want raw speed and have installed chameleon.genshi
-# you should try to use this renderer instead.
-# warning: for the moment chameleon does not handle i18n translations
-#base_config.renderers.append('chameleon_genshi')
 
 #Configure the base SQLALchemy Setup
 base_config.use_sqlalchemy = True
-base_config.model = models
 
 # Configure the authentication backend
 base_config.auth_backend = 'sqlalchemy'
-
-# what is the class you want to use to search for users in the database
-base_config.sa_auth.user_class = models.User
-# what is the class you want to use to search for groups in the database
-base_config.sa_auth.group_class = models.UserGroup
-# what is the class you want to use to search for permissions in the database
-base_config.sa_auth.permission_class = models.Permission
-# The name "groups" is already used for groups of hosts.
-# We use "usergroups" when referering to users to avoid confusion.
-base_config.sa_auth.translations.groups = 'usergroups'
 
 # override this if you would like to provide a different who plugin for
 # managing login and logout of your application

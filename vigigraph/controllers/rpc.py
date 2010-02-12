@@ -2,7 +2,7 @@
 """RPC controller for the combobox of vigigraph"""
 
 from tg import expose, response, request, redirect, config
-from tg import webob
+from tg import exceptions
 
 from vigigraph.lib.base import BaseController
 
@@ -237,7 +237,7 @@ class RpcController(BaseController):
                 txt = _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
                 LOGGER.error(txt)
-                webob.exc.HTTPNotFound(comment=txt)
+                exceptions.HTTPNotFound(comment=txt)
 
         return result
 
@@ -266,7 +266,7 @@ class RpcController(BaseController):
                 txt = _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
                 LOGGER.error(txt)
-                webob.exc.HTTPNotFound(comment=txt)
+                exceptions.HTTPNotFound(comment=txt)
 
         return result
 
@@ -290,7 +290,7 @@ class RpcController(BaseController):
                 txt = _("Can't get RRD data on host \"%s\"") \
                     % (host)
                 LOGGER.error(txt)
-                webob.exc.HTTPNotFound(comment=txt)
+                exceptions.HTTPNotFound(comment=txt)
 
         return result
 
