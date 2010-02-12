@@ -653,7 +653,7 @@ class RpcController(BaseController):
         here += request.host
         here += '/rpc'
 
-        dir = os.path.join(os.getcwd(), 'vigigraph/public')
-        result = dict(here=here, dir=dir)
+        dir_l = os.path.join(os.getcwd(), 'vigigraph/public')
+        result = dict(here=here, dir=dir_l)
 
         return result
