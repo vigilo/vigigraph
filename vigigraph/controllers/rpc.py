@@ -2,6 +2,7 @@
 """RPC controller for the combobox of vigigraph"""
 
 from tg import expose, response, request, redirect, config
+from tg import webob
 
 from vigigraph.lib.base import BaseController
 
@@ -28,10 +29,13 @@ import urllib
 import urllib2
 import csv
 import os
+import logging
 
 from time import gmtime, strftime
 
 from searchhostform import SearchHostForm
+
+LOGGER = logging.getLogger(__name__)
 
 __all__ = ['RpcController']
 
@@ -230,8 +234,10 @@ class RpcController(BaseController):
                 result = rrdproxy.get_img_name_with_params(host, graph, \
                 direct, duration, start, int(details))
             except urllib2.URLError, e:
-                print _("Can't get RRD graph \"%s\" on host \"%s\"") \
+                txt = _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
+                LOGGER.error(txt)
+                webob.exc.HTTPNotFound(comment=txt)
 
         return result
 
@@ -257,8 +263,10 @@ class RpcController(BaseController):
                 result = rrdproxy.get_img_with_params(host, graph, direct, \
                 duration, start, int(details))
             except urllib2.URLError, e:
-                print _("Can't get RRD graph \"%s\" on host \"%s\"") \
+                txt = _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
+                LOGGER.error(txt)
+                webob.exc.HTTPNotFound(comment=txt)
 
         return result
 
@@ -279,8 +287,10 @@ class RpcController(BaseController):
                 #result=rrdproxy.get_getstarttime(host, getstarttime, fakeincr)
                 result = rrdproxy.get_starttime(host, getstarttime)
             except urllib2.URLError, e:
-                print _("Can't get RRD data on host \"%s\"") \
+                txt = _("Can't get RRD data on host \"%s\"") \
                     % (host)
+                LOGGER.error(txt)
+                webob.exc.HTTPNotFound(comment=txt)
 
         return result
 
