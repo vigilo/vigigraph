@@ -307,11 +307,10 @@ class RpcController(BaseController):
             try:
                 result = nagiosproxy.get_status(host)
             except urllib2.URLError, e:
-                response.content_type = "text/html"
-                response.write("<html><body bgcolor='#C3C7D3'> \
-                <p>Unable to find supervision page for %s.<br/>Are You sure \
-                it has been inserted into the supervision configuration ? \
-                </p></body></html>\n" % host)
+                txt = _("Can't get Nagios data on host \"%s\"") \
+                    % (host)
+                LOGGER.error(txt)
+                redirect('nagios_host_error?host=%s"' % host)
 
         return result
 
@@ -328,11 +327,10 @@ class RpcController(BaseController):
             try:
                 result = nagiosproxy.get_extinfo(host, service)
             except urllib2.URLError, e:
-                response.content_type = "text/html"
-                response.write("<html><body bgcolor='#C3C7D3'> \
-                <p>Unable to find supervision page for %s/%s.<br/>Are You sure \
-                it has been inserted into the supervision configuration ? \
-                </p></body></html>\n" % (host, service))
+                txt = _("Can't get Nagios data on host \"%s\" service \"%s\"")\
+                    % (host, service)
+                LOGGER.error(txt)
+                redirect('nagios_host_service_error?host=%s"' % (host, service))
 
         return result
 
@@ -349,11 +347,10 @@ class RpcController(BaseController):
             try:
                 result = rrdproxy.get_host(host)
             except urllib2.URLError, e:
-                response.content_type = "text/html"
-                response.write("<html><body bgcolor='#C3C7D3'> \
-                <p>Unable to find metrology page for %s.<br/>Are You sure \
-                it has been inserted into the supervision configuration ? \
-                </p></body></html>\n" % host)
+                txt = _("Can't get RRD data on host \"%s\"") \
+                    % (host)
+                LOGGER.error(txt)
+                redirect('rrd_error?host=%s"' % host)
 
         return result
 
@@ -667,3 +664,43 @@ class RpcController(BaseController):
         result = dict(here=here, dir=dir_l)
 
         return result
+
+    @expose('')
+    def rrd_txt_error(self, **kwargs):
+        '''rrd_error'''
+        txt = None
+        if kwargs is not None:
+            txt = kwargs.get('txt')
+        return txt
+
+    @expose('rrd_error.html')
+    def rrd_error(self, **kwargs):
+        '''rrd_error'''
+        host = None
+        if kwargs is not None:
+            host = kwargs.get('host')
+            return dict(host=host)
+        else:
+            return None
+
+    @expose('nagios_host_error.html')
+    def nagios_host_error(self, **kwargs):
+        '''nagios_host_error'''
+        host = None
+        if kwargs is not None:
+            host = kwargs.get('host')
+            return dict(host=host)
+        else:
+            return None
+
+    @expose('nagios_host_service_error.html')
+    def nagios_host_service_error(self, **kwargs):
+        '''nagios_host_service_error'''
+        host = None
+        service = None
+        if kwargs is not None:
+            host = kwargs.get('host')
+            service = kwargs.get('service')
+            return dict(host=host, service=service)
+        else:
+            return None
