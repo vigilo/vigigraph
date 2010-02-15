@@ -1,16 +1,29 @@
 # -*- coding: utf-8 -*-
+import os
+import atexit
+from datetime import datetime
 from sqlalchemy import and_
+import paste.deploy
+import tg
+
+tg.config = paste.deploy.appconfig('config:%s/%s' % (os.getcwd(), 'development.ini'))
+from vigilo.models.configure import DBSession, configure_db
+configure_db(tg.config, 'sqlalchemy.')
+
+def commit_on_exit():
+    """
+    Effectue un COMMIT sur la transaction à la fin de l'exécution
+    du script d'insertion des données de test.
+    """
+    import transaction
+    transaction.commit()
+
+atexit.register(commit_on_exit)
 
 from vigilo.models import Host, HostGroup
 from vigilo.models import LowLevelService, ServiceGroup
 from vigilo.models import PerfDataSource, Graph
-from vigilo.models.session import DBSession
 
-from datetime import datetime
-
-import transaction
-
-#DBSession.autocommit = True
 
 # Groupe d'hôtes (HostGroup)
 def create_HostGroup(name, parent=None):
@@ -207,4 +220,3 @@ ds7 = create_ds(u'TCP connections', u'GAUGE', s5 \
 ds8 = create_ds(u'CPU usage (by type)', u'GAUGE', s5 \
                 , u'CPU usage (by type)', graphs[7:8])
 
-transaction.commit()
