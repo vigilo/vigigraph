@@ -330,7 +330,8 @@ class RpcController(BaseController):
                 txt = _("Can't get Nagios data on host \"%s\" service \"%s\"")\
                     % (host, service)
                 LOGGER.error(txt)
-                redirect('nagios_host_service_error?host=%s"' % (host, service))
+                redirect('nagios_host_service_error?host=%s&service=%s' \
+                % (host, service))
 
         return result
 
