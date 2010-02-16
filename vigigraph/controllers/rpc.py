@@ -506,7 +506,7 @@ class RpcController(BaseController):
 
                             # fichier
                             f = open(filename, 'wt')
-                            fn = 'attachment;filename='+filename+"'"
+                            fn = 'attachment;filename='+filename
                             response.headerlist.append \
                             (('Content-Disposition', fn))
                             try:
