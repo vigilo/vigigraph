@@ -47,7 +47,7 @@ var urls = {
     "graphs": "/rpc/graphs",
     "selectHostAndService": "/rpc/selectHostAndService",
     "searchHostAndService": "/rpc/searchHostAndService",
-    "subPage": "/rpc/subPage",
+    "supPage": "/rpc/supPage",
     "getImage": "/rpc/getImage",
     "getStartTime": "/rpc/getStartTime",
     "getIdHost": "/rpc/getIdHost",
@@ -259,7 +259,7 @@ qx.Class.define("vigigraph.Application",
       });
 
       b3.addEventListener("execute",function(e) {
-        var win = new qx.client.NativeWindow(urls.subPage+"?host="+combo3.getSelected().getLabel());
+        var win = new qx.client.NativeWindow(urls.supPage+"?host="+combo3.getSelected().getLabel());
         win.setDimension(800,600);
         win.setDependent(false);
         win.open();
