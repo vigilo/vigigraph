@@ -310,7 +310,7 @@ class RpcController(BaseController):
                 txt = _("Can't get Nagios data on host \"%s\"") \
                     % (host)
                 LOGGER.error(txt)
-                redirect('nagios_host_error?host=%s"' % host)
+                redirect('nagios_host_error?host=%s' % host)
 
         return result
 
@@ -346,14 +346,19 @@ class RpcController(BaseController):
             # proxy
             rrdproxy = RRDProxy(url_l)
             try:
-                result = rrdproxy.get_host(host)
+                result = rrdproxy.get_hostC(host)
             except urllib2.URLError, e:
                 txt = _("Can't get RRD data on host \"%s\"") \
                     % (host)
                 LOGGER.error(txt)
-                redirect('rrd_error?host=%s"' % host)
+                redirect('rrd_error?host=%s' % host)
 
         return result
+
+    @expose('')
+    def imagePage(self, server, graphtemplate):
+        '''metroPage'''
+        redirect('getImage_png?host=%s&graph=%s' % (server, graphtemplate))
 
     @expose('graphslist.html', content_type='text/html')
     def graphsList(self, nocache=None, **kwargs):
@@ -448,22 +453,33 @@ class RpcController(BaseController):
         if indicator is not None:
             dict_indicators = {}
             indicators = self.getListIndicators(graph)
+
             indicators_l = []
+            indicator_f = ''
 
             if indicator == "All":
                 b_export = True
                 for i in range(len(indicators)):
                     indicators_l.append(indicators[i][0])
-                filename = graph
+                indicator_f = graph
             else:
                 for i in range(len(indicators)):
                     if indicator == indicators[i][0]:
                         b_export = True
                         indicators_l.append(indicator)
-                        filename = indicator
+                        indicator_f = indicator
                         break
 
             if b_export:
+                # nom fichier
+                filename = host
+                filename += "_"
+                filename += indicator_f
+                filename += "_"
+                filename += str(start)
+                filename += "_"
+                filename += str(end)
+
                 # nom fichier final
                 lc = [' ', '|', '/', '\\', ':', '?', '*', '<', '>', '"']
                 for c in lc:
@@ -487,10 +503,15 @@ class RpcController(BaseController):
                         indicator=indicator, start=start, end=end)
                     except urllib2.URLError, e:
                         b_export = False
-                        response.content_type = "text/html"
-                        response.write("<html><body bgcolor='#C3C7D3'> \
-                        <p>Unable to export for %s %s %s.<br/> \
-                        </p></body></html>\n" % (host, graph, indicator))
+                        
+                        txt = _("Can't get RRD data on host \"%s\" \
+                        graph \"%s\" indicator \"%s\" ") \
+                        % (host, graph, indicator)
+                        LOGGER.error(txt)
+
+                        redirect('rrd_exportCSV_error?\
+                        host=%s&graph=%s&indicator=%s'\
+                        % (host, graph, indicator))
                     finally:
                         if b_export:
                             # conversion sous forme de dictionnaire
@@ -650,7 +671,6 @@ class RpcController(BaseController):
         else:
             redirect("searchHostForm")
 
-
     @expose ('getopensearch.xml', content_type='text/xml')
     def getOpenSearch(self):
         '''
@@ -677,6 +697,16 @@ class RpcController(BaseController):
     @expose('rrd_error.html')
     def rrd_error(self, **kwargs):
         '''rrd_error'''
+        host = None
+        if kwargs is not None:
+            host = kwargs.get('host')
+            return dict(host=host)
+        else:
+            return None
+
+    @expose('rrd_error.html')
+    def rrd_exportCSV_error(self, **kwargs):
+        '''rrd_exportCSV_error'''
         host = None
         if kwargs is not None:
             host = kwargs.get('host')
