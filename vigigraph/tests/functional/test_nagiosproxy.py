@@ -37,8 +37,8 @@ class TestNagiosProxy(unittest.TestCase):
         #self.url = settings.get('NAGIOS_URL') -> ne marche pas
         self.url = 'http://localhost/nagios/cgi-bin'
 
-    def test_subPage(self):
-        '''fonction vérification subPage'''
+    def test_supPage(self):
+        '''fonction vérification supPage'''
         result = None
 
         host = 'par.linux0'
