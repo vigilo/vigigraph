@@ -241,6 +241,7 @@ class RpcController(BaseController):
 
         return result
 
+    #DCS_GESTNOC_VIGILO_PERF_0020:Visualisation unitaire des graphes
     @expose(content_type='image/png')
     def getImage_png(self, host, start=None, duration=86400, graph=None, \
     details=1):
@@ -427,6 +428,7 @@ class RpcController(BaseController):
               .all()
         return indicators
 
+    #DCS_GESTNOC_VIGILO_PERF_0040:export des donnees d'un graphe au format CSV
     @expose('', content_type='text/csv')
     def exportCSV(self, nocache=None, host=None, graph=None, indicator=None, \
     start=None, end=None):
@@ -567,6 +569,7 @@ class RpcController(BaseController):
         if b_export == False:
             return 'KO'
 
+    #DCS_GESTNOC_VIGILO_PERF_0010:Visualisation globale des graphes
     @expose('fullhostpage.html')
     def fullHostPage(self, host, start=None, duration=86400):
         """
@@ -671,6 +674,7 @@ class RpcController(BaseController):
         else:
             redirect("searchHostForm")
 
+    #DCS_GESTNOC_VIGILO_PERF_0030:Moteur de recherche des graphes
     @expose ('getopensearch.xml', content_type='text/xml')
     def getOpenSearch(self):
         '''
