@@ -17,9 +17,10 @@ setup(
     name='vigigraph',
     version='0.1',
     description='',
-    author='',
-    author_email='',
+    author='Vigilo Team',
+    author_email='contact@projet-vigilo.org',
     #url='',
+    license='http://www.gnu.org/licenses/gpl-2.0.html',
     install_requires=[
         "tg.devtools",
         "TurboGears2 >= 2.0b7",
@@ -39,14 +40,19 @@ setup(
     extras_require={
         'tests': tests_require,
     },
-    package_data={'vigigraph': ['i18n/*/LC_MESSAGES/*.mo',
-                                 'templates/*/*',
-                                 'public/*/*']},
-    message_extractors={'vigigraph': [
+    package_data={
+        'vigigraph': [
+            'i18n/*/LC_MESSAGES/*.mo',
+            'templates/*/*',
+#            'public/*/*',
+        ],
+    },
+    message_extractors={
+        'vigigraph': [
             ('**.py', 'python', None),
-            ('templates/**.mako', 'mako', None),
-            ('templates/**.html', 'genshi', None),
-            ('public/**', 'ignore', None)]},
+#            ('public/**', 'ignore', None),
+        ],
+    },
 
     entry_points="""
     [paste.app_factory]
