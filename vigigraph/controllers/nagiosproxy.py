@@ -50,7 +50,6 @@ class NagiosProxy(object):
      
         @param host : hôte
         @type host : C{str}
-
         @return : donnees Nagios
         @rtype: 
         '''
@@ -73,7 +72,6 @@ class NagiosProxy(object):
         @type host : C{str}
         @param service : service
         @type service : C{str}
-
         @return : donnees Nagios
         @rtype: 
         '''
