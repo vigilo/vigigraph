@@ -2,7 +2,7 @@
 """RPC controller for the combobox of vigigraph"""
 
 from tg import expose, response, request, redirect, config
-from tg import exceptions
+from tg import exceptions, url
 
 from vigigraph.lib.base import BaseController
 
@@ -683,7 +683,6 @@ class RpcController(BaseController):
 
         here = "http://"
         here += request.host
-        here += '/rpc'
 
         dir_l = os.path.join(os.getcwd(), 'vigigraph/public')
         result = dict(here=here, dir=dir_l)
