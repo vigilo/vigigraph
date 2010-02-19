@@ -270,7 +270,7 @@ qx.Class.define("vigigraph.Application",
         var graph=combo5.getSelected().getLabel();
         this.openGraph(host, graph, null, null, true);
       }, this);
-      
+
       b1.addEventListener("execute",function(e) { 
         var w_search = new qx.ui.window.Window(this.tr("Search"), "icon/16/actions/zoom.png");
         w_search.addToDocument();
@@ -997,11 +997,14 @@ qx.Class.define("vigigraph.Application",
 
       function getExport(indicator)
       {
+        var w4 = undefined;
         if (indicator != "")
         {
           var end = start + duration;
           var url= urls.exportCSV+"?host="+encodeURIComponent(host)+"&graph="+graph+"&indicator="+indicator+"&start="+start+"&end="+end;
-          var w3 = window.open(url);
+          w4 = window.open(url);
+          w4.onload = function(){
+          }
         }
       }
 
