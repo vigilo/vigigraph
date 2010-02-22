@@ -402,8 +402,24 @@ class RpcController(BaseController):
     @expose(content_type='text/plain')
     def tempoDelayRefresh(self, nocache=None):
         '''tempo pour rafraichissement'''
+
         delay = config.get('delay_refresh')
-        return str(delay)
+        delay = string.strip(delay)
+
+        b_evaluate = False
+        if delay == '':
+            b_evaluate = True
+        else:
+            if delay.isalnum():
+                delay_l = int(delay)
+                b_evaluate = (delay_l <= 0)
+            else:
+                b_evaluate = True
+
+        if b_evaluate:
+            delay = '30000'
+
+        return delay
 
     @expose('json')
     def getIndicators(self, nocache=None, graph=None):
