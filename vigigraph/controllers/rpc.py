@@ -30,6 +30,7 @@ import urllib2
 import csv
 import os
 import logging
+import string
 
 from time import gmtime, strftime
 
@@ -653,7 +654,13 @@ class RpcController(BaseController):
         '''
 
         hosts = []
+
+        b_query = False
         if query is not None:
+            query = string.strip(query)
+            b_query = (query != '')
+
+        if b_query:
             r = urllib.unquote_plus(query)
             rl = r.split(',')
 
