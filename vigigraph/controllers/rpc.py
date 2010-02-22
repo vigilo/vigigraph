@@ -684,7 +684,7 @@ class RpcController(BaseController):
         here = "http://"
         here += request.host
 
-        dir_l = './vigigraph/public'
+        dir_l = url('/vigigraph/public')
 
         result = dict(here=here, dir=dir_l)
 
