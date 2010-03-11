@@ -24,6 +24,7 @@ from nagiosproxy import NagiosProxy
 from pylons.i18n import ugettext as _
 
 import time
+import datetime
 import random
 import urllib
 import urllib2
@@ -33,6 +34,7 @@ import logging
 import string
 
 from time import gmtime, strftime
+from datetime import datetime
 
 from searchhostform import SearchHostForm
 
@@ -490,14 +492,23 @@ class RpcController(BaseController):
                         break
 
             if b_export:
+                # plage temps sous forme texte
+                format = '%Y%m%d-%H%M%S'
+
+                dt = datetime.utcfromtimestamp(int(start))
+                str_start = dt.strftime(format)
+
+                dt = datetime.utcfromtimestamp(int(end))
+                str_end = dt.strftime(format)
+
                 # nom fichier
                 filename = host
                 filename += "_"
                 filename += indicator_f
                 filename += "_"
-                filename += str(start)
+                filename += str_start
                 filename += "_"
-                filename += str(end)
+                filename += str_end
 
                 # nom fichier final
                 lc = [' ', '|', '/', '\\', ':', '?', '*', '<', '>', '"']
@@ -566,6 +577,7 @@ class RpcController(BaseController):
                                 '''
 
                                 # valeurs
+                                format = '%Y/%m/%d %H:%M:%S'
                                 if dict_values is not None or \
                                 dict_values != "{}":
                                     for key_tv in dict_values:
@@ -573,9 +585,16 @@ class RpcController(BaseController):
                                         dict_data = {}
                                         for key_i in dict_indicators:
                                             iv = dict_indicators[key_i]
-                                            # remplacement . par ,
                                             v = str(tv[key_i])
+
+                                            # temps sous forme texte
+                                            if iv == 'TimeStamp':
+                                                dt = datetime.utcfromtimestamp(int(v))
+                                                v = dt.strftime(format)
+
+                                            # remplacement . par ,
                                             v = v.replace(".", sep_value)
+
                                             dict_data[iv] = v
                                         writer.writerow(dict_data)
                             finally:
