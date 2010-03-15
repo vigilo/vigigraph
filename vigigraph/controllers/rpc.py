@@ -272,6 +272,10 @@ class RpcController(BaseController):
                 LOGGER.error(txt)
                 exceptions.HTTPNotFound(comment=txt)
 
+        print ''
+        print result
+        print ''
+
         return result
 
     @expose('')
