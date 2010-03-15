@@ -296,19 +296,19 @@ qx.Class.define("vigigraph.Application",
         search_host.setLiveUpdate(true);
         search_host.tabIndex = 1;
         search_host.setToolTip(new qx.ui.popup.ToolTip(this.tr("Search for a host (\"*\" for all, 100 max)")));
-        w_search_h.add(new qx.ui.basic.Label(this.tr("Service:")));
+        w_search_h.add(new qx.ui.basic.Label(this.tr("Graph:")));
         var search_service = new qx.ui.form.TextField();
         w_search_h.add(search_service);
         search_service.setMarginRight(5);
         search_service.setLiveUpdate(true);
         search_service.tabIndex = 2;
-        search_service.setToolTip(new qx.ui.popup.ToolTip(this.tr("Search for a service (\"*\" for all, 100 max)")));
+        search_service.setToolTip(new qx.ui.popup.ToolTip(this.tr("Search for a graph (\"*\" for all, 100 max)")));
         var search_button=new qx.ui.form.Button("","icon/16/actions/zoom.png");
         search_button.setWidth(20);
         search_button.setHeight(20);
         w_search_h.add(search_button);
         var search_results_model = new qx.ui.table.model.Simple();
-        search_results_model.setColumns([ this.tr("Host"), this.tr("Service") ]);
+        search_results_model.setColumns([ this.tr("Host"), this.tr("Graph") ]);
         var custom = {
           tableColumnModel :
             function(obj)
