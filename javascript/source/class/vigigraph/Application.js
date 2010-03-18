@@ -50,8 +50,6 @@ var urls = {
     "supPage": "/rpc/supPage",
     "getImage": "/rpc/getImage",
     "getStartTime": "/rpc/getStartTime",
-    "getIdHost": "/rpc/getIdHost",
-    "getIdService": "/rpc/getIdService",
     "graphsList": "/rpc/graphsList",
     "tempoDelayRefresh": "/rpc/tempoDelayRefresh",
     "getIndicators": "/rpc/getIndicators",
