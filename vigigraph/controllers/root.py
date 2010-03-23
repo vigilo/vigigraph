@@ -2,6 +2,7 @@
 # vim:set expandtab tabstop=4 shiftwidth=4: 
 """Vigigraph Controller"""
 
+import logging
 from tg import expose, flash, require, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from repoze.what.predicates import Any, not_anonymous
@@ -12,6 +13,7 @@ from vigigraph.controllers.rpc import RpcController
 
 __all__ = ['RootController']
 
+LOGGER = logging.getLogger(__name__)
 
 class RootController(BaseController):
     """
@@ -56,6 +58,10 @@ class RootController(BaseController):
             login_counter = request.environ['repoze.who.logins'] + 1
             redirect('/login', came_from=came_from, __logins=login_counter)
         userid = request.identity['repoze.who.userid']
+        LOGGER.info(_('"%(username)s" logged in (from %(IP)s)') % {
+                'username': userid,
+                'IP': request.remote_addr,
+            })
         flash(_('Welcome back, %s!') % userid)
         redirect(came_from)
 
