@@ -2,7 +2,7 @@
 """RPC controller for the combobox of vigigraph"""
 
 from tg import expose, response, request, redirect, config
-from tg import exceptions, url
+from tg import exceptions
 
 from vigigraph.lib.base import BaseController
 
@@ -24,12 +24,10 @@ from nagiosproxy import NagiosProxy
 from pylons.i18n import ugettext as _
 
 import time
-import datetime
 import random
 import urllib
 import urllib2
 import csv
-import os
 import logging
 import string
 
