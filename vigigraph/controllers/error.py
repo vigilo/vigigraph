@@ -28,3 +28,105 @@ class ErrorController(object):
                       code=request.params.get('code', resp.status_int),
                       message=request.params.get('message', default_message))
         return values
+
+    @expose('')
+    def rrd_txt_error(self, **kwargs):
+        """
+        Gestion erreur rrd
+        
+        @param **kwargs : arguments nommes
+        @type **kwargs  : dict
+                          (pour la clé 'txt', contient le texte) 
+
+        @return : texte de l erreur
+        @rtype  : C{str}
+        """
+
+        txt = None
+        if kwargs is not None:
+            txt = kwargs.get('txt')
+        return txt
+
+    @expose('rrd_error.html')
+    def rrd_error(self, **kwargs):
+        """
+        Gestion erreur rrd
+        
+        @param **kwargs : arguments nommes
+        @type **kwargs  : dict
+                          (pour la clé 'host', contient l'hôte) 
+
+        @return : page erreur
+        @rtype : page (-> dict sur template rrd_error.html)
+        """
+
+        host = None
+        if kwargs is not None:
+            host = kwargs.get('host')
+            return dict(host=host)
+        else:
+            return None
+
+    @expose('rrd_error.html')
+    def rrd_exportCSV_error(self, **kwargs):
+        """
+        Gestion erreur rrd sur export CSV
+        
+        @param **kwargs : arguments nommes
+        @type **kwargs  : dict
+                          (pour la clé 'host', contient l'hôte) 
+
+        @return : page erreur
+        @rtype : page (-> dict sur template rrd_error.html)
+        """
+
+        host = None
+        if kwargs is not None:
+            host = kwargs.get('host')
+            return dict(host=host)
+        else:
+            return None
+
+    @expose('nagios_host_error.html')
+    def nagios_host_error(self, **kwargs):
+        """
+        Gestion erreur nagios sur l hote
+        
+        @param **kwargs : arguments nommes
+        @type **kwargs  : dict
+                          (pour la clé 'host', contient l'hôte) 
+
+        @return : page erreur
+        @rtype : page (-> dict sur template nagios_host_error.html)
+        """
+
+        host = None
+        if kwargs is not None:
+            host = kwargs.get('host')
+            return dict(host=host)
+        else:
+            return None
+
+    @expose('nagios_host_service_error.html')
+    def nagios_host_service_error(self, **kwargs):
+        """
+        Gestion erreur nagios sur l'hote et le service
+        
+        @param **kwargs : arguments nommes
+        @type **kwargs  : dict
+                          (pour la clé 'host', contient l'hôte) 
+                          (pour la clé 'service', contient le service) 
+
+        @return : page erreur
+        @rtype : page (-> dict sur template nagios_host_service_error.html)
+        """
+
+        host = None
+        service = None
+        if kwargs is not None:
+            host = kwargs.get('host')
+            service = kwargs.get('service')
+            return dict(host=host, service=service)
+        else:
+            return None
+
