@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-from tg import expose, response, request, redirect, config
+from tg import expose, response, request, redirect, config, url
 from tg import exceptions
 
 from vigigraph.lib.base import BaseController
@@ -11,6 +11,7 @@ from vigilo.models import Host, HostGroup
 from vigilo.models import Service, ServiceGroup, LowLevelService
 from vigilo.models import PerfDataSource
 from vigilo.models import Graph
+from vigilo.models import Ventilation, VigiloServer, Application
 
 from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.secondary_tables import HOST_GROUP_TABLE
@@ -31,10 +32,9 @@ import csv
 import logging
 import string
 
-from time import gmtime, strftime
-from datetime import datetime
-
 from searchhostform import SearchHostForm
+from vigigraph.lib import graphs
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -43,17 +43,24 @@ __all__ = ['RpcController']
 
 class RpcController(BaseController):
     """
-    Class Gérant la lecture des différents champs des combobox de vigigraph.
+    Class Controleur TurboGears
     """
     def _get_host(self, hostname):
-        """ Return Host object from hostname, None if not available"""
+        """
+        Return Host object from hostname, None if not available
+        """
         return DBSession.query(Host) \
                 .filter(Host.name == hostname) \
                 .first()
 
     @expose('json')
     def maingroups(self, nocache=None):
-        """Render the JSON document for the combobox Main Group"""
+        """
+        Render the JSON document for the combobox Main Group
+
+        @return : groupes principaux
+        @rtype: dict (sous forme json)
+        """
         topgroups = DBSession.query(HostGroup.name, HostGroup.idgroup) \
                 .filter(HostGroup.parent == None) \
                 .order_by(HostGroup.name) \
@@ -65,7 +72,15 @@ class RpcController(BaseController):
 
     @expose('json')
     def hostgroups(self, maingroupid, nocache=None):
-        """Render the JSON document for the combobox Other Group"""
+        """
+        Render the JSON document for the combobox Other Group
+
+        @param maingroupid : identificateur d un groupe principal
+        @type maingroupid : int
+
+        @return : groupes
+        @rtype: dict (sous forme json)
+        """
         hostgroups = DBSession.query(HostGroup.name, HostGroup.idgroup)\
                      .filter(HostGroup.idparent == maingroupid) \
                      .all()
@@ -76,7 +91,15 @@ class RpcController(BaseController):
 
     @expose('json')
     def hosts(self, othergroupid, nocache=None):
-        """Render the JSON document for the combobox Host Name"""
+        """
+        Render the JSON document for the combobox Host Name
+
+        @param othergroupid : identificateur d un groupe
+        @type othergroupid : int
+
+        @return : hotes
+        @rtype: dict (sous forme json)
+        """
         hostgroup = DBSession.query(HostGroup) \
                 .filter(HostGroup.idgroup == othergroupid) \
                 .first()
@@ -89,7 +112,15 @@ class RpcController(BaseController):
 
     @expose('json')
     def servicegroups(self, idhost, nocache=None):
-        """Render the JSON document for the combobox Graph Group"""
+        """
+        Render the JSON document for the combobox Graph Group
+
+        @param idhost : identificateur d un hote
+        @type idhost : int
+
+        @return : groupes de service
+        @rtype: dict (sous forme json)
+        """
         # passage par une table intermédiaire à cause de l'héritage
         servicegroups = DBSession.query \
             (ServiceGroup.name, LowLevelService.idservice) \
@@ -107,7 +138,15 @@ class RpcController(BaseController):
 
     @expose('json')
     def graphs(self, idservice, nocache=None):
-        """Render the JSON document for the combobox Graph Name"""
+        """
+        Render the JSON document for the combobox Graph Name
+
+        @param idservice : identificateur d un service
+        @type idservice : int
+
+        @return : graphes
+        @rtype: dict (sous forme json)
+        """
         graphs_l = DBSession.query(Graph.name, Graph.idgraph) \
             .join((GRAPH_PERFDATASOURCE_TABLE, \
             GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
@@ -124,8 +163,15 @@ class RpcController(BaseController):
 
     @expose('json')
     def searchHostAndService(self, **kwargs):
-        """Render the JSON document for the Host and Service"""
+        """
+        Render the JSON document for the Host and Service
 
+        @param **kwargs : arguments nommes
+        @type **kwargs : dict
+
+        @return : couples hote-service
+        @rtype: dict (sous forme json)
+        """
         host = kwargs.get('host')
         service = kwargs.get('service')
 
@@ -162,8 +208,15 @@ class RpcController(BaseController):
 
     @expose('json')
     def selectHostAndService(self, **kwargs):
-        """Render the JSON document for the Host and Service"""
-        
+        """
+        Render the JSON document for the Host and Service
+
+        @param **kwargs : arguments nommes
+        @type **kwargs : dict
+
+        @return : groupes
+        @rtype: dict (sous forme json)
+        """
         host = kwargs.get('host')
         #service = kwargs.get('service')
         service = None
@@ -216,7 +269,26 @@ class RpcController(BaseController):
     @expose(content_type='text/plain')
     def getImage(self, host, start=None, duration=86400, graph=None, \
     details=1, nocache=0):
-        '''Image - as Text'''
+        """
+        Determination de l url d un graphe
+        (via proxy)
+
+        @param host : hôte
+        @type host : C{str}
+        @param start : date-heure de debut des donnees
+        @type start : C{str}
+        @param duration : plage de temps des données
+        @type duration : C{str}
+                         (parametre optionnel, initialise à 86400 = plage de 1 jour)
+        @param details :
+        @type details :
+        @param nocache :
+        @type nocache :
+
+        @return : url du graphe
+        @rtype: C{str}
+        """
+
         result = None
 
         if start is None:
@@ -226,9 +298,12 @@ class RpcController(BaseController):
         direct = 1
         fakeIncr = random.randint(0, 9999999999)
 
-        # url
-        url_l = config.get('rrd_url')
-        if url_l is not None:
+        rrdserver = self.getRRDServer(host)
+        if rrdserver is not None:
+            # url
+            url_web_path = config.get('rrd_web_path')
+            url_l = '%s%s' % (rrdserver, url_web_path)
+
             # proxy
             rrdproxy = RRDProxy(url_l)
             try:
@@ -246,7 +321,25 @@ class RpcController(BaseController):
     @expose(content_type='image/png')
     def getImage_png(self, host, start=None, duration=86400, graph=None, \
     details=1):
-        '''Image - as png'''
+        """
+        Affichage de l image d un graphe
+        (via proxy)
+
+        @param host : hôte
+        @type host : C{str}
+        @param start : date-heure de debut des donnees
+        @type start : C{str}
+        @param duration : plage de temps des données
+        @type duration : C{str}
+                      (parametre optionnel, initialise à 86400 = plage de 1 jour)
+        @param graph :
+        @type graph : C{str}
+        @param details :
+        @type details :
+
+        @return : page avec l image du graphe
+        @rtype: page
+        """
         result = None
 
         if start is None:
@@ -256,9 +349,13 @@ class RpcController(BaseController):
         direct = 1
         fakeIncr = random.randint(0, 9999999999)
 
-        # url
-        url_l = config.get('rrd_url')
-        if url_l is not None:
+        rrdserver = self.getRRDServer(host)
+        
+        if rrdserver is not None:
+            # url
+            url_web_path = config.get('rrd_web_path')
+            url_l = '%s%s' % (rrdserver, url_web_path)
+
             # proxy
             rrdproxy = RRDProxy(url_l)
             try:
@@ -270,27 +367,50 @@ class RpcController(BaseController):
                 LOGGER.error(txt)
                 exceptions.HTTPNotFound(comment=txt)
 
-        print ''
-        print result
-        print ''
-
         return result
 
     @expose('')
+    def imagePage(self, server, graphtemplate):
+        """
+        Affichage de l image d un graphe
+
+        @param server : hôte
+        @type server : C{str}
+        @param graphtemplate : graphe
+        @type graphtemplate : C{str}
+
+        @return : page avec l image du graphe (redirection sur getImage_png)
+        @rtype: page
+        """
+        redirect('getImage_png?host=%s&graph=%s' % (server, graphtemplate))
+
+    @expose('')
     def getStartTime(self, host, nocache=None):
-        '''StartTime RRD'''
+        """
+        Determination de la date-heure de debut des donnees RRD d un hote
+        (via proxy)
+
+        @param host : hôte
+        @type host : C{str}
+
+        @return : date-heure de debut des donnees RRD
+        @rtype: 
+        """
+
         result = None
 
         getstarttime = 1
         fakeincr = random.randint(0, 9999999999)
 
-        # url
-        url_l = config.get('rrd_url')
-        if url_l is not None:
+        rrdserver = self.getRRDServer(host)
+        if rrdserver is not None:
+            # url
+            url_web_path = config.get('rrd_web_path')
+            url_l = '%s%s' % (rrdserver, url_web_path)
+    
             # proxy
             rrdproxy = RRDProxy(url_l)
             try:
-                #result=rrdproxy.get_getstarttime(host, getstarttime, fakeincr)
                 result = rrdproxy.get_starttime(host, getstarttime)
             except urllib2.URLError, e:
                 txt = _("Can't get RRD data on host \"%s\"") \
@@ -302,12 +422,24 @@ class RpcController(BaseController):
 
     @expose('')
     def supPage(self, host):
-        '''supPage'''
+        """
+        Affichage page supervision Nagios pour un hote
+        (via proxy)
+
+        @param host : hôte
+        @type host : C{str}
+
+        @return : page de supervision Nagios
+        @rtype : page
+        """
         result = None
 
-        # url
-        url_l = config.get('nagios_url')
-        if url_l is not None:
+        nagiosserver = self.getNagiosServer(host)
+        if nagiosserver is not None:
+            # url
+            url_web_path = config.get('nagios_web_path')
+            url_l = '%s%s' % (nagiosserver, url_web_path)
+
             # proxy
             nagiosproxy = NagiosProxy(url_l)
             try:
@@ -316,18 +448,33 @@ class RpcController(BaseController):
                 txt = _("Can't get Nagios data on host \"%s\"") \
                     % (host)
                 LOGGER.error(txt)
-                redirect('nagios_host_error?host=%s' % host)
+                error_url = '../error/nagios_host_error?host=%s'
+                redirect(error_url % host)
 
         return result
 
     @expose('')
     def servicePage(self, host, service=None):
-        '''servicePage'''
+        """
+        Affichage page supervision Nagios pour un hote
+        (via proxy)
+
+        @param host : hôte
+        @type host : C{str}
+        @param service : service
+        @type service : C{str}
+
+        @return : page de supervision Nagios
+        @rtype : page
+        """
         result = None
 
-        # url
-        url_l = config.get('nagios_url')
-        if url_l is not None:
+        nagiosserver = self.getNagiosServer(host)
+        if nagiosserver is not None:
+            # url
+            url_web_path = config.get('nagios_web_path')
+            url_l = '%s%s' % (nagiosserver, url_web_path)
+
             # proxy
             nagiosproxy = NagiosProxy(url_l)
             try:
@@ -336,19 +483,33 @@ class RpcController(BaseController):
                 txt = _("Can't get Nagios data on host \"%s\" service \"%s\"")\
                     % (host, service)
                 LOGGER.error(txt)
-                redirect('nagios_host_service_error?host=%s&service=%s' \
-                % (host, service))
+
+                error_url = '../error'
+                error_url += '/nagios_host_service_error?host=%s&service=%s'
+                redirect(error_url % (host, service))
 
         return result
 
     @expose('')
     def metroPage(self, host):
-        '''metroPage'''
+        """
+        Affichage page metrologie pour un hote
+        (via proxy)
+
+        @param host : hôte
+        @type host : C{str}
+
+        @return : page de metrologie
+        @rtype : page
+        """
         result = None
 
-        # url
-        url_l = config.get('rrd_url')
-        if url_l is not None:
+        rrdserver = self.getRRDServer(host)
+        if rrdserver is not None:
+            # url
+            url_web_path = config.get('rrd_web_path')
+            url_l = '%s%s' % (rrdserver, url_web_path)
+
             # proxy
             rrdproxy = RRDProxy(url_l)
             try:
@@ -357,77 +518,50 @@ class RpcController(BaseController):
                 txt = _("Can't get RRD data on host \"%s\"") \
                     % (host)
                 LOGGER.error(txt)
-                redirect('rrd_error?host=%s' % host)
+                error_url = '../error/rrd_error?host=%s'
+                redirect(error_url % host)
 
         return result
 
-    @expose('')
-    def imagePage(self, server, graphtemplate):
-        '''metroPage'''
-        redirect('getImage_png?host=%s&graph=%s' % (server, graphtemplate))
-
     @expose('graphslist.html', content_type='text/html')
     def graphsList(self, nocache=None, **kwargs):
-        '''graphsList'''
-        graphslist = []
-        format = "%d-%m-%Y %H:%M"
-        for key in kwargs:
-            # titre
-            title = "Inconnu"
-            graph = ""
-            server = ""
-            lca = kwargs[key].split("?")
-            if len(lca) == 2:
-                largs = lca[1].split("&")
-                for arg in largs:
-                    larg = arg.split("=")
-                    if len(larg) == 2:
-                        if larg[0] == "server":
-                            server = larg[1]
-                        elif larg[0] == "graphtemplate":
-                            graph = larg[1]
-                        elif larg[0] == "start":
-                            start = larg[1]
-                        elif larg[0] == "duration":
-                            duration = larg[1]
-            if graph != "" or server != "":
-                title = "'%s' Graph for host %s" % \
-                  (urllib.unquote_plus(graph), server)
-            graph = {}
-            graph['title'] = title
-            v = int(start)
-            graph['sts'] = _(strftime(format, gmtime(v)))
-            v = int(start) + int(duration)
-            graph['ets'] = _(strftime(format, gmtime(v)))
-            graph['src'] = urllib2.unquote(kwargs[key])
-            graphslist.append(graph)
+        """
+        Liste de graphes
+        
+        @param **kwargs : arguments nommes
+        @type **kwargs  : dict
+
+        @return : dictionnaire applique sur un template -> graphslist.html
+        @rtype: dict
+        """
+        graphslist = graphs.graphsList(**kwargs)
         return dict(graphslist=graphslist)
 
     @expose(content_type='text/plain')
     def tempoDelayRefresh(self, nocache=None):
-        '''tempo pour rafraichissement'''
+        """
+        Lecture de la temporisation pour le rafraichissement automatique
 
-        delay = config.get('delay_refresh')
-        delay = string.strip(delay)
+        @return : valeur de temporisation
+        @return : C{str}
+        """
 
-        b_evaluate = False
-        if delay == '':
-            b_evaluate = True
-        else:
-            if delay.isalnum():
-                delay_l = int(delay)
-                b_evaluate = (delay_l <= 0)
-            else:
-                b_evaluate = True
-
-        if b_evaluate:
-            delay = '30000'
-
+        delay = graphs.tempoDelayRefresh()
         return delay
 
     @expose('json')
     def getIndicators(self, nocache=None, graph=None):
-        '''Indicators for graph'''
+        """
+        Liste d indicateurs associes a un graphe
+
+        @param graph : graphe
+        @type graph  : C{str}
+                       (parametre optionnel, initialise à None)
+
+        @return : dictionnaire applique sur un template json
+        @return : dict
+        """
+
         indicators = self.getListIndicators(graph)
         if indicators is not None and indicators != []:
             return dict(items=[(ind[0], str(ind[1])) for ind in indicators])
@@ -435,7 +569,17 @@ class RpcController(BaseController):
             return dict(items=[])
 
     def getListIndicators(self, graph=None):
-        '''List of Indicators'''
+        """
+        Liste d indicateurs associes a un graphe
+
+        @param graph : graphe
+        @type graph  : C{str}
+                       (parametre optionnel, initialise à None)
+
+        @return : liste d indicateurs
+        @rtype  : list
+        """
+
         indicators = []
         if graph is not None:
             indicators = DBSession.query \
@@ -453,7 +597,25 @@ class RpcController(BaseController):
     @expose('', content_type='text/csv')
     def exportCSV(self, nocache=None, host=None, graph=None, indicator=None, \
     start=None, end=None):
-        '''export CSV'''
+        """
+        Export CSV sous forme de fichier
+        - pour un hote
+        - pour un graphe
+        - pour un indicateur parmi ceux associes au graphe
+          ou l ensemble des indicateurs
+
+        @param host : hôte
+        @type host : C{str}
+        @param graph : graphe
+        @type graph : C{str}
+        @param indicator : indicateur graphe
+        @type indicator : C{str}
+        @param start : date-heure de debut des donnees
+        @type start : C{str}
+
+        @return : donnees RRD dans fichier
+        @rtype  : fichier CSV
+        """
 
         result = None
         b_export = False
@@ -494,29 +656,9 @@ class RpcController(BaseController):
                         break
 
             if b_export:
-                # plage temps sous forme texte
-                format = '%Y%m%d-%H%M%S'
-
-                dt = datetime.utcfromtimestamp(int(start))
-                str_start = dt.strftime(format)
-
-                dt = datetime.utcfromtimestamp(int(end))
-                str_end = dt.strftime(format)
-
                 # nom fichier
-                filename = host
-                filename += "_"
-                filename += indicator_f
-                filename += "_"
-                filename += str_start
-                filename += "_"
-                filename += str_end
-
-                # nom fichier final
-                lc = [' ', '|', '/', '\\', ':', '?', '*', '<', '>', '"']
-                for c in lc:
-                    filename = filename.replace(c, "_")
-                filename += ".csv"
+                filename = graphs.getExportFileName(host, indicator_f, \
+                start, end)
 
                 idx = 0
                 dict_indicators[idx] = 'TimeStamp'
@@ -525,9 +667,12 @@ class RpcController(BaseController):
                     idx += 1
                     dict_indicators[idx] = indicators_l[i]
 
-                # url selon configuration
-                url_l = config.get('rrd_url')
-                if url_l is not None:
+                rrdserver = self.getRRDServer(host)
+                if rrdserver is not None:
+                    # url selon configuration
+                    url_web_path = config.get('rrd_web_path')
+                    url_l = '%s%s' % (rrdserver, url_web_path)
+
                     # donnees via proxy
                     rrdproxy = RRDProxy(url_l)
                     try:
@@ -541,9 +686,10 @@ class RpcController(BaseController):
                         % (host, graph, indicator)
                         LOGGER.error(txt)
 
-                        redirect('rrd_exportCSV_error?\
-                        host=%s&graph=%s&indicator=%s'\
-                        % (host, graph, indicator))
+                        error_url = '../error'
+                        error_url += '/rrd_exportCSV_error'
+                        error_url += '?host=%s&graph=%s&indicator=%s'
+                        redirect(error_url % (host, graph, indicator))
                     finally:
                         if b_export:
                             # conversion sous forme de dictionnaire
@@ -570,35 +716,11 @@ class RpcController(BaseController):
                                 # entête
                                 headers = dict( (n, n) for n in fieldnames )
                                 writer.writerow(headers)
-                                '''
-                                dict_data = {}
-                                for key_i in dict_indicators:
-                                    iv = dict_indicators[key_i]
-                                    dict_data[iv] = iv
-                                writer.writerow(dict_data)
-                                '''
 
-                                # valeurs
-                                format = '%Y/%m/%d %H:%M:%S'
-                                if dict_values is not None or \
-                                dict_values != "{}":
-                                    for key_tv in dict_values:
-                                        tv = dict_values[key_tv]
-                                        dict_data = {}
-                                        for key_i in dict_indicators:
-                                            iv = dict_indicators[key_i]
-                                            v = str(tv[key_i])
-
-                                            # temps sous forme texte
-                                            if iv == 'TimeStamp':
-                                                dt = datetime.utcfromtimestamp(int(v))
-                                                v = dt.strftime(format)
-
-                                            # remplacement . par ,
-                                            v = v.replace(".", sep_value)
-
-                                            dict_data[iv] = v
-                                        writer.writerow(dict_data)
+                                # generation fichier
+                                graphs.setExportFile(writer, dict_values, \
+                                dict_indicators, sep_value)
+                                
                             finally:
                                 f.close()
 
@@ -611,10 +733,25 @@ class RpcController(BaseController):
     @expose('fullhostpage.html')
     def fullHostPage(self, host, start=None, duration=86400):
         """
-        fullHostPage
+        Affichage de l'ensemble des graphes associes a un hote
+        - d apres les donnees RRD
+        - avec une date-heure de debut
+        - pour une plage de temps 
+        
+        @param host : hôte
+        @type host : C{str}
+        @param start : date-heure de debut des donnees
+        @type start : C{str}
+                      (parametre optionnel, initialise à None)
+        @param duration : plage de temps des données
+        @type duration : C{str}
+                         (parametre optionnel, initialise à 86400 = plage de 1 jour)
+
+        @return : dictionnaire applique sur un template -> fullhostpage.html
+        @rtype: dict
         """
 
-        presels = [
+        presets = [
             {"caption" : "Last 12h", "duration" : 43200},
             {"caption" : "Last 24h", "duration" : 86400},
             {"caption" : "Last 2d",  "duration" : 192800},
@@ -651,15 +788,32 @@ class RpcController(BaseController):
             i += 1
 
         return dict(host=host, start=start, duration=duration, \
-        presels=presels, dhgs=dhgs)
+        presets=presets, dhgs=dhgs)
 
     @expose ('singlegraph.html')
     def singleGraph(self, host, graph, start=None, duration=86400):
         """
-        singleGraph
+        Affichage d un graphe associe a un hote et un graphe
+        - d apres les donnees RRD
+        - avec une date-heure de debut
+        - pour une plage de temps 
+        
+        @param host : hôte
+        @type host : C{str}
+        @param graph : graphe
+        @type graph  : C{str}
+        @param start : date-heure de debut des donnees
+        @type start : C{str}
+                      (parametre optionnel, initialise à None)
+        @param duration : plage de temps des données 
+        @type duration : C{str}
+                         (parametre optionnel, initialise à 86400 = plage de 1 jour)
+
+        @return : dictionnaire applique sur un template -> singlegraph.html
+        @rtype: dict
         """
 
-        presels = [
+        presets = [
         {"caption" : "Last 12h", "duration" : 43200},
         {"caption" : "Last 24h", "duration" : 86400},
         {"caption" : "Last 2d",  "duration" : 192800},
@@ -674,11 +828,16 @@ class RpcController(BaseController):
             start = int(time.time()) - int(duration)
 
         return dict(host=host, graph=graph, start=start, duration=duration, \
-        presels=presels)
+        presets=presets)
 
     @expose('searchhostform.html')
     def searchHostForm(self):
-        '''searchhostform'''
+        """
+        Formulaire de recherche sur les hotes
+
+        @return : page
+        @rtype: page (-> dict sur template searchhostform.html)
+        """
         searchhostform = SearchHostForm('search_host_form', \
             submit_text=None)
 
@@ -686,9 +845,15 @@ class RpcController(BaseController):
 
     @expose ('searchhost.html')
     def searchHost(self, query=None):
-        '''
-        searchHost
-        '''
+        """
+        Recherche d hotes
+
+        @param query : prefixe de recherche sur les hotes
+        @type query : C{str}
+
+        @return : page
+        @rtype: page (-> dict sur template searchhost.html)
+        """
 
         hosts = []
 
@@ -721,66 +886,73 @@ class RpcController(BaseController):
     # VIGILO_EXIG_VIGILO_PERF_0030:Moteur de recherche des graphes
     @expose ('getopensearch.xml', content_type='text/xml')
     def getOpenSearch(self):
-        '''
+        """
         getOpenSearch
-        '''
+
+        @return : page
+        @rtype: page xml (-> dict sur template getopensearch.xml)
+        """
 
         here = "http://"
         here += request.host
-
-        #dir_l = url('/vigigraph/public')
-        dir_l = '/vigigraph/public'
+        dir_l = url('/public')
 
         result = dict(here=here, dir=dir_l)
 
         return result
 
-    @expose('')
-    def rrd_txt_error(self, **kwargs):
-        '''rrd_error'''
-        txt = None
-        if kwargs is not None:
-            txt = kwargs.get('txt')
-        return txt
+    def getRRDServer(self, host=None):
+        """
+        Determination Server RRD pour l hote courant
+        (Server RRD -> nom de l application associee = rrdgraph)
 
-    @expose('rrd_error.html')
-    def rrd_error(self, **kwargs):
-        '''rrd_error'''
-        host = None
-        if kwargs is not None:
-            host = kwargs.get('host')
-            return dict(host=host)
-        else:
-            return None
+        @param host : hôte
+        @type host : C{str}
 
-    @expose('rrd_error.html')
-    def rrd_exportCSV_error(self, **kwargs):
-        '''rrd_exportCSV_error'''
-        host = None
-        if kwargs is not None:
-            host = kwargs.get('host')
-            return dict(host=host)
-        else:
-            return None
+        @return : server
+        @rtype: C{str}
+        """
 
-    @expose('nagios_host_error.html')
-    def nagios_host_error(self, **kwargs):
-        '''nagios_host_error'''
-        host = None
-        if kwargs is not None:
-            host = kwargs.get('host')
-            return dict(host=host)
-        else:
-            return None
+        server = None
+        if host is not None:
+            result = DBSession.query \
+            (VigiloServer.name) \
+            .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
+            .filter(Ventilation.idhost == Host.idhost) \
+            .filter(Ventilation.idapp == Application.idapp) \
+            .filter(Host.name == host) \
+            .filter(Application.name == 'rrdgraph') \
+            .first()
 
-    @expose('nagios_host_service_error.html')
-    def nagios_host_service_error(self, **kwargs):
-        '''nagios_host_service_error'''
-        host = None
-        service = None
-        if kwargs is not None:
-            host = kwargs.get('host')
-            service = kwargs.get('service')
-            return dict(host=host, service=service)
-        else:
-            return None
+            if result is not None:
+                server = result[0]
+
+        return server
+
+    def getNagiosServer(self, host=None):
+        """
+        Determination Server Nagios pour l hote courant
+        (Server Nagios -> nom de l application associee = nagios)
+
+        @param host : hôte
+        @type host : C{str}
+
+        @return : server
+        @rtype: C{str}
+        """
+
+        server = None
+        if host is not None:
+            # intitulé 
+            result = DBSession.query \
+            (VigiloServer.name) \
+            .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
+            .filter(Ventilation.idhost == Host.idhost) \
+            .filter(Host.name == host) \
+            .filter(VigiloServer.description.like('%Nagios%')) \
+            .first()
+
+            if result is not None:
+                server = result[0]
+
+        return server
