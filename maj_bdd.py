@@ -23,6 +23,7 @@ atexit.register(commit_on_exit)
 from vigilo.models import Host, HostGroup
 from vigilo.models import LowLevelService, ServiceGroup
 from vigilo.models import PerfDataSource, Graph
+from vigilo.models import Ventilation, VigiloServer, Application
 
 
 # Groupe d'hôtes (HostGroup)
@@ -147,6 +148,36 @@ def create_ds(name, type, service, label, graphs):
         DBSession.add(ds)
     return ds
 
+# VigiloServer
+def create_Server(name, description):
+    s = DBSession.query(VigiloServer).filter(VigiloServer.name == name).filter(VigiloServer.description == description).first()
+    if not s:
+        s = VigiloServer(name=name, description=description)
+        print "Ajout du Server Vigilo: %s - %s" % (name, description)
+        DBSession.add(s)
+    return s
+
+# VigiloApplication
+def create_Application(name):
+    a = DBSession.query(Application).filter(Application.name == name).first()
+    if not a:
+        a = Application(name=name)
+        print "Ajout de l'application Vigilo: %s" % name
+        DBSession.add(a)
+    return a
+
+# Ventilation
+def create_Ventilation(host, server, application):
+    v = None
+    h = DBSession.query(Host).filter(Host.name == host).first()
+    s = DBSession.query(VigiloServer).filter(VigiloServer.name == server).first()
+    a = DBSession.query(Application).filter(Application.name == application).first()
+    if h and s:
+        v = Ventilation(idhost=h.idhost, idvigiloserver=s.idvigiloserver, idapp=a.idapp)
+        print "Ajout Ventilation - host %s - server %s - application %s" % (host, server, application)
+        DBSession.add(v)
+    return v
+
 
 hg1 = create_HostGroup(u'Serveurs')
 hg2 = create_HostGroup(u'Telecoms')
@@ -219,4 +250,17 @@ ds7 = create_ds(u'TCP connections', u'GAUGE', s5 \
                 , u'TCP connections', graphs[6:7])
 ds8 = create_ds(u'CPU usage (by type)', u'GAUGE', s5 \
                 , u'CPU usage (by type)', graphs[7:8])
+
+# Serveurs Vigilo
+sv1 = create_Server(u'http://localhost', u'RRD+Nagios')
+
+# Applications Vigilo
+ap1 = create_Application(u'rrdgraph')
+ap2 = create_Application(u'nagios')
+
+# Ventilation
+if sv1 is not None and ap1 is not None:
+    create_Ventilation(u'par.linux0', sv1.name, ap1.name)
+if sv1 is not None and ap2 is not None:
+    create_Ventilation(u'par.linux0', sv1.name, ap2.name)
 
