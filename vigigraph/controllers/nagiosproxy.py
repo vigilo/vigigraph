@@ -20,7 +20,10 @@ class NagiosProxy(object):
 
     #def _retrieve_content(self, url, values):
     def _retrieve_content(self, *args, **kwargs):
-        ''' Lecture du contenu Nagios à partir d'un dictionnaire de valeurs'''
+        '''
+        Lecture du contenu Nagios à partir d'un dictionnaire
+        ce dictionnaire contient les arguments pour l url
+        '''
 
         handle = None
         result = None
@@ -30,17 +33,15 @@ class NagiosProxy(object):
             values = kwargs.get('values')
             if url is not None and values is not None:
                 data = urllib.urlencode(values)
-                proxy_handler = urllib2.ProxyHandler({'http': url})
-                opener = urllib2.build_opener(proxy_handler)
                 try:
-                    handle = opener.open(url, data)
+                    handle = urllib2.urlopen(url, data)
                     result = handle.read()
                 except urllib2.URLError, e:
                     raise
                 finally:
                     if handle:
                         handle.close()
-            
+
         return result
 
 
