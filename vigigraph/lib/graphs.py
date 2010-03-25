@@ -16,9 +16,8 @@ def graphsList(**kwargs):
     """
     Page liste des graphes
         
-    @param **kwargs : arguments nommes
-    @type **kwargs : dict
-
+    @param kwargs : arguments nommes
+    @type kwargs : dict
     """
     graphslist = []
     
@@ -63,10 +62,10 @@ def tempoDelayRefresh():
     """
     Lecture de la temporisation pour le rafraichissement automatique
     dans le fichier de configuration development.ini
-    (valeur par defaut = 30000)
+    valeur exprimee en millisecondes, valeur par defaut = 30000
 
-    @return : valeur de temporisation (en millisecondes)
-    @rtype : C{str}
+    @return: valeur de temporisation
+    @rtype: C{str}
     """
 
     delay = config.get('delay_refresh')
@@ -95,15 +94,15 @@ def getExportFileName(host, indicator_f, start, end):
 
     @param host : hôte
     @type host : C{str}
-    @param graph : graphe
-    @type graph : C{str}
     @param indicator_f : indicateur graphe ( nom du graphe ou d un des indicateurs)
     @type indicator_f : C{str}
     @param start : date-heure de debut des donnees
     @type start : C{str}
+    @param end : duree des donnees
+    @type end : C{str}
 
-    @return : nom du fichier
-    @rtype : C{str}
+    @return: nom du fichier
+    @rtype: C{str}
     """
 
     # plage temps sous forme texte
@@ -142,8 +141,8 @@ def setExportFile(writer, dict_values, dict_indicators, sep_value):
     @param sep_value : separateur partie entiere - partie decimale
     @type sep_value : C{str}
 
-    @return : resultat generation (pas de valeurs -> false, sinon true)
-    @rtype : booleen
+    @return: resultat generation (pas de valeurs -> false, sinon true)
+    @rtype: booleen
     """
 
     # format pour valeur temps
