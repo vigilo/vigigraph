@@ -853,7 +853,8 @@ class RpcController(BaseController):
     @expose ('searchhost.html')
     def searchHost(self, query=None):
         """
-        Recherche d hotes repondant au critere de recherche
+        Affichage page pour hotes repondant au critere de recherche
+        * dans cette page, lien sur pages de metrologie et de supervision
 
         @param query : prefixe de recherche sur les hotes
         @type query : C{str}
