@@ -58,8 +58,8 @@ class RpcController(BaseController):
         """
         Determination des groupes principaux (sans parent)
 
-        @return : groupes principaux
-        @rtype : document json (sous forme de dict)
+        @return: groupes principaux
+        @rtype: document json (sous forme de dict)
         """
         topgroups = DBSession.query(HostGroup.name, HostGroup.idgroup) \
                 .filter(HostGroup.parent == None) \
@@ -79,8 +79,8 @@ class RpcController(BaseController):
         @param maingroupid : identificateur d un groupe principal
         @type maingroupid : int
 
-        @return : groupes
-        @rtype : document json (sous forme de dict)
+        @return: groupes
+        @rtype: document json (sous forme de dict)
         """
         hostgroups = DBSession.query(HostGroup.name, HostGroup.idgroup)\
                      .filter(HostGroup.idparent == maingroupid) \
@@ -99,8 +99,8 @@ class RpcController(BaseController):
         @param othergroupid : identificateur d un groupe
         @type othergroupid : int
 
-        @return : hotes
-        @rtype : document json (sous forme de dict)
+        @return: hotes
+        @rtype: document json (sous forme de dict)
         """
         hostgroup = DBSession.query(HostGroup) \
                 .filter(HostGroup.idgroup == othergroupid) \
@@ -121,8 +121,8 @@ class RpcController(BaseController):
         @param idhost : identificateur d un hote
         @type idhost : int
 
-        @return : groupes de service
-        @rtype : document json (sous forme de dict)
+        @return: groupes de service
+        @rtype: document json (sous forme de dict)
         """
         # passage par une table intermédiaire à cause de l'héritage
         servicegroups = DBSession.query \
@@ -148,8 +148,8 @@ class RpcController(BaseController):
         @param idservice : identificateur d un service
         @type idservice : int
 
-        @return : graphes
-        @rtype : document json (sous forme de dict)
+        @return: graphes
+        @rtype: document json (sous forme de dict)
         """
         graphs_l = DBSession.query(Graph.name, Graph.idgraph) \
             .join((GRAPH_PERFDATASOURCE_TABLE, \
@@ -174,12 +174,12 @@ class RpcController(BaseController):
         Un critere peut correspondre a un intitule complet hote ou service
         ou a un extrait
 
-        @param **kwargs : arguments nommes
-        @type **kwargs : dict
+        @param kwargs : arguments nommes
+        @type kwargs : dict
                          ( arguments nommes -> host et service )
 
-        @return : couples hote-service
-        @rtype : document json (sous forme de dict)
+        @return: couples hote-service
+        @rtype: document json (sous forme de dict)
         """
         host = kwargs.get('host')
         service = kwargs.get('service')
@@ -220,12 +220,12 @@ class RpcController(BaseController):
         """
         Determination (groupe principal-groupe-service) associe au couple (hote-service)
 
-        @param **kwargs : arguments nommes
-        @type **kwargs : dict
+        @param kwargs : arguments nommes
+        @type kwargs : dict
                          ( arguments nommes -> host et service )
 
-        @return : (groupe principal-groupe-service)
-        @rtype : document json (sous forme de dict)
+        @return: (groupe principal-groupe-service)
+        @rtype: document json (sous forme de dict)
         """
         host = kwargs.get('host')
         #service = kwargs.get('service')
@@ -295,7 +295,7 @@ class RpcController(BaseController):
         @param graph : graphe
         @type graph : C{str}
 
-        @return : url du graphe
+        @return: url du graphe
         @rtype: C{str}
         """
 
@@ -347,7 +347,7 @@ class RpcController(BaseController):
         @param details : indicateur affichage details dans graphe (legende)
         @type details : int
 
-        @return : image du graphe
+        @return: image du graphe
         @rtype: image png
         """
         result = None
@@ -389,7 +389,7 @@ class RpcController(BaseController):
         @param graphtemplate : graphe
         @type graphtemplate : C{str}
 
-        @return : page avec l image du graphe (redirection sur getImage_png)
+        @return: page avec l image du graphe (redirection sur getImage_png)
         @rtype: page
         """
         redirect('getImage_png?host=%s&graph=%s' % (server, graphtemplate))
@@ -403,7 +403,7 @@ class RpcController(BaseController):
         @param host : hôte
         @type host : C{str}
 
-        @return : date-heure de debut des donnees RRD
+        @return: date-heure de debut des donnees RRD
         @rtype: C{str}
         """
 
@@ -439,8 +439,8 @@ class RpcController(BaseController):
         @param host : hôte
         @type host : C{str}
 
-        @return : page de supervision Nagios
-        @rtype : page
+        @return: page de supervision Nagios
+        @rtype: page
         """
         result = None
 
@@ -474,8 +474,8 @@ class RpcController(BaseController):
         @param service : service
         @type service : C{str}
 
-        @return : page de supervision Nagios
-        @rtype : page
+        @return: page de supervision Nagios
+        @rtype: page
         """
         result = None
 
@@ -509,8 +509,8 @@ class RpcController(BaseController):
         @param host : hôte
         @type host : C{str}
 
-        @return : page de metrologie
-        @rtype : page
+        @return: page de metrologie
+        @rtype: page
         """
         result = None
 
@@ -539,10 +539,10 @@ class RpcController(BaseController):
         Generation document avec url des graphes affiches
         (pour l impression )
 
-        @param **kwargs : arguments nommes
-        @type **kwargs  : dict
+        @param kwargs : arguments nommes
+        @type kwargs  : dict
 
-        @return : url de graphes
+        @return: url de graphes
         @rtype: document html
         """
         graphslist = graphs.graphsList(**kwargs)
@@ -554,8 +554,8 @@ class RpcController(BaseController):
         Determination valeur temporisation pour le rafraichissement automatique
         d un graphe
 
-        @return : valeur de temporisation
-        @rtype : C{str}
+        @return: valeur de temporisation
+        @rtype: C{str}
         """
 
         delay = graphs.tempoDelayRefresh()
@@ -569,8 +569,8 @@ class RpcController(BaseController):
         @param graph : graphe
         @type graph  : C{str}
 
-        @return : dictionnaire des indicateurs d un graphe
-        @rtype : document json (sous forme de dict)
+        @return: dictionnaire des indicateurs d un graphe
+        @rtype: document json (sous forme de dict)
         """
 
         indicators = self.getListIndicators(graph)
@@ -586,7 +586,7 @@ class RpcController(BaseController):
         @param graph : graphe
         @type graph  : C{str}
 
-        @return : liste d indicateurs
+        @return: liste d indicateurs
         @rtype  : list
         """
 
@@ -609,10 +609,9 @@ class RpcController(BaseController):
     start=None, end=None):
         """
         Export CSV sous forme de fichier
-        - pour un hote et un graphe
-        - pour l'indicateur suivant
-          - soit un des indicateurs associes au graphe
-          - soit l ensemble des indicateurs -> valeur argument = All
+        pour un hote et un graphe et pour l'indicateur suivant
+        * soit un des indicateurs associes au graphe
+        * soit l ensemble des indicateurs -> valeur argument = All
 
         @param host : hôte
         @type host : C{str}
@@ -623,7 +622,7 @@ class RpcController(BaseController):
         @param start : date-heure de debut des donnees
         @type start : C{str}
 
-        @return : fichier genere avec les donnees RRD repondant aux criteres
+        @return: fichier genere avec les donnees RRD repondant aux criteres
         @rtype  : fichier CSV
         """
 
@@ -744,9 +743,9 @@ class RpcController(BaseController):
     def fullHostPage(self, host, start=None, duration=86400):
         """
         Affichage de l'ensemble des graphes associes a un hote
-        - d apres les donnees RRD
-        - avec une date-heure de debut
-        - pour une plage de temps 
+        * d apres les donnees RRD
+        * avec une date-heure de debut
+        * pour une plage de temps 
         
         @param host : hôte
         @type host : C{str}
@@ -756,7 +755,7 @@ class RpcController(BaseController):
         @type duration : C{str}
                          (parametre optionnel, initialise a 86400 = plage de 1 jour)
 
-        @return : page avec les images des graphes et boutons de deplacement dans le temps
+        @return: page avec les images des graphes et boutons de deplacement dans le temps
         @rtype: page html
         """
 
@@ -803,9 +802,9 @@ class RpcController(BaseController):
     def singleGraph(self, host, graph, start=None, duration=86400):
         """
         Affichage d un graphe associe a un hote et un graphe
-        - d apres les donnees RRD
-        - avec une date-heure de debut
-        - pour une plage de temps 
+        * d apres les donnees RRD
+        * avec une date-heure de debut
+        * pour une plage de temps 
         
         @param host : hôte
         @type host : C{str}
@@ -817,7 +816,7 @@ class RpcController(BaseController):
         @type duration : C{str}
                          (parametre optionnel, initialise a 86400 = plage de 1 jour)
 
-        @return : page avec l image du graphe et boutons de deplacement dans le temps
+        @return: page avec l image du graphe et boutons de deplacement dans le temps
         @rtype: page html
         """
 
@@ -843,7 +842,7 @@ class RpcController(BaseController):
         """
         Formulaire de recherche sur les hotes
 
-        @return : page avec formulaire de recherche
+        @return: page avec formulaire de recherche
         @rtype: page html
         """
         searchhostform = SearchHostForm('search_host_form', \
@@ -859,7 +858,7 @@ class RpcController(BaseController):
         @param query : prefixe de recherche sur les hotes
         @type query : C{str}
 
-        @return : page
+        @return: page
         @rtype: page html
         """
 
@@ -897,7 +896,7 @@ class RpcController(BaseController):
         """
         Moteur de recherche des graphes
 
-        @return : document
+        @return: document
         @rtype: document xml
         """
 
@@ -917,7 +916,7 @@ class RpcController(BaseController):
         @param host : hôte
         @type host : C{str}
 
-        @return : serveur RRD
+        @return: serveur RRD
         @rtype: C{str}
         """
 
@@ -945,7 +944,7 @@ class RpcController(BaseController):
         @param host : hôte
         @type host : C{str}
 
-        @return : serveur Nagios
+        @return: serveur Nagios
         @rtype: C{str}
         """
 

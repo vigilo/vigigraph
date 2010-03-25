@@ -34,11 +34,11 @@ class ErrorController(object):
         """
         Gestion erreur rrd
         
-        @param **kwargs : arguments nommes
-        @type **kwargs  : dict
+        @param kwargs : arguments nommes
+        @type kwargs  : dict
                           (pour la clé 'txt', contient le texte) 
 
-        @return : texte de l erreur
+        @return: texte de l erreur
         @rtype  : C{str}
         """
 
@@ -52,12 +52,12 @@ class ErrorController(object):
         """
         Gestion erreur rrd
         
-        @param **kwargs : arguments nommes
-        @type **kwargs  : dict
+        @param kwargs : arguments nommes
+        @type kwargs  : dict
                           (pour la clé 'host', contient l'hôte) 
 
-        @return : page erreur
-        @rtype : page (-> dict sur template rrd_error.html)
+        @return: page erreur
+        @rtype: page (-> dict sur template rrd_error.html)
         """
 
         host = None
@@ -72,12 +72,12 @@ class ErrorController(object):
         """
         Gestion erreur rrd sur export CSV
         
-        @param **kwargs : arguments nommes
-        @type **kwargs  : dict
+        @param kwargs : arguments nommes
+        @type kwargs  : dict
                           (pour la clé 'host', contient l'hôte) 
 
-        @return : page erreur
-        @rtype : page (-> dict sur template rrd_error.html)
+        @return: page erreur
+        @rtype: page (-> dict sur template rrd_error.html)
         """
 
         host = None
@@ -92,12 +92,13 @@ class ErrorController(object):
         """
         Gestion erreur nagios sur l hote
         
-        @param **kwargs : arguments nommes
-        @type **kwargs  : dict
-                          (pour la clé 'host', contient l'hôte) 
+        @param kwargs : arguments nommes
+        @type kwargs  : dict
 
-        @return : page erreur
-        @rtype : page (-> dict sur template nagios_host_error.html)
+        @return: page erreur
+        @rtype: page
+        
+        (arguments nommes : pour la clé 'host', contient l'hôte) 
         """
 
         host = None
@@ -112,13 +113,13 @@ class ErrorController(object):
         """
         Gestion erreur nagios sur l'hote et le service
         
-        @param **kwargs : arguments nommes
-        @type **kwargs  : dict
+        @param kwargs : arguments nommes
+        @type kwargs  : dict
                           (pour la clé 'host', contient l'hôte) 
                           (pour la clé 'service', contient le service) 
 
-        @return : page erreur
-        @rtype : page (-> dict sur template nagios_host_service_error.html)
+        @return: page erreur
+        @rtype: page (-> dict sur template nagios_host_service_error.html)
         """
 
         host = None
