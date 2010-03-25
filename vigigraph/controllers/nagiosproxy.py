@@ -21,7 +21,7 @@ class NagiosProxy(object):
     #def _retrieve_content(self, url, values):
     def _retrieve_content(self, *args, **kwargs):
         '''
-        Lecture du contenu Nagios à partir d'un dictionnaire
+        Lecture de donnees Nagios à partir d une url et d un dictionnaire
         ce dictionnaire contient les arguments pour l url
         '''
 
