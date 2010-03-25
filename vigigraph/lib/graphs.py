@@ -4,6 +4,9 @@
 from tg import config
 
 import string
+import urllib
+import urllib2
+from pylons.i18n import ugettext as _
 
 from time import gmtime, strftime
 from datetime import datetime
@@ -18,37 +21,42 @@ def graphsList(**kwargs):
 
     """
     graphslist = []
-    format = "%d-%m-%Y %H:%M"
-    for key in kwargs:
-        # titre
-        title = "Inconnu"
-        graph = ""
-        server = ""
-        lca = kwargs[key].split("?")
-        if len(lca) == 2:
-            largs = lca[1].split("&")
-            for arg in largs:
-                larg = arg.split("=")
-                if len(larg) == 2:
-                    if larg[0] == "server":
-                        server = larg[1]
-                    elif larg[0] == "graphtemplate":
-                        graph = larg[1]
-                    elif larg[0] == "start":
-                        start = larg[1]
-                    elif larg[0] == "duration":
-                        duration = larg[1]
-        if graph != "" or server != "":
-            title = "'%s' Graph for host %s" % \
-              (urllib.unquote_plus(graph), server)
-        graph = {}
-        graph['title'] = title
-        v = int(start)
-        graph['sts'] = _(strftime(format, gmtime(v)))
-        v = int(start) + int(duration)
-        graph['ets'] = _(strftime(format, gmtime(v)))
-        graph['src'] = urllib2.unquote(kwargs[key])
-        graphslist.append(graph)
+    
+    if kwargs is not None:
+        format = "%d-%m-%Y %H:%M"
+        for key in kwargs:
+            # titre
+            title = "Inconnu"
+            graph = ""
+            server = ""
+            # recherche arguments (apres ?) -> cle1=valeur1&cle2=valeur2&...
+            lca = kwargs[key].split("?")
+            if len(lca) == 2:
+                # analyse de chacun des arguments -> cle=valeur
+                largs = lca[1].split("&")
+                for arg in largs:
+                    larg = arg.split("=")
+                    if len(larg) == 2:
+                        if larg[0] == "server":
+                            server = larg[1]
+                        elif larg[0] == "graphtemplate":
+                            graph = larg[1]
+                        elif larg[0] == "start":
+                            start = larg[1]
+                        elif larg[0] == "duration":
+                            duration = larg[1]
+            if graph != "" or server != "":
+                title = "'%s' Graph for host %s" % \
+                  (urllib.unquote_plus(graph), server)
+            graph = {}
+            graph['title'] = title
+            v = int(start)
+            graph['sts'] = _(strftime(format, gmtime(v)))
+            v = int(start) + int(duration)
+            graph['ets'] = _(strftime(format, gmtime(v)))
+            graph['src'] = urllib2.unquote(kwargs[key])
+            graphslist.append(graph)
+
     return graphslist
 
 def tempoDelayRefresh():
@@ -141,7 +149,8 @@ def setExportFile(writer, dict_values, dict_indicators, sep_value):
     # format pour valeur temps
     format = '%Y/%m/%d %H:%M:%S'
 
-    result = (dict_values is not None or dict_values != "{}")
+    result = (writer is not None)
+    result &= (dict_values is not None or dict_values != "{}")
     if result:
         # parcours valeurs
         for key_tv in dict_values:
