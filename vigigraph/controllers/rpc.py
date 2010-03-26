@@ -956,8 +956,9 @@ class RpcController(BaseController):
             (VigiloServer.name) \
             .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
             .filter(Ventilation.idhost == Host.idhost) \
+            .filter(Ventilation.idapp == Application.idapp) \
             .filter(Host.name == host) \
-            .filter(VigiloServer.description.like('%Nagios%')) \
+            .filter(Application.name == 'nagios') \
             .first()
 
             if result is not None:
