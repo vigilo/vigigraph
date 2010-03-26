@@ -8,9 +8,81 @@ Tests Nagios Proxy
 
 import unittest
 
+import urllib
+import urllib2
+import os
+from tg import config
+
 from vigigraph.controllers.nagiosproxy import NagiosProxy
 
-#from vigilo.common.conf import settings
+from vigilo.models.configure import DBSession
+from vigilo.models import Host, Ventilation, VigiloServer, Application
+
+from vigigraph.tests import TestController
+
+
+def create_Host(name):
+    '''Creation Host'''
+    h = DBSession.query(Host).filter(Host.name == name).first()
+    if not h:
+        h = Host(name=name,
+                 checkhostcmd=u'dummy',
+                 hosttpl=u'linux',
+                 mainip=u"127.0.0.1",
+                 snmpcommunity=u"public",
+                 snmpport=161,
+                 weight=0)
+        DBSession.add(h)
+        DBSession.flush()
+    return h
+
+def create_Server(name, description):
+    '''Creation Server'''
+    s = DBSession.query(VigiloServer).filter(VigiloServer.name == name).first()
+    if not s:
+        s = VigiloServer(name=name, description=description)
+        DBSession.add(s)
+        DBSession.flush()
+    return s
+
+def create_Application(name):
+    '''Creation Application'''
+    a = DBSession.query(Application).filter(Application.name == name).first()
+    if not a:
+        a = Application(name=name)
+        DBSession.add(a)
+        DBSession.flush()
+    return a
+
+def create_Ventilation(host, server, application):
+    v = None
+    h = DBSession.query(Host).filter(Host.name == host).first()
+    s = DBSession.query(VigiloServer).filter(VigiloServer.name == server).first()
+    a = DBSession.query(Application).filter(Application.name == application).first()
+    if h and s:
+        v = Ventilation(idhost=h.idhost, idvigiloserver=s.idvigiloserver, idapp=a.idapp)
+        DBSession.add(v)
+        DBSession.flush()
+    return v
+
+def getServer(host):
+    '''Server'''
+    
+    server = None
+
+    result = DBSession.query \
+            (VigiloServer.name) \
+            .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
+            .filter(Ventilation.idhost == Host.idhost) \
+            .filter(Ventilation.idapp == Application.idapp) \
+            .filter(Host.name == host) \
+            .filter(Application.name == u'nagios') \
+            .first()
+
+    if result is not None:
+        server = result[0]
+
+    return server
 
 
 class NagiosProxy_without_nagios(NagiosProxy):
@@ -34,7 +106,6 @@ class TestNagiosProxy(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         '''Constructeur'''
         super(TestNagiosProxy, self).__init__(*args, **kwargs)
-        #self.url = settings.get('NAGIOS_URL') -> ne marche pas
         self.url = 'http://localhost/nagios/cgi-bin'
 
     def test_supPage(self):
@@ -73,5 +144,59 @@ class TestNagiosProxy(unittest.TestCase):
         assert(result != None)
 
 
+class TestNagiosProxy_bd(TestController):
+    """ Test Gestion Valeur Nagios """  
+
+    def setup(self):
+        '''setup'''
+        super(TestNagiosProxy_bd, self).setUp()
+
+        # Host
+        host = u'par.linux0'
+        h = create_Host(host)
+
+        # Serveurs Vigilo
+        sv1 = create_Server(u'http://localhost', u'RRD+Nagios')
+
+        # Applications Vigilo
+        ap1 = create_Application(u'rrdgraph')
+        ap2 = create_Application(u'nagios')
+
+        # Ventilation
+        if sv1 is not None and ap1 is not None:
+            create_Ventilation(host, sv1.name, ap1.name)
+        if sv1 is not None and ap2 is not None:
+            create_Ventilation(host, sv1.name, ap2.name)
+
+    def test_acces_url(self):
+        '''fonction vérification acces url via proxy'''
+
+        bresult = True
+
+        host = u'par.linux0'
+
+        values = {'host' : host,
+                  'style' : 'detail',
+                  'supNav' : 1}
+
+        #url = 'http://localhost/nagios/cgi-bin'
+        server = getServer(host)
+        url_web_path = config.get('nagios_web_path')
+        url = '%s%s' % (server, url_web_path)
+        url = os.path.join(url, 'status.cgi')
+
+        if url is not None and values is not None:
+            data = urllib.urlencode(values)
+
+            handle = urllib2.urlopen(url, data)
+            bresult = (handle != None)
+
+            if handle:
+                handle.close()
+
+        assert(bresult)
+
+
 if __name__ == "__main__": 
+
     unittest.main()
