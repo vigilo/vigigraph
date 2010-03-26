@@ -150,7 +150,7 @@ def create_ds(name, type, service, label, graphs):
 
 # VigiloServer
 def create_Server(name, description):
-    s = DBSession.query(VigiloServer).filter(VigiloServer.name == name).filter(VigiloServer.description == description).first()
+    s = DBSession.query(VigiloServer).filter(VigiloServer.name == name).first()
     if not s:
         s = VigiloServer(name=name, description=description)
         print "Ajout du Server Vigilo: %s - %s" % (name, description)
