@@ -6,6 +6,7 @@ Created on 02 feb. 2010
 Tests Nagios Proxy
 '''
 
+import transaction
 import unittest
 
 import urllib
@@ -15,8 +16,8 @@ from tg import config
 
 from vigigraph.controllers.nagiosproxy import NagiosProxy
 
-from vigilo.models.configure import DBSession
-from vigilo.models import Host, Ventilation, VigiloServer, Application
+from vigilo.models.session import DBSession
+from vigilo.models.tables import Host, Ventilation, VigiloServer, Application
 
 from vigigraph.tests import TestController
 
@@ -70,8 +71,7 @@ def getServer(host):
     
     server = None
 
-    result = DBSession.query \
-            (VigiloServer.name) \
+    result = DBSession.query(VigiloServer.name) \
             .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
             .filter(Ventilation.idhost == Host.idhost) \
             .filter(Ventilation.idapp == Application.idapp) \
@@ -168,6 +168,9 @@ class TestNagiosProxy_bd(TestController):
         if sv1 is not None and ap2 is not None:
             create_Ventilation(host, sv1.name, ap2.name)
 
+        DBSession.flush()
+        transaction.commit()
+
     def test_acces_url(self):
         '''fonction vérification acces url via proxy'''
 
@@ -182,11 +185,16 @@ class TestNagiosProxy_bd(TestController):
         #url = 'http://localhost/nagios/cgi-bin'
         server = getServer(host)
         url_web_path = config.get('nagios_web_path')
-        url = '%s%s' % (server, url_web_path)
-        url = os.path.join(url, 'status.cgi')
+        url = '%s%s/%s' % (server, url_web_path, 'status.cgi')
 
         if url is not None and values is not None:
             data = urllib.urlencode(values)
+
+            print url, data
+
+            # Permet de contourner le proxy
+            # éventuellement en place.
+            del os.environ['http_proxy']
 
             handle = urllib2.urlopen(url, data)
             bresult = (handle != None)
@@ -194,9 +202,8 @@ class TestNagiosProxy_bd(TestController):
             if handle:
                 handle.close()
 
-        assert(bresult)
+        self.assertTrue(bresult)
 
-
-if __name__ == "__main__": 
-
+if __name__ == "__main__":
     unittest.main()
+

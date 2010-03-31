@@ -9,10 +9,9 @@ from paste.deploy import loadapp
 from paste.script.appinstall import SetupCommand
 from routes import url_for
 from webtest import TestApp
-import nose
 from nose.tools import eq_
 
-from vigilo.models.configure import metadata, DBSession
+from vigilo.models.session import metadata, DBSession
 
 __all__ = ['setup_db', 'teardown_db', 'TestController', 'url_for']
 
@@ -27,7 +26,6 @@ def teardown_db():
     print "Destroying model"
     engine = config['pylons.app_globals'].sa_engine
     metadata.drop_all(engine)
-
 
 class TestController(object):
     """
@@ -54,6 +52,7 @@ class TestController(object):
     def setUp(self):
         """Method called by nose before running each test"""
         # Loading the application:
+        setup_db()
         conf_dir = config.here
         wsgiapp = loadapp('config:test.ini#%s' % self.application_under_test,
                           relative_to=conf_dir)

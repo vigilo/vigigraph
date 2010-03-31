@@ -6,16 +6,16 @@ from tg import exceptions
 
 from vigigraph.lib.base import BaseController
 
-from vigilo.models.configure import DBSession
-from vigilo.models import Host, HostGroup
-from vigilo.models import Service, ServiceGroup, LowLevelService
-from vigilo.models import PerfDataSource
-from vigilo.models import Graph
-from vigilo.models import Ventilation, VigiloServer, Application
+from vigilo.models.session import DBSession
+from vigilo.models.tables import Host, HostGroup
+from vigilo.models.tables import Service, ServiceGroup, LowLevelService
+from vigilo.models.tables import PerfDataSource
+from vigilo.models.tables import Graph
+from vigilo.models.tables import Ventilation, VigiloServer, Application
 
-from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
-from vigilo.models.secondary_tables import HOST_GROUP_TABLE
-from vigilo.models.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
+from vigilo.models.tables.secondary_tables import SERVICE_GROUP_TABLE
+from vigilo.models.tables.secondary_tables import HOST_GROUP_TABLE
+from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 
 from sqlalchemy.orm import aliased
         
