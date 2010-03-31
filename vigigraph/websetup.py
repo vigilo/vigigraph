@@ -3,9 +3,6 @@
 
 import logging
 
-import transaction
-from tg import config
-
 from vigigraph.config.environment import load_environment
 from vigilo.turbogears import populate_db 
 
@@ -27,8 +24,8 @@ def init_db():
     from paste.script.appinstall import SetupCommand
     import os.path
 
-    ini_file = '/etc/vigilo/vigigraph/settings.ini'
-    ini_file = os.path.join('/', *ini_file.split('/'))
+    ini_file = os.getenv("VIGILO_SETTINGS",
+                         "/etc/vigilo/vigigraph/settings.ini")
 
     cmd = SetupCommand('setup-app')
     cmd.run([ini_file])
