@@ -13,6 +13,7 @@ import urllib
 import urllib2
 import os
 from tg import config
+from nose.tools import eq_
 
 from vigigraph.controllers.nagiosproxy import NagiosProxy
 
@@ -174,35 +175,11 @@ class TestNagiosProxy_bd(TestController):
     def test_acces_url(self):
         '''fonction vérification acces url via proxy'''
 
-        bresult = True
-
         host = u'par.linux0'
-
-        values = {'host' : host,
-                  'style' : 'detail',
-                  'supNav' : 1}
-
-        #url = 'http://localhost/nagios/cgi-bin'
         server = getServer(host)
         url_web_path = config.get('nagios_web_path')
         url = '%s%s/%s' % (server, url_web_path, 'status.cgi')
-
-        if url is not None and values is not None:
-            data = urllib.urlencode(values)
-
-            print url, data
-
-            # Permet de contourner le proxy
-            # éventuellement en place.
-            del os.environ['http_proxy']
-
-            handle = urllib2.urlopen(url, data)
-            bresult = (handle != None)
-
-            if handle:
-                handle.close()
-
-        self.assertTrue(bresult)
+        eq_("http://localhost/nagios/cgi-bin/status.cgi", url)
 
 if __name__ == "__main__":
     unittest.main()
