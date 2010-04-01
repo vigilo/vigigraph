@@ -69,21 +69,15 @@ def create_Ventilation(host, server, application):
 
 def getServer(host):
     '''Server'''
-    
-    server = None
-
     result = DBSession.query(VigiloServer.name) \
             .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
             .filter(Ventilation.idhost == Host.idhost) \
             .filter(Ventilation.idapp == Application.idapp) \
             .filter(Host.name == host) \
             .filter(Application.name == u'nagios') \
-            .first()
+            .scalar()
 
-    if result is not None:
-        server = result[0]
-
-    return server
+    return result
 
 
 class NagiosProxy_without_nagios(NagiosProxy):
@@ -148,7 +142,7 @@ class TestNagiosProxy(unittest.TestCase):
 class TestNagiosProxy_bd(TestController):
     """ Test Gestion Valeur Nagios """  
 
-    def setup(self):
+    def setUp(self):
         '''setup'''
         super(TestNagiosProxy_bd, self).setUp()
 
