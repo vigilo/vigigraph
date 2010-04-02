@@ -4,8 +4,6 @@
 
 import urllib
 import urllib2
-import os
-
 
 class NagiosProxy(object):
     '''

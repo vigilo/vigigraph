@@ -9,9 +9,6 @@ Tests Nagios Proxy
 import transaction
 import unittest
 
-import urllib
-import urllib2
-import os
 from tg import config
 from nose.tools import eq_
 
@@ -59,10 +56,13 @@ def create_Application(name):
 def create_Ventilation(host, server, application):
     v = None
     h = DBSession.query(Host).filter(Host.name == host).first()
-    s = DBSession.query(VigiloServer).filter(VigiloServer.name == server).first()
-    a = DBSession.query(Application).filter(Application.name == application).first()
+    s = DBSession.query(VigiloServer).filter(
+            VigiloServer.name == server).first()
+    a = DBSession.query(Application).filter(
+            Application.name == application).first()
     if h and s:
-        v = Ventilation(idhost=h.idhost, idvigiloserver=s.idvigiloserver, idapp=a.idapp)
+        v = Ventilation(idhost=h.idhost,
+            idvigiloserver=s.idvigiloserver, idapp=a.idapp)
         DBSession.add(v)
         DBSession.flush()
     return v
@@ -148,7 +148,7 @@ class TestNagiosProxy_bd(TestController):
 
         # Host
         host = u'par.linux0'
-        h = create_Host(host)
+        create_Host(host)
 
         # Serveurs Vigilo
         sv1 = create_Server(u'http://localhost', u'RRD+Nagios')

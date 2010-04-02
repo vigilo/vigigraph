@@ -4,7 +4,7 @@
 
 import logging
 from tg import expose, flash, require, request, redirect
-from pylons.i18n import ugettext as _, lazy_ugettext as l_
+from pylons.i18n import ugettext as _
 from repoze.what.predicates import Any, not_anonymous
 
 from vigigraph.lib.base import BaseController

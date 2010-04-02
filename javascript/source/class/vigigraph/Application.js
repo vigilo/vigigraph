@@ -557,16 +557,16 @@ qx.Class.define("vigigraph.Application",
         r5.setEnabled(false);
         b5.setEnabled(false);
       }
-      function _updateGraphList(idgraphgroup)
+      function _updateGraphList(idhost, idgraphgroup)
       {
-        _genericListUpdater(urls.graphs+"?idgraphgroup="+idgraphgroup,combo5);
+        _genericListUpdater(urls.graphs+"?idgraphgroup="+idgraphgroup+"&idhost="+idhost,combo5);
         r5.setEnabled(true);
         b5.setEnabled(false);
       }
       combo1.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostGroupList(e.getValue().getValue()); });
       combo2.addEventListener("changeSelected", function(e) { if(e.getValue()) _updateHostList(e.getValue().getValue()); });
       combo3.addEventListener("changeSelected", function(e) { if(e.getValue()) { b3.setEnabled(true);_updateGraphGroupList(e.getValue().getValue());} });
-      combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(e.getValue().getValue());} });
+      combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(combo3.getSelected().getValue(),e.getValue().getValue());} });
       //combo4.addEventListener("changeSelected", function(e) { if(e.getValue()) { _updateGraphList(combo3.getSelected().getLabel(),e.getValue().getLabel());} });
       combo5.addEventListener("changeSelected", function(e) { if(e.getValue()) b5.setEnabled(true); });
 

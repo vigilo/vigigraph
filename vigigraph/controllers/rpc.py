@@ -33,7 +33,6 @@ import urllib
 import urllib2
 import csv
 import logging
-import string
 
 from searchhostform import SearchHostForm
 from vigigraph.lib import graphs
@@ -155,7 +154,7 @@ class RpcController(BaseController):
         return dict(items=graphgroups)
 
     @expose('json')
-    def graphs(self, idgraphgroup, nocache=None):
+    def graphs(self, idgraphgroup, idhost, nocache=None):
         """
         Determination des graphes
         avec un service dont identificateur = argument
@@ -174,8 +173,14 @@ class RpcController(BaseController):
                     Graph.idgraph),
                 (GraphGroup, GraphGroup.idgroup == \
                     GRAPH_GROUP_TABLE.c.idgroup),
-            ).filter(
-                GraphGroup.idgroup == idgraphgroup
+                (GRAPH_PERFDATASOURCE_TABLE, \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
+                (PerfDataSource, PerfDataSource.idperfdatasource == \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
+                (LowLevelService, LowLevelService.idservice == \
+                    PerfDataSource.idservice),
+            ).filter(GraphGroup.idgroup == idgraphgroup
+            ).filter(LowLevelService.idhost == idhost
             ).all()
 
         graphs_l = [(pds.name, str(pds.idgraph)) for pds in graphs_l]

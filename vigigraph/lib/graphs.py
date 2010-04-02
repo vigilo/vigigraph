@@ -3,7 +3,6 @@
 
 from tg import config
 
-import string
 import urllib
 import urllib2
 from pylons.i18n import ugettext as _
@@ -69,7 +68,7 @@ def tempoDelayRefresh():
     """
 
     delay = config.get('delay_refresh')
-    delay = string.strip(delay)
+    delay = delay.strip()
 
     b_evaluate = False
     if delay == '':
