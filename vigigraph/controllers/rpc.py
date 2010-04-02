@@ -10,12 +10,15 @@ from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, HostGroup
 from vigilo.models.tables import Service, ServiceGroup, LowLevelService
 from vigilo.models.tables import PerfDataSource
-from vigilo.models.tables import Graph
+from vigilo.models.tables import Graph, GraphGroup
 from vigilo.models.tables import Ventilation, VigiloServer, Application
 
 from vigilo.models.tables.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import HOST_GROUP_TABLE
+from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
+
+from vigilo.models.functions import sql_escape_like
 
 from sqlalchemy.orm import aliased
         
@@ -45,6 +48,18 @@ class RpcController(BaseController):
     """
     Class Controleur TurboGears
     """
+
+    presets = [
+        {"caption" : _("Last %s hours") % '12', "duration" : 43200},
+        {"caption" : _("Last %s hours") % '24', "duration" : 86400},
+        {"caption" : _("Last %s days") % '2',  "duration" : 192800},
+        {"caption" : _("Last %s days") % '7',  "duration" : 604800},
+        {"caption" : _("Last %s days") % '14', "duration" : 1209600},
+        {"caption" : _("Last %s months") % '3', "duration" : 86400*31*3},
+        {"caption" : _("Last %s months") % '6', "duration" : 86400*183},
+        {"caption" : _("Last year"), "duration" : 86400*365},
+    ]
+
     def _get_host(self, hostname):
         """
         Return Host object from hostname, None if not available
@@ -65,10 +80,8 @@ class RpcController(BaseController):
                 .filter(HostGroup.parent == None) \
                 .order_by(HostGroup.name) \
                 .all()
-        if topgroups is not None and topgroups != []:
-            return dict(items=[(tpg[0], str(tpg[1])) for tpg in topgroups])
-        else:
-            return dict(items=[])
+        topgroups = [(tpg.name, str(tpg.idgroup)) for tpg in topgroups]
+        return dict(items=topgroups)
 
     @expose('json')
     def hostgroups(self, maingroupid, nocache=None):
@@ -85,10 +98,8 @@ class RpcController(BaseController):
         hostgroups = DBSession.query(HostGroup.name, HostGroup.idgroup)\
                      .filter(HostGroup.idparent == maingroupid) \
                      .all()
-        if hostgroups is not None and hostgroups != []:
-            return dict(items=[(hg[0], str(hg[1])) for hg in hostgroups])
-        else:
-            return dict(items=[])
+        hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups]
+        return dict(items=hostgroups)
 
     @expose('json')
     def hosts(self, othergroupid, nocache=None):
@@ -105,17 +116,15 @@ class RpcController(BaseController):
         hostgroup = DBSession.query(HostGroup) \
                 .filter(HostGroup.idgroup == othergroupid) \
                 .first()
-        if hostgroup is not None and \
-        hostgroup.hosts is not None:
-            return dict(items=[(h.name, str(h.idhost)) \
-            for h in hostgroup.hosts])
-        else:
-            return dict(items=[])
+        if hostgroup is not None:
+            hosts = [(h.name, str(h.idhost)) for h in hostgroup.hosts]
+            return dict(items=hosts)
+        return dict(items=[])
 
     @expose('json')
-    def servicegroups(self, idhost, nocache=None):
+    def graphgroups(self, idhost, nocache=None):
         """
-        Determination des groupes de services associes a l hote
+        Determination des groupes de graphes associes a l hote
         dont identificateur = argument
 
         @param idhost : identificateur d un hote
@@ -124,96 +133,125 @@ class RpcController(BaseController):
         @return: groupes de service
         @rtype: document json (sous forme de dict)
         """
-        # passage par une table intermédiaire à cause de l'héritage
-        servicegroups = DBSession.query \
-            (ServiceGroup.name, LowLevelService.idservice) \
-            .join((SERVICE_GROUP_TABLE, \
-            SERVICE_GROUP_TABLE.c.idgroup == ServiceGroup.idgroup))  \
-            .join((LowLevelService, \
-            SERVICE_GROUP_TABLE.c.idservice == LowLevelService.idservice)) \
-            .filter(LowLevelService.idhost == idhost) \
-            .all()
-        if servicegroups is not None and servicegroups != []:
-            return dict(items=[(sg[0], str(sg[1])) \
-            for sg in set(servicegroups)])
-        else:
-            return dict(items=[])
+        graphgroups = DBSession.query(
+                GraphGroup.name,
+                GraphGroup.idgroup,
+            ).distinct(
+            ).join(
+                (GRAPH_GROUP_TABLE, GRAPH_GROUP_TABLE.c.idgroup == \
+                    GraphGroup.idgroup),
+                (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
+                (GRAPH_PERFDATASOURCE_TABLE, \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
+                (PerfDataSource, PerfDataSource.idperfdatasource == \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
+                (LowLevelService, LowLevelService.idservice == \
+                    PerfDataSource.idservice),
+            ).filter(
+                LowLevelService.idhost == idhost
+            ).all()
+
+        graphgroups = [(gg.name, str(gg.idgroup)) for gg in graphgroups]
+        return dict(items=graphgroups)
 
     @expose('json')
-    def graphs(self, idservice, nocache=None):
+    def graphs(self, idgraphgroup, nocache=None):
         """
         Determination des graphes
         avec un service dont identificateur = argument
 
-        @param idservice : identificateur d un service
-        @type idservice : int
+        @param idgraph : identificateur d un service
+        @type idgraph : int
 
         @return: graphes
         @rtype: document json (sous forme de dict)
         """
-        graphs_l = DBSession.query(Graph.name, Graph.idgraph) \
-            .join((GRAPH_PERFDATASOURCE_TABLE, \
-            GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
-            .join((PerfDataSource, \
-            GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
-            PerfDataSource.idperfdatasource)) \
-            .filter(PerfDataSource.idservice == idservice) \
-            .all()
-        if graphs_l is not None or graphs_l != []:
-            return dict(items=[(pds[0], str(pds[1])) \
-            for pds in set(graphs_l)])
-        else:
-            return dict(items=[])
+        graphs_l = DBSession.query(
+                Graph.name,
+                Graph.idgraph,
+            ).join(
+                (GRAPH_GROUP_TABLE, GRAPH_GROUP_TABLE.c.idgraph == \
+                    Graph.idgraph),
+                (GraphGroup, GraphGroup.idgroup == \
+                    GRAPH_GROUP_TABLE.c.idgroup),
+            ).filter(
+                GraphGroup.idgroup == idgraphgroup
+            ).all()
+
+        graphs_l = [(pds.name, str(pds.idgraph)) for pds in graphs_l]
+        return dict(items=graphs_l)
 
     @expose('json')
-    def searchHostAndService(self, **kwargs):
+    def searchHostAndGraph(self, **kwargs):
         """
-        Determination des couples (hote-service) repondant aux criteres de
-        recherche sur hote et/ou service
+        Determination des couples (hote-graphe) repondant aux criteres de
+        recherche sur hote et/ou graphe.
 
-        Un critere peut correspondre a un intitule complet hote ou service
-        ou a un extrait
+        Un critere peut correspondre a un intitule complet hote ou graphe
+        ou a un extrait.
 
         @param kwargs : arguments nommes
         @type kwargs : dict
-                         ( arguments nommes -> host et service )
+                         ( arguments nommes -> host et graphe )
 
-        @return: couples hote-service
+        @return: couples hote-graphe
         @rtype: document json (sous forme de dict)
         """
         host = kwargs.get('host')
-        service = kwargs.get('service')
+        graph = kwargs.get('graph')
+        items = None
 
-        servicegroups_l = None
-        if host is not None and service is not None:
-            servicegroups_l = DBSession.query( \
-              Host.name, LowLevelService.servicename) \
-              .join((LowLevelService, LowLevelService.idhost == Host.idhost)) \
-              .filter(Host.name.like('%'+host+'%')) \
-              .filter(LowLevelService.servicename.like('%'+service+'%')) \
-              .all()
-        elif host is not None and service is None:
-            servicegroups_l = DBSession.query( \
-              Host.name, LowLevelService.servicename) \
-              .join((LowLevelService, LowLevelService.idhost == Host.idhost)) \
-              .filter(Host.name.like('%'+host+'%')) \
-              .all()
-        elif host is None and service is not None:
-            servicegroups_l = DBSession.query( \
-              Host.name, LowLevelService.servicename) \
-              .join((LowLevelService, LowLevelService.idhost == Host.idhost)) \
-              .filter(LowLevelService.servicename.like('%'+service+'%')) \
-              .all()
-        elif host is None and service is None:
-            servicegroups_l = DBSession.query( \
-              Host.name, LowLevelService.servicename) \
-              .join((LowLevelService, LowLevelService.idhost == Host.idhost)) \
-              .all()
+        # On a un nom d'indicateur, mais pas de nom d'hôte,
+        # on considère que l'utilisateur veut tous les indicateurs
+        # correspondant au motif, quelque soit l'hôte.
+        if graph is not None:
+            if host is None:
+                host = '*'
 
-        if servicegroups_l is not None and servicegroups_l != []:
-            return dict(items=[(sg[0], sg[1]) for sg in set(servicegroups_l)])
+            host = sql_escape_like(host)
+            graph = sql_escape_like(graph)
+
+            items = DBSession.query(
+                    Host.name.label('hostname'),
+                    Graph.name.label('graphname'),
+                ).join(
+                    (LowLevelService, LowLevelService.idhost == Host.idhost),
+                    (PerfDataSource, PerfDataSource.idservice == \
+                        LowLevelService.idservice),
+                    (GRAPH_PERFDATASOURCE_TABLE, \
+                        GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
+                        PerfDataSource.idperfdatasource),
+                    (Graph, Graph.idgraph == \
+                        GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
+                ).filter(Host.name.ilike('%' + host + '%')
+                ).filter(Graph.name.ilike('%' + graph + '%')
+                ).order_by(
+                    Host.name.asc(),
+                    Graph.name.asc(),
+                )
+
+        # On a ni hôte, ni indicateur. On renvoie une liste vide.
+        # Si l'utilisateur voulait vraiment quelque chose,
+        # il n'avait qu'à le demander.
+        elif host is None:
+            return []
+
+        # Sinon, on a juste un motif pour un hôte.
+        # On renvoie la liste des hôtes correspondant.
         else:
-            return dict(items=[])
+            host = sql_escape_like(host)
+            items = DBSession.query(
+                    Host.name.label('hostname'),
+                ).filter(
+                    Host.name.ilike('%' + host + '%')
+                ).order_by(Host.name.asc())
+
+        items = items.limit(100).all()
+        if graph is None:
+            items = [(item.hostname, "") for item in items]
+        else:
+            items = [(item.hostname, item.graphname) for item in items]
+        return dict(items=items)
 
     @expose('json')
     def selectHostAndService(self, **kwargs):
@@ -379,7 +417,7 @@ class RpcController(BaseController):
 
         return result
 
-    @expose('')
+    @expose()
     def imagePage(self, server, graphtemplate):
         """
         Affichage de l image d un graphe
@@ -394,7 +432,7 @@ class RpcController(BaseController):
         """
         redirect('getImage_png?host=%s&graph=%s' % (server, graphtemplate))
 
-    @expose('')
+    @expose()
     def getStartTime(self, host, nocache=None):
         """
         Determination de la date-heure de debut des donnees RRD d un hote
@@ -430,7 +468,7 @@ class RpcController(BaseController):
 
         return result
 
-    @expose('')
+    @expose()
     def supPage(self, host):
         """
         Affichage page supervision Nagios pour un hote
@@ -463,7 +501,7 @@ class RpcController(BaseController):
 
         return result
 
-    @expose('')
+    @expose()
     def servicePage(self, host, service=None):
         """
         Affichage page supervision Nagios pour un hote
@@ -500,7 +538,7 @@ class RpcController(BaseController):
 
         return result
 
-    @expose('')
+    @expose()
     def metroPage(self, host):
         """
         Affichage page metrologie pour un hote
@@ -574,10 +612,8 @@ class RpcController(BaseController):
         """
 
         indicators = self.getListIndicators(graph)
-        if indicators is not None and indicators != []:
-            return dict(items=[(ind[0], str(ind[1])) for ind in indicators])
-        else:
-            return dict(items=[])
+        indicators = [(ind.name, ind.idperfdatasource) for ind in indicators]
+        return dict(items=indicators)
 
     def getListIndicators(self, graph=None):
         """
@@ -604,7 +640,7 @@ class RpcController(BaseController):
         return indicators
 
     # VIGILO_EXIG_VIGILO_PERF_0040:Export des donnees d'un graphe au format CSV
-    @expose('', content_type='text/csv')
+    @expose(content_type='text/csv')
     def exportCSV(self, nocache=None, host=None, graph=None, indicator=None, \
     start=None, end=None):
         """
@@ -759,17 +795,6 @@ class RpcController(BaseController):
         @rtype: page html
         """
 
-        presets = [
-        {"caption" : _("Last %sh") % '12', "duration" : 43200},
-        {"caption" : _("Last %sh") % '24', "duration" : 86400},
-        {"caption" : _("Last %sd") % '2',  "duration" : 192800},
-        {"caption" : _("Last %sd") % '7',  "duration" : 604800},
-        {"caption" : _("Last %sd") % '14', "duration" : 1209600},
-        {"caption" : _("Last %sm") % '3', "duration" : 86400*31*3},
-        {"caption" : _("Last %sm") % '6', "duration" : 86400*183},
-        {"caption" : _("Last year"), "duration" : 86400*365},
-        ]
-
         if start is None:
             start = int(time.time()) - int(duration)
 
@@ -796,7 +821,7 @@ class RpcController(BaseController):
             i += 1
 
         return dict(host=host, start=start, duration=duration, \
-        presets=presets, dhgs=dhgs)
+                    presets=self.presets, dhgs=dhgs)
 
     @expose ('singlegraph.html')
     def singleGraph(self, host, graph, start=None, duration=86400):
@@ -820,22 +845,11 @@ class RpcController(BaseController):
         @rtype: page html
         """
 
-        presets = [
-        {"caption" : _("Last %sh") % '12', "duration" : 43200},
-        {"caption" : _("Last %sh") % '24', "duration" : 86400},
-        {"caption" : _("Last %sd") % '2',  "duration" : 192800},
-        {"caption" : _("Last %sd") % '7',  "duration" : 604800},
-        {"caption" : _("Last %sd") % '14', "duration" : 1209600},
-        {"caption" : _("Last %sm") % '3', "duration" : 86400*31*3},
-        {"caption" : _("Last %sm") % '6', "duration" : 86400*183},
-        {"caption" : _("Last year"), "duration" : 86400*365},
-        ]
-
         if start is None:
             start = int(time.time()) - int(duration)
 
         return dict(host=host, graph=graph, start=start, duration=duration, \
-        presets=presets)
+                    presets=self.presets)
 
     @expose('searchhostform.html')
     def searchHostForm(self):
@@ -865,34 +879,21 @@ class RpcController(BaseController):
 
         hosts = []
 
-        b_query = False
-        if query is not None:
-            query = string.strip(query)
-            b_query = (query != '')
-
-        if b_query:
-            r = urllib.unquote_plus(query)
+        if query:
+            r = urllib.unquote_plus(query.strip())
             rl = r.split(',')
 
-            headings = []
-            for i in range(len(rl)):
-                headings.append(rl[i].strip() + '%')
-
             # hotes
-            for i in range(len(headings)):
+            for part in rl:
                 hosts += DBSession.query(Host.name) \
-                        .filter(Host.name.like(headings[i])) \
+                        .filter(Host.name.like(part.strip() + '%')) \
                         .all()
-
-            if hosts is not None and hosts != []:
-                return dict(hosts=hosts)
-            else:
-                return dict(hosts=[])
+            return dict(hosts=hosts)
         else:
             redirect("searchHostForm")
 
     # VIGILO_EXIG_VIGILO_PERF_0030:Moteur de recherche des graphes
-    @expose ('getopensearch.xml', content_type='text/xml')
+    @expose('getopensearch.xml', content_type='text/xml')
     def getOpenSearch(self):
         """
         Moteur de recherche des graphes
@@ -921,21 +922,15 @@ class RpcController(BaseController):
         @rtype: C{str}
         """
 
-        server = None
-        if host is not None:
-            result = DBSession.query \
+        result = DBSession.query \
             (VigiloServer.name) \
             .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
             .filter(Ventilation.idhost == Host.idhost) \
             .filter(Ventilation.idapp == Application.idapp) \
             .filter(Host.name == host) \
             .filter(Application.name == 'rrdgraph') \
-            .first()
-
-            if result is not None:
-                server = result[0]
-
-        return server
+            .scalar()
+        return result
 
     def getNagiosServer(self, host=None):
         """
@@ -949,19 +944,12 @@ class RpcController(BaseController):
         @rtype: C{str}
         """
 
-        server = None
-        if host is not None:
-            # intitulé 
-            result = DBSession.query \
+        result = DBSession.query \
             (VigiloServer.name) \
             .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
             .filter(Ventilation.idhost == Host.idhost) \
             .filter(Ventilation.idapp == Application.idapp) \
             .filter(Host.name == host) \
             .filter(Application.name == 'nagios') \
-            .first()
-
-            if result is not None:
-                server = result[0]
-
-        return server
+            .scalar()
+        return result

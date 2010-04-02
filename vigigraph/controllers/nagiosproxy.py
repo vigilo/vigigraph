@@ -59,9 +59,7 @@ class NagiosProxy(object):
                   'style' : 'detail',
                   'supNav' : 1}
 
-        url = self._url
-        url = os.path.join(url, 'status.cgi')
-
+        url = '%s/%s' % (self._url, 'status.cgi')
         return self._retrieve_content(url=url, values=values)
 
 
@@ -82,7 +80,5 @@ class NagiosProxy(object):
                   'type' : 2,
                   'supNav' : 1}
 
-        url = self._url
-        url = os.path.join(url, 'extinfo.cgi')
-
+        url = '%s/%s' % (self._url, 'extinfo.cgi')
         return self._retrieve_content(url=url, values=values)
