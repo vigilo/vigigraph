@@ -5,7 +5,7 @@ from tg import request, expose
 
 __all__ = ['ErrorController']
 
-
+# pylint: disable-msg=R0201
 class ErrorController(object):
     """
     Generates error documents as and when they are required.
@@ -29,7 +29,7 @@ class ErrorController(object):
                       message=request.params.get('message', default_message))
         return values
 
-    @expose('')
+    @expose()
     def rrd_txt_error(self, **kwargs):
         """
         Gestion erreur rrd

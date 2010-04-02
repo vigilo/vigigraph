@@ -15,6 +15,7 @@ __all__ = ['RootController']
 
 LOGGER = logging.getLogger(__name__)
 
+# pylint: disable-msg=R0201
 class RootController(BaseController):
     """
     The root controller for the vigigraph application.

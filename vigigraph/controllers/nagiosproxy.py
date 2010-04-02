@@ -34,7 +34,7 @@ class NagiosProxy(object):
                 try:
                     handle = urllib2.urlopen(url, data)
                     result = handle.read()
-                except urllib2.URLError, e:
+                except urllib2.URLError:
                     raise
                 finally:
                     if handle:

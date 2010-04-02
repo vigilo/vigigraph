@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-from tg import expose, response, request, redirect, config, url
-from tg import exceptions
+import time
+import urllib
+import urllib2
+import csv
+import logging
+
+from pylons.i18n import ugettext as _
+from tg import expose, response, request, redirect, config, url, exceptions
+from sqlalchemy.orm import aliased
 
 from vigigraph.lib.base import BaseController
 
@@ -17,23 +24,11 @@ from vigilo.models.tables.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import HOST_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
-
 from vigilo.models.functions import sql_escape_like
-
-from sqlalchemy.orm import aliased
         
 from vigilo.turbogears.rrdproxy import RRDProxy
+
 from nagiosproxy import NagiosProxy
-
-from pylons.i18n import ugettext as _
-
-import time
-import random
-import urllib
-import urllib2
-import csv
-import logging
-
 from searchhostform import SearchHostForm
 from vigigraph.lib import graphs
 
@@ -42,7 +37,7 @@ LOGGER = logging.getLogger(__name__)
 
 __all__ = ['RpcController']
 
-
+# pylint: disable-msg=R0201
 class RpcController(BaseController):
     """
     Class Controleur TurboGears
@@ -349,9 +344,8 @@ class RpcController(BaseController):
 
         # valeurs particulieres
         direct = 1
-        fakeIncr = random.randint(0, 9999999999)
-
         rrdserver = self.getRRDServer(host)
+
         if rrdserver is not None:
             # url
             url_web_path = config.get('rrd_web_path')
@@ -362,7 +356,7 @@ class RpcController(BaseController):
             try:
                 result = rrdproxy.get_img_name_with_params(host, graph, \
                 direct, duration, start, int(details))
-            except urllib2.URLError, e:
+            except urllib2.URLError:
                 txt = _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
                 LOGGER.error(txt)
@@ -400,8 +394,6 @@ class RpcController(BaseController):
 
         # valeurs particulieres
         direct = 1
-        fakeIncr = random.randint(0, 9999999999)
-
         rrdserver = self.getRRDServer(host)
         
         if rrdserver is not None:
@@ -414,7 +406,7 @@ class RpcController(BaseController):
             try:
                 result = rrdproxy.get_img_with_params(host, graph, direct, \
                 duration, start, int(details))
-            except urllib2.URLError, e:
+            except urllib2.URLError:
                 txt = _("Can't get RRD graph \"%s\" on host \"%s\"") \
                     % (graph, host)
                 LOGGER.error(txt)
@@ -451,11 +443,9 @@ class RpcController(BaseController):
         """
 
         result = None
-
         getstarttime = 1
-        fakeincr = random.randint(0, 9999999999)
-
         rrdserver = self.getRRDServer(host)
+
         if rrdserver is not None:
             # url
             url_web_path = config.get('rrd_web_path')
@@ -465,7 +455,7 @@ class RpcController(BaseController):
             rrdproxy = RRDProxy(url_l)
             try:
                 result = rrdproxy.get_starttime(host, getstarttime)
-            except urllib2.URLError, e:
+            except urllib2.URLError:
                 txt = _("Can't get RRD data on host \"%s\"") \
                     % (host)
                 LOGGER.error(txt)
@@ -497,7 +487,7 @@ class RpcController(BaseController):
             nagiosproxy = NagiosProxy(url_l)
             try:
                 result = nagiosproxy.get_status(host)
-            except urllib2.URLError, e:
+            except urllib2.URLError:
                 txt = _("Can't get Nagios data on host \"%s\"") \
                     % (host)
                 LOGGER.error(txt)
@@ -532,7 +522,7 @@ class RpcController(BaseController):
             nagiosproxy = NagiosProxy(url_l)
             try:
                 result = nagiosproxy.get_extinfo(host, service)
-            except urllib2.URLError, e:
+            except urllib2.URLError:
                 txt = _("Can't get Nagios data on host \"%s\" service \"%s\"")\
                     % (host, service)
                 LOGGER.error(txt)
@@ -567,7 +557,7 @@ class RpcController(BaseController):
             rrdproxy = RRDProxy(url_l)
             try:
                 result = rrdproxy.get_hostC(host)
-            except urllib2.URLError, e:
+            except urllib2.URLError:
                 txt = _("Can't get RRD data on host \"%s\"") \
                     % (host)
                 LOGGER.error(txt)
@@ -727,12 +717,12 @@ class RpcController(BaseController):
                     rrdproxy = RRDProxy(url_l)
                     try:
                         result = rrdproxy.exportCSV(server=host, graph=graph, \
-                        indicator=indicator, start=start, end=end)
-                    except urllib2.URLError, e:
+                            indicator=indicator, start=start, end=end)
+                    except urllib2.URLError:
                         b_export = False
                         
                         txt = _("Can't get RRD data on host \"%s\" \
-                        graph \"%s\" indicator \"%s\" ") \
+                                graph \"%s\" indicator \"%s\" ") \
                         % (host, graph, indicator)
                         LOGGER.error(txt)
 
@@ -755,7 +745,7 @@ class RpcController(BaseController):
 
                             # fichier
                             f = open(filename, 'wt')
-                            fn = 'attachment;filename='+filename
+                            fn = 'attachment;filename=' + filename
                             response.headerlist.append \
                             (('Content-Disposition', fn))
                             try:

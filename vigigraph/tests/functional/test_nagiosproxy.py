@@ -54,6 +54,12 @@ def create_Application(name):
     return a
 
 def create_Ventilation(host, server, application):
+    """
+    Peuple la base de données avec des informations sur la ventilation
+    de la supervision, c'est-à-dire, la répartition des applications de
+    supervision sur le parc et les machines gérées par chacune de ces
+    applications.
+    """
     v = None
     h = DBSession.query(Host).filter(Host.name == host).first()
     s = DBSession.query(VigiloServer).filter(
