@@ -15,7 +15,7 @@ tests_require = [
 
 setup(
     name='vigigraph',
-    version='0.1',
+    version='2.0.0',
     description='',
     author='Vigilo Team',
     author_email='contact@projet-vigilo.org',
