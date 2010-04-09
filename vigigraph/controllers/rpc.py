@@ -14,14 +14,13 @@ from sqlalchemy.orm import aliased
 from vigigraph.lib.base import BaseController
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import Host, HostGroup
-from vigilo.models.tables import Service, ServiceGroup, LowLevelService
+from vigilo.models.tables import Service, LowLevelService, Host
+from vigilo.models.tables import SupItemGroup, GroupHierarchy
 from vigilo.models.tables import PerfDataSource
 from vigilo.models.tables import Graph, GraphGroup
 from vigilo.models.tables import Ventilation, VigiloServer, Application
 
-from vigilo.models.tables.secondary_tables import SERVICE_GROUP_TABLE
-from vigilo.models.tables.secondary_tables import HOST_GROUP_TABLE
+from vigilo.models.tables.secondary_tables import SUPITEM_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from vigilo.models.functions import sql_escape_like
@@ -70,11 +69,8 @@ class RpcController(BaseController):
         @return: groupes principaux
         @rtype: document json (sous forme de dict)
         """
-        topgroups = DBSession.query(HostGroup.name, HostGroup.idgroup) \
-                .filter(HostGroup.parent == None) \
-                .order_by(HostGroup.name) \
-                .all()
-        topgroups = [(tpg.name, str(tpg.idgroup)) for tpg in topgroups]
+        topgroups = [(tpg.name, str(tpg.idgroup)) \
+                    for tpg in SupItemGroup.get_top_groups()]
         return dict(items=topgroups)
 
     @expose('json')
@@ -89,9 +85,17 @@ class RpcController(BaseController):
         @return: groupes
         @rtype: document json (sous forme de dict)
         """
-        hostgroups = DBSession.query(HostGroup.name, HostGroup.idgroup)\
-                     .filter(HostGroup.idparent == maingroupid) \
-                     .all()
+        hostgroups = DBSession.query(
+                SupItemGroup.name,
+                SupItemGroup.idgroup,
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idchild == \
+                    SupItemGroup.idgroup),
+            ).filter(GroupHierarchy.idparent == maingroupid
+            ).filter(GroupHierarchy.hops == 1
+            ).order_by(
+                SupItemGroup.name.asc(),
+            ).all()
         hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups]
         return dict(items=hostgroups)
 
@@ -107,13 +111,19 @@ class RpcController(BaseController):
         @return: hotes
         @rtype: document json (sous forme de dict)
         """
-        hostgroup = DBSession.query(HostGroup) \
-                .filter(HostGroup.idgroup == othergroupid) \
-                .first()
-        if hostgroup is not None:
-            hosts = [(h.name, str(h.idhost)) for h in hostgroup.hosts]
-            return dict(items=hosts)
-        return dict(items=[])
+        hosts = DBSession.query(
+                Host.name,
+                Host.idhost,
+            ).join(
+                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost),
+                (SupItemGroup, SupItemGroup.idgroup == SUPITEM_GROUP_TABLE.c.idgroup),
+            ).filter(SupItemGroup.idgroup == othergroupid
+            ).order_by(
+                Host.name.asc(),
+            ).all()
+            
+        hosts = [(h.name, str(h.idhost)) for h in hosts]
+        return dict(items=hosts)
 
     @expose('json')
     def graphgroups(self, idhost, nocache=None):
@@ -143,7 +153,12 @@ class RpcController(BaseController):
                     PerfDataSource.idservice),
             ).filter(
                 LowLevelService.idhost == idhost
-            ).all()
+            ).order_by(
+                GraphGroup.name.asc()
+            )
+        
+        print "@@@\n%s\n@@@" % graphgroups
+        graphgroups = graphgroups.all()
 
         graphgroups = [(gg.name, str(gg.idgroup)) for gg in graphgroups]
         return dict(items=graphgroups)
@@ -163,7 +178,7 @@ class RpcController(BaseController):
         graphs_l = DBSession.query(
                 Graph.name,
                 Graph.idgraph,
-            ).join(
+            ).distinct().join(
                 (GRAPH_GROUP_TABLE, GRAPH_GROUP_TABLE.c.idgraph == \
                     Graph.idgraph),
                 (GraphGroup, GraphGroup.idgroup == \
@@ -176,7 +191,12 @@ class RpcController(BaseController):
                     PerfDataSource.idservice),
             ).filter(GraphGroup.idgroup == idgraphgroup
             ).filter(LowLevelService.idhost == idhost
-            ).all()
+            ).order_by(
+                Graph.name.asc()
+            )
+
+        print "@@@\n%s\n@@@" % graphs_l
+        graphs_l = graphs_l.all()
 
         graphs_l = [(pds.name, str(pds.idgraph)) for pds in graphs_l]
         return dict(items=graphs_l)
@@ -214,7 +234,7 @@ class RpcController(BaseController):
             items = DBSession.query(
                     Host.name.label('hostname'),
                     Graph.name.label('graphname'),
-                ).join(
+                ).distinct().join(
                     (LowLevelService, LowLevelService.idhost == Host.idhost),
                     (PerfDataSource, PerfDataSource.idservice == \
                         LowLevelService.idservice),
@@ -254,65 +274,93 @@ class RpcController(BaseController):
         return dict(items=items)
 
     @expose('json')
-    def selectHostAndService(self, **kwargs):
+    def selectHostAndGraph(self, host=None, graph=None, nocache=None):
         """
-        Determination (groupe principal-groupe-service) associe au couple (hote-service)
+        Renvoie les valeurs à sélectionner dans les comboboxes
+        de VigiGraph pour afficher les données de l'hôte ou du
+        couple hôte/graphe sélectionné.
 
-        @param kwargs : arguments nommes
-        @type kwargs : dict
-                         ( arguments nommes -> host et service )
+        La clé "items" du dictionnaire renvoyé contient une liste avec
+        2 éléments, chacun de ces éléments étant lui-même une liste.
+        La 1ère liste contient les noms des groupes d'hôtes à sélectionner.
+        La 2ème liste contient la liste des groupes de graphes à sélectionner.
 
-        @return: (groupe principal-groupe-service)
-        @rtype: document json (sous forme de dict)
+        Pour le moment, la 2ème liste contiendra au plus 1 élément car
+        les groupes de graphes ne sont pas récursifs. L'utilisation d'une
+        liste permet d'assurer facilement une évolution vers des groupes
+        de graphes récursifs.
         """
-        host = kwargs.get('host')
-        #service = kwargs.get('service')
-        service = None
 
-        groups = []
-        services = None
+        # Ce cas ne devrait pas se produire, mais on tente
+        # d'avoir un comportement gracieux malgré tout.
+        if (not host) and (not graph):
+            return dict(items=[[], []])
 
-        if host is not None:
-            hg1 = aliased(HostGroup)
-            hg2 = aliased(HostGroup)
-            sg =  aliased(ServiceGroup)
-            if service is not None:
-                for hg1_r, hg2_r, sg_r in \
-                DBSession.query(hg1, hg2, sg) \
-                .filter(hg1.parent == None) \
-                .filter(hg2.parent != None) \
-                .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
-                .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
-                .filter(SERVICE_GROUP_TABLE.c.idservice == Service.idservice) \
-                .filter(SERVICE_GROUP_TABLE.c.idgroup == sg.idgroup) \
-                .filter(Host.idhost == LowLevelService.idhost) \
-                .filter(Service.idservice == LowLevelService.idservice) \
-                .filter(Host.name == host ) \
-                .filter(Service.servicename == service):
-                    if hg1_r.idgroup == hg2_r.parent.idgroup:
-                        groups.append(hg1_r.name)
-                        groups.append(hg2_r.name)
-                        groups.append(sg_r.name)
-                        # 1 seul ensemble
-                        break
-            else:
-                for hg1_r, hg2_r in \
-                DBSession.query(hg1, hg2) \
-                .filter(hg1.parent == None) \
-                .filter(hg2.parent != None) \
-                .filter(HOST_GROUP_TABLE.c.idhost == Host.idhost) \
-                .filter(HOST_GROUP_TABLE.c.idgroup == hg2.idgroup) \
-                .filter(Host.name == host ):
-                    if hg1_r.idgroup == hg2_r.parent.idgroup:
-                        groups.append(hg1_r.name)
-                        groups.append(hg2_r.name)
-                        # 1 seul ensemble
-                        break
+        # Groupe principal de l'hôte.
+        mhg = aliased(SupItemGroup)
+        # Groupe secondaire de l'hôte.
+        shg = aliased(SupItemGroup)
 
-        if groups is not None and groups != []:
-            return dict(items=groups)
-        else:
-            return dict(items=[])
+        selected_hostgroups = []
+        selected_graphgroups = []
+
+        # @TODO: ajouter la gestion des permissions au code qui suit.
+        # Pour le moment, la récupération de idsupitemgroup & idgraphgroup
+        # ne prend pas en compte les permissions réelles de l'utilisateur.
+
+        if host:
+            # Sélectionne l'identifiant du premier SupItemGroup auquel
+            # l'utilisateur a accès et auquel l'hôte donné appartient.
+            idsupitemgroup = DBSession.query(
+                    SupItemGroup.idgroup,
+                ).join(
+                    (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idgroup == \
+                        SupItemGroup.idgroup),
+                    (Host, Host.idhost == SUPITEM_GROUP_TABLE.c.idsupitem),
+                ).filter(Host.name == host
+                ).scalar()
+
+            # Si on a trouvé un tel groupe, on renvoie les noms des
+            # groupes de la hiérarchie à sélectionner pour arriver
+            # à celui-ci.
+            if idsupitemgroup is not None:
+                selected_hostgroups = DBSession.query(
+                        SupItemGroup.name,
+                    ).join(
+                        (GroupHierarchy, GroupHierarchy.idparent == \
+                            GraphGroup.idgroup),
+                    ).filter(GroupHierarchy.idchild == idsupitemgroup
+                    ).order_by(
+                        GroupHierarchy.hops.desc()
+                    ).all()
+
+        if graph:
+            # Le principe est le même que pour l'hôte, en considérant
+            # cette fois les GraphGroup à la place des SupItemGroup.
+            idgraphgroup = DBSession.query(
+                    GraphGroup.idgroup,
+                ).join(
+                    (GRAPH_GROUP_TABLE, GRAPH_GROUP_TABLE.c.idgroup == \
+                        GraphGroup.idgroup),
+                    (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
+                ).filter(Graph.name == graph
+                ).scalar()
+
+            # Même principe que pour l'hôte.
+            if idgraphgroup is not None:
+                selected_graphgroups = DBSession.query(
+                        GraphGroup.name,
+                    ).join(
+                        (GroupHierarchy, GroupHierarchy.idparent == \
+                            GraphGroup.idgroup),
+                    ).filter(GroupHierarchy.idchild == idgraphgroup
+                    ).order_by(
+                        GroupHierarchy.hops.desc()
+                    ).all()
+
+        hostgroups = [hg.name for hg in selected_hostgroups]
+        graphgroups = [gg.name for gg in selected_graphgroups]
+        return dict(items=[hostgroups, graphgroups])        
 
     @expose(content_type='text/plain')
     def getImage(self, host, start=None, duration=86400, graph=None, \
@@ -658,116 +706,50 @@ class RpcController(BaseController):
         """
 
         result = None
-        b_export = False
-
-        # separateurs
-        sep_values = ";"
-        sep_value = ","
-
-        sep = config.get("export_csv_sep_values")
-        if sep is not None:
-            sep_values = sep
-            
-        sep = config.get("export_csv_sep_value")
-        if sep is not None:
-            sep_value = sep
-
         filename = None
 
         # indicateurs
-        if indicator is not None:
-            dict_indicators = {}
-            indicators = self.getListIndicators(graph)
+        if indicator is None:
+            raise ValueError
 
-            indicators_l = []
-            indicator_f = ''
+        rrdserver = self.getRRDServer(host)
+        if not rrdserver:
+            raise ValueError, host
 
-            if indicator == "All":
-                b_export = True
-                for i in range(len(indicators)):
-                    indicators_l.append(indicators[i][0])
-                indicator_f = graph
-            else:
-                for i in range(len(indicators)):
-                    if indicator == indicators[i][0]:
-                        b_export = True
-                        indicators_l.append(indicator)
-                        indicator_f = indicator
-                        break
+        indicators = [ind[0] for ind in self.getListIndicators(graph)]
+        if indicator != "All":
+            if indicator not in indicators:
+                raise ValueError, indicator
+            indicators = [indicator]
+            filename = graphs.getExportFileName(host, indicator, start, end)
 
-            if b_export:
-                # nom fichier
-                filename = graphs.getExportFileName(host, indicator_f, \
-                start, end)
+        else:
+            filename = graphs.getExportFileName(host, graph, start, end)
 
-                idx = 0
-                dict_indicators[idx] = 'TimeStamp'
+        indicators.insert(0, "Timestamp")
 
-                for i in range(len(indicators_l)):
-                    idx += 1
-                    dict_indicators[idx] = indicators_l[i]
+        url_web_path = config.get('rrd_web_path', '')
+        url = '%s%s' % (rrdserver, url_web_path)
+        rrdproxy = RRDProxy(url)
 
-                rrdserver = self.getRRDServer(host)
-                if rrdserver is not None:
-                    # url selon configuration
-                    url_web_path = config.get('rrd_web_path')
-                    url_l = '%s%s' % (rrdserver, url_web_path)
+        try:
+            result = rrdproxy.exportCSV(server=host, graph=graph, \
+                indicator=indicator, start=start, end=end)
+        except urllib2.URLError:
+            # @TODO utiliser des dicos pour faciliter la traduction.
+            txt = _("Can't get RRD data on host \"%s\" "
+                    "graph \"%s\" indicator \"%s\" ") % (host, graph, indicator)
+            LOGGER.error(txt)
 
-                    # donnees via proxy
-                    rrdproxy = RRDProxy(url_l)
-                    try:
-                        result = rrdproxy.exportCSV(server=host, graph=graph, \
-                            indicator=indicator, start=start, end=end)
-                    except urllib2.URLError:
-                        b_export = False
-                        
-                        txt = _("Can't get RRD data on host \"%s\" \
-                                graph \"%s\" indicator \"%s\" ") \
-                        % (host, graph, indicator)
-                        LOGGER.error(txt)
+            error_url = '../error'
+            error_url += '/rrd_exportCSV_error'
+            error_url += '?host=%s&graph=%s&indicator=%s'
+            redirect(error_url % (host, graph, indicator))
+        else:
+            response.headerlist.append(('Content-Disposition',
+                'attachment;filename=%s' % filename))
+            return result
 
-                        error_url = '../error'
-                        error_url += '/rrd_exportCSV_error'
-                        error_url += '?host=%s&graph=%s&indicator=%s'
-                        redirect(error_url % (host, graph, indicator))
-                    finally:
-                        if b_export:
-                            # conversion sous forme de dictionnaire
-                            dict_values = {}
-                            if result is not None:
-                                if result != "{}":
-                                    if result.startswith("{") and \
-                                    result.endswith("}"):
-                                        dict_values = eval(result)
- 
-                            fieldnames = tuple([dict_indicators[k] \
-                            for k in dict_indicators])
-
-                            # fichier
-                            f = open(filename, 'wt')
-                            fn = 'attachment;filename=' + filename
-                            response.headerlist.append \
-                            (('Content-Disposition', fn))
-                            try:
-                                writer = csv.DictWriter(f, \
-                                fieldnames=fieldnames, delimiter=sep_values, \
-                                quoting=csv.QUOTE_ALL)
-
-                                # entête
-                                headers = dict( (n, n) for n in fieldnames )
-                                writer.writerow(headers)
-
-                                # generation fichier
-                                graphs.setExportFile(writer, dict_values, \
-                                dict_indicators, sep_value)
-                                
-                            finally:
-                                f.close()
-
-                            return open(filename, 'rt').read()
-
-        if b_export == False:
-            return 'KO'
 
     # VIGILO_EXIG_VIGILO_PERF_0010:Visualisation globale des graphes
     @expose('fullhostpage.html')

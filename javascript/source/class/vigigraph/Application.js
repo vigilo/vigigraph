@@ -97,7 +97,7 @@ qx.Class.define("vigigraph.Application",
       var gl = new qx.ui.layout.GridLayout;
       gl.setDimension("auto", "auto");
       gl.setColumnCount(4);
-      gl.setRowCount(6);			//Number of rows in the main window
+      gl.setRowCount(5);			//Number of rows in the main window
       gl.setVerticalSpacing(4);
       gl.setHorizontalSpacing(2);
 
@@ -114,7 +114,6 @@ qx.Class.define("vigigraph.Application",
       gl.setRowHeight(2, 20);
       gl.setRowHeight(3, 20);
       gl.setRowHeight(4, 20);
-      gl.setRowHeight(5, 20);
 
       gl.add(new qx.ui.basic.Label(this.tr("Main Group")), 0, 0);
       gl.add(new qx.ui.basic.Label(this.tr("Host Group")), 0, 1);
@@ -148,10 +147,6 @@ qx.Class.define("vigigraph.Application",
       b5.setToolTip(new qx.ui.popup.ToolTip(this.tr("Show graph")));
       b5.setEnabled(false);
 
-      var bp=new qx.ui.form.Button("","icon/16/actions/document-print.png");
-      bp.setToolTip(new qx.ui.popup.ToolTip(this.tr("Print Graph(s)")));
-      bp.setEnabled(true);
-
       gl.add(r1,2,0);
       gl.add(r2,2,1);
       gl.add(r3,2,2);
@@ -161,8 +156,6 @@ qx.Class.define("vigigraph.Application",
       gl.add(b1,3,0);
       gl.add(b3,3,2);
       gl.add(b5,3,4);
-
-      gl.add(bp,3,5);
 
       _updateServerGroupList();
 
@@ -208,7 +201,12 @@ qx.Class.define("vigigraph.Application",
       }
 
       // Buttons
-      bp.addEventListener("execute",function(e) {
+      bp = document.getElementById('print');
+      /// @XXX le addEventListener est ici celui du DOM (pas celui de qooxdoo)
+      /// Il faudrait migrer vers mootools et reprendre ce code pour assurer
+      /// la compatibilité avec les navigateurs n'ayant pas addEventListener
+      /// (ie: Internet Explorer).
+      bp.addEventListener("click",function(e) {
         var nb = document.images.length;
 
         // liste src
@@ -253,7 +251,9 @@ qx.Class.define("vigigraph.Application",
             tempoFire(wDelay);
           }
         }
-      });
+        e.stopPropagation();
+        e.preventDefault();
+      }, true);
 
       b3.addEventListener("execute",function(e) {
         var win = new qx.client.NativeWindow(urls.supPage+"?host="+combo3.getSelected().getLabel());
@@ -409,15 +409,21 @@ qx.Class.define("vigigraph.Application",
           var g=new qx.io.remote.Request(url,"GET","application/json");
           g.addEventListener("completed", function(e) {
             r=e.getContent().items;
-            var host_main_group = r[0];
-            var host_sec_group = r[1];
+            
+            /// @XXX pour le moment, on suppose qu'il y a 2 SupItemGroup
+            /// dans la réponse. A terme, on devrait pouvoir en avoir plus.
+            /// De même, on suppose qu'il n'y a qu'un seul GraphGroup à
+            /// sélectionner. Une évolution consisterait à en avoir plus.
 
-            if (r.length < 3) { 
+            var host_main_group = r[0][0];
+            var host_sec_group = r[0][1];
+
+            if (!r[1].length) { 
               _chooseInCombos(host, host_main_group, host_sec_group, null, null);
             }
             else {
-              var srv_group = r[2];
-              _chooseInCombos(host, host_main_group, host_sec_group, graph, srv_group);
+              var graph_group = r[1][0];
+              _chooseInCombos(host, host_main_group, host_sec_group, graph, graph_group);
               mainObj.openGraph(host, graph, null, null, true);
             }
             //qx.log.Logger.ROOT_LOGGER.debug(rowData);
