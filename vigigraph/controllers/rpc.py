@@ -91,7 +91,7 @@ class RpcController(BaseController):
         hostgroups = DBSession.query(
                 SupItemGroup.name,
                 SupItemGroup.idgroup,
-            ).join(
+            ).distinct().join(
                 (GroupHierarchy, GroupHierarchy.idchild == \
                     SupItemGroup.idgroup),
             ).filter(GroupHierarchy.idparent == maingroupid
@@ -318,7 +318,7 @@ class RpcController(BaseController):
             # l'utilisateur a accès et auquel l'hôte donné appartient.
             idsupitemgroup = DBSession.query(
                     SupItemGroup.idgroup,
-                ).join(
+                ).distinct().join(
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idgroup == \
                         SupItemGroup.idgroup),
                     (Host, Host.idhost == SUPITEM_GROUP_TABLE.c.idsupitem),
@@ -331,7 +331,7 @@ class RpcController(BaseController):
             if idsupitemgroup is not None:
                 selected_hostgroups = DBSession.query(
                         SupItemGroup.name,
-                    ).join(
+                    ).distinct().join(
                         (GroupHierarchy, GroupHierarchy.idparent == \
                             GraphGroup.idgroup),
                     ).filter(GroupHierarchy.idchild == idsupitemgroup
@@ -344,7 +344,7 @@ class RpcController(BaseController):
             # cette fois les GraphGroup à la place des SupItemGroup.
             idgraphgroup = DBSession.query(
                     GraphGroup.idgroup,
-                ).join(
+                ).distinct().join(
                     (GRAPH_GROUP_TABLE, GRAPH_GROUP_TABLE.c.idgroup == \
                         GraphGroup.idgroup),
                     (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
@@ -355,7 +355,7 @@ class RpcController(BaseController):
             if idgraphgroup is not None:
                 selected_graphgroups = DBSession.query(
                         GraphGroup.name,
-                    ).join(
+                    ).distinct().join(
                         (GroupHierarchy, GroupHierarchy.idparent == \
                             GraphGroup.idgroup),
                     ).filter(GroupHierarchy.idchild == idgraphgroup
@@ -410,7 +410,7 @@ class RpcController(BaseController):
                 result = rrdproxy.get_img_name_with_params(host, graph, \
                 direct, duration, start, int(details))
             except urllib2.URLError:
-                txt = _("Can't get RRD graph \"%(graph)\" on "
+                txt = _("Can't get RRD graph \"%(graph)s\" on "
                         "host \"%(host)s\"") % {
                     'graph': graph,
                     'host': host,
@@ -463,7 +463,7 @@ class RpcController(BaseController):
                 result = rrdproxy.get_img_with_params(host, graph, direct, \
                 duration, start, int(details))
             except urllib2.URLError:
-                txt = _("Can't get RRD graph \"%(graph)\" on "
+                txt = _("Can't get RRD graph \"%(graph)s\" on "
                         "host \"%(host)s\"") % {
                     'graph': graph,
                     'host': host,
@@ -797,7 +797,7 @@ class RpcController(BaseController):
             start = int(time.time()) - int(duration)
 
         # graphes pour hote
-        hgs = DBSession.query(Graph.name) \
+        hgs = DBSession.query(Graph.name).distinct() \
               .join((GRAPH_PERFDATASOURCE_TABLE, \
               GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
               .join((PerfDataSource, \
