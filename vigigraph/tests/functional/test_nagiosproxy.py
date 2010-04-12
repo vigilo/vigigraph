@@ -12,7 +12,7 @@ import unittest
 from tg import config
 from nose.tools import eq_
 
-from vigigraph.controllers.nagiosproxy import NagiosProxy
+from vigilo.turbogears.nagiosproxy import NagiosProxy
 
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, Ventilation, VigiloServer, Application

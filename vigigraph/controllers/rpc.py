@@ -4,7 +4,6 @@
 import time
 import urllib
 import urllib2
-import csv
 import logging
 
 from pylons.i18n import ugettext as _
@@ -14,7 +13,7 @@ from sqlalchemy.orm import aliased
 from vigigraph.lib.base import BaseController
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import Service, LowLevelService, Host
+from vigilo.models.tables import LowLevelService, Host
 from vigilo.models.tables import SupItemGroup, GroupHierarchy
 from vigilo.models.tables import PerfDataSource
 from vigilo.models.tables import Graph, GraphGroup
@@ -26,9 +25,9 @@ from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from vigilo.models.functions import sql_escape_like
         
 from vigilo.turbogears.rrdproxy import RRDProxy
+from vigilo.turbogears.nagiosproxy import NagiosProxy
 
-from nagiosproxy import NagiosProxy
-from searchhostform import SearchHostForm
+from vigigraph.widgets.searchhostform import SearchHostForm
 from vigigraph.lib import graphs
 
 
@@ -115,8 +114,10 @@ class RpcController(BaseController):
                 Host.name,
                 Host.idhost,
             ).join(
-                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost),
-                (SupItemGroup, SupItemGroup.idgroup == SUPITEM_GROUP_TABLE.c.idgroup),
+                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
+                    Host.idhost),
+                (SupItemGroup, SupItemGroup.idgroup == \
+                    SUPITEM_GROUP_TABLE.c.idgroup),
             ).filter(SupItemGroup.idgroup == othergroupid
             ).order_by(
                 Host.name.asc(),
@@ -541,6 +542,12 @@ class RpcController(BaseController):
                 LOGGER.error(txt)
                 error_url = '../error/nagios_host_error?host=%s'
                 redirect(error_url % host)
+        else:
+            txt = _("No server has been configured to monitor \"%s\"") % host
+            LOGGER.error(txt)
+            error_url = '../error/nagios_host_error?host=%s' % host
+            redirect(error_url)
+
 
         return result
 
@@ -800,7 +807,7 @@ class RpcController(BaseController):
         return dict(host=host, start=start, duration=duration, \
                     presets=self.presets, dhgs=dhgs)
 
-    @expose ('singlegraph.html')
+    @expose('singlegraph.html')
     def singleGraph(self, host, graph, start=None, duration=86400):
         """
         Affichage d un graphe associe a un hote et un graphe
@@ -841,7 +848,7 @@ class RpcController(BaseController):
 
         return dict(searchhostform=searchhostform)
 
-    @expose ('searchhost.html')
+    @expose('searchhost.html')
     def searchHost(self, query=None):
         """
         Affichage page pour hotes repondant au critere de recherche
