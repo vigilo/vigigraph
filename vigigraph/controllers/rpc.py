@@ -42,23 +42,15 @@ class RpcController(BaseController):
     """
 
     presets = [
-        {"caption" : _("Last %s hours") % '12', "duration" : 43200},
-        {"caption" : _("Last %s hours") % '24', "duration" : 86400},
-        {"caption" : _("Last %s days") % '2',  "duration" : 192800},
-        {"caption" : _("Last %s days") % '7',  "duration" : 604800},
-        {"caption" : _("Last %s days") % '14', "duration" : 1209600},
-        {"caption" : _("Last %s months") % '3', "duration" : 86400*31*3},
-        {"caption" : _("Last %s months") % '6', "duration" : 86400*183},
+        {"caption" : _("Last %d hours") %  12, "duration" : 43200},
+        {"caption" : _("Last %d hours") %  24, "duration" : 86400},
+        {"caption" : _("Last %d days") %    2, "duration" : 192800},
+        {"caption" : _("Last %d days") %    7, "duration" : 604800},
+        {"caption" : _("Last %d days") %   14, "duration" : 1209600},
+        {"caption" : _("Last %d months") %  3, "duration" : 86400*31*3},
+        {"caption" : _("Last %d months") %  6, "duration" : 86400*183},
         {"caption" : _("Last year"), "duration" : 86400*365},
     ]
-
-    def _get_host(self, hostname):
-        """
-        Return Host object from hostname, None if not available
-        """
-        return DBSession.query(Host) \
-                .filter(Host.name == hostname) \
-                .first()
 
     @expose('json')
     def maingroups(self, nocache=None):
