@@ -6,9 +6,10 @@ import urllib
 import urllib2
 import logging
 
-from pylons.i18n import ugettext as _
+from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tg import expose, response, request, redirect, config, url, exceptions
 from sqlalchemy.orm import aliased
+from repoze.what.predicates import not_anonymous
 
 from vigigraph.lib.base import BaseController
 
@@ -41,6 +42,9 @@ class RpcController(BaseController):
     Class Controleur TurboGears
     """
 
+    # L'accès à ce contrôleur nécessite d'être identifié.
+    allow_only = not_anonymous(l_("You need to be authenticated"))
+
     presets = [
         {"caption" : _("Last %d hours") %  12, "duration" : 43200},
         {"caption" : _("Last %d hours") %  24, "duration" : 86400},
@@ -57,8 +61,12 @@ class RpcController(BaseController):
         """
         Determination des groupes principaux (sans parent)
 
-        @return: groupes principaux
-        @rtype: document json (sous forme de dict)
+        @return: Dictionnaire dont la clé "items" contient une liste
+            de tuples contenant le nom et l'ID des groupes d'éléments
+            au sommet de la hiérarchie et auquels l'utilisateur a accès.
+        @rtype: C{dict}
+        @note: L'ID des groupes est converti en chaîne de caractères
+            dans le résultat.
         """
         topgroups = [(tpg.name, str(tpg.idgroup)) \
                     for tpg in SupItemGroup.get_top_groups()]
@@ -70,11 +78,15 @@ class RpcController(BaseController):
         Determination des groupes associes au groupe parent
         dont identificateur = argument
 
-        @param maingroupid : identificateur d un groupe principal
-        @type maingroupid : int
+        @param maingroupid: identificateur d un groupe principal
+        @type maingroupid: C{int}
 
-        @return: groupes
-        @rtype: document json (sous forme de dict)
+        @return: Dictionnaire dont la clé "items" contient une liste
+            de tuples avec le nom et l'ID des groupes d'éléments
+            auxquels l'utilisateur a accès.
+        @rtype: C{dict}
+        @note: L'ID des groupes est converti en chaîne de caractères
+            dans le résultat.
         """
         hostgroups = DBSession.query(
                 SupItemGroup.name,
@@ -398,8 +410,11 @@ class RpcController(BaseController):
                 result = rrdproxy.get_img_name_with_params(host, graph, \
                 direct, duration, start, int(details))
             except urllib2.URLError:
-                txt = _("Can't get RRD graph \"%s\" on host \"%s\"") \
-                    % (graph, host)
+                txt = _("Can't get RRD graph \"%(graph)\" on "
+                        "host \"%(host)s\"") % {
+                    'graph': graph,
+                    'host': host,
+                }
                 LOGGER.error(txt)
                 exceptions.HTTPNotFound(comment=txt)
 
@@ -448,8 +463,11 @@ class RpcController(BaseController):
                 result = rrdproxy.get_img_with_params(host, graph, direct, \
                 duration, start, int(details))
             except urllib2.URLError:
-                txt = _("Can't get RRD graph \"%s\" on host \"%s\"") \
-                    % (graph, host)
+                txt = _("Can't get RRD graph \"%(graph)\" on "
+                        "host \"%(host)s\"") % {
+                    'graph': graph,
+                    'host': host,
+                }
                 LOGGER.error(txt)
                 exceptions.HTTPNotFound(comment=txt)
 
@@ -497,8 +515,7 @@ class RpcController(BaseController):
             try:
                 result = rrdproxy.get_starttime(host, getstarttime)
             except urllib2.URLError:
-                txt = _("Can't get RRD data on host \"%s\"") \
-                    % (host)
+                txt = _("Can't get RRD data on host \"%s\"") % host
                 LOGGER.error(txt)
                 exceptions.HTTPNotFound(comment=txt)
 
@@ -529,11 +546,10 @@ class RpcController(BaseController):
             try:
                 result = nagiosproxy.get_status(host)
             except urllib2.URLError:
-                txt = _("Can't get Nagios data on host \"%s\"") \
-                    % (host)
+                txt = _("Can't get Nagios data on host \"%s\"") % host
                 LOGGER.error(txt)
-                error_url = '../error/nagios_host_error?host=%s'
-                redirect(error_url % host)
+                error_url = '../error/nagios_host_error?host=%s' % host
+                redirect(error_url)
         else:
             txt = _("No server has been configured to monitor \"%s\"") % host
             LOGGER.error(txt)
@@ -570,13 +586,16 @@ class RpcController(BaseController):
             try:
                 result = nagiosproxy.get_extinfo(host, service)
             except urllib2.URLError:
-                txt = _("Can't get Nagios data on host \"%s\" service \"%s\"")\
-                    % (host, service)
+                txt = _("Can't get Nagios data on host \"%(host)s\" "
+                        "and service \"%(service)s\"") % {
+                            'host': host,
+                            'service': service,
+                        }
                 LOGGER.error(txt)
 
-                error_url = '../error'
-                error_url += '/nagios_host_service_error?host=%s&service=%s'
-                redirect(error_url % (host, service))
+                error_url = '../error/nagios_host_service_error' \
+                        '?host=%s&service=%s' % (host, service)
+                redirect(error_url)
 
         return result
 
@@ -605,11 +624,10 @@ class RpcController(BaseController):
             try:
                 result = rrdproxy.get_hostC(host)
             except urllib2.URLError:
-                txt = _("Can't get RRD data on host \"%s\"") \
-                    % (host)
+                txt = _("Can't get RRD data on host \"%s\"") % host
                 LOGGER.error(txt)
-                error_url = '../error/rrd_error?host=%s'
-                redirect(error_url % host)
+                error_url = '../error/rrd_error?host=%s' % host
+                redirect(error_url)
 
         return result
 
@@ -735,15 +753,19 @@ class RpcController(BaseController):
             result = rrdproxy.exportCSV(server=host, graph=graph, \
                 indicator=indicator, start=start, end=end)
         except urllib2.URLError:
-            # @TODO utiliser des dicos pour faciliter la traduction.
-            txt = _("Can't get RRD data on host \"%s\" "
-                    "graph \"%s\" indicator \"%s\" ") % (host, graph, indicator)
+            txt = _("Can't get RRD data on host \"%(host)s\", "
+                    "graph \"%(graph)s\" and indicator \"%(indicator)s\"") % {
+                        'host': host,
+                        'graph': graph,
+                        'indicator': indicator,
+                    }
             LOGGER.error(txt)
 
             error_url = '../error'
             error_url += '/rrd_exportCSV_error'
-            error_url += '?host=%s&graph=%s&indicator=%s'
-            redirect(error_url % (host, graph, indicator))
+            error_url += '?host=%s&graph=%s&indicator=%s' % \
+                (host, graph, indicator)
+            redirect(error_url)
         else:
             response.headerlist.append(('Content-Disposition',
                 'attachment;filename=%s' % filename))
@@ -898,14 +920,15 @@ class RpcController(BaseController):
         @rtype: C{str}
         """
 
-        result = DBSession.query \
-            (VigiloServer.name) \
-            .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
-            .filter(Ventilation.idhost == Host.idhost) \
-            .filter(Ventilation.idapp == Application.idapp) \
-            .filter(Host.name == host) \
-            .filter(Application.name == 'rrdgraph') \
-            .scalar()
+        result = DBSession.query(
+                    VigiloServer.name
+                ).filter(VigiloServer.idvigiloserver == \
+                    Ventilation.idvigiloserver
+                ).filter(Ventilation.idhost == Host.idhost
+                ).filter(Ventilation.idapp == Application.idapp
+                ).filter(Host.name == host
+                ).filter(Application.name == 'rrdgraph'
+                ).scalar()
         return result
 
     def getNagiosServer(self, host=None):
@@ -920,12 +943,14 @@ class RpcController(BaseController):
         @rtype: C{str}
         """
 
-        result = DBSession.query \
-            (VigiloServer.name) \
-            .filter(VigiloServer.idvigiloserver == Ventilation.idvigiloserver) \
-            .filter(Ventilation.idhost == Host.idhost) \
-            .filter(Ventilation.idapp == Application.idapp) \
-            .filter(Host.name == host) \
-            .filter(Application.name == 'nagios') \
-            .scalar()
+        result = DBSession.query(
+                    VigiloServer.name
+                ).filter(VigiloServer.idvigiloserver == \
+                    Ventilation.idvigiloserver
+                ).filter(Ventilation.idhost == Host.idhost
+                ).filter(Ventilation.idapp == Application.idapp
+                ).filter(Host.name == host
+                ).filter(Application.name == 'nagios'
+                ).scalar()
         return result
+
