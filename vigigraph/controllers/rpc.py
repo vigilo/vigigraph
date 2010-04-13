@@ -8,13 +8,15 @@ import logging
 
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tg import expose, response, request, redirect, config, url, exceptions
-from sqlalchemy.orm import aliased
 from repoze.what.predicates import not_anonymous
+
+from sqlalchemy.orm import aliased
+from sqlalchemy import or_
 
 from vigigraph.lib.base import BaseController
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import LowLevelService, Host
+from vigilo.models.tables import LowLevelService, Host, User
 from vigilo.models.tables import SupItemGroup, GroupHierarchy
 from vigilo.models.tables import PerfDataSource
 from vigilo.models.tables import Graph, GraphGroup
@@ -27,6 +29,7 @@ from vigilo.models.functions import sql_escape_like
         
 from vigilo.turbogears.rrdproxy import RRDProxy
 from vigilo.turbogears.nagiosproxy import NagiosProxy
+from vigilo.turbogears.helpers import get_current_user
 
 from vigigraph.widgets.searchhostform import SearchHostForm
 from vigigraph.lib import graphs
@@ -68,8 +71,23 @@ class RpcController(BaseController):
         @note: L'ID des groupes est converti en chaîne de caractères
             dans le résultat.
         """
-        topgroups = [(tpg.name, str(tpg.idgroup)) \
-                    for tpg in SupItemGroup.get_top_groups()]
+        user = get_current_user()
+        if user is None:
+            return dict(items=[])
+        supitemgroups = user.supitemgroups()
+
+        children = DBSession.query(
+                SupItemGroup
+            ).distinct(
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup)
+            ).filter(GroupHierarchy.hops > 0)
+
+        topgroups = DBSession.query(
+                SupItemGroup,
+            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
+            ).except_(children).order_by(SupItemGroup.name).all()
+        topgroups = [(sig.name, str(sig.idgroup)) for sig in topgroups]
         return dict(items=topgroups)
 
     @expose('json')
@@ -88,6 +106,11 @@ class RpcController(BaseController):
         @note: L'ID des groupes est converti en chaîne de caractères
             dans le résultat.
         """
+        user = get_current_user()
+        if user is None:
+            return dict(items=[])
+        supitemgroups = user.supitemgroups()
+
         hostgroups = DBSession.query(
                 SupItemGroup.name,
                 SupItemGroup.idgroup,
@@ -96,6 +119,7 @@ class RpcController(BaseController):
                     SupItemGroup.idgroup),
             ).filter(GroupHierarchy.idparent == maingroupid
             ).filter(GroupHierarchy.hops == 1
+            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
             ).order_by(
                 SupItemGroup.name.asc(),
             ).all()
@@ -114,15 +138,19 @@ class RpcController(BaseController):
         @return: hotes
         @rtype: document json (sous forme de dict)
         """
+        user = get_current_user()
+        if user is None:
+            return dict(items=[])
+        supitemgroups = user.supitemgroups()
+
         hosts = DBSession.query(
                 Host.name,
                 Host.idhost,
             ).join(
                 (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                     Host.idhost),
-                (SupItemGroup, SupItemGroup.idgroup == \
-                    SUPITEM_GROUP_TABLE.c.idgroup),
-            ).filter(SupItemGroup.idgroup == othergroupid
+            ).filter(SUPITEM_GROUP_TABLE.c.idgroup == othergroupid
+            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
             ).order_by(
                 Host.name.asc(),
             ).all()
@@ -142,6 +170,11 @@ class RpcController(BaseController):
         @return: groupes de service
         @rtype: document json (sous forme de dict)
         """
+        user = get_current_user()
+        if user is None:
+            return dict(items=[])
+        supitemgroups = user.supitemgroups()
+
         graphgroups = DBSession.query(
                 GraphGroup.name,
                 GraphGroup.idgroup,
@@ -156,15 +189,16 @@ class RpcController(BaseController):
                     GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
                 (LowLevelService, LowLevelService.idservice == \
                     PerfDataSource.idservice),
-            ).filter(
-                LowLevelService.idhost == idhost
+                (SUPITEM_GROUP_TABLE, or_(
+                    SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idhost,
+                    SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idservice,
+                )),
+            ).filter(LowLevelService.idhost == idhost
+            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
             ).order_by(
                 GraphGroup.name.asc()
-            )
+            ).all()
         
-        print "@@@\n%s\n@@@" % graphgroups
-        graphgroups = graphgroups.all()
-
         graphgroups = [(gg.name, str(gg.idgroup)) for gg in graphgroups]
         return dict(items=graphgroups)
 
@@ -180,7 +214,12 @@ class RpcController(BaseController):
         @return: graphes
         @rtype: document json (sous forme de dict)
         """
-        graphs_l = DBSession.query(
+        user = get_current_user()
+        if user is None:
+            return dict(items=[])
+        supitemgroups = user.supitemgroups()
+
+        graphs = DBSession.query(
                 Graph.name,
                 Graph.idgraph,
             ).distinct().join(
@@ -194,17 +233,19 @@ class RpcController(BaseController):
                     GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
                 (LowLevelService, LowLevelService.idservice == \
                     PerfDataSource.idservice),
+                (SUPITEM_GROUP_TABLE, or_(
+                    SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idhost,
+                    SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idservice,
+                )),
             ).filter(GraphGroup.idgroup == idgraphgroup
             ).filter(LowLevelService.idhost == idhost
+            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
             ).order_by(
                 Graph.name.asc()
-            )
+            ).all()
 
-        print "@@@\n%s\n@@@" % graphs_l
-        graphs_l = graphs_l.all()
-
-        graphs_l = [(pds.name, str(pds.idgraph)) for pds in graphs_l]
-        return dict(items=graphs_l)
+        graphs = [(pds.name, str(pds.idgraph)) for pds in graphs]
+        return dict(items=graphs)
 
     @expose('json')
     def searchHostAndGraph(self, **kwargs):
@@ -222,13 +263,18 @@ class RpcController(BaseController):
         @return: couples hote-graphe
         @rtype: document json (sous forme de dict)
         """
+        user = get_current_user()
+        if user is None:
+            return dict(items=[])
+        supitemgroups = user.supitemgroups()
+
         host = kwargs.get('host')
         graph = kwargs.get('graph')
         items = None
 
         # On a un nom d'indicateur, mais pas de nom d'hôte,
         # on considère que l'utilisateur veut tous les indicateurs
-        # correspondant au motif, quelque soit l'hôte.
+        # correspondant au motif, quel que soit l'hôte.
         if graph is not None:
             if host is None:
                 host = '*'
@@ -248,8 +294,13 @@ class RpcController(BaseController):
                         PerfDataSource.idperfdatasource),
                     (Graph, Graph.idgraph == \
                         GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
+                    (SUPITEM_GROUP_TABLE, or_(
+                        SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
+                        SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idservice,
+                    )),
                 ).filter(Host.name.ilike('%' + host + '%')
                 ).filter(Graph.name.ilike('%' + graph + '%')
+                ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
                 ).order_by(
                     Host.name.asc(),
                     Graph.name.asc(),
@@ -267,8 +318,11 @@ class RpcController(BaseController):
             host = sql_escape_like(host)
             items = DBSession.query(
                     Host.name.label('hostname'),
-                ).filter(
-                    Host.name.ilike('%' + host + '%')
+                ).join(
+                    (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
+                        Host.idhost),
+                ).filter(Host.name.ilike('%' + host + '%')
+                ).filter(SUPITEM_GROUP_TABLE.c.idsupitem.in_(supitemgroups)
                 ).order_by(Host.name.asc())
 
         items = items.limit(100).all()
