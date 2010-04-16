@@ -10,6 +10,8 @@ from repoze.what.predicates import Any, not_anonymous
 from vigigraph.lib.base import BaseController
 from vigigraph.controllers.error import ErrorController
 from vigigraph.controllers.rpc import RpcController
+from vigilo.turbogears.controllers.nagiosproxy \
+    import make_nagios_proxy_controller
 
 __all__ = ['RootController']
 
@@ -32,6 +34,7 @@ class RootController(BaseController):
     """
     error = ErrorController()
     rpc = RpcController()
+    nagios = make_nagios_proxy_controller(BaseController, '/nagios/')
 
     @expose('index.html')
     @require(Any(not_anonymous(), msg=_("You need to be authenticated")))

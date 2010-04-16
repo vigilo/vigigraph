@@ -29,7 +29,6 @@ from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from vigilo.models.functions import sql_escape_like
         
 from vigilo.turbogears.rrdproxy import RRDProxy
-from vigilo.turbogears.nagiosproxy import NagiosProxy
 from vigilo.turbogears.helpers import get_current_user
 
 from vigigraph.widgets.searchhostform import SearchHostForm
@@ -578,44 +577,28 @@ class RpcController(BaseController):
 
     @expose()
     def supPage(self, host):
-        """
-        Affichage page supervision Nagios pour un hote
-        (appel fonction status via proxy Nagios)
-        
-        @param host : hôte
-        @type host : C{str}
+        proxy = nagiosproxy.NagiosProxy()
+        values = {
+            'host' : host,
+            'style' : 'detail',
+            'supNav' : 1,
+        }
 
-        @return: page de supervision Nagios
-        @rtype: page
-        """
-        result = None
-
-        nagiosserver = self.getNagiosServer(host)
-        if nagiosserver is not None:
-            # url
-            url_web_path = config.get('nagios_web_path')
-            url_l = '%s%s' % (nagiosserver, url_web_path)
-
-            # proxy
-            nagiosproxy = NagiosProxy(url_l)
-            try:
-                result = nagiosproxy.get_status(host)
-            except urllib2.URLError:
-                txt = _("Can't get Nagios data on host \"%s\"") % host
-                LOGGER.error(txt)
-                error_url = '../error/nagios_host_error?host=%s' % host
-                redirect(error_url)
-        else:
+        try:
+            res = proxy.retrieve(host, 'cgi-bin/status.cgi', values)
+        except urllib2.URLError:
+            LOGGER.exception(_("Can't get Nagios data on host \"%s\"") % host)
+            error_url = '../error/nagios_host_error?host=%s' % host
+            redirect(error_url)
+        except nagiosproxy.NoNagiosServerConfigured:
             txt = _("No server has been configured to monitor \"%s\"") % host
             LOGGER.error(txt)
             error_url = '../error/nagios_host_error?host=%s' % host
             redirect(error_url)
-
-
-        return result
+        return res.read()
 
     @expose()
-    def servicePage(self, host, service=None):
+    def servicePage(self, host, service):
         """
         Affichage page supervision Nagios pour un hote
         (appel fonction get_extinfo via proxy Nagios)
@@ -628,31 +611,32 @@ class RpcController(BaseController):
         @return: page de supervision Nagios
         @rtype: page
         """
-        result = None
+        proxy = nagiosproxy.NagiosProxy()
+        values = {
+            'host' : host,
+            'service': service,
+            'type' : 2,
+            'supNav' : 1,
+        }
 
-        nagiosserver = self.getNagiosServer(host)
-        if nagiosserver is not None:
-            # url
-            url_web_path = config.get('nagios_web_path')
-            url_l = '%s%s' % (nagiosserver, url_web_path)
-
-            # proxy
-            nagiosproxy = NagiosProxy(url_l)
-            try:
-                result = nagiosproxy.get_extinfo(host, service)
-            except urllib2.URLError:
+        try:
+            res = proxy.retrieve(host, 'cgi-bin/extinfo.cgi', values)
+        except urllib2.URLError:
                 txt = _("Can't get Nagios data on host \"%(host)s\" "
                         "and service \"%(service)s\"") % {
                             'host': host,
                             'service': service,
                         }
                 LOGGER.error(txt)
-
                 error_url = '../error/nagios_host_service_error' \
                         '?host=%s&service=%s' % (host, service)
                 redirect(error_url)
-
-        return result
+        except nagiosproxy.NoNagiosServerConfigured:
+            txt = _("No server has been configured to monitor \"%s\"") % host
+            LOGGER.error(txt)
+            error_url = '../error/nagios_host_error?host=%s' % host
+            redirect(error_url)
+        return res.read()
 
     @expose()
     def metroPage(self, host):
@@ -983,29 +967,6 @@ class RpcController(BaseController):
                 ).filter(Ventilation.idapp == Application.idapp
                 ).filter(Host.name == host
                 ).filter(Application.name == 'rrdgraph'
-                ).scalar()
-        return result
-
-    def getNagiosServer(self, host=None):
-        """
-        Determination Serveur Nagios pour l hote courant
-        (Server Nagios -> nom de l application associee = nagios)
-
-        @param host : hôte
-        @type host : C{str}
-
-        @return: serveur Nagios
-        @rtype: C{str}
-        """
-
-        result = DBSession.query(
-                    VigiloServer.name
-                ).filter(VigiloServer.idvigiloserver == \
-                    Ventilation.idvigiloserver
-                ).filter(Ventilation.idhost == Host.idhost
-                ).filter(Ventilation.idapp == Application.idapp
-                ).filter(Host.name == host
-                ).filter(Application.name == 'nagios'
                 ).scalar()
         return result
 
