@@ -76,6 +76,13 @@ class RpcController(BaseController):
             return dict(items=[])
         supitemgroups = user.supitemgroups()
 
+        groups_with_parents = DBSession.query(
+                GroupHierarchy.idparent,
+            ).distinct(
+            ).filter(GroupHierarchy.idchild.in_(supitemgroups)
+            ).all()
+        groups_with_parents = [g.idparent for g in groups_with_parents]
+
         children = DBSession.query(
                 SupItemGroup
             ).distinct(
@@ -85,7 +92,7 @@ class RpcController(BaseController):
 
         topgroups = DBSession.query(
                 SupItemGroup,
-            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
+            ).filter(SupItemGroup.idgroup.in_(groups_with_parents)
             ).except_(children).order_by(SupItemGroup.name).all()
         topgroups = [(sig.name, str(sig.idgroup)) for sig in topgroups]
         return dict(items=topgroups)
@@ -124,6 +131,7 @@ class RpcController(BaseController):
                 SupItemGroup.name.asc(),
             ).all()
         hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups]
+        hostgroups.insert(0, (_('No subgroup'), str(maingroupid)))
         return dict(items=hostgroups)
 
     @expose('json')
@@ -143,14 +151,27 @@ class RpcController(BaseController):
             return dict(items=[])
         supitemgroups = user.supitemgroups()
 
+        groups_with_parents = DBSession.query(
+                GroupHierarchy.idparent,
+            ).distinct(
+            ).filter(GroupHierarchy.idchild.in_(supitemgroups)
+            ).all()
+        groups_with_parents = [g.idparent for g in groups_with_parents]
+
         hosts = DBSession.query(
                 Host.name,
                 Host.idhost,
+            ).distinct(
+            ).outerjoin(
+                (LowLevelService, LowLevelService.idhost == Host.idhost),
             ).join(
-                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
-                    Host.idhost),
+                (SUPITEM_GROUP_TABLE, or_(
+                    SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
+                    SUPITEM_GROUP_TABLE.c.idsupitem ==
+                        LowLevelService.idservice,
+                )),
             ).filter(SUPITEM_GROUP_TABLE.c.idgroup == othergroupid
-            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
+            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(groups_with_parents)
             ).order_by(
                 Host.name.asc(),
             ).all()
@@ -574,69 +595,6 @@ class RpcController(BaseController):
                 exceptions.HTTPNotFound(comment=txt)
 
         return result
-
-    @expose()
-    def supPage(self, host):
-        proxy = nagiosproxy.NagiosProxy()
-        values = {
-            'host' : host,
-            'style' : 'detail',
-            'supNav' : 1,
-        }
-
-        try:
-            res = proxy.retrieve(host, 'cgi-bin/status.cgi', values)
-        except urllib2.URLError:
-            LOGGER.exception(_("Can't get Nagios data on host \"%s\"") % host)
-            error_url = '../error/nagios_host_error?host=%s' % host
-            redirect(error_url)
-        except nagiosproxy.NoNagiosServerConfigured:
-            txt = _("No server has been configured to monitor \"%s\"") % host
-            LOGGER.error(txt)
-            error_url = '../error/nagios_host_error?host=%s' % host
-            redirect(error_url)
-        return res.read()
-
-    @expose()
-    def servicePage(self, host, service):
-        """
-        Affichage page supervision Nagios pour un hote
-        (appel fonction get_extinfo via proxy Nagios)
-
-        @param host : hôte
-        @type host : C{str}
-        @param service : service
-        @type service : C{str}
-
-        @return: page de supervision Nagios
-        @rtype: page
-        """
-        proxy = nagiosproxy.NagiosProxy()
-        values = {
-            'host' : host,
-            'service': service,
-            'type' : 2,
-            'supNav' : 1,
-        }
-
-        try:
-            res = proxy.retrieve(host, 'cgi-bin/extinfo.cgi', values)
-        except urllib2.URLError:
-                txt = _("Can't get Nagios data on host \"%(host)s\" "
-                        "and service \"%(service)s\"") % {
-                            'host': host,
-                            'service': service,
-                        }
-                LOGGER.error(txt)
-                error_url = '../error/nagios_host_service_error' \
-                        '?host=%s&service=%s' % (host, service)
-                redirect(error_url)
-        except nagiosproxy.NoNagiosServerConfigured:
-            txt = _("No server has been configured to monitor \"%s\"") % host
-            LOGGER.error(txt)
-            error_url = '../error/nagios_host_error?host=%s' % host
-            redirect(error_url)
-        return res.read()
 
     @expose()
     def metroPage(self, host):
