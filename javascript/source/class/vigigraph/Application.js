@@ -47,12 +47,12 @@ var urls = {
     "selectHostAndGraph": "/rpc/selectHostAndGraph",
     "searchHostAndGraph": "/rpc/searchHostAndGraph",
     "supPage": "/nagios/",
-    "getImage": "/rpc/getImage",
-    "getStartTime": "/rpc/getStartTime",
+    "getImage": "/rrdgraph/",
+    "getStartTime": "/rrdgraph/",
     "graphsList": "/rpc/graphsList",
     "tempoDelayRefresh": "/rpc/tempoDelayRefresh",
     "getIndicators": "/rpc/getIndicators",
-    "exportCSV": "/rpc/exportCSV"
+    "exportCSV": "/rrdgraph/"
 };
 
 /**
@@ -684,21 +684,13 @@ qx.Class.define("vigigraph.Application",
 
       function setUrl(start,duration)
       {
-        url= urls.getImage+"?host="+encodeURIComponent(host)+"&start="+start+"&duration="+duration+"&graph="+encodeURIComponent(graph);
+        url= urls.getImage+"/"+encodeURIComponent(host)+"/rrdgraph.py?start="+start+"&duration="+duration+"&graphtemplate="+encodeURIComponent(graph)+"&direct=1";
         qx.log.Logger.ROOT_LOGGER.debug(url);
       }
       function loadImage(myUrl,o)
       {
         o.removeAll();
-        var i=new qx.io.remote.Request(url,"GET","text/plain");
-        i.addEventListener("completed", function(e) { 
-          img = e.getContent();
-          if (img)
-          {
-            o.add(new qx.ui.basic.Image(e.getContent()));
-          }
-        });
-        i.send();
+        o.add(new qx.ui.basic.Image(myUrl));
       }
       function getTime() // we use a function because the window can be opened a long time without reloading
       {
@@ -707,7 +699,7 @@ qx.Class.define("vigigraph.Application",
       }
       function updateGraphOnStartTime()
       {
-        var url= urls.getStartTime+"?host="+encodeURIComponent(host);
+        var url= urls.getStartTime+"/"+encodeURIComponent(host)+"/rrdgraph.py?getstarttime=1";
         var g=new qx.io.remote.Request(url,"GET","text/plain");
         g.addEventListener("completed", function(e) { 
           start = parseInt(e.getContent());
@@ -1006,7 +998,7 @@ qx.Class.define("vigigraph.Application",
         if (indicator != "")
         {
           var end = start + duration;
-          var url= urls.exportCSV+"?host="+encodeURIComponent(host)+"&graph="+graph+"&indicator="+indicator+"&start="+start+"&end="+end;
+          var url= urls.exportCSV+"/"+encodeURIComponent(host)+"/rrdgraph.py/exportCSV?graphtemplate="+graph+"&ds="+indicator+"&start="+start+"&end="+end;
           w4 = window.open(url);
           w4.onload = function(){
           }

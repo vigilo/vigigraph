@@ -10,8 +10,7 @@ from repoze.what.predicates import Any, not_anonymous
 from vigigraph.lib.base import BaseController
 from vigigraph.controllers.error import ErrorController
 from vigigraph.controllers.rpc import RpcController
-from vigilo.turbogears.controllers.nagiosproxy \
-    import make_nagios_proxy_controller
+from vigilo.turbogears.controllers.proxy import make_proxy_controller
 
 __all__ = ['RootController']
 
@@ -21,20 +20,11 @@ LOGGER = logging.getLogger(__name__)
 class RootController(BaseController):
     """
     The root controller for the vigigraph application.
-    
-    All the other controllers and WSGI applications should be mounted on this
-    controller. For example::
-    
-        panel = ControlPanelController()
-        another_app = AnotherWSGIApplication()
-    
-    Keep in mind that WSGI applications shouldn't be mounted directly: They
-    must be wrapped around with :class:`tg.controllers.WSGIAppController`.
-    
     """
     error = ErrorController()
     rpc = RpcController()
-    nagios = make_nagios_proxy_controller(BaseController, '/nagios/')
+    nagios = make_proxy_controller(BaseController, 'nagios', '/nagios/')
+    rrdgraph = make_proxy_controller(BaseController, 'rrdgraph', '/rrdgraph/')
 
     @expose('index.html')
     @require(Any(not_anonymous(), msg=_("You need to be authenticated")))

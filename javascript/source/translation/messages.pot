@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-16 16:43+0200\n"
+"POT-Creation-Date: 2010-04-20 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: source/class/vigigraph/Application.js:87
-#: source/class/vigigraph/Application.js:1047
-#: source/class/vigigraph/Application.js:1076
-#: source/class/vigigraph/Application.js:1105
+#: source/class/vigigraph/Application.js:1039
+#: source/class/vigigraph/Application.js:1068
+#: source/class/vigigraph/Application.js:1097
 msgid "Vigilo Graphic"
 msgstr ""
 

@@ -442,191 +442,30 @@ class RpcController(BaseController):
         graphgroups = [gg.name for gg in selected_graphgroups]
         return dict(items=[hostgroups, graphgroups])        
 
-    @expose(content_type='text/plain')
-    def getImage(self, host, start=None, duration=86400, graph=None, \
-    details=1, nocache=0):
-        """
-        Determination de l url d un graphe
-        (via proxy RRD)
+#    # VIGILO_EXIG_VIGILO_PERF_0020:Visualisation unitaire des graphes
+#    @expose(content_type='image/png')
+#    def getImage_png(self, host, start=None, duration=86400, graph=None, \
+#    details=1):
+#        """
+#        Affichage de l image d un graphe
+#        (via proxy RRD)
 
-        @param host : hôte
-        @type host : C{str}
-        @param start : date-heure de debut des donnees
-        @type start : C{str}
-        @param duration : plage de temps des données
-        @type duration : C{str}
-                         (parametre optionnel, initialise a 86400 = plage de 1 jour)
-        @param details : indicateur affichage details dans graphe (legende)
-        @type details : int
-        @param graph : graphe
-        @type graph : C{str}
+#        @param host : hôte
+#        @type host : C{str}
+#        @param start : date-heure de debut des donnees
+#        @type start : C{str}
+#        @param duration : plage de temps des données
+#        @type duration : C{str}
+#                      (parametre optionnel, initialise a 86400 = plage de 1 jour)
+#        @param graph : graphe
+#        @type graph : C{str}
+#        @param details : indicateur affichage details dans graphe (legende)
+#        @type details : int
 
-        @return: url du graphe
-        @rtype: C{str}
-        """
-
-        result = None
-
-        if start is None:
-            start = int(time.time()) - 24*3600
-
-        # valeurs particulieres
-        direct = 1
-        rrdserver = self.getRRDServer(host)
-
-        if rrdserver is not None:
-            # url
-            url_web_path = config.get('rrd_web_path')
-            url_l = '%s%s' % (rrdserver, url_web_path)
-
-            # proxy
-            rrdproxy = RRDProxy(url_l)
-            try:
-                result = rrdproxy.get_img_name_with_params(host, graph, \
-                direct, duration, start, int(details))
-            except urllib2.URLError:
-                txt = _("Can't get RRD graph \"%(graph)s\" on "
-                        "host \"%(host)s\"") % {
-                    'graph': graph,
-                    'host': host,
-                }
-                LOGGER.error(txt)
-                exceptions.HTTPNotFound(comment=txt)
-
-        return result
-
-    # VIGILO_EXIG_VIGILO_PERF_0020:Visualisation unitaire des graphes
-    @expose(content_type='image/png')
-    def getImage_png(self, host, start=None, duration=86400, graph=None, \
-    details=1):
-        """
-        Affichage de l image d un graphe
-        (via proxy RRD)
-
-        @param host : hôte
-        @type host : C{str}
-        @param start : date-heure de debut des donnees
-        @type start : C{str}
-        @param duration : plage de temps des données
-        @type duration : C{str}
-                      (parametre optionnel, initialise a 86400 = plage de 1 jour)
-        @param graph : graphe
-        @type graph : C{str}
-        @param details : indicateur affichage details dans graphe (legende)
-        @type details : int
-
-        @return: image du graphe
-        @rtype: image png
-        """
-        result = None
-
-        if start is None:
-            start = int(time.time()) - 24*3600
-
-        # valeurs particulieres
-        direct = 1
-        rrdserver = self.getRRDServer(host)
-        
-        if rrdserver is not None:
-            # url
-            url_web_path = config.get('rrd_web_path')
-            url_l = '%s%s' % (rrdserver, url_web_path)
-
-            # proxy
-            rrdproxy = RRDProxy(url_l)
-            try:
-                result = rrdproxy.get_img_with_params(host, graph, direct, \
-                duration, start, int(details))
-            except urllib2.URLError:
-                txt = _("Can't get RRD graph \"%(graph)s\" on "
-                        "host \"%(host)s\"") % {
-                    'graph': graph,
-                    'host': host,
-                }
-                LOGGER.error(txt)
-                exceptions.HTTPNotFound(comment=txt)
-
-        return result
-
-    @expose()
-    def imagePage(self, server, graphtemplate):
-        """
-        Affichage de l image d un graphe
-
-        @param server : hôte
-        @type server : C{str}
-        @param graphtemplate : graphe
-        @type graphtemplate : C{str}
-
-        @return: page avec l image du graphe (redirection sur getImage_png)
-        @rtype: page
-        """
-        redirect('getImage_png?host=%s&graph=%s' % (server, graphtemplate))
-
-    @expose()
-    def getStartTime(self, host, nocache=None):
-        """
-        Determination de la date-heure de debut des donnees RRD d un hote
-        (via proxy RRD)
-
-        @param host : hôte
-        @type host : C{str}
-
-        @return: date-heure de debut des donnees RRD
-        @rtype: C{str}
-        """
-
-        result = None
-        getstarttime = 1
-        rrdserver = self.getRRDServer(host)
-
-        if rrdserver is not None:
-            # url
-            url_web_path = config.get('rrd_web_path')
-            url_l = '%s%s' % (rrdserver, url_web_path)
-    
-            # proxy
-            rrdproxy = RRDProxy(url_l)
-            try:
-                result = rrdproxy.get_starttime(host, getstarttime)
-            except urllib2.URLError:
-                txt = _("Can't get RRD data on host \"%s\"") % host
-                LOGGER.error(txt)
-                exceptions.HTTPNotFound(comment=txt)
-
-        return result
-
-    @expose()
-    def metroPage(self, host):
-        """
-        Affichage page metrologie pour un hote
-        (via proxy RRD)
-
-        @param host : hôte
-        @type host : C{str}
-
-        @return: page de metrologie
-        @rtype: page
-        """
-        result = None
-
-        rrdserver = self.getRRDServer(host)
-        if rrdserver is not None:
-            # url
-            url_web_path = config.get('rrd_web_path')
-            url_l = '%s%s' % (rrdserver, url_web_path)
-
-            # proxy
-            rrdproxy = RRDProxy(url_l)
-            try:
-                result = rrdproxy.get_hostC(host)
-            except urllib2.URLError:
-                txt = _("Can't get RRD data on host \"%s\"") % host
-                LOGGER.error(txt)
-                error_url = '../error/rrd_error?host=%s' % host
-                redirect(error_url)
-
-        return result
+#        @return: image du graphe
+#        @rtype: image png
+#        """
+#        result = None
 
     @expose('graphslist.html', content_type='text/html')
     def graphsList(self, nocache=None, **kwargs):
@@ -671,103 +510,6 @@ class RpcController(BaseController):
         indicators = self.getListIndicators(graph)
         indicators = [(ind.name, ind.idperfdatasource) for ind in indicators]
         return dict(items=indicators)
-
-    def getListIndicators(self, graph=None):
-        """
-        Liste d indicateurs associes a un graphe
-
-        @param graph : graphe
-        @type graph  : C{str}
-
-        @return: liste d indicateurs
-        @rtype  : list
-        """
-
-        indicators = []
-        if graph is not None:
-            indicators = DBSession.query \
-              (PerfDataSource.name, PerfDataSource.idperfdatasource) \
-              .join((GRAPH_PERFDATASOURCE_TABLE, \
-              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
-              PerfDataSource.idperfdatasource)) \
-              .join((Graph, \
-              Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
-              .filter(Graph.name == graph) \
-              .all()
-        return indicators
-
-    # VIGILO_EXIG_VIGILO_PERF_0040:Export des donnees d'un graphe au format CSV
-    @expose(content_type='text/csv')
-    def exportCSV(self, nocache=None, host=None, graph=None, indicator=None, \
-    start=None, end=None):
-        """
-        Export CSV sous forme de fichier
-        pour un hote et un graphe et pour l'indicateur suivant
-        * soit un des indicateurs associes au graphe
-        * soit l ensemble des indicateurs -> valeur argument = All
-
-        @param host : hôte
-        @type host : C{str}
-        @param graph : graphe
-        @type graph : C{str}
-        @param indicator : indicateur graphe
-        @type indicator : C{str}
-        @param start : date-heure de debut des donnees
-        @type start : C{str}
-
-        @return: fichier genere avec les donnees RRD repondant aux criteres
-        @rtype  : fichier CSV
-        """
-
-        result = None
-        filename = None
-
-        # indicateurs
-        if indicator is None:
-            raise ValueError
-
-        rrdserver = self.getRRDServer(host)
-        if not rrdserver:
-            raise ValueError, host
-
-        indicators = [ind[0] for ind in self.getListIndicators(graph)]
-        if indicator != "All":
-            if indicator not in indicators:
-                raise ValueError, indicator
-            indicators = [indicator]
-            filename = graphs.getExportFileName(host, indicator, start, end)
-
-        else:
-            filename = graphs.getExportFileName(host, graph, start, end)
-
-        indicators.insert(0, "Timestamp")
-
-        url_web_path = config.get('rrd_web_path', '')
-        url = '%s%s' % (rrdserver, url_web_path)
-        rrdproxy = RRDProxy(url)
-
-        try:
-            result = rrdproxy.exportCSV(server=host, graph=graph, \
-                indicator=indicator, start=start, end=end)
-        except urllib2.URLError:
-            txt = _("Can't get RRD data on host \"%(host)s\", "
-                    "graph \"%(graph)s\" and indicator \"%(indicator)s\"") % {
-                        'host': host,
-                        'graph': graph,
-                        'indicator': indicator,
-                    }
-            LOGGER.error(txt)
-
-            error_url = '../error'
-            error_url += '/rrd_exportCSV_error'
-            error_url += '?host=%s&graph=%s&indicator=%s' % \
-                (host, graph, indicator)
-            redirect(error_url)
-        else:
-            response.headerlist.append(('Content-Disposition',
-                'attachment;filename=%s' % filename))
-            return result
-
 
     # VIGILO_EXIG_VIGILO_PERF_0010:Visualisation globale des graphes
     @expose('fullhostpage.html')
@@ -897,6 +639,8 @@ class RpcController(BaseController):
         @rtype: document xml
         """
 
+        # @TODO: une URL relative ne suffit-elle pas
+        # ex: /public
         here = "http://"
         here += request.host
         dir_l = url('/public')
@@ -905,26 +649,27 @@ class RpcController(BaseController):
 
         return result
 
-    def getRRDServer(self, host=None):
+    def getListIndicators(self, graph=None):
         """
-        Determination Serveur RRD pour l hote courant
-        (Serveur RRD -> nom de l application associee = rrdgraph)
+        Liste d indicateurs associes a un graphe
 
-        @param host : hôte
-        @type host : C{str}
+        @param graph : graphe
+        @type graph  : C{str}
 
-        @return: serveur RRD
-        @rtype: C{str}
+        @return: liste d indicateurs
+        @rtype  : list
         """
 
-        result = DBSession.query(
-                    VigiloServer.name
-                ).filter(VigiloServer.idvigiloserver == \
-                    Ventilation.idvigiloserver
-                ).filter(Ventilation.idhost == Host.idhost
-                ).filter(Ventilation.idapp == Application.idapp
-                ).filter(Host.name == host
-                ).filter(Application.name == 'rrdgraph'
-                ).scalar()
-        return result
+        indicators = []
+        if graph is not None:
+            indicators = DBSession.query \
+              (PerfDataSource.name, PerfDataSource.idperfdatasource) \
+              .join((GRAPH_PERFDATASOURCE_TABLE, \
+              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
+              PerfDataSource.idperfdatasource)) \
+              .join((Graph, \
+              Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
+              .filter(Graph.name == graph) \
+              .all()
+        return indicators
 

@@ -1,0 +1,20 @@
+--- javascript/qooxdoo-0.7.3-sdk/frontend/framework/source/class/qx/html/Location.js.old	2010-04-20 14:18:32.000000000 +0200
++++ javascript/qooxdoo-0.7.3-sdk/frontend/framework/source/class/qx/html/Location.js	2010-04-20 14:42:14.000000000 +0200
+@@ -419,7 +419,7 @@
+     getPageAreaLeft : qx.core.Variant.select("qx.client",
+     {
+       "gecko" : function(el) {
+-        return el.ownerDocument.getBoxObjectFor(el).x;
++        return el.getBoundingClientRect().left;
+       },
+ 
+       "default" : function(el) {
+@@ -439,7 +439,7 @@
+     getPageAreaTop : qx.core.Variant.select("qx.client",
+     {
+       "gecko" : function(el) {
+-        return el.ownerDocument.getBoxObjectFor(el).y;
++        return el.getBoundingClientRect().top;
+       },
+ 
+       "default" : function(el) {
