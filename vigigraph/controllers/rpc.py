@@ -28,7 +28,6 @@ from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from vigilo.models.functions import sql_escape_like
         
-from vigilo.turbogears.rrdproxy import RRDProxy
 from vigilo.turbogears.helpers import get_current_user
 
 from vigigraph.widgets.searchhostform import SearchHostForm
