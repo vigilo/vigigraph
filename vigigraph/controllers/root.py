@@ -66,5 +66,8 @@ class RootController(BaseController):
         goodbye as well.
         
         """
+        LOGGER.info(_('Some user logged out (from %(IP)s)') % {
+                'IP': request.remote_addr,
+            })
         flash(_('We hope to see you soon!'))
         redirect(came_from)
