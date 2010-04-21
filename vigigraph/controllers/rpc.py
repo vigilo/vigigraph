@@ -27,7 +27,7 @@ from vigilo.models.tables.secondary_tables import SUPITEM_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from vigilo.models.functions import sql_escape_like
-        
+
 from vigilo.turbogears.helpers import get_current_user
 
 from vigigraph.widgets.searchhostform import SearchHostForm
@@ -466,7 +466,7 @@ class RpcController(BaseController):
 #        """
 #        result = None
 
-    @expose('graphslist.html', content_type='text/html')
+    @expose('graphslist.html')
     def graphsList(self, nocache=None, **kwargs):
         """
         Generation document avec url des graphes affiches
@@ -534,30 +534,41 @@ class RpcController(BaseController):
         if start is None:
             start = int(time.time()) - int(duration)
 
-        # graphes pour hote
-        hgs = DBSession.query(Graph.name).distinct() \
-              .join((GRAPH_PERFDATASOURCE_TABLE, \
-              GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph)) \
-              .join((PerfDataSource, \
-              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
-              PerfDataSource.idperfdatasource)) \
-              .join((LowLevelService, \
-              PerfDataSource.idservice == LowLevelService.idservice)) \
-              .join((Host, \
-              LowLevelService.idhost == Host.idhost)) \
-              .filter(Host.name == host) \
-              .all()
+        # @TODO définir des validateurs sur les paramètres
+        start = int(start)
+        duration = int(duration)
 
-        # dictionnaire -> {0 : [hote, graph_0], ..., n: [hote, graph_n] }
-        i = 0
-        dhgs = {}
-        for hg in hgs:
-            elt = [host, hg]
-            dhgs[i] = elt
-            i += 1
+        user = get_current_user()
+        if user is None:
+            return dict(host=host, start=start, duration=duration,
+                        presets=self.presets, graphs=[])
+        supitemgroups = user.supitemgroups()
 
-        return dict(host=host, start=start, duration=duration, \
-                    presets=self.presets, dhgs=dhgs)
+        # Récupération de la liste des noms des graphes,
+        # avec vérification des permissions de l'utilisateur.
+        graphs = DBSession.query(
+                Graph.name
+            ).distinct(
+            ).join(
+                (GRAPH_PERFDATASOURCE_TABLE,
+                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
+                (PerfDataSource, PerfDataSource.idperfdatasource ==
+                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
+                (LowLevelService, LowLevelService.idservice ==
+                    PerfDataSource.idservice),
+            ).outerjoin(
+                (Host, Host.idhost == LowLevelService.idhost),
+            ).join(
+                (SUPITEM_GROUP_TABLE, or_(
+                    SUPITEM_GROUP_TABLE.c.idsupitem ==
+                        LowLevelService.idservice,
+                    SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
+                ))
+            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
+            ).all()
+
+        return dict(host=host, start=start, duration=duration,
+                    presets=self.presets, graphs=graphs)
 
     @expose('singlegraph.html')
     def singleGraph(self, host, graph, start=None, duration=86400):
@@ -584,6 +595,10 @@ class RpcController(BaseController):
         if start is None:
             start = int(time.time()) - int(duration)
 
+        # @TODO définir des validateurs sur les paramètres
+        start = int(start)
+        duration = int(duration)
+
         return dict(host=host, graph=graph, start=start, duration=duration, \
                     presets=self.presets)
 
@@ -603,30 +618,43 @@ class RpcController(BaseController):
     @expose('searchhost.html')
     def searchHost(self, query=None):
         """
-        Affichage page pour hotes repondant au critere de recherche
-        * dans cette page, lien sur pages de metrologie et de supervision
+        Affiche les résultats de la recherche par nom d'hôte.
+        La requête de recherche (L{query}) correspond à un préfixe
+        qui sera recherché dans le nom d'hôte. Ce préfixe peut
+        contenir les caractères '*' et '?' qui agissent comme des
+        "jokers".
 
-        @param query : prefixe de recherche sur les hotes
-        @type query : C{str}
-
-        @return: page
-        @rtype: page html
+        @param query: Prefixe de recherche sur les noms d'hôtes
+        @type query: C{unicode}
         """
 
-        hosts = []
-
-        if query:
-            r = urllib.unquote_plus(query.strip())
-            rl = r.split(',')
-
-            # hotes
-            for part in rl:
-                hosts += DBSession.query(Host.name) \
-                        .filter(Host.name.like(part.strip() + '%')) \
-                        .all()
-            return dict(hosts=hosts)
-        else:
+        if not query:
             redirect("searchHostForm")
+
+        query = sql_escape_like(query.strip())
+        user = get_current_user()
+        if user is None:
+            return dict(items=[])
+        supitemgroups = user.supitemgroups()
+
+        # Récupère les hôtes auxquels l'utilisateur a réellement accès.
+        hosts = DBSession.query(
+                Host.name,
+            ).distinct(
+            ).outerjoin(
+                (LowLevelService, LowLevelService.idhost == Host.idhost),
+            ).join(
+                (SUPITEM_GROUP_TABLE, or_(
+                    SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
+                    SUPITEM_GROUP_TABLE.c.idsupitem ==
+                        LowLevelService.idservice,
+                )),
+            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
+            ).filter(Host.name.like(query+'%')
+            ).order_by(
+                Host.name.asc(),
+            ).all()
+        return dict(hosts=hosts)
 
     # VIGILO_EXIG_VIGILO_PERF_0030:Moteur de recherche des graphes
     @expose('getopensearch.xml', content_type='text/xml')

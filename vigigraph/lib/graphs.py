@@ -5,7 +5,7 @@ from tg import config
 
 import urllib
 import urllib2
-from pylons.i18n import lazy_ugettext as l_
+from pylons.i18n import ugettext as _
 
 from time import gmtime, strftime
 from datetime import datetime
@@ -21,11 +21,11 @@ def graphsList(**kwargs):
     graphslist = []
     
     if kwargs is not None:
-        # TRANSLATORS: Format Python de date avec heure.
-        format = l_("%d-%m-%Y %H:%M")
+        # TRANSLATORS: Format Python de date/heure, lisible par un humain.
+        format = _("%a, %d %b %Y %H:%M:%S")
         for key in kwargs:
             # titre
-            title = l_("Unknown")
+            title = _("Unknown")
             graph = ""
             server = ""
             # recherche arguments (apres ?) -> cle1=valeur1&cle2=valeur2&...
