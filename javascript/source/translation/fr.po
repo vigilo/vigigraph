@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SupNavigator 1.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-20 14:42+0200\n"
+"POT-Creation-Date: 2010-04-21 11:34+0200\n"
 "PO-Revision-Date: 2007-12-06 16:03+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: source/class/vigigraph/Application.js:87
-#: source/class/vigigraph/Application.js:1039
-#: source/class/vigigraph/Application.js:1068
-#: source/class/vigigraph/Application.js:1097
+#: source/class/vigigraph/Application.js:1046
+#: source/class/vigigraph/Application.js:1075
+#: source/class/vigigraph/Application.js:1104
 msgid "Vigilo Graphic"
 msgstr ""
 
@@ -92,83 +92,83 @@ msgstr "Graphe"
 msgid "Host"
 msgstr "Hôte"
 
-#: source/class/vigigraph/Application.js:629
+#: source/class/vigigraph/Application.js:636
 msgid "\"%1\" Graph for host %2"
 msgstr "Graphe \"%1\" pour l'hôte %2"
 
-#: source/class/vigigraph/Application.js:634
+#: source/class/vigigraph/Application.js:641
 msgid "Reload graph"
 msgstr "Recharger le graphe"
 
-#: source/class/vigigraph/Application.js:639
+#: source/class/vigigraph/Application.js:646
 msgid "Last 12 hours"
 msgstr "12 dernières heures"
 
-#: source/class/vigigraph/Application.js:640
+#: source/class/vigigraph/Application.js:647
 msgid "Last 24 hours"
 msgstr "24 dernières heures"
 
-#: source/class/vigigraph/Application.js:641
+#: source/class/vigigraph/Application.js:648
 msgid "Last 48 hours"
 msgstr "48 dernières heures"
 
-#: source/class/vigigraph/Application.js:642
+#: source/class/vigigraph/Application.js:649
 msgid "Last 7 days"
 msgstr "7 derniers jours"
 
-#: source/class/vigigraph/Application.js:643
+#: source/class/vigigraph/Application.js:650
 msgid "Last 14 days"
 msgstr "14 derniers jours"
 
-#: source/class/vigigraph/Application.js:644
+#: source/class/vigigraph/Application.js:651
 msgid "Last 3 months"
 msgstr "3 derniers mois"
 
-#: source/class/vigigraph/Application.js:645
+#: source/class/vigigraph/Application.js:652
 msgid "Last 6 months"
 msgstr "6 derniers mois"
 
-#: source/class/vigigraph/Application.js:646
+#: source/class/vigigraph/Application.js:653
 msgid "Last year"
 msgstr "Dernière année"
 
-#: source/class/vigigraph/Application.js:655
+#: source/class/vigigraph/Application.js:662
 msgid "Timeframe"
 msgstr "Période"
 
-#: source/class/vigigraph/Application.js:656
+#: source/class/vigigraph/Application.js:663
 msgid "Timeframe menu"
 msgstr "Menu de choix de la période"
 
-#: source/class/vigigraph/Application.js:659
+#: source/class/vigigraph/Application.js:666
 msgid "Graph start"
 msgstr "Début du graphe"
 
-#: source/class/vigigraph/Application.js:661
+#: source/class/vigigraph/Application.js:668
 msgid "Last section"
 msgstr "Dernière section"
 
-#: source/class/vigigraph/Application.js:663
+#: source/class/vigigraph/Application.js:670
 msgid "Next section"
 msgstr "Section suivante"
 
-#: source/class/vigigraph/Application.js:665
+#: source/class/vigigraph/Application.js:672
 msgid "Graph end"
 msgstr "Fin du graphe"
 
-#: source/class/vigigraph/Application.js:667
+#: source/class/vigigraph/Application.js:674
 msgid "Zoom in"
 msgstr "Zoomer"
 
-#: source/class/vigigraph/Application.js:669
+#: source/class/vigigraph/Application.js:676
 msgid "Zoom out"
 msgstr "Dézoomer"
 
-#: source/class/vigigraph/Application.js:671
+#: source/class/vigigraph/Application.js:678
 msgid "Print Graph"
 msgstr "Imprimer le graphe"
 
-#: source/class/vigigraph/Application.js:677
-#: source/class/vigigraph/Application.js:678
+#: source/class/vigigraph/Application.js:684
+#: source/class/vigigraph/Application.js:685
 msgid "Export CSV"
 msgstr "Export CSV"

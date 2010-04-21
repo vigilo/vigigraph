@@ -336,12 +336,15 @@ qx.Class.define("vigigraph.Application",
         };
         w_search_v.add(search_results);
         //search_results.setLocation(10, 40);
-        function _searchResultsUpdater(host,graph)
-        {
+        function _searchResultsUpdater(host,graph) {
           var url = urls.searchHostAndGraph;
-          if (host && graph) { url = url+"?host="+host+"&graph="+graph };
-          else if (host) { url = url+"?host="+host };
-          else if (graph) { url = url+"?graph="+graph };
+          if (host && graph) {
+            url = url+"?host="+host+"&graph="+graph
+          } else if (host) {
+            url = url+"?host="+host;
+          } else if (graph) {
+            url = url+"?graph="+graph;
+          }
 
           search_results_model.setData([]);
           var g=new qx.io.remote.Request(url,"GET","application/json");
@@ -404,9 +407,13 @@ qx.Class.define("vigigraph.Application",
         function _selectHostAndGraph(host, graph, mainObj)
         {
           var url = urls.selectHostAndGraph;
-          if (host && graph) { url = url+"?host="+host+"&graph="+graph };
-          else if (host) { url = url+"?host="+host };
-          else if (graph) { url = url+"?graph="+graph };
+          if (host && graph) {
+            url = url+"?host="+host+"&graph="+graph
+          } else if (host) {
+            url = url+"?host="+host
+          } else if (graph) {
+            url = url+"?graph="+graph
+          }
 
           var g=new qx.io.remote.Request(url,"GET","application/json");
           g.addEventListener("completed", function(e) {

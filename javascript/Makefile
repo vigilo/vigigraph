@@ -46,7 +46,7 @@ APPLICATION_NAMESPACE = vigigraph
 # Files that will be copied from the source directory into the build
 # directory (space separated list). The default list is empty.
 #
-APPLICATION_FILES = index.html
+APPLICATION_FILES =
 
 #-------------------------------------------------------------------------------
 # For a full list and description of available application settings, please 
@@ -67,7 +67,6 @@ APPLICATION_THEME=vigigraph.theme.Vigilo
 
 
 
-
 ################################################################################
 # INTERNALS (PLEASE DO NOT CHANGE)
 ################################################################################
@@ -85,6 +84,9 @@ error:
 # Vigilo-specific
 ################################################################################
 
+$(QOOXDOO_PATH): qooxdoo-0.7.3-sdk.tar.gz
+	rm -rf $(QOOXDOO_PATH)
+	tar -xzf qooxdoo-0.7.3-sdk.tar.gz
 
 clean:
 	find $(CURDIR) -name "*~" -exec rm {} \;
