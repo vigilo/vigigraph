@@ -8,9 +8,9 @@ from pylons.i18n import ugettext as _
 from repoze.what.predicates import Any, not_anonymous
 
 from vigilo.turbogears.controllers import BaseController
-from vigigraph.controllers.error import ErrorController
-from vigigraph.controllers.rpc import RpcController
+from vigilo.turbogears.controllers.error import ErrorController
 from vigilo.turbogears.controllers.proxy import ProxyController
+from vigigraph.controllers.rpc import RpcController
 
 __all__ = ['RootController']
 
