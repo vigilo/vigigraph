@@ -21,7 +21,8 @@ from formencode import validators, schema
 from sqlalchemy.orm import aliased
 from sqlalchemy import or_
 
-from vigigraph.lib.base import BaseController
+from vigilo.turbogears.controllers import BaseController
+from vigilo.turbogears.helpers import get_current_user
 
 from vigilo.models.session import DBSession
 from vigilo.models.tables import LowLevelService, Host, User
@@ -35,8 +36,6 @@ from vigilo.models.tables.secondary_tables import SUPITEM_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from vigilo.models.functions import sql_escape_like
-
-from vigilo.turbogears.helpers import get_current_user
 
 from vigigraph.widgets.searchhostform import SearchHostForm
 

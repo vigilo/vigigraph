@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Fallback controller."""
 
-from vigigraph.lib.base import BaseController
+from vigilo.turbogears.controllers import BaseController
 
 __all__ = ['TemplateController']
 
