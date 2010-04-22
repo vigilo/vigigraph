@@ -50,7 +50,9 @@ setup(
     message_extractors={
         'vigigraph': [
             ('**.py', 'python', None),
-#            ('public/**', 'ignore', None),
+        ],
+        '../turbogears/src': [
+            ('**.py', 'python', None),
         ],
     },
 
