@@ -256,9 +256,9 @@ qx.Class.define("vigigraph.Application",
       }, true);
 
       b3.addEventListener("execute",function(e) {
-        var win = new qx.client.NativeWindow(urls.supPage+
-          combo3.getSelected().getLabel()+'/cgi-bin/status.cgi'+
-          '?style=detail&supNav=1');
+        var host = combo3.getSelected().getLabel();
+        var win = new qx.client.NativeWindow(urls.supPage+'/'+encodeURIComponent(host)
+          +'/cgi-bin/status.cgi?host='+encodeURIComponent(host)+'&style=detail&supNav=1');
         win.setDimension(800,600);
         win.setDependent(false);
         win.open();
@@ -691,7 +691,7 @@ qx.Class.define("vigigraph.Application",
 
       function setUrl(start,duration)
       {
-        url= urls.getImage+"/"+encodeURIComponent(host)+"/rrdgraph.py?start="+start+"&duration="+duration+"&graphtemplate="+encodeURIComponent(graph)+"&direct=1";
+        url= urls.getImage+"/"+encodeURIComponent(host)+"/rrdgraph.py?start="+start+"&duration="+duration+"&graphtemplate="+encodeURIComponent(graph)+"&host="+encodeURIComponent(host)+"&direct=1";
         qx.log.Logger.ROOT_LOGGER.debug(url);
       }
       function loadImage(myUrl,o)
@@ -706,7 +706,7 @@ qx.Class.define("vigigraph.Application",
       }
       function updateGraphOnStartTime()
       {
-        var url= urls.getStartTime+"/"+encodeURIComponent(host)+"/rrdgraph.py?getstarttime=1";
+        var url= urls.getStartTime+"/"+encodeURIComponent(host)+"/rrdgraph.py?getstarttime=1&host="+encodeURIComponent(host);
         var g=new qx.io.remote.Request(url,"GET","text/plain");
         g.addEventListener("completed", function(e) { 
           start = parseInt(e.getContent());
@@ -1005,7 +1005,7 @@ qx.Class.define("vigigraph.Application",
         if (indicator != "")
         {
           var end = start + duration;
-          var url= urls.exportCSV+"/"+encodeURIComponent(host)+"/rrdgraph.py/exportCSV?graphtemplate="+graph+"&ds="+indicator+"&start="+start+"&end="+end;
+          var url= urls.exportCSV+"/"+encodeURIComponent(host)+"/rrdgraph.py/exportCSV?host="+encodeURIComponent(host)+"&graphtemplate="+encodeURIComponent(graph)+"&ds="+encodeURIComponent(indicator)+"&start="+start+"&end="+end;
           w4 = window.open(url);
           w4.onload = function(){
           }

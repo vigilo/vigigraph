@@ -319,13 +319,14 @@ class RpcController(BaseController):
     class SearchHostAndGraphSchema(schema.Schema):
         host = validators.String(if_missing=None)
         graph = validators.String(if_missing=None)
+        nocache = validators.String(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
         validators=SearchHostAndGraphSchema(),
         error_handler=process_form_errors)
     @expose('json')
-    def searchHostAndGraph(self, host, graph):
+    def searchHostAndGraph(self, host, graph, nocache):
         """
         Determination des couples (hote-graphe) repondant aux criteres de
         recherche sur hote et/ou graphe.
