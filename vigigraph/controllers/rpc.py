@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-import time
+import time, urlparse
 import urllib
 import urllib2
 import logging
 
+# La fonction parse_qsl a été déplacée dans Python 2.6.
+try:
+    from urlparse import parse_qsl
+except ImportError:
+    from cgi import parse_qsl
+
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
-from tg import expose, response, request, redirect, config, url, exceptions
+from tg import expose, response, request, redirect, tmpl_context, \
+                config, url, exceptions, validate, flash
 from repoze.what.predicates import not_anonymous
+from formencode import validators, schema
 
 from sqlalchemy.orm import aliased
 from sqlalchemy import or_
@@ -31,12 +39,11 @@ from vigilo.models.functions import sql_escape_like
 from vigilo.turbogears.helpers import get_current_user
 
 from vigigraph.widgets.searchhostform import SearchHostForm
-from vigigraph.lib import graphs
-
 
 LOGGER = logging.getLogger(__name__)
 
 __all__ = ['RpcController']
+    
 
 # pylint: disable-msg=R0201
 class RpcController(BaseController):
@@ -53,10 +60,19 @@ class RpcController(BaseController):
         {"caption" : _("Last %d days") %    2, "duration" : 192800},
         {"caption" : _("Last %d days") %    7, "duration" : 604800},
         {"caption" : _("Last %d days") %   14, "duration" : 1209600},
-        {"caption" : _("Last %d months") %  3, "duration" : 86400*31*3},
-        {"caption" : _("Last %d months") %  6, "duration" : 86400*183},
-        {"caption" : _("Last year"), "duration" : 86400*365},
+        {"caption" : _("Last %d months") %  3, "duration" : 86400 * 31 * 3},
+        {"caption" : _("Last %d months") %  6, "duration" : 86400 * 183},
+        {"caption" : _("Last year"), "duration" : 86400 * 365},
     ]
+
+    def process_form_errors(self, *argv, **kwargv):
+        """
+        Gestion des erreurs de validation : On affiche les erreurs
+        puis on redirige vers la dernière page accédée.
+        """
+        for k in tmpl_context.form_errors:
+            flash("'%s': %s" % (k, tmpl_context.form_errors[k]), 'error')
+        redirect(request.environ.get('HTTP_REFERER', '/'))
 
     @expose('json')
     def maingroups(self, nocache=None):
@@ -96,8 +112,16 @@ class RpcController(BaseController):
         topgroups = [(sig.name, str(sig.idgroup)) for sig in topgroups]
         return dict(items=topgroups)
 
+    class HostgroupsSchema(schema.Schema):
+        maingroupid = validators.Int(not_empty=True)
+        nocache = validators.String(if_missing=None)
+
+    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
+    @validate(
+        validators=HostgroupsSchema(),
+        error_handler=process_form_errors)
     @expose('json')
-    def hostgroups(self, maingroupid, nocache=None):
+    def hostgroups(self, maingroupid, nocache):
         """
         Determination des groupes associes au groupe parent
         dont identificateur = argument
@@ -133,8 +157,16 @@ class RpcController(BaseController):
         hostgroups.insert(0, (_('No subgroup'), str(maingroupid)))
         return dict(items=hostgroups)
 
+    class HostsSchema(schema.Schema):
+        othergroupid = validators.Int(not_empty=True)
+        nocache = validators.String(if_missing=None)
+
+    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
+    @validate(
+        validators=HostsSchema(),
+        error_handler=process_form_errors)
     @expose('json')
-    def hosts(self, othergroupid, nocache=None):
+    def hosts(self, othergroupid, nocache):
         """
         Determination des hotes associes au groupe
         dont identificateur = argument
@@ -178,8 +210,16 @@ class RpcController(BaseController):
         hosts = [(h.name, str(h.idhost)) for h in hosts]
         return dict(items=hosts)
 
+    class GraphGroupsSchema(schema.Schema):
+        idhost = validators.Int(not_empty=True)
+        nocache = validators.String(if_missing=None)
+
+    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
+    @validate(
+        validators=GraphGroupsSchema(),
+        error_handler=process_form_errors)
     @expose('json')
-    def graphgroups(self, idhost, nocache=None):
+    def graphgroups(self, idhost, nocache):
         """
         Determination des groupes de graphes associes a l hote
         dont identificateur = argument
@@ -222,8 +262,17 @@ class RpcController(BaseController):
         graphgroups = [(gg.name, str(gg.idgroup)) for gg in graphgroups]
         return dict(items=graphgroups)
 
+    class GraphsSchema(schema.Schema):
+        idgraphgroup = validators.Int(not_empty=True)
+        idhost = validators.Int(not_empty=True)
+        nocache = validators.String(if_missing=None)
+
+    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
+    @validate(
+        validators=GraphsSchema(),
+        error_handler=process_form_errors)
     @expose('json')
-    def graphs(self, idgraphgroup, idhost, nocache=None):
+    def graphs(self, idgraphgroup, idhost, nocache):
         """
         Determination des graphes
         avec un service dont identificateur = argument
@@ -267,8 +316,16 @@ class RpcController(BaseController):
         graphs = [(pds.name, str(pds.idgraph)) for pds in graphs]
         return dict(items=graphs)
 
+    class SearchHostAndGraphSchema(schema.Schema):
+        host = validators.String(if_missing=None)
+        graph = validators.String(if_missing=None)
+
+    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
+    @validate(
+        validators=SearchHostAndGraphSchema(),
+        error_handler=process_form_errors)
     @expose('json')
-    def searchHostAndGraph(self, **kwargs):
+    def searchHostAndGraph(self, host, graph):
         """
         Determination des couples (hote-graphe) repondant aux criteres de
         recherche sur hote et/ou graphe.
@@ -288,9 +345,7 @@ class RpcController(BaseController):
             return dict(items=[])
         supitemgroups = user.supitemgroups()
 
-        host = kwargs.get('host')
-        graph = kwargs.get('graph')
-        items = None
+        items = []
 
         # On a un nom d'indicateur, mais pas de nom d'hôte,
         # on considère que l'utilisateur veut tous les indicateurs
@@ -352,8 +407,17 @@ class RpcController(BaseController):
             items = [(item.hostname, item.graphname) for item in items]
         return dict(items=items)
 
+    class SelectHostAndGraphSchema(schema.Schema):
+        host = validators.String(if_missing=None)
+        graph = validators.String(if_missing=None)
+        nocache = validators.String(if_missing=None)
+
+    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
+    @validate(
+        validators=SearchHostAndGraphSchema(),
+        error_handler=process_form_errors)
     @expose('json')
-    def selectHostAndGraph(self, host=None, graph=None, nocache=None):
+    def selectHostAndGraph(self, host, graph, nocache):
         """
         Renvoie les valeurs à sélectionner dans les comboboxes
         de VigiGraph pour afficher les données de l'hôte ou du
@@ -441,31 +505,6 @@ class RpcController(BaseController):
         graphgroups = [gg.name for gg in selected_graphgroups]
         return dict(items=[hostgroups, graphgroups])        
 
-#    # VIGILO_EXIG_VIGILO_PERF_0020:Visualisation unitaire des graphes
-#    @expose(content_type='image/png')
-#    def getImage_png(self, host, start=None, duration=86400, graph=None, \
-#    details=1):
-#        """
-#        Affichage de l image d un graphe
-#        (via proxy RRD)
-
-#        @param host : hôte
-#        @type host : C{str}
-#        @param start : date-heure de debut des donnees
-#        @type start : C{str}
-#        @param duration : plage de temps des données
-#        @type duration : C{str}
-#                      (parametre optionnel, initialise a 86400 = plage de 1 jour)
-#        @param graph : graphe
-#        @type graph : C{str}
-#        @param details : indicateur affichage details dans graphe (legende)
-#        @type details : int
-
-#        @return: image du graphe
-#        @rtype: image png
-#        """
-#        result = None
-
     @expose('graphslist.html')
     def graphsList(self, nocache=None, **kwargs):
         """
@@ -478,7 +517,27 @@ class RpcController(BaseController):
         @return: url de graphes
         @rtype: document html
         """
-        graphslist = graphs.graphsList(**kwargs)
+        if not kwargs:
+            return dict(graphslist=[])
+
+        # TRANSLATORS: Format Python de date/heure, lisible par un humain.
+        format = _("%a, %d %b %Y %H:%M:%S")
+        graphslist = []
+        for url in kwargs.itervalues():
+            parts = urlparse.urlparse(url)
+            params = dict(parse_qsl(parts.query))
+
+            graph = {}
+            start = int(params.get('start', time.time() - 86400))
+            duration = int(params.get('duration', 86400))
+
+            graph['graph'] = params.get('graphtemplate')
+            graph['start_date'] = time.strftime(format, time.localtime(start))
+            graph['end_date'] = time.strftime(format,
+                                    time.localtime(start + duration))
+            graph['img_src'] = url
+            graph['host'] = params['host']
+            graphslist.append(graph)
         return dict(graphslist=graphslist)
 
     @expose(content_type='text/plain')
@@ -491,11 +550,22 @@ class RpcController(BaseController):
         @rtype: C{str}
         """
 
-        delay = graphs.tempoDelayRefresh()
-        return delay
+        try:
+            delay = int(config['delay_refresh'])
+        except ValueError, KeyError:
+            delay = 36000
+        return str(delay)
 
+    class GetIndicatorsSchema(schema.Schema):
+        graph = validators.String(not_empty=True)
+        nocache = validators.String(if_missing=None)
+
+    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
+    @validate(
+        validators=GetIndicatorsSchema(),
+        error_handler=process_form_errors)
     @expose('json')
-    def getIndicators(self, nocache=None, graph=None):
+    def getIndicators(self, graph, nocache):
         """
         Liste d indicateurs associes a un graphe
 
@@ -510,7 +580,16 @@ class RpcController(BaseController):
         indicators = [(ind.name, ind.idperfdatasource) for ind in indicators]
         return dict(items=indicators)
 
+
+    class FullHostPageSchema(schema.Schema):
+        host = validators.String(not_empty=True)
+        start = validators.Int(if_missing=None)
+        duration = validators.Int(if_missing=86400)
+
     # VIGILO_EXIG_VIGILO_PERF_0010:Visualisation globale des graphes
+    @validate(
+        validators=FullHostPageSchema(),
+        error_handler=process_form_errors)
     @expose('fullhostpage.html')
     def fullHostPage(self, host, start=None, duration=86400):
         """
@@ -570,8 +649,19 @@ class RpcController(BaseController):
         return dict(host=host, start=start, duration=duration,
                     presets=self.presets, graphs=graphs)
 
+
+    class SingleGraphSchema(schema.Schema):
+        host = validators.String(not_empty=True)
+        graph = validators.String(not_empty=True)
+        start = validators.Int(if_missing=None)
+        duration = validators.Int(if_missing=86400)
+
+    # VIGILO_EXIG_VIGILO_PERF_0020:Visualisation unitaire des graphes
+    @validate(
+        validators=SingleGraphSchema(),
+        error_handler=process_form_errors)
     @expose('singlegraph.html')
-    def singleGraph(self, host, graph, start=None, duration=86400):
+    def singleGraph(self, host, graph, start, duration):
         """
         Affichage d un graphe associe a un hote et un graphe
         * d apres les donnees RRD
@@ -615,8 +705,14 @@ class RpcController(BaseController):
 
         return dict(searchhostform=searchhostform)
 
+    class SearchHostSchema(schema.Schema):
+        query = validators.String(if_missing=None)
+
+    @validate(
+        validators=SearchHostSchema(),
+        error_handler=process_form_errors)
     @expose('searchhost.html')
-    def searchHost(self, query=None):
+    def searchHost(self, query):
         """
         Affiche les résultats de la recherche par nom d'hôte.
         La requête de recherche (L{query}) correspond à un préfixe
