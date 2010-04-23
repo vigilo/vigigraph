@@ -84,7 +84,7 @@ qx.Class.define("vigigraph.Application",
       qx.io.Alias.getInstance().add("vigigraph", qx.core.Setting.get("vigigraph.resourceUri"));
 
       // Change the window title
-      document.title = this.tr("Vigilo Graphic");
+      document.title = "VigiGraph";
 
       // Host picker
       var w1 = new qx.ui.window.Window(this.tr("Host Picker"), "icon/16/devices/network-wired.png");
@@ -1043,7 +1043,7 @@ qx.Class.define("vigigraph.Application",
         {
           // actualisation etat
           var state = state.replace(cp, "");
-          qx.client.History.getInstance().addToHistory(state, this.tr("Vigilo Graphic"));
+          qx.client.History.getInstance().addToHistory(state, "VigiGraph");
         }
 
         // pour rafraichissement
@@ -1072,7 +1072,7 @@ qx.Class.define("vigigraph.Application",
         {
           // actualisation etat
           var state = state.replace(cp, ap);
-          qx.client.History.getInstance().addToHistory(state, this.tr("Vigilo Graphic"));
+          qx.client.History.getInstance().addToHistory(state, "VigiGraph");
           wleft_c = wleft;
           wtop_c = wtop;
         }
@@ -1101,7 +1101,7 @@ qx.Class.define("vigigraph.Application",
         var wtop = w.getTop();
         if (!wtop) { wtop = 0; }
         state += host+";"+encodeURIComponent(graph)+";"+wleft+";"+wtop+"+";
-        qx.client.History.getInstance().addToHistory(state, this.tr("Vigilo Graphic"));
+        qx.client.History.getInstance().addToHistory(state, "VigiGraph");
         qx.log.Logger.ROOT_LOGGER.debug("state: "+state);
       }
     },

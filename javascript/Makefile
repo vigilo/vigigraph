@@ -56,7 +56,7 @@ APPLICATION_FILES =
 #-------------------------------------------------------------------------------
 
 # Translations
-APPLICATION_LOCALES=fr
+APPLICATION_LOCALES=fr en
 
 # Logging
 APPLICATION_SOURCE_LOG_LEVEL=debug
