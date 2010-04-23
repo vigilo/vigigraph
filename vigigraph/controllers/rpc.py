@@ -15,6 +15,7 @@ except ImportError:
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tg import expose, response, request, redirect, tmpl_context, \
                 config, url, exceptions, validate, flash
+from tg.decorators import paginate
 from repoze.what.predicates import not_anonymous
 from formencode import validators, schema
 
@@ -250,7 +251,8 @@ class RpcController(BaseController):
                     PerfDataSource.idservice),
                 (SUPITEM_GROUP_TABLE, or_(
                     SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idhost,
-                    SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idservice,
+                    SUPITEM_GROUP_TABLE.c.idsupitem ==
+                        LowLevelService.idservice,
                 )),
             ).filter(LowLevelService.idhost == idhost
             ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
@@ -303,7 +305,8 @@ class RpcController(BaseController):
                     PerfDataSource.idservice),
                 (SUPITEM_GROUP_TABLE, or_(
                     SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idhost,
-                    SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idservice,
+                    SUPITEM_GROUP_TABLE.c.idsupitem ==
+                        LowLevelService.idservice,
                 )),
             ).filter(GraphGroup.idgroup == idgraphgroup
             ).filter(LowLevelService.idhost == idhost
@@ -371,7 +374,8 @@ class RpcController(BaseController):
                         GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
                     (SUPITEM_GROUP_TABLE, or_(
                         SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
-                        SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idservice,
+                        SUPITEM_GROUP_TABLE.c.idsupitem ==
+                            LowLevelService.idservice,
                     )),
                 ).filter(Host.name.ilike('%' + host + '%')
                 ).filter(Graph.name.ilike('%' + graph + '%')
@@ -414,7 +418,7 @@ class RpcController(BaseController):
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
-        validators=SearchHostAndGraphSchema(),
+        validators=SelectHostAndGraphSchema(),
         error_handler=process_form_errors)
     @expose('json')
     def selectHostAndGraph(self, host, graph, nocache):
@@ -613,7 +617,6 @@ class RpcController(BaseController):
         if start is None:
             start = int(time.time()) - int(duration)
 
-        # @TODO définir des validateurs sur les paramètres
         start = int(start)
         duration = int(duration)
 
@@ -685,7 +688,6 @@ class RpcController(BaseController):
         if start is None:
             start = int(time.time()) - int(duration)
 
-        # @TODO définir des validateurs sur les paramètres
         start = int(start)
         duration = int(duration)
 
@@ -705,14 +707,9 @@ class RpcController(BaseController):
 
         return dict(searchhostform=searchhostform)
 
-    class SearchHostSchema(schema.Schema):
-        query = validators.String(if_missing=None)
-
-    @validate(
-        validators=SearchHostSchema(),
-        error_handler=process_form_errors)
     @expose('searchhost.html')
-    def searchHost(self, query):
+    @paginate('hosts', items_per_page=10)
+    def searchHost(self, *args, **kwargs):
         """
         Affiche les résultats de la recherche par nom d'hôte.
         La requête de recherche (L{query}) correspond à un préfixe
@@ -723,7 +720,7 @@ class RpcController(BaseController):
         @param query: Prefixe de recherche sur les noms d'hôtes
         @type query: C{unicode}
         """
-
+        query = kwargs.get('query')
         if not query:
             redirect("searchHostForm")
 
@@ -749,7 +746,7 @@ class RpcController(BaseController):
             ).filter(Host.name.like(query+'%')
             ).order_by(
                 Host.name.asc(),
-            ).all()
+            )
         return dict(hosts=hosts)
 
     # VIGILO_EXIG_VIGILO_PERF_0030:Moteur de recherche des graphes
@@ -761,16 +758,7 @@ class RpcController(BaseController):
         @return: document
         @rtype: document xml
         """
-
-        # @TODO: une URL relative ne suffit-elle pas
-        # ex: /public
-        here = "http://"
-        here += request.host
-        dir_l = url('/public')
-
-        result = dict(here=here, dir=dir_l)
-
-        return result
+        return dict()
 
     def getListIndicators(self, graph=None):
         """
