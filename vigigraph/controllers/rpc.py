@@ -2,8 +2,6 @@
 """RPC controller for the combobox of vigigraph"""
 
 import time, urlparse
-import urllib
-import urllib2
 import logging
 
 # La fonction parse_qsl a été déplacée dans Python 2.6.
@@ -13,24 +11,21 @@ except ImportError:
     from cgi import parse_qsl
 
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
-from tg import expose, response, request, redirect, tmpl_context, \
-                config, url, exceptions, validate, flash
+from tg import expose, request, redirect, tmpl_context, \
+                config, validate, flash
 from tg.decorators import paginate
 from repoze.what.predicates import not_anonymous
 from formencode import validators, schema
-
-from sqlalchemy.orm import aliased
 from sqlalchemy import or_
 
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import LowLevelService, Host, User
+from vigilo.models.tables import LowLevelService, Host
 from vigilo.models.tables import SupItemGroup
 from vigilo.models.tables import PerfDataSource
 from vigilo.models.tables import Graph, GraphGroup
-from vigilo.models.tables import Ventilation, VigiloServer, Application
 from vigilo.models.tables.grouphierarchy import GroupHierarchy
 
 from vigilo.models.tables.secondary_tables import SUPITEM_GROUP_TABLE
@@ -113,13 +108,14 @@ class RpcController(BaseController):
         return dict(items=topgroups)
 
     class HostgroupsSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{hostgroups}."""
         maingroupid = validators.Int(not_empty=True)
         nocache = validators.String(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
-        validators=HostgroupsSchema(),
-        error_handler=process_form_errors)
+        validators = HostgroupsSchema(),
+        error_handler = process_form_errors)
     @expose('json')
     def hostgroups(self, maingroupid, nocache):
         """
@@ -158,13 +154,14 @@ class RpcController(BaseController):
         return dict(items=hostgroups)
 
     class HostsSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{hosts}."""
         othergroupid = validators.Int(not_empty=True)
         nocache = validators.String(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
-        validators=HostsSchema(),
-        error_handler=process_form_errors)
+        validators = HostsSchema(),
+        error_handler = process_form_errors)
     @expose('json')
     def hosts(self, othergroupid, nocache):
         """
@@ -211,13 +208,14 @@ class RpcController(BaseController):
         return dict(items=hosts)
 
     class GraphGroupsSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{graphgroups}."""
         idhost = validators.Int(not_empty=True)
         nocache = validators.String(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
-        validators=GraphGroupsSchema(),
-        error_handler=process_form_errors)
+        validators = GraphGroupsSchema(),
+        error_handler = process_form_errors)
     @expose('json')
     def graphgroups(self, idhost, nocache):
         """
@@ -264,14 +262,15 @@ class RpcController(BaseController):
         return dict(items=graphgroups)
 
     class GraphsSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{graphs}."""
         idgraphgroup = validators.Int(not_empty=True)
         idhost = validators.Int(not_empty=True)
         nocache = validators.String(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
-        validators=GraphsSchema(),
-        error_handler=process_form_errors)
+        validators = GraphsSchema(),
+        error_handler = process_form_errors)
     @expose('json')
     def graphs(self, idgraphgroup, idhost, nocache):
         """
@@ -319,14 +318,15 @@ class RpcController(BaseController):
         return dict(items=graphs)
 
     class SearchHostAndGraphSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{searchHostAndGraph}."""
         host = validators.String(if_missing=None)
         graph = validators.String(if_missing=None)
         nocache = validators.String(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
-        validators=SearchHostAndGraphSchema(),
-        error_handler=process_form_errors)
+        validators = SearchHostAndGraphSchema(),
+        error_handler = process_form_errors)
     @expose('json')
     def searchHostAndGraph(self, host, graph, nocache):
         """
@@ -412,14 +412,15 @@ class RpcController(BaseController):
         return dict(items=items)
 
     class SelectHostAndGraphSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{selectHostAndGraph}."""
         host = validators.String(if_missing=None)
         graph = validators.String(if_missing=None)
         nocache = validators.String(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
-        validators=SelectHostAndGraphSchema(),
-        error_handler=process_form_errors)
+        validators = SelectHostAndGraphSchema(),
+        error_handler = process_form_errors)
     @expose('json')
     def selectHostAndGraph(self, host, graph, nocache):
         """
@@ -442,11 +443,6 @@ class RpcController(BaseController):
         # d'avoir un comportement gracieux malgré tout.
         if (not host) and (not graph):
             return dict(items=[[], []])
-
-        # Groupe principal de l'hôte.
-        mhg = aliased(SupItemGroup)
-        # Groupe secondaire de l'hôte.
-        shg = aliased(SupItemGroup)
 
         selected_hostgroups = []
         selected_graphgroups = []
@@ -556,18 +552,19 @@ class RpcController(BaseController):
 
         try:
             delay = int(config['delay_refresh'])
-        except ValueError, KeyError:
+        except (ValueError, KeyError):
             delay = 36000
         return str(delay)
 
     class GetIndicatorsSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{getIndicators}."""
         graph = validators.String(not_empty=True)
         nocache = validators.String(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
-        validators=GetIndicatorsSchema(),
-        error_handler=process_form_errors)
+        validators = GetIndicatorsSchema(),
+        error_handler = process_form_errors)
     @expose('json')
     def getIndicators(self, graph, nocache):
         """
@@ -586,14 +583,15 @@ class RpcController(BaseController):
 
 
     class FullHostPageSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{fullHostPage}."""
         host = validators.String(not_empty=True)
         start = validators.Int(if_missing=None)
         duration = validators.Int(if_missing=86400)
 
     # VIGILO_EXIG_VIGILO_PERF_0010:Visualisation globale des graphes
     @validate(
-        validators=FullHostPageSchema(),
-        error_handler=process_form_errors)
+        validators = FullHostPageSchema(),
+        error_handler = process_form_errors)
     @expose('fullhostpage.html')
     def fullHostPage(self, host, start=None, duration=86400):
         """
@@ -654,6 +652,7 @@ class RpcController(BaseController):
 
 
     class SingleGraphSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{singleGraph}."""
         host = validators.String(not_empty=True)
         graph = validators.String(not_empty=True)
         start = validators.Int(if_missing=None)
@@ -661,8 +660,8 @@ class RpcController(BaseController):
 
     # VIGILO_EXIG_VIGILO_PERF_0020:Visualisation unitaire des graphes
     @validate(
-        validators=SingleGraphSchema(),
-        error_handler=process_form_errors)
+        validators = SingleGraphSchema(),
+        error_handler = process_form_errors)
     @expose('singlegraph.html')
     def singleGraph(self, host, graph, start, duration):
         """
