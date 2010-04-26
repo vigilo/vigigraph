@@ -47,6 +47,7 @@ setup(
         'vigigraph': [
             'i18n/*/LC_MESSAGES/*.mo',
             'templates/*/*',
+            'public/js/*.js',
 #            'public/*/*',
         ],
     },
@@ -70,9 +71,9 @@ setup(
     vigigraph-init-db = vigigraph.websetup:init_db
     """,
     data_files=[
-        (os.path.join(sysconfdir, 'vigilo/vigimap/'), [
-            'deployment/vigimap.conf',
-            'deployment/vigimap.wsgi',
+        (os.path.join(sysconfdir, 'vigilo/vigigraph/'), [
+            'deployment/vigigraph.conf',
+            'deployment/vigigraph.wsgi',
             'deployment/settings.ini',
         ]),
     ],
