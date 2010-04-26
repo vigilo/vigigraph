@@ -31,6 +31,11 @@ This application is part of the Vigilo Project <http://vigilo-project.org>
 
 %prep
 %setup -q -n %{module}
+cd javascript
+wget http://downloads.sourceforge.net/project/qooxdoo/qooxdoo-legacy/0.7.3/qooxdoo-0.7.3-sdk.tar.gz
+tar -xzf qooxdoo-0.7.3-sdk.tar.gz
+cd ..
+patch -p0 < patches/001_qooxdoo_getBoxObjectFor.diff
 
 %build
 make PYTHON=%{_bindir}/python SYSCONFDIR=%{_sysconfdir}

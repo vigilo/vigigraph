@@ -7,6 +7,8 @@ except ImportError:
     use_setuptools()
     from setuptools import setup, find_packages
 
+sysconfdir = os.getenv("SYSCONFDIR", "/etc")
+
 tests_require = [
     'WebTest',
     'BeautifulSoup',
@@ -66,4 +68,11 @@ setup(
     [console_scripts]
     vigigraph-init-db = vigigraph.websetup:init_db
     """,
+    data_files=[
+        (os.path.join(sysconfdir, 'vigilo/vigimap/'), [
+            'deployment/vigimap.conf',
+            'deployment/vigimap.wsgi',
+            'deployment/settings.ini',
+        ]),
+    ],
 )
