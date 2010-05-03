@@ -187,19 +187,6 @@ qx.Class.define("vigigraph.Application",
         return index_l;
       }
 
-      function tempoFire(Delay)
-      {
-        var a = setTimeout(tempoFall, Delay);
-      }
-
-      function tempoFall()
-      {
-        if ( w2 != undefined)
-        {
-          w2.close();
-        }
-      }
-
       // Buttons
       bp = document.getElementById('print');
       /// @XXX le addEventListener est ici celui du DOM (pas celui de qooxdoo)
@@ -207,49 +194,23 @@ qx.Class.define("vigigraph.Application",
       /// la compatibilité avec les navigateurs n'ayant pas addEventListener
       /// (ie: Internet Explorer).
       bp.addEventListener("click",function(e) {
-        var nb = document.images.length;
 
-        // liste src
-        var index_p = -1;
-        var src_l = "";
-        var src_tab = new Array;
-        var j = 0;
-        for (i = 0; i < nb; i++)
-        {
-          src_l = document.images[i].src;
-
-          // graphe rrd ?
-          pos = src_l.indexOf("/rrdgraph.py");
-          if (pos != -1)
-          {
-            src_tab[j] = encodeURIComponent(src_l);
-            j += 1; 
+        var graph_imgs = [];
+        var images = document.getElementsByTagName("img");
+        for (var i=0 ; i < images.length ; i++) {
+          if (images[i].parentNode.className == "graph") {
+            graph_imgs.push(images[i].src);
           }
         }
+        var print_url = urls.graphsList + "?";
+        for (var i=0 ; i < graph_imgs.length ; i++) {
+          if (i != 0) print_url += "&";
+          print_url += i + "=" + encodeURIComponent(graph_imgs[i]);
+        }
 
-        // impression à partir nouvelle fenêtre
-        var lh = src_tab.length;
-        if (lh > 0)
-        {
-          var url = urls.graphsList;
-          url += "?";
-          for (i = 0; i < lh; i++)
-          {
-            if (i > 0)
-            {
-              url += "&";
-            }
-            url += i;
-            url += "=";
-            url += src_tab[i];
-          }
-
-          w2 = window.open(url);
-          w2.onload = function(){
-            w2.print();
-            wDelay = 1000;
-            tempoFire(wDelay);
-          }
+        w2 = window.open(print_url);
+        w2.onload = function(){
+          w2.print();
         }
         e.stopPropagation();
         e.preventDefault();
@@ -691,13 +652,18 @@ qx.Class.define("vigigraph.Application",
 
       function setUrl(start,duration)
       {
-        url= urls.getImage+"/"+encodeURIComponent(host)+"/rrdgraph.py?start="+start+"&duration="+duration+"&graphtemplate="+encodeURIComponent(graph)+"&host="+encodeURIComponent(host)+"&direct=1";
+        url= urls.getImage+"/"+encodeURIComponent(host)+"/graph.png?start="+start+"&duration="+duration+"&graphtemplate="+encodeURIComponent(graph)+"&host="+encodeURIComponent(host);
         qx.log.Logger.ROOT_LOGGER.debug(url);
       }
       function loadImage(myUrl,o)
       {
         o.removeAll();
-        o.add(new qx.ui.basic.Image(myUrl));
+        var img = new qx.ui.basic.Image(myUrl);
+        img.addEventListener("insertDom", function(e) {
+            // Attention, la classe va être appliquée au div entourant l'image
+            e.getTarget().getElement().className = "graph";
+        });
+        o.add(img);
       }
       function getTime() // we use a function because the window can be opened a long time without reloading
       {
@@ -706,10 +672,10 @@ qx.Class.define("vigigraph.Application",
       }
       function updateGraphOnStartTime()
       {
-        var url= urls.getStartTime+"/"+encodeURIComponent(host)+"/rrdgraph.py?getstarttime=1&host="+encodeURIComponent(host);
-        var g=new qx.io.remote.Request(url,"GET","text/plain");
+        var url= urls.getStartTime+"/"+encodeURIComponent(host)+"/starttime?host="+encodeURIComponent(host);
+        var g=new qx.io.remote.Request(url,"GET","application/json");
         g.addEventListener("completed", function(e) { 
-          start = parseInt(e.getContent());
+          start = parseInt(e.getContent().starttime);
           setStep(start);
           bt_first.setEnabled(false); 
           bt_prev.setEnabled(false);
@@ -785,23 +751,22 @@ qx.Class.define("vigigraph.Application",
       }
       function getIndicators(graph)
       {
+        function addExportButton(label, ds) {
+          var menu_bt = new qx.ui.menu.Button(label);
+          menu_bt.title = label
+          menu_bt.addEventListener("execute",function(e) { getExport(ds); });
+          indicator_menu.add(menu_bt);
+        }
         var url= urls.getIndicators+"?graph="+graph;
         var r = new qx.io.remote.Request(url,"GET","application/json");
         r.addEventListener("completed", function(e) { 
           r = e.getContent().items;
-          var txt = "";
-          for(var i = 0; i <= r.length; i++)
+          for(var i = 0; i < r.length; i++)
           {
-            txt = "All";
-            if (i < r.length)
-            {
-              txt = r[i][0];
-            }
-            var menu_bt = new qx.ui.menu.Button(txt);
-            menu_bt.title = txt
-            menu_bt.addEventListener("execute",function(e) { getExport(this.title); });
-            indicator_menu.add(menu_bt);
+            // on pourrait vouloir traduire les indicateurs un jour, donc deux arguments...
+            addExportButton(r[i], r[i]);
           }
+          addExportButton(this.tr("All"), null);
         });
         r.send();
       }
@@ -840,87 +805,19 @@ qx.Class.define("vigigraph.Application",
       bt_print.addEventListener("execute",function(e) {
         var w3 = undefined;
 
-        function tempoFirePrint(Delay)
-        {
-          var a = setTimeout(tempoFallPrint, Delay);
+        var win = e.getTarget().getElement().parentNode.parentNode.parentNode;
+        var images = win.getElementsByTagName("img");
+        var src = null;
+        for (var i=0 ; i < images.length ; i++) {
+          if (images[i].parentNode.className != "graph") {
+            continue;
+          }
+          src = images[i].src
         }
-
-        function tempoFallPrint()
-        {
-          if ( w3 != undefined)
-          {
-            w3.close();
-          }
-        }
-
-        var nb = document.images.length;
-
-        // liste src
-        var index_p = -1;
-        var src_l = "";
-        var src_tab = new Array;
-        var j = 0;
-        for (i = 0; i < nb; i++)
-        {
-          src_l = document.images[i].src;
-
-          // correspondance selon parametres ?
-          pos = src_l.indexOf("/rrdgraph.py");
-          if (pos != -1)
-          {
-            pos = src_l.indexOf(host);
-            if (pos != -1)
-            {
-              var graph_l = graph;
-              var sc = " ";
-              var rc = "+";
-              while (graph_l.indexOf(sc) > 0)
-              {
-                graph_l = graph_l.replace(sc, rc);
-              }
-
-              var src_d = decodeURIComponent(src_l);
-              pos = src_d.indexOf(graph_l);
-            }
-            if (pos != -1)
-            {
-              pos = src_l.indexOf(start);
-            }
-            if (pos != -1)
-            {
-              pos = src_l.indexOf(duration);
-            }
-            if (pos != -1)
-            {
-              src_tab[j] = encodeURIComponent(src_l);
-              j += 1; 
-            }
-          }
-        }
-
-        // impression à partir nouvelle fenêtre
-        var lh = src_tab.length;
-        if (lh > 0)
-        {
-          var url = urls.graphsList;
-          url += "?";
-          for (i = 0; i < lh; i++)
-          {
-            if (i > 0)
-            {
-              url += "&";
-            }
-            url += i;
-            url += "=";
-            url += src_tab[i];
-          }
-
-          w3 = window.open(url);
-          w3.onload = function(){
-            w3.print();
-            wDelay = 1000;
-            tempoFirePrint(wDelay);
-          }
+        var print_url = urls.graphsList + "?1=" + encodeURIComponent(src);
+        w3 = window.open(print_url);
+        w3.onload = function(){
+          w3.print();
         }
       });
 
@@ -1005,7 +902,16 @@ qx.Class.define("vigigraph.Application",
         if (indicator != "")
         {
           var end = start + duration;
-          var url= urls.exportCSV+"/"+encodeURIComponent(host)+"/rrdgraph.py/exportCSV?host="+encodeURIComponent(host)+"&graphtemplate="+encodeURIComponent(graph)+"&ds="+encodeURIComponent(indicator)+"&start="+start+"&end="+end;
+          // @XXX: puisqu'on exporte soit tout le graphe soit un indicateur à
+          // la fois, on ne devrait pas avoir besoin de fournir le
+          // graphtemplate si on spécifie un ds.
+          var url= urls.exportCSV+"/"+encodeURIComponent(host)+"/export.csv?"
+                    +"host="+encodeURIComponent(host)
+                    +"&graphtemplate="+encodeURIComponent(graph)
+                    +"&start="+start+"&end="+end;
+          if (indicator) {
+            url += "&ds="+encodeURIComponent(indicator);
+          }
           w4 = window.open(url);
           w4.onload = function(){
           }

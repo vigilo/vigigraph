@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-23 13:14+0200\n"
+"POT-Creation-Date: 2010-04-30 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,7 +49,7 @@ msgid "Refresh"
 msgstr ""
 
 #: source/class/vigigraph/Application.js:142
-#: source/class/vigigraph/Application.js:274
+#: source/class/vigigraph/Application.js:235
 msgid "Search"
 msgstr ""
 
@@ -61,107 +61,111 @@ msgstr ""
 msgid "Show graph"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:291
+#: source/class/vigigraph/Application.js:252
 msgid "Host:"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:297
+#: source/class/vigigraph/Application.js:258
 msgid "Search for a host (\"*\" for all, 100 max)"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:298
+#: source/class/vigigraph/Application.js:259
 msgid "Graph:"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:304
+#: source/class/vigigraph/Application.js:265
 msgid "Search for a graph (\"*\" for all, 100 max)"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:310
+#: source/class/vigigraph/Application.js:271
 msgid "Graph"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:310
+#: source/class/vigigraph/Application.js:271
 msgid "Host"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:636
+#: source/class/vigigraph/Application.js:597
 msgid "\"%1\" Graph for host %2"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:641
+#: source/class/vigigraph/Application.js:602
 msgid "Reload graph"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:646
+#: source/class/vigigraph/Application.js:607
 msgid "Last 12 hours"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:647
+#: source/class/vigigraph/Application.js:608
 msgid "Last 24 hours"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:648
+#: source/class/vigigraph/Application.js:609
 msgid "Last 48 hours"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:649
+#: source/class/vigigraph/Application.js:610
 msgid "Last 7 days"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:650
+#: source/class/vigigraph/Application.js:611
 msgid "Last 14 days"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:651
+#: source/class/vigigraph/Application.js:612
 msgid "Last 3 months"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:652
+#: source/class/vigigraph/Application.js:613
 msgid "Last 6 months"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:653
+#: source/class/vigigraph/Application.js:614
 msgid "Last year"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:662
+#: source/class/vigigraph/Application.js:623
 msgid "Timeframe"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:663
+#: source/class/vigigraph/Application.js:624
 msgid "Timeframe menu"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:666
+#: source/class/vigigraph/Application.js:627
 msgid "Graph start"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:668
+#: source/class/vigigraph/Application.js:629
 msgid "Last section"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:670
+#: source/class/vigigraph/Application.js:631
 msgid "Next section"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:672
+#: source/class/vigigraph/Application.js:633
 msgid "Graph end"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:674
+#: source/class/vigigraph/Application.js:635
 msgid "Zoom in"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:676
+#: source/class/vigigraph/Application.js:637
 msgid "Zoom out"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:678
+#: source/class/vigigraph/Application.js:639
 msgid "Print Graph"
 msgstr ""
 
-#: source/class/vigigraph/Application.js:684
-#: source/class/vigigraph/Application.js:685
+#: source/class/vigigraph/Application.js:645
+#: source/class/vigigraph/Application.js:646
 msgid "Export CSV"
+msgstr ""
+
+#: source/class/vigigraph/Application.js:769
+msgid "All"
 msgstr ""

@@ -578,7 +578,7 @@ class RpcController(BaseController):
         """
 
         indicators = self.getListIndicators(graph)
-        indicators = [(ind.name, ind.idperfdatasource) for ind in indicators]
+        indicators = [ind.name for ind in indicators]
         return dict(items=indicators)
 
 
@@ -773,7 +773,7 @@ class RpcController(BaseController):
         indicators = []
         if graph is not None:
             indicators = DBSession.query \
-              (PerfDataSource.name, PerfDataSource.idperfdatasource) \
+              (PerfDataSource.name) \
               .join((GRAPH_PERFDATASOURCE_TABLE, \
               GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
               PerfDataSource.idperfdatasource)) \
