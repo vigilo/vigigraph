@@ -7,8 +7,9 @@ import paste.deploy
 import tg
 
 tg.config = paste.deploy.appconfig('config:%s/%s' % (os.getcwd(), 'development.ini'))
-from vigilo.models.configure import DBSession, configure_db
-configure_db(tg.config, 'sqlalchemy.')
+from vigilo.models.session import DBSession
+from vigilo.models.configure import configure_db
+configure_db(tg.config, 'sqlalchemy.', tg.config['db_basename'])
 
 def commit_on_exit():
     """
@@ -20,22 +21,15 @@ def commit_on_exit():
 
 atexit.register(commit_on_exit)
 
-from vigilo.models import Host, HostGroup
-from vigilo.models import LowLevelService, ServiceGroup
-from vigilo.models import PerfDataSource, Graph
-from vigilo.models import Ventilation, VigiloServer, Application
+from vigilo.models.tables import Host, SupItemGroup
+from vigilo.models.tables import LowLevelService
+from vigilo.models.tables import PerfDataSource, Graph
+from vigilo.models.tables import Ventilation, VigiloServer, Application
 
 
-# Groupe d'hôtes (HostGroup)
-def create_HostGroup(name, parent=None):
-    g = DBSession.query(HostGroup).filter(HostGroup.name == name).first()
-    if not g:
-        if parent:
-            g = HostGroup(name=name, idparent=parent.idgroup)
-        else:
-            g = HostGroup(name=name)
-        print "Ajout du Groupe: ", name
-        DBSession.add(g)
+# Groupe d'hôtes (SupItemGroup)
+def create_SupItemGroup(name, parent=None):
+    g = SupItemGroup.create(name, parent)
     return g
 
 # Hôte (Host)
@@ -61,13 +55,13 @@ def get_host(hostname):
             .filter(Host.name == hostname) \
             .first()
 
-# Ajout d'un hôte dans un groupe d'hôtes (Host -> HostGroup)
-def add_Host2HostGroup(host, group):
-    if host not in group.hosts:
+# Ajout d'un hôte dans un groupe d'hôtes (Host -> SupItemGroup)
+def add_Host2SupItemGroup(host, group):
+    if host not in group.get_hosts():
         print "Ajout de l'hote: %(h)s dans le group: %(g)s" % \
                 {'h': host.name,
                  'g': group.name}
-        group.hosts.append(host)
+        host.groups.append(group)
 
 def create_LowLevelService(hostname, servicename):
     s = DBSession.query(LowLevelService) \
@@ -84,25 +78,14 @@ def create_LowLevelService(hostname, servicename):
         DBSession.add(s)
     return s
 
-# Groupe de services (ServiceGroup)
-def create_ServiceGroup(name, parent=None):
-    g = DBSession.query(ServiceGroup).filter(ServiceGroup.name == name).first()
-    if not g:
-        if parent:
-            g = ServiceGroup(name=name, idparent=parent.idgroup)
-        else:
-            g = ServiceGroup(name=name)
-        print "Ajout du Groupe: ", name
-        DBSession.add(g)
-    return g
 
-# Ajout d'un hôte dans un groupe d'hôtes (Host -> HostGroup)
-def add_LowLevelService2ServiceGroup(service, group):
-    if service not in group.services:
+# Ajout d'un hôte dans un groupe d'hôtes (Host -> SupItemGroup)
+def add_LowLevelService2SupItemGroup(service, group):
+    if service not in group.get_services():
         print "Ajout du service: %(s)s dans le group: %(g)s" % \
                 {'s': service.servicename,
                  'g': group.name}
-        group.services.append(service)
+        service.groups.append(group)
 
 def _get_service(hostname, servicename):
     """ Return Host object from hostname, None if not available"""
@@ -112,9 +95,9 @@ def _get_service(hostname, servicename):
             .filter(LowLevelService.servicename == servicename) \
             .first()
 
-#Recherche de l'objet ServiceGroup à partir du name
-def get_ServiceGroup(name):
-    return DBSession.query(ServiceGroup).filter(ServiceGroup.name == name).first()
+#Recherche de l'objet SupItemGroup à partir du name
+def get_SupItemGroup(name):
+    return DBSession.query(SupItemGroup).filter(SupItemGroup.name == name).first()
 
 #Recherche de l'objet LowLevelService à partir du name
 def get_LowLevelService(hostname, servicename):
@@ -152,7 +135,7 @@ def create_ds(name, type, service, label, graphs):
 def create_Server(name, description):
     s = DBSession.query(VigiloServer).filter(VigiloServer.name == name).first()
     if not s:
-        s = VigiloServer(name=name, description=description)
+        s = VigiloServer(name=name)
         print "Ajout du Server Vigilo: %s - %s" % (name, description)
         DBSession.add(s)
     return s
@@ -179,11 +162,11 @@ def create_Ventilation(host, server, application):
     return v
 
 
-hg1 = create_HostGroup(u'Serveurs')
-hg2 = create_HostGroup(u'Telecoms')
-hg3 = create_HostGroup(u'Serveurs Linux', hg1)
-hg4 = create_HostGroup(u'NORTEL', hg2)
-hg5 = create_HostGroup(u'CISCO', hg2)
+hg1 = create_SupItemGroup(u'Serveurs')
+hg2 = create_SupItemGroup(u'Telecoms')
+hg3 = create_SupItemGroup(u'Serveurs Linux', hg1)
+hg4 = create_SupItemGroup(u'NORTEL', hg2)
+hg5 = create_SupItemGroup(u'CISCO', hg2)
 
 h1 = create_Host(u'proto4.si.c-s.fr')
 h2 = create_Host(u'messagerie.si.c-s.fr')
@@ -191,18 +174,18 @@ h3 = create_Host(u'testnortel.si.c-s.fr')
 h4 = create_Host(u'proto6.si.c-s.fr')
 h5 = create_Host(u'par.linux0')
 
-add_Host2HostGroup(h1, hg3)
-add_Host2HostGroup(h2, hg3)
-add_Host2HostGroup(h3, hg4)
-add_Host2HostGroup(h4, hg5)
-add_Host2HostGroup(h4, hg3)
-add_Host2HostGroup(h5, hg3)
+add_Host2SupItemGroup(h1, hg3)
+add_Host2SupItemGroup(h2, hg3)
+add_Host2SupItemGroup(h3, hg4)
+add_Host2SupItemGroup(h4, hg5)
+add_Host2SupItemGroup(h4, hg3)
+add_Host2SupItemGroup(h5, hg3)
 
-sg1 = create_ServiceGroup(u'Général')
-sg2 = create_ServiceGroup(u'Interface Réseau')
-sg3 = create_ServiceGroup(u'Performance')
-sg4 = create_ServiceGroup(u'Partitions')
-sg5 = create_ServiceGroup(u'Processus')
+sg1 = create_SupItemGroup(u'Général')
+sg2 = create_SupItemGroup(u'Interface Réseau')
+sg3 = create_SupItemGroup(u'Performance')
+sg4 = create_SupItemGroup(u'Partitions')
+sg5 = create_SupItemGroup(u'Processus')
 
 s1 = create_LowLevelService(h1.name, u'Interface eth0')
 s2 = create_LowLevelService(h1.name, u'Interface eth1')
@@ -210,12 +193,12 @@ s3 = create_LowLevelService(h1.name, u'Interface série')
 s4 = create_LowLevelService(h4.name, u'Interface')
 s5 = create_LowLevelService(h5.name, u'Interface Linux')
 
-add_LowLevelService2ServiceGroup(s1, sg2)
-add_LowLevelService2ServiceGroup(s2, sg2)
-add_LowLevelService2ServiceGroup(s3, sg1)
-add_LowLevelService2ServiceGroup(s4, sg2)
-add_LowLevelService2ServiceGroup(s5, sg2)
-add_LowLevelService2ServiceGroup(s5, sg3)
+add_LowLevelService2SupItemGroup(s1, sg2)
+add_LowLevelService2SupItemGroup(s2, sg2)
+add_LowLevelService2SupItemGroup(s3, sg1)
+add_LowLevelService2SupItemGroup(s4, sg2)
+add_LowLevelService2SupItemGroup(s5, sg2)
+add_LowLevelService2SupItemGroup(s5, sg3)
 
 gr1 = create_graph(u'graph1',u'Graph1', None)
 gr2 = create_graph(u'graph2',u'Graph2', None)
