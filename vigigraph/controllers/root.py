@@ -4,8 +4,9 @@
 
 import logging
 from tg import expose, flash, require, request, redirect
-from pylons.i18n import ugettext as _
-from repoze.what.predicates import Any, not_anonymous
+from pylons.i18n import ugettext as _, lazy_ugettext as l_
+from repoze.what.predicates import Any, All, not_anonymous, \
+                                    has_permission, in_group
 
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.controllers.error import ErrorController
@@ -27,7 +28,14 @@ class RootController(BaseController):
     rrdgraph = ProxyController('rrdgraph', '/rrdgraph/')
 
     @expose('index.html')
-    @require(Any(not_anonymous(), msg=_("You need to be authenticated")))
+    @require(All(
+        not_anonymous(msg=l_("You need to be authenticated")),
+        Any(
+            in_group('managers'),
+            has_permission('vigigraph-read',
+                msg=l_("You don't have read access on VigiGraph")),
+        )
+    ))
     def index(self):
         """Handle the front-page."""
         return dict(page='index')
@@ -71,3 +79,4 @@ class RootController(BaseController):
             })
         flash(_('We hope to see you soon!'))
         redirect(came_from)
+

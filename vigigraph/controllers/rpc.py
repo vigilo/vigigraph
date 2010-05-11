@@ -14,7 +14,8 @@ from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from tg import expose, request, redirect, tmpl_context, \
                 config, validate, flash
 from tg.decorators import paginate
-from repoze.what.predicates import not_anonymous
+from repoze.what.predicates import not_anonymous, has_permission, \
+                                    in_group, Any, All
 from formencode import validators, schema
 from sqlalchemy import or_
 
@@ -47,7 +48,14 @@ class RpcController(BaseController):
     """
 
     # L'accès à ce contrôleur nécessite d'être identifié.
-    allow_only = not_anonymous(l_("You need to be authenticated"))
+    allow_only = All(
+        not_anonymous(msg=l_("You need to be authenticated")),
+        Any(
+            in_group('managers'),
+            has_permission('vigigraph-read',
+                msg=l_("You don't have read access on VigiGraph")),
+        ),
+    )
 
     presets = [
         {"caption" : _("Last %d hours") %  12, "duration" : 43200},
@@ -742,7 +750,7 @@ class RpcController(BaseController):
                         LowLevelService.idservice,
                 )),
             ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
-            ).filter(Host.name.like(query+'%')
+            ).filter(Host.name.like(query + '%')
             ).order_by(
                 Host.name.asc(),
             )
