@@ -19,16 +19,7 @@ from vigilo.turbogears import VigiloAppConfig
 from vigigraph.lib import app_globals, helpers
 
 base_config = VigiloAppConfig('vigigraph')
-base_config.renderers = []
-
 base_config.package = vigigraph
-
-#Set the default renderer
-base_config.default_renderer = 'genshi'
-base_config.renderers.append('genshi')
-
-#Configure the base SQLALchemy Setup
-base_config.use_sqlalchemy = True
 
 # Configure the authentication backend
 base_config.auth_backend = 'sqlalchemy'
