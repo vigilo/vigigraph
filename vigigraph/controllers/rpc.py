@@ -92,15 +92,20 @@ class RpcController(BaseController):
         user = get_current_user()
         if user is None:
             return dict(items=[])
-        supitemgroups = user.supitemgroups()
 
         groups_with_parents = DBSession.query(
                 GroupHierarchy.idparent,
-            ).distinct(
-            ).filter(GroupHierarchy.idchild.in_(supitemgroups)
-            ).all()
-        groups_with_parents = [g.idparent for g in groups_with_parents]
+            ).distinct()
 
+        # Les managers ont accès à tout.
+        # Les autres ont un accès restreint.
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            supitemgroups = user.supitemgroups()
+            groups_with_parents = groups_with_parents.filter(
+                GroupHierarchy.idchild.in_(supitemgroups))
+
+        groups_with_parents = [g.idparent for g in groups_with_parents.all()]
         children = DBSession.query(
                 SupItemGroup
             ).distinct(
@@ -143,7 +148,6 @@ class RpcController(BaseController):
         user = get_current_user()
         if user is None:
             return dict(items=[])
-        supitemgroups = user.supitemgroups()
 
         hostgroups = DBSession.query(
                 SupItemGroup.name,
@@ -153,11 +157,17 @@ class RpcController(BaseController):
                     SupItemGroup.idgroup),
             ).filter(GroupHierarchy.idparent == maingroupid
             ).filter(GroupHierarchy.hops == 1
-            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
-            ).order_by(
-                SupItemGroup.name.asc(),
-            ).all()
-        hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups]
+            ).order_by(SupItemGroup.name.asc())
+
+        # Les managers ont accès à tout.
+        # Les autres ont un accès restreint.
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            supitemgroups = user.supitemgroups()
+            hostgroups = hostgroups.filter(
+                SupItemGroup.idgroup.in_(supitemgroups))
+
+        hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups.all()]
         hostgroups.insert(0, (_('No subgroup'), str(maingroupid)))
         return dict(items=hostgroups)
 
@@ -185,15 +195,20 @@ class RpcController(BaseController):
         user = get_current_user()
         if user is None:
             return dict(items=[])
-        supitemgroups = user.supitemgroups()
 
         groups_with_parents = DBSession.query(
                 GroupHierarchy.idparent,
-            ).distinct(
-            ).filter(GroupHierarchy.idchild.in_(supitemgroups)
-            ).all()
-        groups_with_parents = [g.idparent for g in groups_with_parents]
+            ).distinct()
 
+        # Les managers ont accès à tout.
+        # Les autres ont un accès restreint.
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            supitemgroups = user.supitemgroups()
+            groups_with_parents = groups_with_parents.filter(
+                GroupHierarchy.idchild.in_(supitemgroups))
+
+        groups_with_parents = [g.idparent for g in groups_with_parents.all()]
         hosts = DBSession.query(
                 Host.name,
                 Host.idhost,
@@ -239,7 +254,6 @@ class RpcController(BaseController):
         user = get_current_user()
         if user is None:
             return dict(items=[])
-        supitemgroups = user.supitemgroups()
 
         graphgroups = DBSession.query(
                 GraphGroup.name,
@@ -261,12 +275,17 @@ class RpcController(BaseController):
                         LowLevelService.idservice,
                 )),
             ).filter(LowLevelService.idhost == idhost
-            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
-            ).order_by(
-                GraphGroup.name.asc()
-            ).all()
+            ).order_by(GraphGroup.name.asc())
+
+        # Les managers ont accès à tout.
+        # Les autres ont un accès restreint.
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            supitemgroups = user.supitemgroups()
+            graphgroups = graphgroups.filter(
+                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
         
-        graphgroups = [(gg.name, str(gg.idgroup)) for gg in graphgroups]
+        graphgroups = [(gg.name, str(gg.idgroup)) for gg in graphgroups.all()]
         return dict(items=graphgroups)
 
     class GraphsSchema(schema.Schema):
@@ -294,7 +313,6 @@ class RpcController(BaseController):
         user = get_current_user()
         if user is None:
             return dict(items=[])
-        supitemgroups = user.supitemgroups()
 
         graphs = DBSession.query(
                 Graph.name,
@@ -317,12 +335,17 @@ class RpcController(BaseController):
                 )),
             ).filter(GraphGroup.idgroup == idgraphgroup
             ).filter(LowLevelService.idhost == idhost
-            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
-            ).order_by(
-                Graph.name.asc()
-            ).all()
+            ).order_by(Graph.name.asc())
 
-        graphs = [(pds.name, str(pds.idgraph)) for pds in graphs]
+        # Les managers ont accès à tout.
+        # Les autres ont un accès restreint.
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            supitemgroups = user.supitemgroups()
+            graphs = graphs.filter(
+                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
+
+        graphs = [(pds.name, str(pds.idgraph)) for pds in graphs.all()]
         return dict(items=graphs)
 
     class SearchHostAndGraphSchema(schema.Schema):
@@ -352,11 +375,10 @@ class RpcController(BaseController):
         @rtype: document json (sous forme de dict)
         """
         user = get_current_user()
+        items = []
+
         if user is None:
             return dict(items=[])
-        supitemgroups = user.supitemgroups()
-
-        items = []
 
         # On a un nom d'indicateur, mais pas de nom d'hôte,
         # on considère que l'utilisateur veut tous les indicateurs
@@ -387,7 +409,6 @@ class RpcController(BaseController):
                     )),
                 ).filter(Host.name.ilike('%' + host + '%')
                 ).filter(Graph.name.ilike('%' + graph + '%')
-                ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
                 ).order_by(
                     Host.name.asc(),
                     Graph.name.asc(),
@@ -409,8 +430,15 @@ class RpcController(BaseController):
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                         Host.idhost),
                 ).filter(Host.name.ilike('%' + host + '%')
-                ).filter(SUPITEM_GROUP_TABLE.c.idsupitem.in_(supitemgroups)
                 ).order_by(Host.name.asc())
+
+        # Les managers ont accès à tout.
+        # Les autres ont un accès restreint.
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            supitemgroups = user.supitemgroups()
+            items = items.filter(
+                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
 
         items = items.limit(100).all()
         if graph is None:
@@ -630,7 +658,6 @@ class RpcController(BaseController):
         if user is None:
             return dict(host=host, start=start, duration=duration,
                         presets=self.presets, graphs=[])
-        supitemgroups = user.supitemgroups()
 
         # Récupération de la liste des noms des graphes,
         # avec vérification des permissions de l'utilisateur.
@@ -652,9 +679,17 @@ class RpcController(BaseController):
                         LowLevelService.idservice,
                     SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
                 ))
-            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
-            ).all()
+            )
 
+        # Les managers ont accès à tout.
+        # Les autres ont un accès restreint.
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            supitemgroups = user.supitemgroups()
+            graphs = graphs.filter(
+                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
+
+        graphs = graphs.all()
         return dict(host=host, start=start, duration=duration,
                     presets=self.presets, graphs=graphs)
 
@@ -735,7 +770,6 @@ class RpcController(BaseController):
         user = get_current_user()
         if user is None:
             return dict(items=[])
-        supitemgroups = user.supitemgroups()
 
         # Récupère les hôtes auxquels l'utilisateur a réellement accès.
         hosts = DBSession.query(
@@ -749,11 +783,19 @@ class RpcController(BaseController):
                     SUPITEM_GROUP_TABLE.c.idsupitem ==
                         LowLevelService.idservice,
                 )),
-            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups)
             ).filter(Host.name.like(query + '%')
             ).order_by(
                 Host.name.asc(),
             )
+
+        # Les managers ont accès à tout.
+        # Les autres ont un accès restreint.
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            supitemgroups = user.supitemgroups()
+            hosts = hosts.filter(
+                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
+
         return dict(hosts=hosts)
 
     # VIGILO_EXIG_VIGILO_PERF_0030:Moteur de recherche des graphes
