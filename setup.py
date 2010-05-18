@@ -60,16 +60,18 @@ setup(
         ],
     },
 
-    entry_points="""
-    [paste.app_factory]
-    main = vigigraph.config.middleware:make_app
+    entry_points={
+        'paste.app_factory': [
+            'main = vigigraph.config.middleware:make_app',
+        ],
+        'paste.app_install': [
+            'main = pylons.util:PylonsInstaller',
+        ],
+        'vigilo.models': [
+            'populate_db = vigigraph.websetup:populate_db',
+        ],
+    },
 
-    [paste.app_install]
-    main = pylons.util:PylonsInstaller
-
-    [console_scripts]
-    vigigraph-init-db = vigigraph.websetup:init_db
-    """,
     data_files=[
         (os.path.join(sysconfdir, 'vigilo/vigigraph/'), [
             'deployment/vigigraph.conf',

@@ -24,16 +24,18 @@ class RootController(BaseController):
     """
     error = ErrorController()
     rpc = RpcController()
-    nagios = ProxyController('nagios', '/nagios/')
-    rrdgraph = ProxyController('rrdgraph', '/rrdgraph/')
+    nagios = ProxyController('nagios', '/nagios/',
+        not_anonymous(l_('You need to be authenticated')))
+    rrdgraph = ProxyController('rrdgraph', '/rrdgraph/',
+        not_anonymous(l_('You need to be authenticated')))
 
     @expose('index.html')
     @require(All(
         not_anonymous(msg=l_("You need to be authenticated")),
         Any(
             in_group('managers'),
-            has_permission('vigigraph-read',
-                msg=l_("You don't have read access on VigiGraph")),
+            has_permission('vigigraph-access',
+                msg=l_("You don't have access on VigiGraph")),
         )
     ))
     def index(self):

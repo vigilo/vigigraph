@@ -52,8 +52,8 @@ class RpcController(BaseController):
         not_anonymous(msg=l_("You need to be authenticated")),
         Any(
             in_group('managers'),
-            has_permission('vigigraph-read',
-                msg=l_("You don't have read access on VigiGraph")),
+            has_permission('vigigraph-access',
+                msg=l_("You don't have access on VigiGraph")),
         ),
     )
 
@@ -101,7 +101,7 @@ class RpcController(BaseController):
         # Les autres ont un accès restreint.
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
-            supitemgroups = user.supitemgroups()
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             groups_with_parents = groups_with_parents.filter(
                 GroupHierarchy.idchild.in_(supitemgroups))
 
@@ -163,7 +163,7 @@ class RpcController(BaseController):
         # Les autres ont un accès restreint.
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
-            supitemgroups = user.supitemgroups()
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             hostgroups = hostgroups.filter(
                 SupItemGroup.idgroup.in_(supitemgroups))
 
@@ -204,7 +204,7 @@ class RpcController(BaseController):
         # Les autres ont un accès restreint.
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
-            supitemgroups = user.supitemgroups()
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             groups_with_parents = groups_with_parents.filter(
                 GroupHierarchy.idchild.in_(supitemgroups))
 
@@ -281,7 +281,7 @@ class RpcController(BaseController):
         # Les autres ont un accès restreint.
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
-            supitemgroups = user.supitemgroups()
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             graphgroups = graphgroups.filter(
                 SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
         
@@ -341,7 +341,7 @@ class RpcController(BaseController):
         # Les autres ont un accès restreint.
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
-            supitemgroups = user.supitemgroups()
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             graphs = graphs.filter(
                 SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
 
@@ -436,7 +436,7 @@ class RpcController(BaseController):
         # Les autres ont un accès restreint.
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
-            supitemgroups = user.supitemgroups()
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             items = items.filter(
                 SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
 
@@ -685,7 +685,7 @@ class RpcController(BaseController):
         # Les autres ont un accès restreint.
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
-            supitemgroups = user.supitemgroups()
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             graphs = graphs.filter(
                 SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
 
@@ -792,7 +792,7 @@ class RpcController(BaseController):
         # Les autres ont un accès restreint.
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
-            supitemgroups = user.supitemgroups()
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             hosts = hosts.filter(
                 SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
 
