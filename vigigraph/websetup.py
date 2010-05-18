@@ -23,10 +23,11 @@ def populate_db(bind):
 
     if installed:
         print "VigiGraph has already been installed"
-    else:
-        DBSession.add(tables.Permission(
-            permission_name=u'vigigraph-access',
-            description=u'Gives access to VigiGraph',
-        ))
-        DBSession.flush()
+        return
+
+    DBSession.add(tables.Permission(
+        permission_name=u'vigigraph-access',
+        description=u'Gives access to VigiGraph',
+    ))
+    DBSession.flush()
 
