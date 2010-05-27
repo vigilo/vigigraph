@@ -39,20 +39,20 @@
 ************************************************************************ */
 
 var urls = {
-    "maingroups": "/rpc/maingroups",
-    "hostgroups": "/rpc/hostgroups",
-    "hosts": "/rpc/hosts",
-    "graphgroups": "/rpc/graphgroups",
-    "graphs": "/rpc/graphs",
-    "selectHostAndGraph": "/rpc/selectHostAndGraph",
-    "searchHostAndGraph": "/rpc/searchHostAndGraph",
-    "supPage": "/nagios/",
-    "getImage": "/rrdgraph/",
-    "getStartTime": "/rrdgraph/",
-    "graphsList": "/rpc/graphsList",
-    "tempoDelayRefresh": "/rpc/tempoDelayRefresh",
-    "getIndicators": "/rpc/getIndicators",
-    "exportCSV": "/rrdgraph/"
+    "maingroups": "rpc/maingroups",
+    "hostgroups": "rpc/hostgroups",
+    "hosts": "rpc/hosts",
+    "graphgroups": "rpc/graphgroups",
+    "graphs": "rpc/graphs",
+    "selectHostAndGraph": "rpc/selectHostAndGraph",
+    "searchHostAndGraph": "rpc/searchHostAndGraph",
+    "supPage": "nagios/",
+    "getImage": "rrdgraph/",
+    "getStartTime": "rrdgraph/",
+    "graphsList": "rpc/graphsList",
+    "tempoDelayRefresh": "rpc/tempoDelayRefresh",
+    "getIndicators": "rpc/getIndicators",
+    "exportCSV": "rrdgraph/"
 };
 
 /**
