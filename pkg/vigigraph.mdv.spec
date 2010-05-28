@@ -19,8 +19,7 @@ BuildRequires:   python-babel
 Requires:   python >= 2.5
 Requires:   python-setuptools
 Requires:   vigilo-turbogears
-Requires:   python-tw.mootools
-Requires:   python-tw.dynforms
+Requires:   apache-mod_wsgi
 
 Buildarch:  noarch
 

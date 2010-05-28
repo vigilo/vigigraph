@@ -25,14 +25,6 @@ setup(
     #url='',
     license='http://www.gnu.org/licenses/gpl-2.0.html',
     install_requires=[
-        "tg.devtools",
-        "TurboGears2 >= 2.0b7",
-        "Catwalk >= 2.0.2",
-        "Babel >=0.9.4",
-        #can be removed iif use_toscawidgets = False
-        "ToscaWidgets >= 0.9.7.1",
-        "vigilo-models",
-        "vigilo-themes-default",
         "vigilo-turbogears",
         ],
     paster_plugins=['PasteScript', 'Pylons', 'TurboGears2', 'tg.devtools'],
