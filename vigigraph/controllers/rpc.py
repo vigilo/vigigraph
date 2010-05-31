@@ -23,7 +23,7 @@ from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import LowLevelService, Host
+from vigilo.models.tables import Host
 from vigilo.models.tables import SupItemGroup
 from vigilo.models.tables import PerfDataSource
 from vigilo.models.tables import Graph, GraphGroup
@@ -213,14 +213,9 @@ class RpcController(BaseController):
                 Host.name,
                 Host.idhost,
             ).distinct(
-            ).outerjoin(
-                (LowLevelService, LowLevelService.idhost == Host.idhost),
             ).join(
-                (SUPITEM_GROUP_TABLE, or_(
-                    SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
-                    SUPITEM_GROUP_TABLE.c.idsupitem ==
-                        LowLevelService.idservice,
-                )),
+                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
+                    Host.idhost),
             ).filter(SUPITEM_GROUP_TABLE.c.idgroup == othergroupid
             ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(groups_with_parents)
             ).order_by(
@@ -267,14 +262,9 @@ class RpcController(BaseController):
                     GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
                 (PerfDataSource, PerfDataSource.idperfdatasource == \
                     GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
-                (LowLevelService, LowLevelService.idservice == \
-                    PerfDataSource.idservice),
-                (SUPITEM_GROUP_TABLE, or_(
-                    SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idhost,
-                    SUPITEM_GROUP_TABLE.c.idsupitem ==
-                        LowLevelService.idservice,
-                )),
-            ).filter(LowLevelService.idhost == idhost
+                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
+                    PerfDataSource.idhost),
+            ).filter(PerfDataSource.idhost == idhost
             ).order_by(GraphGroup.name.asc())
 
         # Les managers ont accès à tout.
@@ -326,15 +316,10 @@ class RpcController(BaseController):
                     GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
                 (PerfDataSource, PerfDataSource.idperfdatasource == \
                     GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
-                (LowLevelService, LowLevelService.idservice == \
-                    PerfDataSource.idservice),
-                (SUPITEM_GROUP_TABLE, or_(
-                    SUPITEM_GROUP_TABLE.c.idsupitem == LowLevelService.idhost,
-                    SUPITEM_GROUP_TABLE.c.idsupitem ==
-                        LowLevelService.idservice,
-                )),
+                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
+                    PerfDataSource.idhost),
             ).filter(GraphGroup.idgroup == idgraphgroup
-            ).filter(LowLevelService.idhost == idhost
+            ).filter(PerfDataSource.idhost == idhost
             ).order_by(Graph.name.asc())
 
         # Les managers ont accès à tout.
@@ -394,19 +379,14 @@ class RpcController(BaseController):
                     Host.name.label('hostname'),
                     Graph.name.label('graphname'),
                 ).distinct().join(
-                    (LowLevelService, LowLevelService.idhost == Host.idhost),
-                    (PerfDataSource, PerfDataSource.idservice == \
-                        LowLevelService.idservice),
+                    (PerfDataSource, PerfDataSource.idhost == Host.idhost),
                     (GRAPH_PERFDATASOURCE_TABLE, \
                         GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
                         PerfDataSource.idperfdatasource),
                     (Graph, Graph.idgraph == \
                         GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
-                    (SUPITEM_GROUP_TABLE, or_(
-                        SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
-                        SUPITEM_GROUP_TABLE.c.idsupitem ==
-                            LowLevelService.idservice,
-                    )),
+                    (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
+                        Host.idhost),
                 ).filter(Host.name.ilike('%' + host + '%')
                 ).filter(Graph.name.ilike('%' + graph + '%')
                 ).order_by(
@@ -669,16 +649,9 @@ class RpcController(BaseController):
                     GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
                 (PerfDataSource, PerfDataSource.idperfdatasource ==
                     GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
-                (LowLevelService, LowLevelService.idservice ==
-                    PerfDataSource.idservice),
-            ).outerjoin(
-                (Host, Host.idhost == LowLevelService.idhost),
-            ).join(
-                (SUPITEM_GROUP_TABLE, or_(
-                    SUPITEM_GROUP_TABLE.c.idsupitem ==
-                        LowLevelService.idservice,
-                    SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
-                ))
+                (Host, Host.idhost == PerfDataSource.idhost),
+                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
+                    Host.idhost),
             )
 
         # Les managers ont accès à tout.
@@ -775,14 +748,9 @@ class RpcController(BaseController):
         hosts = DBSession.query(
                 Host.name,
             ).distinct(
-            ).outerjoin(
-                (LowLevelService, LowLevelService.idhost == Host.idhost),
             ).join(
-                (SUPITEM_GROUP_TABLE, or_(
-                    SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost,
-                    SUPITEM_GROUP_TABLE.c.idsupitem ==
-                        LowLevelService.idservice,
-                )),
+                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
+                    Host.idhost),
             ).filter(Host.name.like(query + '%')
             ).order_by(
                 Host.name.asc(),
@@ -822,14 +790,15 @@ class RpcController(BaseController):
 
         indicators = []
         if graph is not None:
-            indicators = DBSession.query \
-              (PerfDataSource.name) \
-              .join((GRAPH_PERFDATASOURCE_TABLE, \
-              GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
-              PerfDataSource.idperfdatasource)) \
-              .join((Graph, \
-              Graph.idgraph == GRAPH_PERFDATASOURCE_TABLE.c.idgraph)) \
-              .filter(Graph.name == graph) \
-              .all()
+            indicators = DBSession.query(
+                    PerfDataSource.name
+                ).join(
+                    (GRAPH_PERFDATASOURCE_TABLE, \
+                        GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
+                        PerfDataSource.idperfdatasource),
+                    (Graph, Graph.idgraph == \
+                        GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
+                ).filter(Graph.name == graph
+                ).all()
         return indicators
 
