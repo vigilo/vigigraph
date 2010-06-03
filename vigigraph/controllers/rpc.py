@@ -518,6 +518,10 @@ class RpcController(BaseController):
                     ).all()
 
         hostgroups = [hg.name for hg in selected_hostgroups]
+        # @FIXME: Ce test est nécessaire tant que l'interface Qooxdoo
+        # monolithique est conservée (ie: 2 niveaux de profondeur figés).
+        if len(hostgroups) != 2:
+            hostgroups.append(_('No subgroup'))
         graphgroups = [gg.name for gg in selected_graphgroups]
         return dict(items=[hostgroups, graphgroups])        
 
