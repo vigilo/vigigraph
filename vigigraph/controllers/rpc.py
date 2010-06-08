@@ -578,6 +578,7 @@ class RpcController(BaseController):
 
     class GetIndicatorsSchema(schema.Schema):
         """Schéma de validation pour la méthode L{getIndicators}."""
+        host = validators.String(not_empty=True)
         graph = validators.String(not_empty=True)
         nocache = validators.String(if_missing=None)
 
@@ -586,7 +587,7 @@ class RpcController(BaseController):
         validators = GetIndicatorsSchema(),
         error_handler = process_form_errors)
     @expose('json')
-    def getIndicators(self, graph, nocache):
+    def getIndicators(self, host, graph, nocache):
         """
         Liste d indicateurs associes a un graphe
 
@@ -596,8 +597,8 @@ class RpcController(BaseController):
         @return: dictionnaire des indicateurs d un graphe
         @rtype: document json (sous forme de dict)
         """
-
-        indicators = self.getListIndicators(graph)
+        
+        indicators = self.getListIndicators(host, graph)
         indicators = [ind.name for ind in indicators]
         return dict(items=indicators)
 
@@ -781,7 +782,7 @@ class RpcController(BaseController):
         """
         return dict()
 
-    def getListIndicators(self, graph=None):
+    def getListIndicators(self, host, graph):
         """
         Liste d indicateurs associes a un graphe
 
@@ -796,13 +797,16 @@ class RpcController(BaseController):
         if graph is not None:
             indicators = DBSession.query(
                     PerfDataSource.name
+                ).distinct(
                 ).join(
                     (GRAPH_PERFDATASOURCE_TABLE, \
                         GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
                         PerfDataSource.idperfdatasource),
                     (Graph, Graph.idgraph == \
                         GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
+                    (Host, Host.idhost == PerfDataSource.idhost),
                 ).filter(Graph.name == graph
+                ).filter(Host.name == host
                 ).all()
         return indicators
 

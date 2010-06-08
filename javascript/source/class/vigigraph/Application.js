@@ -749,7 +749,7 @@ qx.Class.define("vigigraph.Application",
         });
         r.send();
       }
-      function getIndicators(graph)
+      function getIndicators(host, graph)
       {
         function addExportButton(label, ds) {
           var menu_bt = new qx.ui.menu.Button(label);
@@ -757,7 +757,7 @@ qx.Class.define("vigigraph.Application",
           menu_bt.addEventListener("execute",function(e) { getExport(ds); });
           indicator_menu.add(menu_bt);
         }
-        var url= urls.getIndicators+"?graph="+graph;
+        var url= urls.getIndicators+"?host"+host+"&graph="+graph;
         var r = new qx.io.remote.Request(url,"GET","application/json");
         r.addEventListener("completed", function(e) { 
           r = e.getContent().items;
@@ -777,7 +777,7 @@ qx.Class.define("vigigraph.Application",
       duration = 24 * 3600;
       setUrl(start, duration);
       loadImage(url,l);
-      getIndicators(graph);
+      getIndicators(host, graph);
 
       // Events
       tempoDelayRefresh();
