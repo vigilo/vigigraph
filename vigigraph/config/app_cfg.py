@@ -41,6 +41,3 @@ base_config.sa_auth.post_logout_url = '/post_logout'
 # Settings specific to Vigigraph #
 ##################################
 
-# Vigigraph version
-base_config['vigigraph_version'] = u'0.1'
-
