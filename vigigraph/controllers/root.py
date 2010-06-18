@@ -35,7 +35,7 @@ class RootController(BaseController):
         Any(
             in_group('managers'),
             has_permission('vigigraph-access',
-                msg=l_("You don't have access on VigiGraph")),
+                msg=l_("You don't have access to VigiGraph")),
         )
     ))
     def index(self):
