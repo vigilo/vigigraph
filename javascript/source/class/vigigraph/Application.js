@@ -594,7 +594,13 @@ qx.Class.define("vigigraph.Application",
       var duration;
       var fakeIncr=0;
       // Create UI elements
-      var w=new qx.ui.window.Window(this.tr("\"%1\" Graph for host %2", graph, host), "icon/16/apps/accessories-time-tracking.png");
+      var ellipse_host;
+      if (host.length > 35)
+        ellipse_host = host.substring(0, 15) + '(...)' + host.substring(host.length - 15, host.length);
+      else
+        ellipse_host = host;
+      var w=new qx.ui.window.Window(this.tr("Graph for \"%1\" on \"%2\"", graph, ellipse_host),
+        "icon/16/apps/accessories-time-tracking.png");
       var l=new qx.ui.layout.FlowLayout;
       l.set({"paddingTop": 26 });
       var l2=new qx.ui.layout.HorizontalBoxLayout;
