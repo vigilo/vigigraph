@@ -387,8 +387,8 @@ class RpcController(BaseController):
                         GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                         Host.idhost),
-                ).filter(Host.name.ilike('%' + host + '%')
-                ).filter(Graph.name.ilike('%' + graph + '%')
+                ).filter(Host.name.ilike(host)
+                ).filter(Graph.name.ilike(graph)
                 ).order_by(
                     Host.name.asc(),
                     Graph.name.asc(),
@@ -409,7 +409,7 @@ class RpcController(BaseController):
                 ).join(
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                         Host.idhost),
-                ).filter(Host.name.ilike('%' + host + '%')
+                ).filter(Host.name.ilike(host)
                 ).order_by(Host.name.asc())
 
         # Les managers ont accès à tout.
