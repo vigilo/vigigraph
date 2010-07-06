@@ -454,6 +454,9 @@ class RpcController(BaseController):
         liste permet d'assurer facilement une évolution vers des groupes
         de graphes récursifs.
         """
+        user = get_current_user()
+        if user is None:
+            return dict(items=[[], []])
 
         # Ce cas ne devrait pas se produire, mais on tente
         # d'avoir un comportement gracieux malgré tout.
@@ -462,10 +465,11 @@ class RpcController(BaseController):
 
         selected_hostgroups = []
         selected_graphgroups = []
+        is_manager = in_group('managers').is_met(request.environ)
 
-        # @TODO: ajouter la gestion des permissions au code qui suit.
-        # Pour le moment, la récupération de idsupitemgroup & idgraphgroup
-        # ne prend pas en compte les permissions réelles de l'utilisateur.
+        supitemgroups = []
+        if not is_manager:
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
 
         if host:
             # Sélectionne l'identifiant du premier SupItemGroup auquel
@@ -476,8 +480,14 @@ class RpcController(BaseController):
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idgroup == \
                         SupItemGroup.idgroup),
                     (Host, Host.idhost == SUPITEM_GROUP_TABLE.c.idsupitem),
-                ).filter(Host.name == host
-                ).scalar()
+                ).filter(Host.name == host)
+
+            # On prend en compte les permissions de l'utilisateur.
+            if not is_manager:
+                idsuitemgroup = idsupitemgroup.filter(
+                    SupItemGroup.idgroup.in_(supitemgroups))
+
+            idsupitemgroup = idsupitemgroup.scalar()
 
             # Si on a trouvé un tel groupe, on renvoie les noms des
             # groupes de la hiérarchie à sélectionner pour arriver
@@ -498,18 +508,24 @@ class RpcController(BaseController):
             # cette fois les GraphGroup à la place des SupItemGroup.
             idgraphgroup = DBSession.query(
                     GraphGroup.idgroup,
-                ).distinct().join(
+                ).join(
                     (GRAPH_GROUP_TABLE, GRAPH_GROUP_TABLE.c.idgroup == \
                         GraphGroup.idgroup),
                     (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
-                ).filter(Graph.name == graph
-                ).scalar()
+                ).filter(Graph.name == graph)
+
+            # On prend en compte les permissions de l'utilisateur.
+            if not is_manager:
+                idgraphgroup = idgraphgroup.filter(
+                    GraphGroup.idgroup.in_(supitemgroups))
+
+            idgraphgroup = idgraphgroup.scalar()
 
             # Même principe que pour l'hôte.
             if idgraphgroup is not None:
                 selected_graphgroups = DBSession.query(
                         GraphGroup.name,
-                    ).distinct().join(
+                    ).join(
                         (GroupHierarchy, GroupHierarchy.idparent == \
                             GraphGroup.idgroup),
                     ).filter(GroupHierarchy.idchild == idgraphgroup
