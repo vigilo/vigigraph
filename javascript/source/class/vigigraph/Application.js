@@ -39,20 +39,20 @@
 ************************************************************************ */
 
 var urls = {
-    "maingroups": "rpc/maingroups",
-    "hostgroups": "rpc/hostgroups",
-    "hosts": "rpc/hosts",
+    "exportCSV": "rrdgraph/",
+    "getImage": "rrdgraph/",
+    "getIndicators": "rpc/getIndicators",
+    "getStartTime": "rrdgraph/",
     "graphgroups": "rpc/graphgroups",
     "graphs": "rpc/graphs",
-    "selectHostAndGraph": "rpc/selectHostAndGraph",
-    "searchHostAndGraph": "rpc/searchHostAndGraph",
-    "supPage": "nagios/",
-    "getImage": "rrdgraph/",
-    "getStartTime": "rrdgraph/",
     "graphsList": "rpc/graphsList",
-    "tempoDelayRefresh": "rpc/tempoDelayRefresh",
-    "getIndicators": "rpc/getIndicators",
-    "exportCSV": "rrdgraph/"
+    "hostgroups": "rpc/hostgroups",
+    "hosts": "rpc/hosts",
+    "maingroups": "rpc/maingroups",
+    "searchHostAndGraph": "rpc/searchHostAndGraph",
+    "selectHostAndGraph": "rpc/selectHostAndGraph",
+    "supPage": "nagios/",
+    "tempoDelayRefresh": "rpc/tempoDelayRefresh"
 };
 
 /**
@@ -763,7 +763,7 @@ qx.Class.define("vigigraph.Application",
           menu_bt.addEventListener("execute",function(e) { getExport(ds); });
           indicator_menu.add(menu_bt);
         }
-        var url= urls.getIndicators+"?host"+host+"&graph="+graph;
+        var url= urls.getIndicators+"?host="+host+"&graph="+graph;
         var r = new qx.io.remote.Request(url,"GET","application/json");
         r.addEventListener("completed", function(e) { 
           r = e.getContent().items;
