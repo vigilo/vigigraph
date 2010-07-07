@@ -24,6 +24,7 @@ Requires:   apache-mod_wsgi
 Requires:   vigilo-turbogears
 Requires:   vigilo-models
 Requires:   vigilo-themes-default
+Requires:   vigilo-common
 Requires:   python-TgRum
 Requires:   python-rum
 Requires:   python-decorator
@@ -54,7 +55,6 @@ Requires:   python-prioritized_methods
 Requires:   python-formencode
 Requires:   python-webflash
 Requires:   python-peak-rules
-Requires:   vigilo-common
 Requires:   python-transaction
 Requires:   python-zope.sqlalchemy
 Requires:   python-sqlalchemy
