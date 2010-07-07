@@ -33,14 +33,14 @@ def create_SupItemGroup(name, parent=None):
     return g
 
 # Hôte (Host)
-#def create_Host(name, checkhostcmd, hosttpl, snmpcommunity, mainip, snmpport):
+#def create_Host(name, checkhostcmd, hosttpl, snmpcommunity, address, snmpport):
 def create_Host(name):
     h = DBSession.query(Host).filter(Host.name == name).first()
     if not h:
         h = Host(name=name,
                  checkhostcmd=u'dummy',
                  hosttpl=u'linux',
-                 mainip=u"127.0.0.1",
+                 address=u"127.0.0.1",
                  snmpcommunity=u"public",
                  snmpport=161,
                  weight=0)
