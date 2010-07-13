@@ -1,3 +1,2 @@
 recursive-include vigigraph/public *
-include vigigraph/public/favicon.ico
 recursive-include vigigraph/i18n *
