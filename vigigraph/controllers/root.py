@@ -11,6 +11,8 @@ from repoze.what.predicates import Any, All, not_anonymous, \
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.controllers.error import ErrorController
 from vigilo.turbogears.controllers.proxy import ProxyController
+from vigilo.turbogears.controllers.api.root import ApiRootController
+
 from vigigraph.controllers.rpc import RpcController
 
 __all__ = ['RootController']
@@ -28,6 +30,7 @@ class RootController(BaseController):
         not_anonymous(l_('You need to be authenticated')))
     rrdgraph = ProxyController('rrdgraph', '/rrdgraph/',
         not_anonymous(l_('You need to be authenticated')))
+    api = ApiRootController("/api")
 
     @expose('index.html')
     @require(All(
