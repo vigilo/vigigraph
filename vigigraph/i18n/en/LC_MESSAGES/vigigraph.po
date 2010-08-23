@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vigigraph 2.0.0\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2010-04-23 13:05+0200\n"
-"PO-Revision-Date: 2010-04-23 18:07+0200\n"
+"POT-Creation-Date: 2010-08-23 15:45+0200\n"
+"PO-Revision-Date: 2010-08-23 15:45+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -17,85 +17,79 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
 
-#: vigigraph/controllers/root.py:30 vigigraph/controllers/rpc.py:55
-#: ../turbogears/src/vigilo/turbogears/controllers/proxy.py:193
+#: vigigraph/controllers/root.py:30 vigigraph/controllers/root.py:32
+#: vigigraph/controllers/root.py:37 vigigraph/controllers/rpc.py:52
 msgid "You need to be authenticated"
 msgstr "You need to be authenticated"
 
-#: vigigraph/controllers/root.py:40
+#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:56
+msgid "You don't have access to VigiGraph"
+msgstr "You don't have access to VigiGraph"
+
+#: vigigraph/controllers/root.py:53
 msgid "Wrong credentials"
 msgstr "Wrong credentials"
 
-#: vigigraph/controllers/root.py:55
+#: vigigraph/controllers/root.py:68
 #, python-format
 msgid "\"%(username)s\" logged in (from %(IP)s)"
 msgstr "\"%(username)s\" logged in (from %(IP)s)"
 
-#: vigigraph/controllers/root.py:59
+#: vigigraph/controllers/root.py:72
 #, python-format
 msgid "Welcome back, %s!"
 msgstr "Welcome back, %s!"
 
-#: vigigraph/controllers/root.py:69
+#: vigigraph/controllers/root.py:82
 #, python-format
 msgid "Some user logged out (from %(IP)s)"
 msgstr "Some user logged out (from %(IP)s)"
 
-#: vigigraph/controllers/root.py:72
+#: vigigraph/controllers/root.py:85
 msgid "We hope to see you soon!"
 msgstr "We hope to see you soon!"
 
-#: vigigraph/controllers/rpc.py:58 vigigraph/controllers/rpc.py:59
+#: vigigraph/controllers/rpc.py:61 vigigraph/controllers/rpc.py:62
 #, python-format
 msgid "Last %d hours"
 msgstr "Last %d hours"
 
-#: vigigraph/controllers/rpc.py:60 vigigraph/controllers/rpc.py:61
-#: vigigraph/controllers/rpc.py:62
+#: vigigraph/controllers/rpc.py:63 vigigraph/controllers/rpc.py:64
+#: vigigraph/controllers/rpc.py:65
 #, python-format
 msgid "Last %d days"
 msgstr "Last %d days"
 
-#: vigigraph/controllers/rpc.py:63 vigigraph/controllers/rpc.py:64
+#: vigigraph/controllers/rpc.py:66 vigigraph/controllers/rpc.py:67
 #, python-format
 msgid "Last %d months"
 msgstr "Last %d months"
 
-#: vigigraph/controllers/rpc.py:65
+#: vigigraph/controllers/rpc.py:68
 msgid "Last year"
 msgstr "Last year"
 
-#: vigigraph/controllers/rpc.py:157
+#: vigigraph/controllers/rpc.py:171 vigigraph/controllers/rpc.py:540
 msgid "No subgroup"
 msgstr "No subgroup"
 
 #. TRANSLATORS: Format Python de date/heure, lisible par un humain.
-#: vigigraph/controllers/rpc.py:528
+#: vigigraph/controllers/rpc.py:560
 #, python-format
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
-#: ../turbogears/src/vigilo/turbogears/controllers/error.py:26
-msgid "We're sorry but we weren't able to process this request."
-msgstr "We're sorry but we weren't able to process this request."
+#: vigigraph/widgets/search_form.py:13 vigigraph/widgets/searchform.py:13
+#: vigigraph/widgets/selectionform.py:13
+msgid "Host:"
+msgstr "Host:"
 
-#: ../turbogears/src/vigilo/turbogears/controllers/proxy.py:98
-#, python-format
-msgid "No such monitored host: %s"
-msgstr "No such monitored host: %s"
+#: vigigraph/widgets/search_form.py:14 vigigraph/widgets/searchform.py:14
+#: vigigraph/widgets/selectionform.py:14
+msgid "Graph:"
+msgstr "Graph:"
 
-#: ../turbogears/src/vigilo/turbogears/controllers/proxy.py:138
-#, python-format
-msgid "Access denied to host \"%(host)s\" and service \"%(service)s\""
-msgstr "Access denied to host \"%(host)s\" and service \"%(service)s\""
-
-#: ../turbogears/src/vigilo/turbogears/controllers/proxy.py:144
-#, python-format
-msgid "Access denied to host \"%s\""
-msgstr "Access denied to host \"%s\""
-
-#: ../turbogears/src/vigilo/turbogears/controllers/proxy.py:153
-#, python-format
-msgid "No %(server_type)s server configured to monitor \"%(host)s\""
-msgstr "No %(server_type)s server configured to monitor \"%(host)s\""
+#: vigigraph/widgets/selectionform.py:20
+msgid "Search"
+msgstr "Search"
 

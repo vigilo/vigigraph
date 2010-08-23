@@ -39,7 +39,7 @@ from vigigraph.widgets.searchhostform import SearchHostForm
 LOGGER = logging.getLogger(__name__)
 
 __all__ = ['RpcController']
-    
+
 
 # pylint: disable-msg=R0201
 class RpcController(BaseController):
@@ -53,7 +53,7 @@ class RpcController(BaseController):
         Any(
             in_group('managers'),
             has_permission('vigigraph-access',
-                msg=l_("You don't have access on VigiGraph")),
+                msg=l_("You don't have access to VigiGraph")),
         ),
     )
 
@@ -221,7 +221,7 @@ class RpcController(BaseController):
             ).order_by(
                 Host.name.asc(),
             ).all()
-            
+
         hosts = [(h.name, str(h.idhost)) for h in hosts]
         return dict(items=hosts)
 
@@ -274,7 +274,7 @@ class RpcController(BaseController):
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             graphgroups = graphgroups.filter(
                 SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
-        
+
         graphgroups = [(gg.name, str(gg.idgroup)) for gg in graphgroups.all()]
         return dict(items=graphgroups)
 
@@ -539,7 +539,7 @@ class RpcController(BaseController):
         if len(hostgroups) != 2:
             hostgroups.append(_('No subgroup'))
         graphgroups = [gg.name for gg in selected_graphgroups]
-        return dict(items=[hostgroups, graphgroups])        
+        return dict(items=[hostgroups, graphgroups])
 
     @expose('graphslist.html')
     def graphsList(self, nocache=None, **kwargs):
@@ -613,7 +613,7 @@ class RpcController(BaseController):
         @return: dictionnaire des indicateurs d un graphe
         @rtype: document json (sous forme de dict)
         """
-        
+
         indicators = self.getListIndicators(host, graph)
         indicators = [ind.name for ind in indicators]
         return dict(items=indicators)
@@ -635,8 +635,8 @@ class RpcController(BaseController):
         Affichage de l'ensemble des graphes associes a un hote
         * d apres les donnees RRD
         * avec une date-heure de debut
-        * pour une plage de temps 
-        
+        * pour une plage de temps
+
         @param host : hôte
         @type host : C{str}
         @param start : date-heure de debut des donnees
@@ -705,15 +705,15 @@ class RpcController(BaseController):
         Affichage d un graphe associe a un hote et un graphe
         * d apres les donnees RRD
         * avec une date-heure de debut
-        * pour une plage de temps 
-        
+        * pour une plage de temps
+
         @param host : hôte
         @type host : C{str}
         @param graph : graphe
         @type graph  : C{str}
         @param start : date-heure de debut des donnees
         @type start : C{str}
-        @param duration : plage de temps des données 
+        @param duration : plage de temps des données
         @type duration : C{str}
                          (parametre optionnel, initialise a 86400 = plage de 1 jour)
 
@@ -825,4 +825,3 @@ class RpcController(BaseController):
                 ).filter(Host.name == host
                 ).all()
         return indicators
-
