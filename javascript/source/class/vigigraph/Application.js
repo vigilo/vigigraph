@@ -14,12 +14,12 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
    (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -152,7 +152,7 @@ qx.Class.define("vigigraph.Application",
       gl.add(r3,2,2);
       gl.add(r4,2,3);
       gl.add(r5,2,4);
-      
+
       gl.add(b1,3,0);
       gl.add(b3,3,2);
       gl.add(b5,3,4);
@@ -225,13 +225,13 @@ qx.Class.define("vigigraph.Application",
         win.open();
       });
 
-      b5.addEventListener("execute",function(e) { 
+      b5.addEventListener("execute",function(e) {
         var host=combo3.getSelected().getLabel();
         var graph=combo5.getSelected().getLabel();
         this.openGraph(host, graph, null, null, true);
       }, this);
 
-      b1.addEventListener("execute",function(e) { 
+      b1.addEventListener("execute",function(e) {
         var w_search = new qx.ui.window.Window(this.tr("Search"), "icon/16/actions/zoom.png");
         w_search.addToDocument();
         w_search.set({
@@ -297,7 +297,7 @@ qx.Class.define("vigigraph.Application",
         };
         w_search_v.add(search_results);
         //search_results.setLocation(10, 40);
-        function _searchResultsUpdater(host,graph) {
+        function _searchResultsUpdater(host,graph,glass) {
           var url = urls.searchHostAndGraph;
           if (host && graph) {
             url = url+"?host="+host+"&graph="+graph
@@ -305,7 +305,10 @@ qx.Class.define("vigigraph.Application",
             url = url+"?host="+host;
           } else if (graph) {
             url = url+"?graph="+graph;
+          } else if (glass) {
+            url = url+"?graph=*";
           }
+
 
           search_results_model.setData([]);
           var g=new qx.io.remote.Request(url,"GET","application/json");
@@ -331,35 +334,35 @@ qx.Class.define("vigigraph.Application",
               o.setSelected(c_item);
             }
           }
-          combo1.addEventListener("changeEnabled", function(e) { 
+          combo1.addEventListener("changeEnabled", function(e) {
             if (e.getValue() == true) {
               e.getTarget().removeEventListener("changeEnabled", arguments.callee);
               _selectItem(e.getTarget(), host_main_group);
             }
           });
-          combo2.addEventListener("changeEnabled", function(e) { 
+          combo2.addEventListener("changeEnabled", function(e) {
             if (e.getValue() == true) {
               e.getTarget().removeEventListener("changeEnabled", arguments.callee);
               _selectItem(e.getTarget(), host_sec_group);
             }
           });
-          combo3.addEventListener("changeEnabled", function(e) { 
+          combo3.addEventListener("changeEnabled", function(e) {
             if (e.getValue() == true) {
               e.getTarget().removeEventListener("changeEnabled", arguments.callee);
-              _selectItem(e.getTarget(), host); 
+              _selectItem(e.getTarget(), host);
             }
           });
           if ((graph) && (graph_group)) {
             combo4.addEventListener("changeEnabled", function(e) {
               if (e.getValue() == true) {
                 e.getTarget().removeEventListener("changeEnabled", arguments.callee);
-                _selectItem(e.getTarget(), graph_group); 
+                _selectItem(e.getTarget(), graph_group);
               }
             });
             combo5.addEventListener("changeEnabled", function(e) {
               if (e.getValue() == true) {
                 e.getTarget().removeEventListener("changeEnabled", arguments.callee);
-                _selectItem(e.getTarget(), graph); 
+                _selectItem(e.getTarget(), graph);
               }
             });
           }
@@ -379,7 +382,7 @@ qx.Class.define("vigigraph.Application",
           var g=new qx.io.remote.Request(url,"GET","application/json");
           g.addEventListener("completed", function(e) {
             r=e.getContent().items;
-            
+
             /// @XXX pour le moment, on suppose qu'il y a 2 SupItemGroup
             /// dans la réponse. A terme, on devrait pouvoir en avoir plus.
             /// De même, on suppose qu'il n'y a qu'un seul GraphGroup à
@@ -388,7 +391,7 @@ qx.Class.define("vigigraph.Application",
             var host_main_group = r[0][0];
             var host_sec_group = r[0][1];
 
-            if (!r[1].length) { 
+            if (!r[1].length) {
               _chooseInCombos(host, host_main_group, host_sec_group, null, null);
             }
             else {
@@ -420,23 +423,23 @@ qx.Class.define("vigigraph.Application",
         // Submit events
         search_host.addEventListener("keydown", function(e) {
           if (e.getKeyIdentifier() == "Enter") {
-            _searchResultsUpdater(search_host.getValue(), search_graph.getValue());
+            _searchResultsUpdater(search_host.getValue(), search_graph.getValue(), false);
           }
         });
         search_host.addEventListener("changeValue", function(e) {
-          _searchResultsUpdater(search_host.getValue(), search_graph.getValue());document.body.outerHTML
+          _searchResultsUpdater(search_host.getValue(), search_graph.getValue(), false);
         });
         search_graph.addEventListener("keydown", function(e) {
           if (e.getKeyIdentifier() == "Enter") {
-            _searchResultsUpdater(search_host.getValue(), search_graph.getValue());
+            _searchResultsUpdater(search_host.getValue(), search_graph.getValue(), false);
           }
         });
         search_graph.addEventListener("changeValue", function(e) {
-          _searchResultsUpdater(search_host.getValue(), search_graph.getValue());
+          _searchResultsUpdater(search_host.getValue(), search_graph.getValue(), false);
         });
         // Submit button
         search_button.addEventListener("execute",function(e) {
-          _searchResultsUpdater(search_host.getValue(), search_graph.getValue());
+          _searchResultsUpdater(search_host.getValue(), search_graph.getValue(), true);
         });
         w_search.open();
         w_search.setTop(w1.getTop());document.body.outerHTML
@@ -609,7 +612,7 @@ qx.Class.define("vigigraph.Application",
       bt_refresh.setBorder("outset");
       // Timeframe menu
       var time_menu = new qx.ui.menu.Menu();
-      var timeframes = [ 
+      var timeframes = [
         [12, this.tr("Last 12 hours")],
         [24, this.tr("Last 24 hours")],
         [48, this.tr("Last 48 hours")],
@@ -680,10 +683,10 @@ qx.Class.define("vigigraph.Application",
       {
         var url= urls.getStartTime+"/"+encodeURIComponent(host)+"/starttime?host="+encodeURIComponent(host);
         var g=new qx.io.remote.Request(url,"GET","application/json");
-        g.addEventListener("completed", function(e) { 
+        g.addEventListener("completed", function(e) {
           start = parseInt(e.getContent().starttime);
           setStep(start);
-          bt_first.setEnabled(false); 
+          bt_first.setEnabled(false);
           bt_prev.setEnabled(false);
         });
         g.send();
@@ -750,7 +753,7 @@ qx.Class.define("vigigraph.Application",
       {
         var url= urls.tempoDelayRefresh;
         var r = new qx.io.remote.Request(url,"GET","text/plain");
-        r.addEventListener("completed", function(e) { 
+        r.addEventListener("completed", function(e) {
           delay = e.getContent();
         });
         r.send();
@@ -765,7 +768,7 @@ qx.Class.define("vigigraph.Application",
         }
         var url= urls.getIndicators+"?host="+host+"&graph="+graph;
         var r = new qx.io.remote.Request(url,"GET","application/json");
-        r.addEventListener("completed", function(e) { 
+        r.addEventListener("completed", function(e) {
           r = e.getContent().items;
           for(var i = 0; i < r.length; i++)
           {
@@ -847,8 +850,8 @@ qx.Class.define("vigigraph.Application",
       function setTail(hours)
       {
         now = getTime();
-        start=now-hours*3600; 
-        duration=hours*3600; 
+        start=now-hours*3600;
+        duration=hours*3600;
 
         setUrl(start,duration);
         loadImage(url,l);
@@ -874,15 +877,15 @@ qx.Class.define("vigigraph.Application",
       bt_first.addEventListener("execute", function(e) { updateGraphOnStartTime() });
       bt_prev.addEventListener("execute", function(e) { setStep(start-duration); });
       bt_next.addEventListener("execute", function(e) { setStep(start+duration); });
-      bt_last.addEventListener("execute", function(e) { 
-        now = getTime(); 
-        setStep(now-duration); 
+      bt_last.addEventListener("execute", function(e) {
+        now = getTime();
+        setStep(now-duration);
       });
       bt_zoomin.addEventListener("execute", function(e) { duration = duration / 2; setStep(start+duration/2); });
-      bt_zoomout.addEventListener("execute", function(e) { 
-        start = start - duration / 2; 
-        duration = duration * 2; 
-        setStep(start); 
+      bt_zoomout.addEventListener("execute", function(e) {
+        start = start - duration / 2;
+        duration = duration * 2;
+        setStep(start);
       });
 
       indicator_menu_bt.addEventListener("click", function(e)
@@ -969,7 +972,7 @@ qx.Class.define("vigigraph.Application",
           cdi.remove(c_l);
         }
       });
-      w._captionBar.addEventListener("mouseup", function(e) { 
+      w._captionBar.addEventListener("mouseup", function(e) {
         var state = qx.client.History.getInstance().getState();
 
         var wleft = this.getLeft();
@@ -993,14 +996,14 @@ qx.Class.define("vigigraph.Application",
       w.open();
       wleft = parseInt(wleft);
       wtop = parseInt(wtop);
-      if (wleft) { 
-        w.setLeft(wleft); 
+      if (wleft) {
+        w.setLeft(wleft);
       } else {
         // w.setRight() makes the close button fixed on the page even if you move the window
         w.setLeft(qx.ui.core.ClientDocument.getInstance().getClientWidth() - 600);
       }
-      if (wtop) { 
-        w.setTop(wtop); 
+      if (wtop) {
+        w.setTop(wtop);
       } else {
         w.setTop(5);
       }
@@ -1017,8 +1020,8 @@ qx.Class.define("vigigraph.Application",
         qx.log.Logger.ROOT_LOGGER.debug("state: "+state);
       }
     },
-    
-	
+
+
     /**
      * On window close (verbatim from qooxdoo's skeleton)
      *
