@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VigiGraph 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-27 18:10+0200\n"
+"POT-Creation-Date: 2010-09-01 09:42+0200\n"
 "PO-Revision-Date: 2010-04-23 13:12+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -86,9 +86,8 @@ msgid "Host"
 msgstr "Host"
 
 #: source/class/vigigraph/Application.js:605
-#, fuzzy
 msgid "Graph for \"%1\" on \"%2\""
-msgstr "\"%1\" Graph for host %2"
+msgstr "Graph for \"%1\" on \"%2\""
 
 #: source/class/vigigraph/Application.js:611
 msgid "Reload graph"
@@ -139,8 +138,8 @@ msgid "Graph start"
 msgstr "Graph start"
 
 #: source/class/vigigraph/Application.js:638
-msgid "Last section"
-msgstr "Last section"
+msgid "Previous section"
+msgstr "Previous section"
 
 #: source/class/vigigraph/Application.js:640
 msgid "Next section"

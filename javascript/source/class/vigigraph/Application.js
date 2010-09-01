@@ -635,7 +635,7 @@ qx.Class.define("vigigraph.Application",
       var bt_first=new qx.ui.form.Button("","icon/16/actions/start.png");
       bt_first.setToolTip(new qx.ui.popup.ToolTip(this.tr("Graph start")));
       var bt_prev=new qx.ui.form.Button("","icon/16/actions/go-previous.png");
-      bt_prev.setToolTip(new qx.ui.popup.ToolTip(this.tr("Last section")));
+      bt_prev.setToolTip(new qx.ui.popup.ToolTip(this.tr("Previous section")));
       var bt_next=new qx.ui.form.Button("","icon/16/actions/go-next.png");
       bt_next.setToolTip(new qx.ui.popup.ToolTip(this.tr("Next section")));
       var bt_last=new qx.ui.form.Button("","icon/16/actions/dialog-finish.png");
