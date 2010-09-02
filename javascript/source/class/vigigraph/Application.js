@@ -754,7 +754,7 @@ qx.Class.define("vigigraph.Application",
         var url= urls.tempoDelayRefresh;
         var r = new qx.io.remote.Request(url,"GET","text/plain");
         r.addEventListener("completed", function(e) {
-          delay = e.getContent();
+          delay = e.getContent() * 1000;
         });
         r.send();
       }

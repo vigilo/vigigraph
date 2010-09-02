@@ -587,9 +587,9 @@ class RpcController(BaseController):
         """
 
         try:
-            delay = int(config['delay_refresh'])
+            delay = int(config['refresh_delay'])
         except (ValueError, KeyError):
-            delay = 36000
+            delay = 30
         return str(delay)
 
     class GetIndicatorsSchema(schema.Schema):
