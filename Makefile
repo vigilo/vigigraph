@@ -2,6 +2,11 @@ NAME := vigigraph
 
 all: qooxdoo build
 
+include buildenv/Makefile.common
+PKGNAME := $(NAME)
+MODULE := $(NAME)
+CODEPATH := $(NAME)
+
 qooxdoo: vigigraph/public/js/vigigraph.js
 vigigraph/public/js/vigigraph.js: javascript/source/class/vigigraph/Application.js
 	make -C javascript build
@@ -24,10 +29,6 @@ install: vigigraph/public/js/vigigraph.js
 	ln -s $(SYSCONFDIR)/vigilo/$(NAME)/app_cfg.py $(DESTDIR)`grep '$(NAME)/config/app_cfg.py$$' INSTALLED_FILES`
 	echo $(SYSCONFDIR)/vigilo/$(NAME)/app_cfg.py >> INSTALLED_FILES
 
-include buildenv/Makefile.common
-
-MODULE := $(NAME)
-CODEPATH := $(NAME)
 lint: lint_pylint
 tests: tests_nose
 clean: clean_python clean_qooxdoo
