@@ -417,10 +417,11 @@ class RpcController(BaseController):
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
+            # pylint: disable-msg=E1103
             items = items.filter(
                 SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
 
-        items = items.limit(100).all()
+        items = items.limit(100).all() # pylint: disable-msg=E1103
         if graph is None:
             items = [(item.hostname, "") for item in items]
         else:
