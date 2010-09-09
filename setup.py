@@ -66,6 +66,7 @@ setup(
             'deployment/vigigraph.conf',
             'deployment/vigigraph.wsgi',
             'deployment/settings.ini',
+            'deployment/who.ini',
         ]),
     ],
 )
