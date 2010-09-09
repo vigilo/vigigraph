@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vigigraph 0.1\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
 "POT-Creation-Date: 2010-02-15 13:41+0100\n"
-"PO-Revision-Date: 2010-08-23 15:45+0200\n"
+"PO-Revision-Date: 2010-09-07 11:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: fr_FR <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -79,16 +79,3 @@ msgstr "Pas de sous-groupe"
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
-#: vigigraph/widgets/search_form.py:13 vigigraph/widgets/searchform.py:13
-#: vigigraph/widgets/selectionform.py:13
-msgid "Host:"
-msgstr "Hôte :"
-
-#: vigigraph/widgets/search_form.py:14 vigigraph/widgets/searchform.py:14
-#: vigigraph/widgets/selectionform.py:14
-msgid "Graph:"
-msgstr "Graphe :"
-
-#: vigigraph/widgets/selectionform.py:20
-msgid "Search"
-msgstr "Rechercher"

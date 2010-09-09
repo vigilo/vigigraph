@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vigigraph 2.0.0\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2010-08-23 15:45+0200\n"
+"POT-Creation-Date: 2010-09-07 11:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,19 +77,5 @@ msgstr ""
 #: vigigraph/controllers/rpc.py:560
 #, python-format
 msgid "%a, %d %b %Y %H:%M:%S"
-msgstr ""
-
-#: vigigraph/widgets/search_form.py:13 vigigraph/widgets/searchform.py:13
-#: vigigraph/widgets/selectionform.py:13
-msgid "Host:"
-msgstr ""
-
-#: vigigraph/widgets/search_form.py:14 vigigraph/widgets/searchform.py:14
-#: vigigraph/widgets/selectionform.py:14
-msgid "Graph:"
-msgstr ""
-
-#: vigigraph/widgets/selectionform.py:20
-msgid "Search"
 msgstr ""
 
