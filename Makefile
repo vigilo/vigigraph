@@ -6,6 +6,7 @@ include buildenv/Makefile.common
 PKGNAME := $(NAME)
 MODULE := $(NAME)
 CODEPATH := $(NAME)
+EPYDOC_PARSE := vigigraph\.controllers
 
 qooxdoo: vigigraph/public/js/vigigraph.js
 vigigraph/public/js/vigigraph.js: javascript/source/class/vigigraph/Application.js
