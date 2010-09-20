@@ -15,6 +15,7 @@ License:    GPLv2
 
 BuildRequires:   python-setuptools
 BuildRequires:   python-babel
+BuildRequires:   wget
 
 Requires:   python >= 2.5
 Requires:   python-setuptools

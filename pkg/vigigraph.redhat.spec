@@ -22,6 +22,7 @@ Buildarch:  noarch
 
 BuildRequires:   python26-distribute
 BuildRequires:   python26-babel
+BuildRequires:   wget
 
 Requires:   python26-distribute
 Requires:   vigilo-turbogears
