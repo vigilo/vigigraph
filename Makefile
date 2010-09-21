@@ -22,7 +22,8 @@ javascript/qooxdoo-$(QOOXDOO_VER)-sdk/frontend/Makefile: javascript/qooxdoo-$(QO
 qooxdoo: vigigraph/public/js/vigigraph.js
 vigigraph/public/js/vigigraph.js: javascript/source/class/vigigraph/Application.js javascript/qooxdoo-$(QOOXDOO_VER)-sdk/frontend/Makefile
 	make -C javascript build
-	cp -f javascript/build/script/vigigraph.js vigigraph/public/js/
+	mkdir -p vigigraph/public/js/
+	cp -f javascript/build/script/vigigraph.js vigigraph/public/js/vigigraph.js
 	cp -rf javascript/build/resource vigigraph/public/
 
 clean_qooxdoo:
