@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vigigraph 2.0.0\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2010-09-07 11:18+0200\n"
+"POT-Creation-Date: 2010-09-21 17:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,12 +69,12 @@ msgstr ""
 msgid "Last year"
 msgstr ""
 
-#: vigigraph/controllers/rpc.py:171 vigigraph/controllers/rpc.py:540
+#: vigigraph/controllers/rpc.py:171 vigigraph/controllers/rpc.py:541
 msgid "No subgroup"
 msgstr ""
 
 #. TRANSLATORS: Format Python de date/heure, lisible par un humain.
-#: vigigraph/controllers/rpc.py:560
+#: vigigraph/controllers/rpc.py:561
 #, python-format
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
