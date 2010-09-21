@@ -28,7 +28,7 @@ class RootController(BaseController):
     rpc = RpcController()
     nagios = ProxyController('nagios', '/nagios/',
         not_anonymous(l_('You need to be authenticated')))
-    rrdgraph = ProxyController('rrdgraph', '/rrdgraph/',
+    vigirrd = ProxyController('vigirrd', '/vigirrd/',
         not_anonymous(l_('You need to be authenticated')))
     api = ApiRootController("/api")
 

@@ -39,10 +39,10 @@
 ************************************************************************ */
 
 var urls = {
-    "exportCSV": "rrdgraph/",
-    "getImage": "rrdgraph/",
+    "exportCSV": "vigirrd/",
+    "getImage": "vigirrd/",
     "getIndicators": "rpc/getIndicators",
-    "getStartTime": "rrdgraph/",
+    "getStartTime": "vigirrd/",
     "graphgroups": "rpc/graphgroups",
     "graphs": "rpc/graphs",
     "graphsList": "rpc/graphsList",
