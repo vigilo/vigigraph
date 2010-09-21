@@ -7,7 +7,7 @@ Name:       %{name}
 Summary:    Vigilo graphs interface
 Version:    %{version}
 Release:    %{release}
-Source0:    %{name}-%{version}.tar.gz
+Source0:    %{module}-%{version}.tar.gz
 URL:        http://www.projet-vigilo.org
 Group:      System/Servers
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-build
@@ -92,7 +92,7 @@ Vigilo graphs interface.
 This application is part of the Vigilo Project <http://vigilo-project.org>
 
 %prep
-%setup -q
+%setup -q -n %{module}-%{version}
 cd javascript
 #wget http://downloads.sourceforge.net/project/qooxdoo/qooxdoo-legacy/0.7.3/qooxdoo-0.7.3-sdk.tar.gz
 wget http://vigilo-dev.si.c-s.fr/cache/qooxdoo-0.7.3-sdk.tar.gz
