@@ -24,7 +24,7 @@ install: vigigraph/public/js/vigigraph.js
 	chmod a+rX -R $(DESTDIR)$(PREFIX)/lib*/python*/*
 	# Permissions de la conf
 	chmod a+rX -R $(DESTDIR)$(SYSCONFDIR)/vigilo/$(NAME)
-	[ `id -u` -eq 0 ] && chgrp $(HTTPD_USER) $(DESTDIR)$(SYSCONFDIR)/vigilo/$(NAME)/*.ini
+	[ `id -u` -ne 0 ] || chgrp $(HTTPD_USER) $(DESTDIR)$(SYSCONFDIR)/vigilo/$(NAME)/*.ini
 	chmod 600 $(DESTDIR)$(SYSCONFDIR)/vigilo/$(NAME)/*.ini
 	# Apache
 	mkdir -p $(DESTDIR)$(HTTPD_DIR)
