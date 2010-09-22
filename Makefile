@@ -31,7 +31,7 @@ clean_qooxdoo:
 	$(RM) -r vigigraph/public/resource
 	$(RM) -r javascript/build/
 
-install: vigigraph/public/js/vigigraph.js
+install: vigigraph/public/js/vigigraph.js $(PYTHON)
 	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR) --record=INSTALLED_FILES
 	chmod a+rX -R $(DESTDIR)$(PREFIX)/lib*/python*/*
 	# Permissions de la conf
