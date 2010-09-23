@@ -77,5 +77,4 @@ msgstr "Pas de sous-groupe"
 #: vigigraph/controllers/rpc.py:561
 #, python-format
 msgid "%a, %d %b %Y %H:%M:%S"
-msgstr "%a, %d %b %Y %H:%M:%S"
-
+msgstr "%d/%m/%Y à %H:%M:%S"

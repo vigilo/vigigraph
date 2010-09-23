@@ -557,8 +557,10 @@ class RpcController(BaseController):
         if not kwargs:
             return dict(graphslist=[])
 
+        # On est obligé de convertir le format en UTF-8 car strftime
+        # n'accepte pas les chaînes Unicode en entrée.
         # TRANSLATORS: Format Python de date/heure, lisible par un humain.
-        format = _("%a, %d %b %Y %H:%M:%S")
+        format = _("%a, %d %b %Y %H:%M:%S").encode('utf8')
         graphslist = []
         for url in kwargs.itervalues():
             parts = urlparse.urlparse(url)
@@ -569,9 +571,10 @@ class RpcController(BaseController):
             duration = int(params.get('duration', 86400))
 
             graph['graph'] = params.get('graphtemplate')
-            graph['start_date'] = time.strftime(format, time.localtime(start))
+            graph['start_date'] = time.strftime(format,
+                time.localtime(start)).decode('utf8')
             graph['end_date'] = time.strftime(format,
-                                    time.localtime(start + duration))
+                time.localtime(start + duration)).decode('utf8')
             graph['img_src'] = url
             graph['host'] = params['host']
             graphslist.append(graph)
