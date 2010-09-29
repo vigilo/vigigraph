@@ -26,7 +26,7 @@ BuildRequires:   wget
 
 Requires:   python26-distribute
 Requires:   vigilo-turbogears
-Requires:   apache-mod_wsgi
+Requires:   mod_wsgi
 
 
 %description
