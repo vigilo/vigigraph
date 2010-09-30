@@ -406,7 +406,7 @@ class RpcController(BaseController):
             host = sql_escape_like(host)
             items = DBSession.query(
                     Host.name.label('hostname'),
-                ).join(
+                ).distinct().join(
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                         Host.idhost),
                 ).filter(Host.name.ilike(host)
