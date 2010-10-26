@@ -2,17 +2,12 @@
 """
 Suite de tests du formulaire de sélection des hôtes et groupes d'hôtes.
 """
-from nose.tools import assert_true, assert_equal
-from datetime import datetime
+from nose.tools import assert_equal
 import transaction
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
-from vigilo.models.tables import SupItemGroup, Host, Permission, \
-                                    Event, CorrEvent, StateName, \
-                                    User, UserGroup, DataPermission, \
-                                    SupItemGroup
-from vigilo.models.tables.grouphierarchy import GroupHierarchy
+from vigilo.models.tables import SupItemGroup, Permission, SupItemGroup
 from vigilo.models.demo.functions import add_supitemgroup, \
     add_host, add_host2group, add_usergroup, add_user, \
     add_supitemgrouppermission, add_usergroup_permission
@@ -39,16 +34,18 @@ class TestHostSelectionForm(TestController):
         # Ajout d'un second groupe d'hôtes de second niveau
         hostgroup2 = add_supitemgroup(u'hg2', mainhostgroup)
 
-        # Ajout de deux hôtes
+        # Ajout de trois hôtes
         host1 = add_host(u'host1')
         host2 = add_host(u'host2')
         host3 = add_host(u'host3')
 
         # Ajout du premier hôte dans le groupe d'hôtes principal.
         add_host2group(host1, mainhostgroup)
-        # Ajout du deuxième hôte dans le premier groupe d'hôtes de second niveau.
+        # Ajout du deuxième hôte dans le premier
+        # groupe d'hôtes de second niveau.
         add_host2group(host2, hostgroup1)
-        # Ajout du troisième hôte dans le second groupe d'hôtes de second niveau.
+        # Ajout du troisième hôte dans le second
+        # groupe d'hôtes de second niveau.
         add_host2group(host3, hostgroup2)
 
         # Ajout de trois groupes d'utilisateurs
@@ -82,7 +79,7 @@ class TestHostSelectionForm(TestController):
         DBSession.flush()
         transaction.commit()
 
-################################################################################
+##### Premier onglet déroulant du formulaire #####
 
     def test_get_main_host_groups_when_allowed(self):
         """
@@ -91,7 +88,7 @@ class TestHostSelectionForm(TestController):
 
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
         mainhostgroup = DBSession.query(SupItemGroup).filter(
-                SupItemGroup.name == u'mhg').first()
+            SupItemGroup.name == u'mhg').first()
 
         # Récupération des groupes d'hôtes principaux
         # accessibles à l'utilisateur 'poweruser'
@@ -103,10 +100,9 @@ class TestHostSelectionForm(TestController):
         # On s'assure que la liste de groupes
         # d'hôtes retournée contient bien 'mhg'
         assert_equal(
-            json, {"items": [[
-                mainhostgroup.name,
-                unicode(mainhostgroup.idgroup)
-            ]]}
+            json, {"items": [
+                [mainhostgroup.name, unicode(mainhostgroup.idgroup)]
+            ]}
         )
 
         # Récupération des groupes d'hôtes principaux
@@ -142,7 +138,7 @@ class TestHostSelectionForm(TestController):
             json, {"items": []}
         )
 
-################################################################################
+##### Deuxième onglet déroulant du formulaire #####
 
     def test_get_host_groups_when_allowed(self):
         """
@@ -151,11 +147,15 @@ class TestHostSelectionForm(TestController):
 
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
         mainhostgroup = DBSession.query(SupItemGroup).filter(
-                SupItemGroup.name == u'mhg').first()
+            SupItemGroup.name == u'mhg').first()
 
         # Récupération du groupe d'hôtes 'hg1' dans la base de données
         hostgroup1 = DBSession.query(SupItemGroup).filter(
-                SupItemGroup.name == u'hg1').first()
+            SupItemGroup.name == u'hg1').first()
+
+        # Récupération du groupe d'hôtes 'hg2' dans la base de données
+        hostgroup2 = DBSession.query(SupItemGroup).filter(
+            SupItemGroup.name == u'hg2').first()
 
         # Récupération des groupes d'hôtes
         # accessibles à l'utilisateur 'poweruser'
@@ -164,25 +164,27 @@ class TestHostSelectionForm(TestController):
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
-        # On s'assure que la liste de groupes
-        # d'hôtes retournée contient bien 'No subgroup'
+        # On s'assure que la liste de groupes d'hôtes retournée
+        # contient bien 'No subgroup', 'hg1', et 'hg2'
         assert_equal(
             json, {"items": [
                 ['No subgroup', unicode(mainhostgroup.idgroup)],
+                [hostgroup1.name, unicode(hostgroup1.idgroup)],
+                [hostgroup2.name, unicode(hostgroup2.idgroup)],
             ]}
         )
 
-        # Récupération des groupes d'hôtes accessibles à l'utilisateur 'user'
+        # Récupération des groupes d'hôtes
+        # accessibles à l'utilisateur 'user'
         response = self.app.post(
             '/rpc/hostgroups?maingroupid=%s' % (mainhostgroup.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste de groupes
-        # d'hôtes retournée contient bien 'hg1' et 'No subgroup'
+        # d'hôtes retournée contient bien 'hg1'
         assert_equal(
             json, {"items": [
-                ['No subgroup', unicode(mainhostgroup.idgroup)],
                 [hostgroup1.name, unicode(hostgroup1.idgroup)]
             ]}
         )
@@ -194,7 +196,7 @@ class TestHostSelectionForm(TestController):
 
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
         mainhostgroup = DBSession.query(SupItemGroup).filter(
-                SupItemGroup.name == u'mhg').first()
+            SupItemGroup.name == u'mhg').first()
 
         # Récupération des groupes d'hôtes
         # accessibles à l'utilisateur 'visitor'
@@ -228,7 +230,7 @@ class TestHostSelectionForm(TestController):
             json, {"items": [['No subgroup', '6666666']]}
         )
 
-################################################################################
+##### Troisième onglet déroulant du formulaire #####
 
     def test_get_hosts_when_allowed(self):
         """
@@ -237,11 +239,15 @@ class TestHostSelectionForm(TestController):
 
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
         mainhostgroup = DBSession.query(SupItemGroup).filter(
-                SupItemGroup.name == u'mhg').first()
+            SupItemGroup.name == u'mhg').first()
 
         # Récupération du groupe d'hôtes 'hg1' dans la base de données
         hostgroup1 = DBSession.query(SupItemGroup).filter(
-                SupItemGroup.name == u'hg1').first()
+            SupItemGroup.name == u'hg1').first()
+
+        # Récupération du groupe d'hôtes 'hg2' dans la base de données
+        hostgroup2 = DBSession.query(SupItemGroup).filter(
+            SupItemGroup.name == u'hg2').first()
 
         # Récupération des hôtes du groupe 'mhg'
         # accessibles à l'utilisateur 'poweruser'
@@ -250,26 +256,24 @@ class TestHostSelectionForm(TestController):
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
-        # On s'assure que la liste d'hôtes
-        # retournée contient bien 'host1'
+        # On s'assure que la liste d'hôtes retournée contient bien 'host1'
         assert_equal(
             json, {"items": [
                 ['host1', unicode(mainhostgroup.idgroup)],
             ]}
         )
 
-        # Récupération des hôtes du groupe 'mhg'
-        # accessibles à l'utilisateur 'user'
+        # Récupération des hôtes du groupe 'hg1'
+        # accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (mainhostgroup.idgroup, ), {
-            }, extra_environ={'REMOTE_USER': 'user'})
+            '/rpc/hosts?othergroupid=%s' % (hostgroup1.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
-        # On s'assure que la liste d'hôtes
-        # retournée contient bien 'host1'
+        # On s'assure que la liste d'hotes retournée contient bien 'host2'
         assert_equal(
             json, {"items": [
-                ['host1', unicode(mainhostgroup.idgroup)],
+                ['host2', unicode(hostgroup1.idgroup)],
             ]}
         )
 
@@ -280,11 +284,24 @@ class TestHostSelectionForm(TestController):
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
-        # On s'assure que la liste d'hôtes
-        # retournée contient bien 'host2'
+        # On s'assure que la liste d'hôtes retournée contient bien 'host2'
         assert_equal(
             json, {"items": [
                 ['host2', unicode(hostgroup1.idgroup)],
+            ]}
+        )
+
+        # Récupération des hôtes du groupe 'hg2'
+        # accessibles à l'utilisateur 'poweruser'
+        response = self.app.post(
+            '/rpc/hosts?othergroupid=%s' % (hostgroup2.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'poweruser'})
+        json = response.json
+
+        # On s'assure que la liste d'hotes retournée contient bien 'host3'
+        assert_equal(
+            json, {"items": [
+                ['host3', unicode(hostgroup1.idgroup)],
             ]}
         )
 
@@ -295,21 +312,53 @@ class TestHostSelectionForm(TestController):
 
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
         mainhostgroup = DBSession.query(SupItemGroup).filter(
-                SupItemGroup.name == u'mhg').first()
+            SupItemGroup.name == u'mhg').first()
 
         # Récupération du groupe d'hôtes
         # secondaire 'hg1' dans la base de données
         hostgroup1 = DBSession.query(SupItemGroup).filter(
-                SupItemGroup.name == u'hg1').first()
+            SupItemGroup.name == u'hg1').first()
 
-        # Récupération des hôtes du groupe 'hg1'
-        # accessibles à l'utilisateur 'poweruser'
+        # Récupération du groupe d'hôtes
+        # secondaire 'hg2' dans la base de données
+        hostgroup2 = DBSession.query(SupItemGroup).filter(
+            SupItemGroup.name == u'hg2').first()
+
+        # Récupération des hôtes du groupe 'mhg'
+        # accessibles à l'utilisateur 'user'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (hostgroup1.idgroup, ), {
-            }, extra_environ={'REMOTE_USER': 'poweruser'})
+            '/rpc/hosts?othergroupid=%s' % (mainhostgroup.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
-        # On s'assure que la liste retournée est vide
+        # On s'assure que la liste
+        # d'hôtes retournée est vide
+        assert_equal(
+            json, {"items": []}
+        )
+
+        # Récupération des hôtes du groupe 'hg2'
+        # accessibles à l'utilisateur 'user'
+        response = self.app.post(
+            '/rpc/hosts?othergroupid=%s' % (hostgroup2.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'user'})
+        json = response.json
+
+        # On s'assure que la liste
+        # d'hôtes retournée est vide
+        assert_equal(
+            json, {"items": []}
+        )
+
+        # Récupération des hôtes du groupe 'mhg'
+        # accessibles à l'utilisateur 'visitor'
+        response = self.app.post(
+            '/rpc/hosts?othergroupid=%s' % (mainhostgroup.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'visitor'})
+        json = response.json
+
+        # On s'assure que la liste
+        # d'hôtes retournée est vide
         assert_equal(
             json, {"items": []}
         )
@@ -318,6 +367,18 @@ class TestHostSelectionForm(TestController):
         # accessibles à l'utilisateur 'visitor'
         response = self.app.post(
             '/rpc/hosts?othergroupid=%s' % (hostgroup1.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'visitor'})
+        json = response.json
+
+        # On s'assure que la liste d'hôtes retournée est vide
+        assert_equal(
+            json, {"items": []}
+        )
+
+        # Récupération des hôtes du groupe 'hg2'
+        # accessibles à l'utilisateur 'visitor'
+        response = self.app.post(
+            '/rpc/hosts?othergroupid=%s' % (hostgroup2.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
 
