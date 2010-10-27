@@ -116,8 +116,8 @@ class RpcController(BaseController):
         topgroups = DBSession.query(
                 SupItemGroup,
             ).filter(SupItemGroup.idgroup.in_(groups_with_parents)
-            ).except_(children).order_by(SupItemGroup.name).all()
-        topgroups = [(sig.name, str(sig.idgroup)) for sig in topgroups]
+            ).except_(children).order_by(SupItemGroup.name)
+        topgroups = [(sig.name, str(sig.idgroup)) for sig in topgroups.all()]
         return dict(items=topgroups)
 
     class HostgroupsSchema(schema.Schema):

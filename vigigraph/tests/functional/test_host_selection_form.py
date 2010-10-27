@@ -7,7 +7,7 @@ import transaction
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
-from vigilo.models.tables import SupItemGroup, Permission, SupItemGroup
+from vigilo.models.tables import SupItemGroup, Permission
 from vigilo.models.demo.functions import add_supitemgroup, \
     add_host, add_host2group, add_usergroup, add_user, \
     add_supitemgrouppermission, add_usergroup_permission
