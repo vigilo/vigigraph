@@ -11,6 +11,7 @@ except ImportError:
     from cgi import parse_qsl
 
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
+from webob.exc import HTTPPreconditionFailed
 from tg import expose, request, redirect, tmpl_context, \
                 config, validate, flash
 from tg.decorators import paginate
@@ -464,6 +465,9 @@ class RpcController(BaseController):
         if (not host) and (not graph):
             return dict(items=[[], []])
 
+        if graph and not host:
+            raise HTTPPreconditionFailed(_("No host given"))
+
         selected_hostgroups = []
         selected_graphgroups = []
         is_manager = in_group('managers').is_met(request.environ)
@@ -537,7 +541,7 @@ class RpcController(BaseController):
         hostgroups = [hg.name for hg in selected_hostgroups]
         # @FIXME: Ce test est nécessaire tant que l'interface Qooxdoo
         # monolithique est conservée (ie: 2 niveaux de profondeur figés).
-        if len(hostgroups) != 2:
+        if len(hostgroups) == 1:
             hostgroups.append(_('No subgroup'))
         graphgroups = [gg.name for gg in selected_graphgroups]
         return dict(items=[hostgroups, graphgroups])

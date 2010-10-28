@@ -2,7 +2,6 @@
 """
 Suite de tests du formulaire de recherche de VigiGraph.
 """
-from nose.tools import assert_equal
 import transaction
 
 from vigigraph.tests import TestController
@@ -66,7 +65,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste retournée
         # contient bien 'mhg' et 'No subgroup'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, u'No subgroup'],
                 []
@@ -83,7 +82,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste retournée
         # contient bien 'mhg' et 'No subgroup'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, u'No subgroup'],
                 []
@@ -100,7 +99,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste retournée
         # contient bien 'mhg' et 'hostgroup1'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, hostgroup1.name],
                 []
@@ -117,7 +116,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste retournée
         # contient bien 'mhg' et 'hostgroup1'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, hostgroup1.name],
                 []
@@ -147,7 +146,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [],[]
             ]}
@@ -163,7 +162,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [],[]
             ]}
@@ -179,7 +178,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [],[]
             ]}
@@ -195,7 +194,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [],[]
             ]}
@@ -233,7 +232,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [], []
             ]}
@@ -251,7 +250,7 @@ class TestSearchForm(TestController):
         # On s'assure qu'une erreur 412 est retournée lorsque
         # l'on recherche un graphe sans préciser d'hôte.
         self.app.post(
-        '/rpc/selectHostAndGraph?host=%s' % (str(graph1.name), ), {
+        '/rpc/selectHostAndGraph?graph=%s' % (str(graph1.name), ), {
             }, extra_environ={'REMOTE_USER': 'manager'}, status=412)
 
     def test_select_graph_with_an_erroneous_host(self):
@@ -270,7 +269,7 @@ class TestSearchForm(TestController):
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [], []
             ]}
@@ -326,7 +325,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste retournée
         # est conforme à celle attendue
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, u'No subgroup'],
                 [graphgroup1.name]
@@ -344,7 +343,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste retournée
         # est conforme à celle attendue
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, u'No subgroup'],
                 [graphgroup1.name]
@@ -362,7 +361,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste retournée
         # est conforme à celle attendue
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, hostgroup1.name],
                 [graphgroup2.name]
@@ -380,7 +379,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste retournée
         # est conforme à celle attendue
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, hostgroup1.name],
                 [graphgroup2.name]
@@ -419,7 +418,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [], []
             ]}
@@ -436,7 +435,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [], []
             ]}
@@ -453,7 +452,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [], []
             ]}
@@ -470,7 +469,7 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [], []
             ]}
@@ -518,10 +517,8 @@ class TestSearchForm(TestController):
 
         # On s'assure que la liste
         # retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [], []
             ]}
         )
-
-

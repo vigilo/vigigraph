@@ -2,7 +2,6 @@
 """
 Suite de tests du formulaire de sélection des graphes et groupes de graphes.
 """
-from nose.tools import assert_equal
 import transaction
 
 from vigigraph.tests import TestController
@@ -128,7 +127,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup1'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graphgroup1.name, unicode(graphgroup1.idgroup)]
             ]}
@@ -143,7 +142,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graphgroup2.name, unicode(graphgroup2.idgroup)]
             ]}
@@ -158,7 +157,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup1'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graphgroup1.name, unicode(graphgroup1.idgroup)]
             ]}
@@ -173,7 +172,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graphgroup2.name, unicode(graphgroup2.idgroup)]
             ]}
@@ -188,7 +187,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graphgroup2.name, unicode(graphgroup2.idgroup)]
             ]}
@@ -203,7 +202,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup3'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graphgroup3.name, unicode(graphgroup3.idgroup)]
             ]}
@@ -231,7 +230,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -244,7 +243,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -257,7 +256,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -291,7 +290,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -354,7 +353,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de
         # graphes retournée contient 'graph1'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graph1.name, unicode(graph1.idgraph)]
             ]}
@@ -370,7 +369,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de
         # graphes retournée contient 'graph2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graph2.name, unicode(graph2.idgraph)]
             ]}
@@ -386,7 +385,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de
         # graphes retournée contient 'graph1'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graph1.name, unicode(graph1.idgraph)]
             ]}
@@ -402,7 +401,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de
         # graphes retournée contient 'graph2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graph2.name, unicode(graph2.idgraph)]
             ]}
@@ -418,7 +417,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de
         # graphes retournée contient 'graph2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graph2.name, unicode(graph2.idgraph)]
             ]}
@@ -434,7 +433,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de
         # graphes retournée contient 'graph3'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [graph3.name, unicode(graph3.idgraph)]
             ]}
@@ -473,7 +472,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -487,7 +486,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -501,7 +500,7 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -541,8 +540,6 @@ class TestGraphSelectionForm(TestController):
 
         # On s'assure que la liste de
         # graphes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
-
-

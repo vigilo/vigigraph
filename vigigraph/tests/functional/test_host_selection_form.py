@@ -2,7 +2,6 @@
 """
 Suite de tests du formulaire de sélection des hôtes et groupes d'hôtes.
 """
-from nose.tools import assert_equal
 import transaction
 
 from vigigraph.tests import TestController
@@ -118,7 +117,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # d'hôtes retournée contient bien 'mhg'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, unicode(mainhostgroup.idgroup)]
             ]}
@@ -133,7 +132,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # d'hôtes retournée contient bien 'mhg'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [mainhostgroup.name, unicode(mainhostgroup.idgroup)]
             ]}
@@ -148,7 +147,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # d'hôtes retournée contient bien 'mhg'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [[
                 mainhostgroup.name,
                 unicode(mainhostgroup.idgroup)
@@ -168,7 +167,7 @@ class TestHostSelectionForm(TestController):
         json = response.json
 
         # On s'assure que la liste de groupes d'hôtes retournée est bien vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -212,7 +211,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste de groupes d'hôtes retournée
         # contient bien 'No subgroup', 'hg1', et 'hg2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 ['No subgroup', unicode(mainhostgroup.idgroup)],
                 [hostgroup1.name, unicode(hostgroup1.idgroup)],
@@ -229,7 +228,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste de groupes d'hôtes retournée
         # contient bien 'No subgroup', 'hg1', et 'hg2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 ['No subgroup', unicode(mainhostgroup.idgroup)],
                 [hostgroup1.name, unicode(hostgroup1.idgroup)],
@@ -246,7 +245,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste de groupes
         # d'hôtes retournée contient bien 'hg1'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 [hostgroup1.name, unicode(hostgroup1.idgroup)]
             ]}
@@ -270,7 +269,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste de groupes d'hôtes
         # retournée contient uniquement 'No subgroups'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [['No subgroup', '%s'
                 % (mainhostgroup.idgroup, )]]}
         )
@@ -305,7 +304,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste de groupes d'hôtes
         # retournée contient uniquement 'No subgroups'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [['No subgroup', '6666666']]}
         )
 
@@ -332,7 +331,7 @@ class TestHostSelectionForm(TestController):
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée contient bien 'host1'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 ['host1', unicode(mainhostgroup.idgroup)],
             ]}
@@ -346,7 +345,7 @@ class TestHostSelectionForm(TestController):
         json = response.json
 
         # On s'assure que la liste d'hotes retournée contient bien 'host2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 ['host2', unicode(hostgroup1.idgroup)],
             ]}
@@ -360,7 +359,7 @@ class TestHostSelectionForm(TestController):
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée contient bien 'host1'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 ['host1', unicode(mainhostgroup.idgroup)],
             ]}
@@ -374,7 +373,7 @@ class TestHostSelectionForm(TestController):
         json = response.json
 
         # On s'assure que la liste d'hotes retournée contient bien 'host2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 ['host2', unicode(hostgroup1.idgroup)],
             ]}
@@ -388,7 +387,7 @@ class TestHostSelectionForm(TestController):
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée contient bien 'host2'
-        assert_equal(
+        self.assertEqual(
             json, {"items": [
                 ['host2', unicode(hostgroup1.idgroup)],
             ]}
@@ -422,7 +421,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste
         # d'hôtes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -435,7 +434,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste
         # d'hôtes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -448,7 +447,7 @@ class TestHostSelectionForm(TestController):
 
         # On s'assure que la liste
         # d'hôtes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -460,7 +459,7 @@ class TestHostSelectionForm(TestController):
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
 
@@ -493,7 +492,6 @@ class TestHostSelectionForm(TestController):
         json = response.json
 
         # On s'assure que la liste retournée est vide
-        assert_equal(
+        self.assertEqual(
             json, {"items": []}
         )
-
