@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vigigraph 0.1\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
 "POT-Creation-Date: 2010-02-15 13:41+0100\n"
-"PO-Revision-Date: 2010-09-21 17:20+0200\n"
+"PO-Revision-Date: 2010-10-29 14:32+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: fr_FR <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -17,64 +17,84 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
 
-#: vigigraph/controllers/root.py:30 vigigraph/controllers/root.py:32
-#: vigigraph/controllers/root.py:37 vigigraph/controllers/rpc.py:52
+#: vigigraph/controllers/root.py:32 vigigraph/controllers/root.py:34
+#: vigigraph/controllers/root.py:39 vigigraph/controllers/rpc.py:53
 msgid "You need to be authenticated"
 msgstr "Vous devez vous authentifier"
 
-#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:56
+#: vigigraph/controllers/root.py:43 vigigraph/controllers/rpc.py:57
 msgid "You don't have access to VigiGraph"
 msgstr "Vous n'avez pas accès à VigiGraph"
 
-#: vigigraph/controllers/root.py:53
+#: vigigraph/controllers/root.py:55
 msgid "Wrong credentials"
 msgstr "Identifiant ou mot de passe incorrect"
 
-#: vigigraph/controllers/root.py:68
+#: vigigraph/controllers/root.py:70
 #, python-format
 msgid "\"%(username)s\" logged in (from %(IP)s)"
 msgstr "\"%(username)s\" s'est connecté (depuis %(IP)s)"
 
-#: vigigraph/controllers/root.py:72
+#: vigigraph/controllers/root.py:74
 #, python-format
 msgid "Welcome back, %s!"
 msgstr "Bienvenue, %s !"
 
-#: vigigraph/controllers/root.py:82
+#: vigigraph/controllers/root.py:84
 #, python-format
 msgid "Some user logged out (from %(IP)s)"
 msgstr "Un utilisateur s'est déconnecté (depuis %(IP)s)"
 
-#: vigigraph/controllers/root.py:85
+#: vigigraph/controllers/root.py:87
 msgid "We hope to see you soon!"
 msgstr "Au plaisir de vous revoir !"
 
-#: vigigraph/controllers/rpc.py:61 vigigraph/controllers/rpc.py:62
+#: vigigraph/controllers/rpc.py:62 vigigraph/controllers/rpc.py:63
 #, python-format
 msgid "Last %d hours"
 msgstr "Les %d dernières heures"
 
-#: vigigraph/controllers/rpc.py:63 vigigraph/controllers/rpc.py:64
-#: vigigraph/controllers/rpc.py:65
+#: vigigraph/controllers/rpc.py:64 vigigraph/controllers/rpc.py:65
+#: vigigraph/controllers/rpc.py:66
 #, python-format
 msgid "Last %d days"
 msgstr "Les %d derniers jours"
 
-#: vigigraph/controllers/rpc.py:66 vigigraph/controllers/rpc.py:67
+#: vigigraph/controllers/rpc.py:67 vigigraph/controllers/rpc.py:68
 #, python-format
 msgid "Last %d months"
 msgstr "Les %d derniers mois"
 
-#: vigigraph/controllers/rpc.py:68
+#: vigigraph/controllers/rpc.py:69
 msgid "Last year"
 msgstr "L'an dernier"
 
-#: vigigraph/controllers/rpc.py:171 vigigraph/controllers/rpc.py:541
+#: vigigraph/controllers/rpc.py:173 vigigraph/controllers/rpc.py:546
 msgid "No subgroup"
 msgstr "Pas de sous-groupe"
 
+#: vigigraph/controllers/rpc.py:470
+msgid "No host given"
+msgstr "Aucun hôte n'a été donné"
+
 #. TRANSLATORS: Format Python de date/heure, lisible par un humain.
-#: vigigraph/controllers/rpc.py:561
+#: vigigraph/controllers/rpc.py:568
 #, python-format
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%d/%m/%Y à %H:%M:%S"
+
+#: vigigraph/widgets/host_picker.py:13
+msgid "Choose"
+msgstr "Choisir"
+
+#: vigigraph/widgets/host_picker.py:14
+msgid "→"
+msgstr "→"
+
+#: vigigraph/widgets/host_picker.py:36
+msgid "Host"
+msgstr "Hôte"
+
+#: vigigraph/widgets/host_picker.py:37
+msgid "Graph"
+msgstr "Graphe"
