@@ -681,7 +681,7 @@ class RpcController(BaseController):
                 (Host, Host.idhost == PerfDataSource.idhost),
                 (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                     Host.idhost),
-            )
+            ).filter(Host.name == host)
 
         # Les managers ont accès à tout.
         # Les autres ont un accès restreint.
