@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-import time, urlparse, urllib2
+import time, urlparse
 import logging
 
 # La fonction parse_qsl a été déplacée dans Python 2.6.
@@ -17,13 +17,12 @@ from tg import expose, request, redirect, tmpl_context, \
 from tg.decorators import paginate
 from repoze.what.predicates import not_anonymous, has_permission, \
                                     in_group, Any, All
-from formencode import validators, schema, foreach
+from formencode import validators, schema
 from sqlalchemy import or_
 from sqlalchemy.sql.expression import literal_column
 
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
-from vigilo.turbogears.controllers.proxy import get_through_proxy
 
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host
@@ -181,7 +180,7 @@ class RpcController(BaseController):
     def graphsList(self, nocache=None, **kwargs):
         """
         Generation document avec url des graphes affiches
-        (pour impression)
+        (pour l impression )
 
         @param kwargs : arguments nommes
         @type kwargs  : dict
@@ -189,10 +188,6 @@ class RpcController(BaseController):
         @return: url de graphes
         @rtype: document html
         """
-        # @TODO: le must serait de hot-patcher mootools pour que son serializer
-        # d'URL utilise directement le format attendu par TurboGears
-        # (notation pointée plutôt qu'avec des crochets)
-
         if not kwargs:
             return dict(graphslist=[])
 
@@ -200,35 +195,23 @@ class RpcController(BaseController):
         # n'accepte pas les chaînes Unicode en entrée.
         # TRANSLATORS: Format Python de date/heure, lisible par un humain.
         format = _("%a, %d %b %Y %H:%M:%S").encode('utf8')
-        i = 0
         graphslist = []
+        for url in kwargs.itervalues():
+            parts = urlparse.urlparse(url)
+            params = dict(parse_qsl(parts.query))
 
-        while True:
-            try:
-                host = kwargs['graphs[%d][host]' % i]
-                graph = kwargs['graphs[%d][graph]' % i]
-                start = int(kwargs.get('graphs[%d][start]' % i, time.time() - 86400))
-                duration = int(kwargs.get('graphs[%d][duration]' % i))
-                nocache = kwargs['graphs[%d][nocache]' % i]
-            except KeyError:
-                break
+            graph = {}
+            start = int(params.get('start', time.time() - 86400))
+            duration = int(params.get('duration', 86400))
 
-            if not (host and graph and duration and nocache):
-                break
-
-            graphslist.append({
-                'host': host,
-                'graph': graph,
-                'start': start,
-                'duration': duration,
-                'nocache': nocache,
-                'start_date': time.strftime(format,
-                    time.localtime(start)).decode('utf8'),
-                'end_date': time.strftime(format,
-                    time.localtime(start + duration)).decode('utf8')
-            })
-            i += 1
-
+            graph['graph'] = params.get('graphtemplate')
+            graph['start_date'] = time.strftime(format,
+                time.localtime(start)).decode('utf8')
+            graph['end_date'] = time.strftime(format,
+                time.localtime(start + duration)).decode('utf8')
+            graph['img_src'] = url
+            graph['host'] = params['host']
+            graphslist.append(graph)
         return dict(graphslist=graphslist)
 
     @expose('json')
@@ -273,21 +256,6 @@ class RpcController(BaseController):
         indicators = [ind.name for ind in indicators]
         return dict(items=indicators)
 
-    class StartTimeSchema(schema.Schema):
-        """Schéma de validation pour la méthode L{getIndicators}."""
-        host = validators.String(not_empty=True)
-        nocache = validators.String(if_missing=None)
-
-    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
-    @validate(
-        validators = StartTimeSchema(),
-        error_handler = process_form_errors)
-    @expose('json')
-    def startTime(self, host, nocache):
-        return get_through_proxy(
-            'vigirrd', host,
-            '/starttime?host=%s' % urllib2.quote(host, '')
-        )
 
     class FullHostPageSchema(schema.Schema):
         """Schéma de validation pour la méthode L{fullHostPage}."""
@@ -564,7 +532,7 @@ class RpcController(BaseController):
         if not host.is_allowed_for(user):
             return dict(groups = [], graphs=[])
 
-        # On récupère la liste des groupes de graphes associé à l'hôte
+        # On récupère la liste des groupes de graphes associés à l'hôte
         host_graph_groups = DBSession.query(
             GraphGroup
         ).distinct(
@@ -579,7 +547,8 @@ class RpcController(BaseController):
             (SUPITEM_GROUP_TABLE, \
                 SUPITEM_GROUP_TABLE.c.idsupitem == PerfDataSource.idhost),
         ).filter(PerfDataSource.idhost == host_id
-        ).order_by(GraphGroup.name.asc())
+        ).order_by(GraphGroup.name.asc()
+        ).all()
 
         # Si l'identifiant du groupe parent n'est pas spécifié,
         # on récupère la liste des groupes de graphes racines.
@@ -598,7 +567,8 @@ class RpcController(BaseController):
                     GraphGroup.idgroup),
             ).filter(GroupHierarchy.hops == 1
             ).filter(GroupHierarchy.idparent == parent_id
-            ).order_by(GraphGroup.name.asc())
+            ).order_by(GraphGroup.name.asc()
+            ).all()
 
         # On réalise l'intersection des deux listes
         groups = []
@@ -616,11 +586,17 @@ class RpcController(BaseController):
             db_graphs = DBSession.query(
                 Graph.idgraph,
                 Graph.name,
+            ).distinct(
             ).join(
                 (GRAPH_GROUP_TABLE,
-                    GRAPH_GROUP_TABLE.c.idgraph == Graph.idgraph
-                    ),
+                    GRAPH_GROUP_TABLE.c.idgraph == Graph.idgraph),
+                (GRAPH_PERFDATASOURCE_TABLE,
+                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
+                (PerfDataSource,
+                    PerfDataSource.idperfdatasource == \
+                        GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
             ).filter(GRAPH_GROUP_TABLE.c.idgroup == parent_id
+            ).filter(PerfDataSource.idhost == host_id
             ).order_by(Graph.name.asc())
             for graph in db_graphs.all():
                 graphs.append({
@@ -672,63 +648,63 @@ class RpcController(BaseController):
                 'name' : group.name,
             })
 
-        return dict(groups = groups, hosts=[])
+        return dict(groups = groups, leaves=[])
 
-    def get_root_graph_groups(self, host_id):
-        """
-        Retourne tous les groupes racines (c'est à dire n'ayant
-        aucun parent) de graphes auquel l'utilisateur a accès et
-        concernant l'hôte dont l'identifiant est passé en paramètre.
-
-        @return: Un dictionnaire contenant la liste de ces groupes.
-        @rtype : C{dict} of C{list} of C{dict} of C{mixed}
-        """
-
-        # On récupère tous les groupes qui ont un parent.
-        children = DBSession.query(
-            Graph,
-        ).distinct(
-        ).join(
-            (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup)
-        ).filter(GroupHierarchy.hops > 0)
-
-        # On récupère tous les groupes racines de graphes portant sur l'hôte
-        # souhaité, en éliminant les groupes récupérés à l'étape précédente
-        graph_groups = DBSession.query(
-            GraphGroup
-        ).distinct(
-        ).join(
-            (GRAPH_GROUP_TABLE, \
-                GRAPH_GROUP_TABLE.c.idgroup == GraphGroup.idgroup),
-            (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
-            (GRAPH_PERFDATASOURCE_TABLE, \
-                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
-            (PerfDataSource, PerfDataSource.idperfdatasource == \
-                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
-            (SUPITEM_GROUP_TABLE, \
-                SUPITEM_GROUP_TABLE.c.idsupitem == PerfDataSource.idhost),
-        ).filter(PerfDataSource.idhost == host_id
-#        ).except_(children
-        ).order_by(GraphGroup.name.asc())
-
-        # On filtre ces groupes racines afin de ne
-        # retourner que ceux auquels l'utilisateur a accès
-        user = get_current_user()
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
-            user_groups = [ug[0] for ug in user.supitemgroups() if ug[1]]
-            graph_groups = graph_groups.filter(
-                SUPITEM_GROUP_TABLE.c.idgroup.in_(user_groups))
-
-        groups = []
-        for group in graph_groups.all():
-            #if group.has_children() or len(group.graphs)>0:
-            groups.append({
-                'id'   : group.idgroup,
-                'name' : group.name,
-            })
-
-        return dict(groups = groups, graphs=[])
+#    def get_root_graph_groups(self, host_id):
+#        """
+#        Retourne tous les groupes racines (c'est à dire n'ayant
+#        aucun parent) de graphes auquel l'utilisateur a accès et
+#        concernant l'hôte dont l'identifiant est passé en paramètre.
+#
+#        @return: Un dictionnaire contenant la liste de ces groupes.
+#        @rtype : C{dict} of C{list} of C{dict} of C{mixed}
+#        """
+#
+#        # On récupère tous les groupes qui ont un parent.
+#        children = DBSession.query(
+#            Graph,
+#        ).distinct(
+#        ).join(
+#            (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup)
+#        ).filter(GroupHierarchy.hops > 0)
+#
+#        # On récupère tous les groupes racines de graphes portant sur l'hôte
+#        # souhaité, en éliminant les groupes récupérés à l'étape précédente
+#        graph_groups = DBSession.query(
+#            GraphGroup
+#        ).distinct(
+#        ).join(
+#            (GRAPH_GROUP_TABLE, \
+#                GRAPH_GROUP_TABLE.c.idgroup == GraphGroup.idgroup),
+#            (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
+#            (GRAPH_PERFDATASOURCE_TABLE, \
+#                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
+#            (PerfDataSource, PerfDataSource.idperfdatasource == \
+#                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
+#            (SUPITEM_GROUP_TABLE, \
+#                SUPITEM_GROUP_TABLE.c.idsupitem == PerfDataSource.idhost),
+#        ).filter(PerfDataSource.idhost == host_id
+##        ).except_(children
+#        ).order_by(GraphGroup.name.asc())
+#
+#        # On filtre ces groupes racines afin de ne
+#        # retourner que ceux auquels l'utilisateur a accès
+#        user = get_current_user()
+#        is_manager = in_group('managers').is_met(request.environ)
+#        if not is_manager:
+#            user_groups = [ug[0] for ug in user.supitemgroups() if ug[1]]
+#            graph_groups = graph_groups.filter(
+#                SUPITEM_GROUP_TABLE.c.idgroup.in_(user_groups))
+#
+#        groups = []
+#        for group in graph_groups.all():
+#            #if group.has_children() or len(group.graphs)>0:
+#            groups.append({
+#                'id'   : group.idgroup,
+#                'name' : group.name,
+#            })
+#
+#        return dict(groups = groups, graphs=[])
 
     def getListIndicators(self, host, graph):
         """
@@ -757,3 +733,4 @@ class RpcController(BaseController):
                 ).filter(Host.name == host
                 ).all()
         return indicators
+

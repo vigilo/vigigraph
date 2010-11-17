@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Suite de tests du formulaire de sélection des graphes et groupes de graphes.
+Suite de tests de l'arbre de sélection des graphes et groupes de graphes.
 """
 import transaction
 
@@ -62,17 +62,17 @@ def addGraphs(host1, host2, host3):
     add_graph2group(graph3, graphgroup3)
 
 
-class TestGraphSelectionForm(TestController):
+class TestGraphTree(TestController):
     """
-    Teste le formulaire de sélection des
-    graphes et groupes de graphes de Vigigraph.
+    Teste l'arbre de sélection des graphes
+    et groupes de graphes de Vigigraph.
     """
 
     def setUp(self):
         """Préparation de la base de données de tests."""
 
         # Initialisation de la base
-        super(TestGraphSelectionForm, self).setUp()
+        super(TestGraphTree, self).setUp()
 
         # Ajout de données de tests dans la base
         (host1, host2, host3) = populateDB()
@@ -121,91 +121,97 @@ class TestGraphSelectionForm(TestController):
         # Récupération des groupes de graphes de l'hôte
         # host1 accessibles à l'utilisateur 'manager'
         response = self.app.post(
-        '/rpc/graphgroups?idhost=%s' % (host1.idhost, ), {
+        '/rpc/graphtree?host_id=%s' % (host1.idhost, ), {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup1'
         self.assertEqual(
-            json, {"items": [
-                [graphgroup1.name, unicode(graphgroup1.idgroup)]
-            ]}
+            json, {
+                'leaves': [],
+                'groups': [{'id': graphgroup1.idgroup, 'name': graphgroup1.name}]
+            }
         )
 
         # Récupération des groupes de graphes de l'hôte
         # host2 accessibles à l'utilisateur 'manager'
         response = self.app.post(
-        '/rpc/graphgroups?idhost=%s' % (host2.idhost, ), {
+        '/rpc/graphtree?host_id=%s' % (host2.idhost, ), {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup2'
         self.assertEqual(
-            json, {"items": [
-                [graphgroup2.name, unicode(graphgroup2.idgroup)]
-            ]}
+            json, {
+                'leaves': [],
+                'groups': [{'id': graphgroup2.idgroup, 'name': graphgroup2.name}]
+            }
         )
 
         # Récupération des groupes de graphes de l'hôte
         # host1 accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/graphgroups?idhost=%s' % (host1.idhost, ), {
+        '/rpc/graphtree?host_id=%s' % (host1.idhost, ), {
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup1'
         self.assertEqual(
-            json, {"items": [
-                [graphgroup1.name, unicode(graphgroup1.idgroup)]
-            ]}
+            json, {
+                'leaves': [],
+                'groups': [{'id': graphgroup1.idgroup, 'name': graphgroup1.name}]
+            }
         )
 
         # Récupération des groupes de graphes de l'hôte
         # host2 accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/graphgroups?idhost=%s' % (host2.idhost, ), {
+        '/rpc/graphtree?host_id=%s' % (host2.idhost, ), {
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup2'
         self.assertEqual(
-            json, {"items": [
-                [graphgroup2.name, unicode(graphgroup2.idgroup)]
-            ]}
+            json, {
+                'leaves': [],
+                'groups': [{'id': graphgroup2.idgroup, 'name': graphgroup2.name}]
+            }
         )
 
         # Récupération des groupes de graphes de l'hôte
         # host2 accessibles à l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/graphgroups?idhost=%s' % (host2.idhost, ), {
+        '/rpc/graphtree?host_id=%s' % (host2.idhost, ), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup2'
         self.assertEqual(
-            json, {"items": [
-                [graphgroup2.name, unicode(graphgroup2.idgroup)]
-            ]}
+            json, {
+                'leaves': [],
+                'groups': [{'id': graphgroup2.idgroup, 'name': graphgroup2.name}]
+            }
         )
 
         # Récupération des groupes de graphes de l'hôte
         # host3 accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/graphgroups?idhost=%s' % (host3.idhost, ), {
+        '/rpc/graphtree?host_id=%s' % (host3.idhost, ), {
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée contient bien 'graphgroup3'
         self.assertEqual(
-            json, {"items": [
-                [graphgroup3.name, unicode(graphgroup3.idgroup)]
-            ]}
+            json, {
+                'leaves': [],
+                'groups': [{'id': graphgroup3.idgroup, 'name': graphgroup3.name}]
+            }
         )
 
     def test_get_graph_groups_when_not_allowed(self):
@@ -224,40 +230,49 @@ class TestGraphSelectionForm(TestController):
         # Récupération des groupes de graphes de l'hôte
         # host1 accessibles à l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/graphgroups?idhost=%s' % (host1.idhost, ), {
+        '/rpc/graphtree?host_id=%s' % (host1.idhost, ), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {
+                'graphs': [],
+                'groups': []
+            }
         )
 
         # Récupération des groupes de graphes de l'hôte
         # host3 accessibles à l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/graphgroups?idhost=%s' % (host3.idhost, ), {
+        '/rpc/graphtree?host_id=%s' % (host3.idhost, ), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {
+                'graphs': [],
+                'groups': []
+            }
         )
 
         # Récupération des groupes de graphes de l'hôte
         # host1 accessibles à l'utilisateur 'visitor'
         response = self.app.post(
-        '/rpc/graphgroups?idhost=%s' % (host1.idhost, ), {
+        '/rpc/graphtree?host_id=%s' % (host1.idhost, ), {
             }, extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {
+                'graphs': [],
+                'groups': []
+            }
         )
 
     def test_get_graph_groups_as_anonymous(self):
@@ -273,7 +288,7 @@ class TestGraphSelectionForm(TestController):
         # 'host1' par un utilisateur anonyme : le contrôleur
         # doit retourner une erreur 401 (HTTPUnauthorized)
         self.app.post(
-            '/rpc/graphgroups?idhost=%s' % (host1.idhost, ), {
+            '/rpc/graphtree?host_id=%s' % (host1.idhost, ), {
             }, status=401)
 
     def test_get_graph_groups_from_inexisting_host(self):
@@ -284,14 +299,17 @@ class TestGraphSelectionForm(TestController):
         # Récupération des groupes d'hôtes accessibles à l'utilisateur
         # 'visitor' et appartenant à un groupe principal inexistant
         response = self.app.post(
-            '/rpc/graphgroups?idhost=6666666', {
+            '/rpc/graphtree?host_id=6666666', {
             }, extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {
+                'graphs': [],
+                'groups': []
+            }
         )
 
 ##### Cinquième onglet déroulant du formulaire #####
@@ -346,7 +364,7 @@ class TestGraphSelectionForm(TestController):
         # Récupération des graphes du groupe de graphes
         # 'graphgroup1' accessibles à l'utilisateur 'manager'
         response = self.app.post(
-        '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+        '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup1.idgroup, host1.idhost), {},
             extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
@@ -354,15 +372,16 @@ class TestGraphSelectionForm(TestController):
         # On s'assure que la liste de
         # graphes retournée contient 'graph1'
         self.assertEqual(
-            json, {"items": [
-                [graph1.name, unicode(graph1.idgraph)]
-            ]}
+            json, {
+                'leaves': [{'id': graph1.idgraph, 'name': graph1.name}],
+                'groups': []
+            }
         )
 
         # Récupération des graphes du groupe de graphes
         # 'graphgroup2' accessibles à l'utilisateur 'manager'
         response = self.app.post(
-        '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+        '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup2.idgroup, host2.idhost), {},
             extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
@@ -370,15 +389,16 @@ class TestGraphSelectionForm(TestController):
         # On s'assure que la liste de
         # graphes retournée contient 'graph2'
         self.assertEqual(
-            json, {"items": [
-                [graph2.name, unicode(graph2.idgraph)]
-            ]}
+            json, {
+                'leaves': [{'id': graph2.idgraph, 'name': graph2.name}],
+                'groups': []
+            }
         )
 
         # Récupération des graphes du groupe de graphes
         # 'graphgroup1' accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+        '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup1.idgroup, host1.idhost), {},
             extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
@@ -386,15 +406,16 @@ class TestGraphSelectionForm(TestController):
         # On s'assure que la liste de
         # graphes retournée contient 'graph1'
         self.assertEqual(
-            json, {"items": [
-                [graph1.name, unicode(graph1.idgraph)]
-            ]}
+            json, {
+                'leaves': [{'id': graph1.idgraph, 'name': graph1.name}],
+                'groups': []
+            }
         )
 
         # Récupération des graphes du groupe de graphes
         # 'graphgroup2' accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+        '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup2.idgroup, host2.idhost), {},
             extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
@@ -402,15 +423,16 @@ class TestGraphSelectionForm(TestController):
         # On s'assure que la liste de
         # graphes retournée contient 'graph2'
         self.assertEqual(
-            json, {"items": [
-                [graph2.name, unicode(graph2.idgraph)]
-            ]}
+            json, {
+                'leaves': [{'id': graph2.idgraph, 'name': graph2.name}],
+                'groups': []
+            }
         )
 
         # Récupération des graphes du groupe de graphes
         # 'graphgroup2' accessibles à l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+        '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup2.idgroup, host2.idhost), {},
             extra_environ={'REMOTE_USER': 'user'})
         json = response.json
@@ -418,15 +440,16 @@ class TestGraphSelectionForm(TestController):
         # On s'assure que la liste de
         # graphes retournée contient 'graph2'
         self.assertEqual(
-            json, {"items": [
-                [graph2.name, unicode(graph2.idgraph)]
-            ]}
+            json, {
+                'leaves': [{'id': graph2.idgraph, 'name': graph2.name}],
+                'groups': []
+            }
         )
 
         # Récupération des graphes du groupe de graphes
         # 'graphgroup3' accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+        '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup3.idgroup, host3.idhost), {},
             extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
@@ -434,9 +457,10 @@ class TestGraphSelectionForm(TestController):
         # On s'assure que la liste de
         # graphes retournée contient 'graph3'
         self.assertEqual(
-            json, {"items": [
-                [graph3.name, unicode(graph3.idgraph)]
-            ]}
+            json, {
+                'leaves': [{'id': graph3.idgraph, 'name': graph3.name}],
+                'groups': []
+            }
         )
 
     def test_get_graphs_when_not_allowed(self):
@@ -465,7 +489,7 @@ class TestGraphSelectionForm(TestController):
         # Récupération des graphes du groupe de graphes
         # graphgroup1 accessibles à l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+        '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup1.idgroup, host1.idhost), {},
             extra_environ={'REMOTE_USER': 'user'})
         json = response.json
@@ -473,13 +497,16 @@ class TestGraphSelectionForm(TestController):
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {
+                'graphs': [],
+                'groups': []
+            }
         )
 
         # Récupération des graphes du groupe de graphes
         # 'graphgroup1' accessibles à l'utilisateur 'visitor'
         response = self.app.post(
-        '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+        '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup1.idgroup, host1.idhost), {},
             extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
@@ -487,13 +514,16 @@ class TestGraphSelectionForm(TestController):
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {
+                'graphs': [],
+                'groups': []
+            }
         )
 
         # Récupération des graphes du groupe de graphes
         # 'graphgroup3' accessibles à l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+        '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup3.idgroup, host3.idhost), {},
             extra_environ={'REMOTE_USER': 'user'})
         json = response.json
@@ -501,7 +531,10 @@ class TestGraphSelectionForm(TestController):
         # On s'assure que la liste de groupes
         # de graphes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {
+                'graphs': [],
+                'groups': []
+            }
         )
 
     def test_get_graphs_as_anonymous(self):
@@ -522,7 +555,7 @@ class TestGraphSelectionForm(TestController):
         # 'graphgroup1' par un utilisateur anonyme : le contrôleur
         # doit retourner une erreur 401 (HTTPUnauthorized)
         self.app.post(
-            '/rpc/graphs?idgraphgroup=%s&idhost=%s' %
+            '/rpc/graphtree?parent_id=%s&host_id=%s' %
             (graphgroup1.idgroup, host1.idhost),
             {}, status=401)
 
@@ -534,12 +567,15 @@ class TestGraphSelectionForm(TestController):
         # Récupération des graphes accessibles à l'utilisateur
         # 'manager' et appartenant à un groupe inexistant
         response = self.app.post(
-            '/rpc/graphs?idgraphgroup=6666666&idhost=6666666', {
+            '/rpc/graphtree?parent_id=6666666&host_id=6666666', {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
         # On s'assure que la liste de
         # graphes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {
+                'graphs': [],
+                'groups': []
+            }
         )

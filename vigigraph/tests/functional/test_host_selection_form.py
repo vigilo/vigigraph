@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Suite de tests du formulaire de sélection des hôtes et groupes d'hôtes.
+Suite de tests de l'arbre de sélection des hôtes et groupes d'hôtes.
 """
 import transaction
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
-from vigilo.models.tables import SupItemGroup, Permission
+from vigilo.models.tables import Host, SupItemGroup, Permission
 from vigilo.models.demo.functions import add_supitemgroup, \
     add_host, add_host2group, add_usergroup, add_user, \
     add_supitemgrouppermission, add_usergroup_permission
@@ -78,17 +78,17 @@ def populateDB():
     return (host1, host2, host3)
 
 
-class TestHostSelectionForm(TestController):
+class TestHostTree(TestController):
     """
-    Teste le formulaire de sélection des
-    hôtes et groupes d'hôtes de Vigigraph.
+    Teste l'arbre de sélection des hôtes
+    et groupes d'hôtes de Vigigraph.
     """
 
     def setUp(self):
         """Préparation de la base de données de tests."""
 
         # Initialisation de la base
-        super(TestHostSelectionForm, self).setUp()
+        super(TestHostTree, self).setUp()
 
         # Ajout de données de tests dans la base
         populateDB()
@@ -111,47 +111,55 @@ class TestHostSelectionForm(TestController):
         # Récupération des groupes d'hôtes principaux
         # accessibles à l'utilisateur 'manager'
         response = self.app.post(
-            '/rpc/maingroups', {
+            '/rpc/hosttree', {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # d'hôtes retournée contient bien 'mhg'
         self.assertEqual(
-            json, {"items": [
-                [mainhostgroup.name, unicode(mainhostgroup.idgroup)]
-            ]}
+            json, {
+                'leaves': [], 'groups': [{
+                    'id': mainhostgroup.idgroup,
+                    'name': mainhostgroup.name
+                }]
+            }
         )
 
         # Récupération des groupes d'hôtes principaux
         # accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-            '/rpc/maingroups', {
+            '/rpc/hosttree', {
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # d'hôtes retournée contient bien 'mhg'
         self.assertEqual(
-            json, {"items": [
-                [mainhostgroup.name, unicode(mainhostgroup.idgroup)]
-            ]}
+            json, {
+                'leaves': [], 'groups': [{
+                    'id': mainhostgroup.idgroup,
+                    'name': mainhostgroup.name
+                }]
+            }
         )
 
         # Récupération des groupes d'hôtes principaux
         # accessibles à l'utilisateur 'user'
         response = self.app.post(
-            '/rpc/maingroups', {
+            '/rpc/hosttree', {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste de groupes
         # d'hôtes retournée contient bien 'mhg'
         self.assertEqual(
-            json, {"items": [[
-                mainhostgroup.name,
-                unicode(mainhostgroup.idgroup)
-            ]]}
+            json, {
+                'leaves': [], 'groups': [{
+                    'id': mainhostgroup.idgroup,
+                    'name': mainhostgroup.name
+                }]
+            }
         )
 
     def test_get_main_host_groups_when_not_allowed(self):
@@ -162,13 +170,13 @@ class TestHostSelectionForm(TestController):
         # Récupération des groupes d'hôtes principaux
         # accessibles à l'utilisateur 'visitor'
         response = self.app.post(
-            '/rpc/maingroups', {
+            '/rpc/hosttree', {
             }, extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
 
         # On s'assure que la liste de groupes d'hôtes retournée est bien vide
         self.assertEqual(
-            json, {"items": []}
+            json, {'leaves': [], 'groups': []}
         )
 
     def test_get_main_host_groups_as_anonymous(self):
@@ -180,7 +188,7 @@ class TestHostSelectionForm(TestController):
         # par un utilisateur anonyme : le contrôleur doit
         # retourner une erreur 401 (HTTPUnauthorized)
         self.app.post(
-            '/rpc/maingroups', {
+            '/rpc/hosttree', {
             }, status=401)
 
 ##### Deuxième onglet déroulant du formulaire #####
@@ -205,7 +213,7 @@ class TestHostSelectionForm(TestController):
         # Récupération des groupes d'hôtes
         # accessibles à l'utilisateur 'manager'
         response = self.app.post(
-            '/rpc/hostgroups?maingroupid=%s' % (mainhostgroup.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
@@ -222,7 +230,7 @@ class TestHostSelectionForm(TestController):
         # Récupération des groupes d'hôtes
         # accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-            '/rpc/hostgroups?maingroupid=%s' % (mainhostgroup.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
@@ -239,7 +247,7 @@ class TestHostSelectionForm(TestController):
         # Récupération des groupes d'hôtes
         # accessibles à l'utilisateur 'user'
         response = self.app.post(
-            '/rpc/hostgroups?maingroupid=%s' % (mainhostgroup.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
@@ -263,15 +271,13 @@ class TestHostSelectionForm(TestController):
         # Récupération des groupes d'hôtes
         # accessibles à l'utilisateur 'visitor'
         response = self.app.post(
-            '/rpc/hostgroups?maingroupid=%s' % (mainhostgroup.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
 
-        # On s'assure que la liste de groupes d'hôtes
-        # retournée contient uniquement 'No subgroups'
+        # On s'assure que la liste de groupes d'hôtes retournée est bien vide
         self.assertEqual(
-            json, {"items": [['No subgroup', '%s'
-                % (mainhostgroup.idgroup, )]]}
+            json, {'leaves': [], 'groups': []}
         )
 
     def test_get_host_groups_as_anonymous(self):
@@ -287,7 +293,7 @@ class TestHostSelectionForm(TestController):
         # utilisateur anonyme : le contrôleur doit
         # retourner une erreur 401 (HTTPUnauthorized)
         self.app.post(
-            '/rpc/hostgroups?maingroupid=%s' % (mainhostgroup.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, status=401)
 
     def test_get_host_groups_from_inexisting_main_group(self):
@@ -298,7 +304,7 @@ class TestHostSelectionForm(TestController):
         # Récupération des groupes d'hôtes accessibles à l'utilisateur
         # 'manager' et appartenant à un groupe principal inexistant
         response = self.app.post(
-            '/rpc/hostgroups?maingroupid=6666666', {
+            '/rpc/hosttree?parent_id=6666666', {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
@@ -323,74 +329,96 @@ class TestHostSelectionForm(TestController):
         hostgroup1 = DBSession.query(SupItemGroup).filter(
             SupItemGroup.name == u'hg1').first()
 
+        # Récupération du groupe d'hôtes 'hg2' dans la base de données
+        hostgroup2 = DBSession.query(SupItemGroup).filter(
+            SupItemGroup.name == u'hg2').first()
+
+        # Récupération de l'hôte 'host1' dans la base de données
+        host1 = DBSession.query(Host).filter(
+            Host.name == u'host1').first()
+
+        # Récupération de l'hôte 'host2' dans la base de données
+        host2 = DBSession.query(Host).filter(
+            Host.name == u'host2').first()
+
         # Récupération des hôtes du groupe 'mhg'
         # accessibles à l'utilisateur 'manager'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (mainhostgroup.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée contient bien 'host1'
         self.assertEqual(
-            json, {"items": [
-                ['host1', unicode(mainhostgroup.idgroup)],
-            ]}
+            json, {
+                'leaves': [{'id': host1.idhost, 'name': host1.name}],
+                'groups': [
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
+                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name}
+                ]
+            }
         )
 
         # Récupération des hôtes du groupe 'hg1'
         # accessibles à l'utilisateur 'manager'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (hostgroup1.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (hostgroup1.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
         # On s'assure que la liste d'hotes retournée contient bien 'host2'
         self.assertEqual(
-            json, {"items": [
-                ['host2', unicode(hostgroup1.idgroup)],
-            ]}
+            json, {
+                'leaves': [{'id': host2.idhost, 'name': host2.name}],
+                'groups': []
+            }
         )
 
         # Récupération des hôtes du groupe 'mhg'
         # accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (mainhostgroup.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée contient bien 'host1'
         self.assertEqual(
-            json, {"items": [
-                ['host1', unicode(mainhostgroup.idgroup)],
-            ]}
+            json, {
+                'leaves': [{'id': host1.idhost, 'name': host1.name}],
+                'groups': [
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
+                ]
+            }
         )
 
         # Récupération des hôtes du groupe 'hg1'
         # accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (hostgroup1.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (hostgroup1.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
         # On s'assure que la liste d'hotes retournée contient bien 'host2'
         self.assertEqual(
-            json, {"items": [
-                ['host2', unicode(hostgroup1.idgroup)],
-            ]}
+            json, {
+                'leaves': [{'id': host2.idhost, 'name': host2.name}],
+                'groups': []
+            }
         )
 
         # Récupération des hôtes du groupe 'hg1'
         # accessibles à l'utilisateur 'user'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (hostgroup1.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (hostgroup1.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée contient bien 'host2'
         self.assertEqual(
-            json, {"items": [
-                ['host2', unicode(hostgroup1.idgroup)],
-            ]}
+            json, {
+                'leaves': [{'id': host2.idhost, 'name': host2.name}],
+                'groups': []
+            }
         )
 
     def test_get_hosts_when_not_allowed(self):
@@ -415,52 +443,49 @@ class TestHostSelectionForm(TestController):
         # Récupération des hôtes du groupe 'mhg'
         # accessibles à l'utilisateur 'user'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (mainhostgroup.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
-        # On s'assure que la liste
-        # d'hôtes retournée est vide
+        # On s'assure que la liste d'hôtes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {'leaves': [], 'groups': []}
         )
 
         # Récupération des hôtes du groupe 'hg2'
         # accessibles à l'utilisateur 'user'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (hostgroup2.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (hostgroup2.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
-        # On s'assure que la liste
-        # d'hôtes retournée est vide
+        # On s'assure que la liste d'hôtes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {'leaves': [], 'groups': []}
         )
 
         # Récupération des hôtes du groupe 'mhg'
         # accessibles à l'utilisateur 'visitor'
         response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (mainhostgroup.idgroup, ), {
-            }, extra_environ={'REMOTE_USER': 'visitor'})
-        json = response.json
-
-        # On s'assure que la liste
-        # d'hôtes retournée est vide
-        self.assertEqual(
-            json, {"items": []}
-        )
-
-        # Récupération des hôtes du groupe 'hg1'
-        # accessibles à l'utilisateur 'visitor'
-        response = self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (hostgroup1.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {'leaves': [], 'groups': []}
+        )
+
+        # Récupération des hôtes du groupe 'hg1'
+        # accessibles à l'utilisateur 'visitor'
+        response = self.app.post(
+            '/rpc/hosttree?parent_id=%s' % (hostgroup1.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'visitor'})
+        json = response.json
+
+        # On s'assure que la liste d'hôtes retournée est vide
+        self.assertEqual(
+            json, {'leaves': [], 'groups': []}
         )
 
     def test_get_hosts_as_anonymous(self):
@@ -476,7 +501,7 @@ class TestHostSelectionForm(TestController):
         # un utilisateur anonyme : le contrôleur doit
         # retourner une erreur 401 (HTTPUnauthorized)
         self.app.post(
-            '/rpc/hosts?othergroupid=%s' % (mainhostgroup.idgroup, ), {
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
             }, status=401)
 
     def test_get_hosts_from_inexisting_secondary_group(self):
@@ -487,11 +512,11 @@ class TestHostSelectionForm(TestController):
         # Récupération des hôtes accessibles à l'utilisateur
         # 'manager' et appartenant à un groupe secondaire inexistant
         response = self.app.post(
-            '/rpc/hosts?othergroupid=6666666', {
+            '/rpc/hosttree?parent_id=6666666', {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
         # On s'assure que la liste retournée est vide
         self.assertEqual(
-            json, {"items": []}
+            json, {'leaves': [], 'groups': []}
         )
