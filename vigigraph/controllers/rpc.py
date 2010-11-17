@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """RPC controller for the combobox of vigigraph"""
 
-import time, urlparse
+import time, urlparse, urllib2
 import logging
 
 # La fonction parse_qsl a été déplacée dans Python 2.6.
@@ -23,6 +23,7 @@ from sqlalchemy.sql.expression import literal_column
 
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
+from vigilo.turbogears.controllers.proxy import get_through_proxy
 
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host
@@ -272,6 +273,21 @@ class RpcController(BaseController):
         indicators = [ind.name for ind in indicators]
         return dict(items=indicators)
 
+    class StartTimeSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{getIndicators}."""
+        host = validators.String(not_empty=True)
+        nocache = validators.String(if_missing=None)
+
+    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
+    @validate(
+        validators = StartTimeSchema(),
+        error_handler = process_form_errors)
+    @expose('json')
+    def startTime(self, host, nocache):
+        return get_through_proxy(
+            'vigirrd', host,
+            '/starttime?host=%s' % urllib2.quote(host, '')
+        )
 
     class FullHostPageSchema(schema.Schema):
         """Schéma de validation pour la méthode L{fullHostPage}."""

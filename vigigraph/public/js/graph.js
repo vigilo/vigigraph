@@ -18,8 +18,7 @@ var Graph = new Class({
         this.refreshTimer = null;
 
         new Request.JSON({
-            url: app_path + 'vigirrd/' +
-                encodeURIComponent(this.host) + '/starttime',
+            url: app_path + 'rpc/startTime',
             onSuccess: function (data) {
                 this.startTime = data.starttime;
             }.bind(this)
