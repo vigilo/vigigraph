@@ -1,35 +1,13 @@
 NAME := vigigraph
 QOOXDOO_VER := 0.7.3
 
-all: qooxdoo build
+all: build
 
 include buildenv/Makefile.common
 PKGNAME := $(NAME)
 MODULE := $(NAME)
 CODEPATH := $(NAME)
 EPYDOC_PARSE := vigigraph\.controllers
-
-qooxdoo_source: javascript/qooxdoo-$(QOOXDOO_VER)-sdk/frontend/Makefile
-javascript/qooxdoo-$(QOOXDOO_VER)-sdk.tar.gz:
-	#wget -P javascript/ http://downloads.sourceforge.net/project/qooxdoo/qooxdoo-legacy/$(QOOXDOO_VER)/qooxdoo-$(QOOXDOO_VER)-sdk.tar.gz
-	wget -P javascript/ http://vigilo-dev.si.c-s.fr/cache/qooxdoo-$(QOOXDOO_VER)-sdk.tar.gz
-	touch --no-create $@
-javascript/qooxdoo-$(QOOXDOO_VER)-sdk/frontend/Makefile: javascript/qooxdoo-$(QOOXDOO_VER)-sdk.tar.gz
-	tar -C javascript/ -xzf javascript/qooxdoo-0.7.3-sdk.tar.gz
-	patch -p0 < patches/001_qooxdoo_getBoxObjectFor.diff
-	touch --no-create $@
-
-qooxdoo: vigigraph/public/js/vigigraph.js
-vigigraph/public/js/vigigraph.js: javascript/source/class/vigigraph/Application.js javascript/qooxdoo-$(QOOXDOO_VER)-sdk/frontend/Makefile
-	make -C javascript build
-	mkdir -p vigigraph/public/js/
-	cp -f javascript/build/script/vigigraph.js vigigraph/public/js/vigigraph.js
-	cp -rf javascript/build/resource vigigraph/public/
-
-clean_qooxdoo:
-	$(RM) vigigraph/public/js/vigigraph.js
-	$(RM) -r vigigraph/public/resource
-	$(RM) -r javascript/build/
 
 install: vigigraph/public/js/vigigraph.js $(PYTHON)
 	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR) --record=INSTALLED_FILES
@@ -54,4 +32,4 @@ install: vigigraph/public/js/vigigraph.js $(PYTHON)
 
 lint: lint_pylint
 tests: tests_nose
-clean: clean_python clean_qooxdoo
+clean: clean_python

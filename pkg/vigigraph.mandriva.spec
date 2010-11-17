@@ -93,10 +93,8 @@ This application is part of the Vigilo Project <http://vigilo-project.org>
 
 %prep
 %setup -q -n %{module}-%{version}
-make qooxdoo_source
 
 %build
-make qooxdoo
 make PYTHON=%{_bindir}/python SYSCONFDIR=%{_sysconfdir}
 
 %install

@@ -4,7 +4,7 @@
 
 import logging
 from tg import expose, flash, require, request, redirect
-from pylons.i18n import ugettext as _, lazy_ugettext as l_
+from pylons.i18n import ugettext as _, lazy_ugettext as l_, get_lang
 from repoze.what.predicates import Any, All, not_anonymous, \
                                     has_permission, in_group
 
@@ -44,6 +44,32 @@ class RootController(BaseController):
     def index(self):
         """Handle the front-page."""
         return dict(page='index')
+
+    @expose()
+    def i18n(self):
+        import gettext
+        import pylons
+        import os.path
+
+        # Repris de pylons.i18n.translation:_get_translator.
+        conf = pylons.config.current_conf()
+        try:
+            rootdir = conf['pylons.paths']['root']
+        except KeyError:
+            rootdir = conf['pylons.paths'].get('root_path')
+        localedir = os.path.join(rootdir, 'i18n')
+
+        # Localise le fichier *.mo actuellement chargé
+        # et génère le chemin jusqu'au *.js correspondant.
+        filename = gettext.find(conf['pylons.package'], localedir,
+            languages=get_lang())
+        js = filename[:-3] + '.js'
+
+        # Récupère et envoie le contenu du fichier de traduction *.js.
+        fhandle = open(js, 'r')
+        translations = fhandle.read()
+        fhandle.close()
+        return translations
 
     @expose('login.html')
     def login(self, came_from='/'):

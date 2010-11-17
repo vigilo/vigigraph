@@ -19,6 +19,7 @@ from repoze.what.predicates import not_anonymous, has_permission, \
                                     in_group, Any, All
 from formencode import validators, schema
 from sqlalchemy import or_
+from sqlalchemy.sql.expression import literal_column
 
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
@@ -34,8 +35,6 @@ from vigilo.models.tables.secondary_tables import SUPITEM_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from vigilo.models.functions import sql_escape_like
-
-from vigigraph.widgets.searchhostform import SearchHostForm
 
 LOGGER = logging.getLogger(__name__)
 
@@ -78,274 +77,17 @@ class RpcController(BaseController):
             flash("'%s': %s" % (k, tmpl_context.form_errors[k]), 'error')
         redirect(request.environ.get('HTTP_REFERER', '/'))
 
-    @expose('json')
-    def maingroups(self, nocache=None):
-        """
-        Determination des groupes principaux (sans parent)
-
-        @return: Dictionnaire dont la clé "items" contient une liste
-            de tuples contenant le nom et l'ID des groupes d'éléments
-            au sommet de la hiérarchie et auquels l'utilisateur a accès.
-        @rtype: C{dict}
-        @note: L'ID des groupes est converti en chaîne de caractères
-            dans le résultat.
-        """
-        user = get_current_user()
-        if user is None:
-            return dict(items=[])
-
-        groups_with_parents = DBSession.query(
-                GroupHierarchy.idparent,
-            ).distinct()
-
-        # Les managers ont accès à tout.
-        # Les autres ont un accès restreint.
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
-            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-            groups_with_parents = groups_with_parents.filter(
-                GroupHierarchy.idchild.in_(supitemgroups))
-
-        groups_with_parents = [g.idparent for g in groups_with_parents.all()]
-        children = DBSession.query(
-                SupItemGroup
-            ).distinct(
-            ).join(
-                (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup)
-            ).filter(GroupHierarchy.hops > 0)
-
-        topgroups = DBSession.query(
-                SupItemGroup,
-            ).filter(SupItemGroup.idgroup.in_(groups_with_parents)
-            ).except_(children).order_by(SupItemGroup.name)
-        topgroups = [(sig.name, str(sig.idgroup)) for sig in topgroups.all()]
-        return dict(items=topgroups)
-
-    class HostgroupsSchema(schema.Schema):
-        """Schéma de validation pour la méthode L{hostgroups}."""
-        maingroupid = validators.Int(not_empty=True)
-        nocache = validators.String(if_missing=None)
-
-    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
-    @validate(
-        validators = HostgroupsSchema(),
-        error_handler = process_form_errors)
-    @expose('json')
-    def hostgroups(self, maingroupid, nocache):
-        """
-        Determination des groupes associes au groupe parent
-        dont identificateur = argument
-
-        @param maingroupid: identificateur d un groupe principal
-        @type maingroupid: C{int}
-
-        @return: Dictionnaire dont la clé "items" contient une liste
-            de tuples avec le nom et l'ID des groupes d'éléments
-            auxquels l'utilisateur a accès.
-        @rtype: C{dict}
-        @note: L'ID des groupes est converti en chaîne de caractères
-            dans le résultat.
-        """
-        user = get_current_user()
-        if user is None:
-            return dict(items=[])
-
-        hostgroups = DBSession.query(
-                SupItemGroup.name,
-                SupItemGroup.idgroup,
-            ).distinct().join(
-                (GroupHierarchy, GroupHierarchy.idchild == \
-                    SupItemGroup.idgroup),
-            ).filter(GroupHierarchy.idparent == maingroupid
-            ).filter(GroupHierarchy.hops == 1
-            ).order_by(SupItemGroup.name.asc())
-
-        # Les managers ont accès à tout.
-        # Les autres ont un accès restreint.
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
-            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-            hostgroups = hostgroups.filter(
-                SupItemGroup.idgroup.in_(supitemgroups))
-
-        hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups.all()]
-        hostgroups.insert(0, (_('No subgroup'), str(maingroupid)))
-        return dict(items=hostgroups)
-
-    class HostsSchema(schema.Schema):
-        """Schéma de validation pour la méthode L{hosts}."""
-        othergroupid = validators.Int(not_empty=True)
-        nocache = validators.String(if_missing=None)
-
-    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
-    @validate(
-        validators = HostsSchema(),
-        error_handler = process_form_errors)
-    @expose('json')
-    def hosts(self, othergroupid, nocache):
-        """
-        Determination des hotes associes au groupe
-        dont identificateur = argument
-
-        @param othergroupid : identificateur d un groupe
-        @type othergroupid : int
-
-        @return: hotes
-        @rtype: document json (sous forme de dict)
-        """
-        user = get_current_user()
-        if user is None:
-            return dict(items=[])
-
-        groups_with_parents = DBSession.query(
-                GroupHierarchy.idparent,
-            ).distinct()
-
-        # Les managers ont accès à tout.
-        # Les autres ont un accès restreint.
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
-            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-            groups_with_parents = groups_with_parents.filter(
-                GroupHierarchy.idchild.in_(supitemgroups))
-
-        groups_with_parents = [g.idparent for g in groups_with_parents.all()]
-        hosts = DBSession.query(
-                Host.name,
-                Host.idhost,
-            ).distinct(
-            ).join(
-                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
-                    Host.idhost),
-            ).filter(SUPITEM_GROUP_TABLE.c.idgroup == othergroupid
-            ).filter(SUPITEM_GROUP_TABLE.c.idgroup.in_(groups_with_parents)
-            ).order_by(
-                Host.name.asc(),
-            ).all()
-
-        hosts = [(h.name, str(h.idhost)) for h in hosts]
-        return dict(items=hosts)
-
-    class GraphGroupsSchema(schema.Schema):
-        """Schéma de validation pour la méthode L{graphgroups}."""
-        idhost = validators.Int(not_empty=True)
-        nocache = validators.String(if_missing=None)
-
-    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
-    @validate(
-        validators = GraphGroupsSchema(),
-        error_handler = process_form_errors)
-    @expose('json')
-    def graphgroups(self, idhost, nocache):
-        """
-        Determination des groupes de graphes associes a l hote
-        dont identificateur = argument
-
-        @param idhost : identificateur d un hote
-        @type idhost : int
-
-        @return: groupes de service
-        @rtype: document json (sous forme de dict)
-        """
-        user = get_current_user()
-        if user is None:
-            return dict(items=[])
-
-        graphgroups = DBSession.query(
-                GraphGroup.name,
-                GraphGroup.idgroup,
-            ).distinct(
-            ).join(
-                (GRAPH_GROUP_TABLE, GRAPH_GROUP_TABLE.c.idgroup == \
-                    GraphGroup.idgroup),
-                (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
-                (GRAPH_PERFDATASOURCE_TABLE, \
-                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
-                (PerfDataSource, PerfDataSource.idperfdatasource == \
-                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
-                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
-                    PerfDataSource.idhost),
-            ).filter(PerfDataSource.idhost == idhost
-            ).order_by(GraphGroup.name.asc())
-
-        # Les managers ont accès à tout.
-        # Les autres ont un accès restreint.
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
-            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-            graphgroups = graphgroups.filter(
-                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
-
-        graphgroups = [(gg.name, str(gg.idgroup)) for gg in graphgroups.all()]
-        return dict(items=graphgroups)
-
-    class GraphsSchema(schema.Schema):
-        """Schéma de validation pour la méthode L{graphs}."""
-        idgraphgroup = validators.Int(not_empty=True)
-        idhost = validators.Int(not_empty=True)
-        nocache = validators.String(if_missing=None)
-
-    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
-    @validate(
-        validators = GraphsSchema(),
-        error_handler = process_form_errors)
-    @expose('json')
-    def graphs(self, idgraphgroup, idhost, nocache):
-        """
-        Determination des graphes
-        avec un service dont identificateur = argument
-
-        @param idgraph : identificateur d un service
-        @type idgraph : int
-
-        @return: graphes
-        @rtype: document json (sous forme de dict)
-        """
-        user = get_current_user()
-        if user is None:
-            return dict(items=[])
-
-        graphs = DBSession.query(
-                Graph.name,
-                Graph.idgraph,
-            ).distinct().join(
-                (GRAPH_GROUP_TABLE, GRAPH_GROUP_TABLE.c.idgraph == \
-                    Graph.idgraph),
-                (GraphGroup, GraphGroup.idgroup == \
-                    GRAPH_GROUP_TABLE.c.idgroup),
-                (GRAPH_PERFDATASOURCE_TABLE, \
-                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
-                (PerfDataSource, PerfDataSource.idperfdatasource == \
-                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
-                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
-                    PerfDataSource.idhost),
-            ).filter(GraphGroup.idgroup == idgraphgroup
-            ).filter(PerfDataSource.idhost == idhost
-            ).order_by(Graph.name.asc())
-
-        # Les managers ont accès à tout.
-        # Les autres ont un accès restreint.
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
-            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-            graphs = graphs.filter(
-                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
-
-        graphs = [(pds.name, str(pds.idgraph)) for pds in graphs.all()]
-        return dict(items=graphs)
-
     class SearchHostAndGraphSchema(schema.Schema):
         """Schéma de validation pour la méthode L{searchHostAndGraph}."""
-        host = validators.String(if_missing=None)
-        graph = validators.String(if_missing=None)
-        nocache = validators.String(if_missing=None)
+        search_form_host = validators.String(if_missing=None)
+        search_form_graph = validators.String(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
         validators = SearchHostAndGraphSchema(),
         error_handler = process_form_errors)
     @expose('json')
-    def searchHostAndGraph(self, host, graph, nocache):
+    def searchHostAndGraph(self, search_form_host, search_form_graph):
         """
         Determination des couples (hote-graphe) repondant aux criteres de
         recherche sur hote et/ou graphe.
@@ -369,15 +111,17 @@ class RpcController(BaseController):
         # On a un nom d'indicateur, mais pas de nom d'hôte,
         # on considère que l'utilisateur veut tous les indicateurs
         # correspondant au motif, quel que soit l'hôte.
-        if graph is not None:
-            if host is None:
-                host = '*'
+        if search_form_graph:
+            if not search_form_host:
+                search_form_host = '*'
 
-            host = sql_escape_like(host)
-            graph = sql_escape_like(graph)
+            search_form_host = sql_escape_like(search_form_host)
+            search_form_graph = sql_escape_like(search_form_graph)
 
             items = DBSession.query(
+                    Host.idhost.label('idhost'),
                     Host.name.label('hostname'),
+                    Graph.idgraph.label('idgraph'),
                     Graph.name.label('graphname'),
                 ).distinct().join(
                     (PerfDataSource, PerfDataSource.idhost == Host.idhost),
@@ -388,8 +132,8 @@ class RpcController(BaseController):
                         GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                         Host.idhost),
-                ).filter(Host.name.ilike(host)
-                ).filter(Graph.name.ilike(graph)
+                ).filter(Host.name.ilike(search_form_host)
+                ).filter(Graph.name.ilike(search_form_graph)
                 ).order_by(
                     Host.name.asc(),
                     Graph.name.asc(),
@@ -398,19 +142,20 @@ class RpcController(BaseController):
         # On a ni hôte, ni indicateur. On renvoie une liste vide.
         # Si l'utilisateur voulait vraiment quelque chose,
         # il n'avait qu'à le demander.
-        elif host is None:
+        elif not search_form_host:
             return []
 
         # Sinon, on a juste un motif pour un hôte.
         # On renvoie la liste des hôtes correspondant.
         else:
-            host = sql_escape_like(host)
+            search_form_host = sql_escape_like(search_form_host)
             items = DBSession.query(
+                    Host.idhost.label('idhost'),
                     Host.name.label('hostname'),
                 ).distinct().join(
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                         Host.idhost),
-                ).filter(Host.name.ilike(host)
+                ).filter(Host.name.ilike(search_form_host)
                 ).order_by(Host.name.asc())
 
         # Les managers ont accès à tout.
@@ -423,128 +168,13 @@ class RpcController(BaseController):
                 SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
 
         items = items.limit(100).all() # pylint: disable-msg=E1103
-        if graph is None:
-            items = [(item.hostname, "") for item in items]
+        if not search_form_graph:
+            ids = [(item.idhost, None) for item in items]
+            labels = [(item.hostname, None) for item in items]
         else:
-            items = [(item.hostname, item.graphname) for item in items]
-        return dict(items=items)
-
-    class SelectHostAndGraphSchema(schema.Schema):
-        """Schéma de validation pour la méthode L{selectHostAndGraph}."""
-        host = validators.String(if_missing=None)
-        graph = validators.String(if_missing=None)
-        nocache = validators.String(if_missing=None)
-
-    # @TODO définir un error_handler différent pour remonter l'erreur via JS.
-    @validate(
-        validators = SelectHostAndGraphSchema(),
-        error_handler = process_form_errors)
-    @expose('json')
-    def selectHostAndGraph(self, host, graph, nocache):
-        """
-        Renvoie les valeurs à sélectionner dans les comboboxes
-        de VigiGraph pour afficher les données de l'hôte ou du
-        couple hôte/graphe sélectionné.
-
-        La clé "items" du dictionnaire renvoyé contient une liste avec
-        2 éléments, chacun de ces éléments étant lui-même une liste.
-        La 1ère liste contient les noms des groupes d'hôtes à sélectionner.
-        La 2ème liste contient la liste des groupes de graphes à sélectionner.
-
-        Pour le moment, la 2ème liste contiendra au plus 1 élément car
-        les groupes de graphes ne sont pas récursifs. L'utilisation d'une
-        liste permet d'assurer facilement une évolution vers des groupes
-        de graphes récursifs.
-        """
-        user = get_current_user()
-        if user is None:
-            return dict(items=[[], []])
-
-        # Ce cas ne devrait pas se produire, mais on tente
-        # d'avoir un comportement gracieux malgré tout.
-        if (not host) and (not graph):
-            return dict(items=[[], []])
-
-        if graph and not host:
-            raise HTTPPreconditionFailed(_("No host given"))
-
-        selected_hostgroups = []
-        selected_graphgroups = []
-        is_manager = in_group('managers').is_met(request.environ)
-
-        supitemgroups = []
-        if not is_manager:
-            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-
-        if host:
-            # Sélectionne l'identifiant du premier SupItemGroup auquel
-            # l'utilisateur a accès et auquel l'hôte donné appartient.
-            idsupitemgroup = DBSession.query(
-                    SupItemGroup.idgroup,
-                ).distinct().join(
-                    (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idgroup == \
-                        SupItemGroup.idgroup),
-                    (Host, Host.idhost == SUPITEM_GROUP_TABLE.c.idsupitem),
-                ).filter(Host.name == host)
-
-            # On prend en compte les permissions de l'utilisateur.
-            if not is_manager:
-                idsuitemgroup = idsupitemgroup.filter(
-                    SupItemGroup.idgroup.in_(supitemgroups))
-
-            idsupitemgroup = idsupitemgroup.scalar()
-
-            # Si on a trouvé un tel groupe, on renvoie les noms des
-            # groupes de la hiérarchie à sélectionner pour arriver
-            # à celui-ci.
-            if idsupitemgroup is not None:
-                selected_hostgroups = DBSession.query(
-                        SupItemGroup.name,
-                    ).distinct().join(
-                        (GroupHierarchy, GroupHierarchy.idparent == \
-                            GraphGroup.idgroup),
-                    ).filter(GroupHierarchy.idchild == idsupitemgroup
-                    ).order_by(
-                        GroupHierarchy.hops.desc()
-                    ).all()
-
-        if graph:
-            # Le principe est le même que pour l'hôte, en considérant
-            # cette fois les GraphGroup à la place des SupItemGroup.
-            idgraphgroup = DBSession.query(
-                    GraphGroup.idgroup,
-                ).join(
-                    (GRAPH_GROUP_TABLE, GRAPH_GROUP_TABLE.c.idgroup == \
-                        GraphGroup.idgroup),
-                    (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
-                ).filter(Graph.name == graph)
-
-            # On prend en compte les permissions de l'utilisateur.
-            if not is_manager:
-                idgraphgroup = idgraphgroup.filter(
-                    GraphGroup.idgroup.in_(supitemgroups))
-
-            idgraphgroup = idgraphgroup.scalar()
-
-            # Même principe que pour l'hôte.
-            if idgraphgroup is not None:
-                selected_graphgroups = DBSession.query(
-                        GraphGroup.name,
-                    ).join(
-                        (GroupHierarchy, GroupHierarchy.idparent == \
-                            GraphGroup.idgroup),
-                    ).filter(GroupHierarchy.idchild == idgraphgroup
-                    ).order_by(
-                        GroupHierarchy.hops.desc()
-                    ).all()
-
-        hostgroups = [hg.name for hg in selected_hostgroups]
-        # @FIXME: Ce test est nécessaire tant que l'interface Qooxdoo
-        # monolithique est conservée (ie: 2 niveaux de profondeur figés).
-        if len(hostgroups) == 1:
-            hostgroups.append(_('No subgroup'))
-        graphgroups = [gg.name for gg in selected_graphgroups]
-        return dict(items=[hostgroups, graphgroups])
+            ids = [(item.idhost, item.idgraph) for item in items]
+            labels = [(item.hostname, item.graphname) for item in items]
+        return dict(labels=labels, ids=ids)
 
     @expose('graphslist.html')
     def graphsList(self, nocache=None, **kwargs):
@@ -584,7 +214,7 @@ class RpcController(BaseController):
             graphslist.append(graph)
         return dict(graphslist=graphslist)
 
-    @expose(content_type='text/plain')
+    @expose('json')
     def tempoDelayRefresh(self, nocache=None):
         """
         Determination valeur temporisation pour le rafraichissement automatique
@@ -598,7 +228,7 @@ class RpcController(BaseController):
             delay = int(config['refresh_delay'])
         except (ValueError, KeyError):
             delay = 30
-        return str(delay)
+        return {'delay': delay}
 
     class GetIndicatorsSchema(schema.Schema):
         """Schéma de validation pour la méthode L{getIndicators}."""
@@ -738,19 +368,6 @@ class RpcController(BaseController):
         return dict(host=host, graph=graph, start=start, duration=duration, \
                     presets=self.presets)
 
-    @expose('searchhostform.html')
-    def searchHostForm(self):
-        """
-        Formulaire de recherche sur les hotes
-
-        @return: page avec formulaire de recherche
-        @rtype: page html
-        """
-        searchhostform = SearchHostForm('search_host_form', \
-            submit_text=None)
-
-        return dict(searchhostform=searchhostform)
-
     @expose('searchhost.html')
     @paginate('hosts', items_per_page=10)
     def searchHost(self, *args, **kwargs):
@@ -806,6 +423,281 @@ class RpcController(BaseController):
         """
         return dict()
 
+    @expose('json')
+    def hosttree(self, parent_id=None):
+
+        # Si l'identifiant du groupe parent n'est pas
+        # spécifié, on retourne la liste des groupes racines,
+        # fournie par la méthode get_root_hosts_groups.
+        if parent_id is None:
+            return self.get_root_host_groups()
+
+        # TODO: Utiliser un schéma de validation
+        parent_id = int(parent_id)
+
+        # On vérifie si le groupe parent fait partie des
+        # groupes auxquel l'utilisateur a accès, et on
+        # retourne une liste vide dans le cas contraire
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            direct_access = False
+            user = get_current_user()
+            user_groups = dict(user.supitemgroups())
+            # On regarde d'abord si le groupe fait partie de ceux
+            # auquels l'utilisateur a explicitement accès, ou s'il
+            # est un parent des groupes auxquels l'utilisateur a accès
+            if parent_id in user_groups.keys():
+                direct_access = user_groups[parent_id]
+            # Dans le cas contraire, on vérifie si le groupe est un
+            # sous-groupe des groupes auxquels l'utilisateur a accès
+            else:
+                id_list = [ug for ug in user_groups.keys() if user_groups[ug]]
+                child_groups = DBSession.query(SupItemGroup.idgroup
+                    ).distinct(
+                    ).join(
+                        (GroupHierarchy,
+                            GroupHierarchy.idchild == SupItemGroup.idgroup),
+                    ).filter(GroupHierarchy.idparent.in_(id_list)
+                    ).filter(GroupHierarchy.hops > 0
+                    ).all()
+                for ucg in child_groups:
+                    if ucg.idgroup == parent_id:
+                        direct_access = True
+                        break
+                # Sinon, l'utilisateur n'a pas accès à ce groupe
+                else:
+                    return dict(groups = [], leaves = [])
+
+        # On récupère la liste des groupes dont
+        # l'identifiant du parent est passé en paramètre
+        db_groups = DBSession.query(
+            SupItemGroup
+        ).join(
+            (GroupHierarchy, GroupHierarchy.idchild == \
+                SupItemGroup.idgroup),
+        ).filter(GroupHierarchy.hops == 1
+        ).filter(GroupHierarchy.idparent == parent_id
+        ).order_by(SupItemGroup.name.asc())
+        if not is_manager and not direct_access:
+            id_list = [ug for ug in user_groups.keys() if not user_groups[ug]]
+            db_groups = db_groups.filter(
+                SupItemGroup.idgroup.in_(id_list))
+        groups = []
+        for group in db_groups.all():
+            #if group.has_children() or len(group.hosts)>0:
+            groups.append({
+                'id'   : group.idgroup,
+                'name' : group.name,
+            })
+
+        # On récupère la liste des hôtes appartenant au
+        # groupe dont l'identifiant est passé en paramètre
+        hosts = []
+        if is_manager or direct_access:
+            db_hosts = DBSession.query(
+                Host.idhost,
+                Host.name,
+            ).join(
+                (SUPITEM_GROUP_TABLE,
+                    SUPITEM_GROUP_TABLE.c.idsupitem == Host.idhost
+                    ),
+            ).filter(SUPITEM_GROUP_TABLE.c.idgroup == parent_id
+            ).order_by(Host.name.asc())
+            hosts = []
+            for host in db_hosts.all():
+                hosts.append({
+                    'id'   : host.idhost,
+                    'name' : host.name,
+                })
+
+        return dict(groups = groups, leaves = hosts)
+
+    @expose('json')
+    def graphtree(self, host_id=None, parent_id=None):
+
+        # Si l'identifiant de l'hôte n'est pas spécifié, on
+        # retourne un dictionnaire contenant deux listes vides
+        if host_id is None:
+            return dict(groups = [], graphs=[])
+
+        # On vérifie les permissions sur l'hôte
+        # TODO: Utiliser un schéma de validation
+        host_id = int(host_id)
+        host = DBSession.query(Host
+            ).filter(Host.idhost == host_id
+            ).first()
+        if host is None:
+            return dict(groups = [], graphs=[])
+        user = get_current_user()
+        if not host.is_allowed_for(user):
+            return dict(groups = [], graphs=[])
+
+        # On récupère la liste des groupes de graphes associé à l'hôte
+        host_graph_groups = DBSession.query(
+            GraphGroup
+        ).distinct(
+        ).join(
+            (GRAPH_GROUP_TABLE, \
+                GRAPH_GROUP_TABLE.c.idgroup == GraphGroup.idgroup),
+            (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
+            (GRAPH_PERFDATASOURCE_TABLE, \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
+            (PerfDataSource, PerfDataSource.idperfdatasource == \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
+            (SUPITEM_GROUP_TABLE, \
+                SUPITEM_GROUP_TABLE.c.idsupitem == PerfDataSource.idhost),
+        ).filter(PerfDataSource.idhost == host_id
+        ).order_by(GraphGroup.name.asc())
+
+        # Si l'identifiant du groupe parent n'est pas spécifié,
+        # on récupère la liste des groupes de graphes racines.
+        if parent_id is None:
+            graph_groups = GraphGroup.get_top_groups()
+
+        # Sinon on récupère la liste des graphes dont le
+        # groupe passé en paramètre est le parent direct
+        else:
+            # TODO: Utiliser un schéma de validation
+            parent_id = int(parent_id)
+            graph_groups = DBSession.query(
+                GraphGroup
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idchild == \
+                    GraphGroup.idgroup),
+            ).filter(GroupHierarchy.hops == 1
+            ).filter(GroupHierarchy.idparent == parent_id
+            ).order_by(GraphGroup.name.asc())
+
+        # On réalise l'intersection des deux listes
+        groups = []
+        for gg in graph_groups:
+            if gg in host_graph_groups:
+                groups.append({
+                    'id'   : gg.idgroup,
+                    'name' : gg.name,
+                })
+
+        # On récupère la liste des graphes appartenant au
+        # groupe dont l'identifiant est passé en paramètre
+        graphs = []
+        if parent_id:
+            db_graphs = DBSession.query(
+                Graph.idgraph,
+                Graph.name,
+            ).join(
+                (GRAPH_GROUP_TABLE,
+                    GRAPH_GROUP_TABLE.c.idgraph == Graph.idgraph
+                    ),
+            ).filter(GRAPH_GROUP_TABLE.c.idgroup == parent_id
+            ).order_by(Graph.name.asc())
+            for graph in db_graphs.all():
+                graphs.append({
+                    'id'   : graph.idgraph,
+                    'name' : graph.name,
+                })
+
+        return dict(groups = groups, leaves = graphs)
+
+    def get_root_host_groups(self):
+        """
+        Retourne tous les groupes racines (c'est à dire n'ayant
+        aucun parent) d'hôtes auquel l'utilisateur a accès.
+
+        @return: Un dictionnaire contenant la liste de ces groupes.
+        @rtype : C{dict} of C{list} of C{dict} of C{mixed}
+        """
+
+        # On récupère tous les groupes qui ont un parent.
+        children = DBSession.query(
+            SupItemGroup,
+        ).distinct(
+        ).join(
+            (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup)
+        ).filter(GroupHierarchy.hops > 0)
+
+        # Ensuite on les exclut de la liste des groupes,
+        # pour ne garder que ceux qui sont au sommet de
+        # l'arbre et qui constituent nos "root groups".
+        root_groups = DBSession.query(
+            SupItemGroup,
+        ).except_(children
+        ).order_by(SupItemGroup.name)
+
+        # On filtre ces groupes racines afin de ne
+        # retourner que ceux auquels l'utilisateur a accès
+        user = get_current_user()
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            user_groups = [ug[0] for ug in user.supitemgroups() if ug[1]]
+            root_groups = root_groups.filter(
+                SupItemGroup.idgroup.in_(user_groups))
+
+        groups = []
+        for group in root_groups.all():
+            #if group.has_children() or len(group.hosts)>0:
+            groups.append({
+                'id'   : group.idgroup,
+                'name' : group.name,
+            })
+
+        return dict(groups = groups, hosts=[])
+
+    def get_root_graph_groups(self, host_id):
+        """
+        Retourne tous les groupes racines (c'est à dire n'ayant
+        aucun parent) de graphes auquel l'utilisateur a accès et
+        concernant l'hôte dont l'identifiant est passé en paramètre.
+
+        @return: Un dictionnaire contenant la liste de ces groupes.
+        @rtype : C{dict} of C{list} of C{dict} of C{mixed}
+        """
+
+        # On récupère tous les groupes qui ont un parent.
+        children = DBSession.query(
+            Graph,
+        ).distinct(
+        ).join(
+            (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup)
+        ).filter(GroupHierarchy.hops > 0)
+
+        # On récupère tous les groupes racines de graphes portant sur l'hôte
+        # souhaité, en éliminant les groupes récupérés à l'étape précédente
+        graph_groups = DBSession.query(
+            GraphGroup
+        ).distinct(
+        ).join(
+            (GRAPH_GROUP_TABLE, \
+                GRAPH_GROUP_TABLE.c.idgroup == GraphGroup.idgroup),
+            (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
+            (GRAPH_PERFDATASOURCE_TABLE, \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
+            (PerfDataSource, PerfDataSource.idperfdatasource == \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
+            (SUPITEM_GROUP_TABLE, \
+                SUPITEM_GROUP_TABLE.c.idsupitem == PerfDataSource.idhost),
+        ).filter(PerfDataSource.idhost == host_id
+#        ).except_(children
+        ).order_by(GraphGroup.name.asc())
+
+        # On filtre ces groupes racines afin de ne
+        # retourner que ceux auquels l'utilisateur a accès
+        user = get_current_user()
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            user_groups = [ug[0] for ug in user.supitemgroups() if ug[1]]
+            graph_groups = graph_groups.filter(
+                SUPITEM_GROUP_TABLE.c.idgroup.in_(user_groups))
+
+        groups = []
+        for group in graph_groups.all():
+            #if group.has_children() or len(group.graphs)>0:
+            groups.append({
+                'id'   : group.idgroup,
+                'name' : group.name,
+            })
+
+        return dict(groups = groups, graphs=[])
+
     def getListIndicators(self, host, graph):
         """
         Liste d indicateurs associes a un graphe
@@ -833,3 +725,4 @@ class RpcController(BaseController):
                 ).filter(Host.name == host
                 ).all()
         return indicators
+

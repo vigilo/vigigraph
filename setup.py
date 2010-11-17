@@ -1,12 +1,22 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
+
 import os
+
 try:
     from setuptools import setup, find_packages
 except ImportError:
     from ez_setup import use_setuptools
     use_setuptools()
     from setuptools import setup, find_packages
+
+cmdclass = {}
+try:
+    from babeljs import compile_catalog_plusjs
+except ImportError:
+    pass
+else:
+    cmdclass['compile_catalog'] = compile_catalog_plusjs
 
 sysconfdir = os.getenv("SYSCONFDIR", "/etc")
 
@@ -38,14 +48,15 @@ setup(
     package_data={
         'vigigraph': [
             'i18n/*/LC_MESSAGES/*.mo',
+            'i18n/*/LC_MESSAGES/*.js',
             'templates/*/*',
             'public/js/*.js',
-#            'public/*/*',
         ],
     },
     message_extractors={
         'vigigraph': [
             ('**.py', 'python', None),
+            ('**/public/js/*.js', 'javascript', None),
         ],
     },
 
@@ -61,6 +72,7 @@ setup(
         ],
     },
 
+    cmdclass=cmdclass,
     data_files=[
         (os.path.join(sysconfdir, 'vigilo/vigigraph/'), [
             'deployment/vigigraph.conf',
