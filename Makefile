@@ -9,7 +9,7 @@ MODULE := $(NAME)
 CODEPATH := $(NAME)
 EPYDOC_PARSE := vigigraph\.controllers
 
-install: vigigraph/public/js/vigigraph.js $(PYTHON)
+install: $(PYTHON)
 	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR) --record=INSTALLED_FILES
 	chmod a+rX -R $(DESTDIR)$(PREFIX)/lib*/python*/*
 	# Permissions de la conf
