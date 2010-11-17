@@ -359,7 +359,7 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph2' pour l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_host=%s' %
+        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
             (str(host2.name), str(graph2.name)), {
             }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json

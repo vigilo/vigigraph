@@ -164,8 +164,10 @@ class RpcController(BaseController):
         if not is_manager:
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             # pylint: disable-msg=E1103
-            items = items.filter(
-                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
+            items = items.join(
+                (GroupHierarchy, GroupHierarchy.idchild == \
+                    SUPITEM_GROUP_TABLE.c.idgroup)
+            ).filter(GroupHierarchy.idparent.in_(supitemgroups))
 
         items = items.limit(100).all() # pylint: disable-msg=E1103
         if not search_form_graph:
@@ -174,6 +176,7 @@ class RpcController(BaseController):
         else:
             ids = [(item.idhost, item.idgraph) for item in items]
             labels = [(item.hostname, item.graphname) for item in items]
+
         return dict(labels=labels, ids=ids)
 
     @expose('graphslist.html')
@@ -650,62 +653,6 @@ class RpcController(BaseController):
 
         return dict(groups = groups, leaves=[])
 
-#    def get_root_graph_groups(self, host_id):
-#        """
-#        Retourne tous les groupes racines (c'est à dire n'ayant
-#        aucun parent) de graphes auquel l'utilisateur a accès et
-#        concernant l'hôte dont l'identifiant est passé en paramètre.
-#
-#        @return: Un dictionnaire contenant la liste de ces groupes.
-#        @rtype : C{dict} of C{list} of C{dict} of C{mixed}
-#        """
-#
-#        # On récupère tous les groupes qui ont un parent.
-#        children = DBSession.query(
-#            Graph,
-#        ).distinct(
-#        ).join(
-#            (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup)
-#        ).filter(GroupHierarchy.hops > 0)
-#
-#        # On récupère tous les groupes racines de graphes portant sur l'hôte
-#        # souhaité, en éliminant les groupes récupérés à l'étape précédente
-#        graph_groups = DBSession.query(
-#            GraphGroup
-#        ).distinct(
-#        ).join(
-#            (GRAPH_GROUP_TABLE, \
-#                GRAPH_GROUP_TABLE.c.idgroup == GraphGroup.idgroup),
-#            (Graph, Graph.idgraph == GRAPH_GROUP_TABLE.c.idgraph),
-#            (GRAPH_PERFDATASOURCE_TABLE, \
-#                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
-#            (PerfDataSource, PerfDataSource.idperfdatasource == \
-#                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
-#            (SUPITEM_GROUP_TABLE, \
-#                SUPITEM_GROUP_TABLE.c.idsupitem == PerfDataSource.idhost),
-#        ).filter(PerfDataSource.idhost == host_id
-##        ).except_(children
-#        ).order_by(GraphGroup.name.asc())
-#
-#        # On filtre ces groupes racines afin de ne
-#        # retourner que ceux auquels l'utilisateur a accès
-#        user = get_current_user()
-#        is_manager = in_group('managers').is_met(request.environ)
-#        if not is_manager:
-#            user_groups = [ug[0] for ug in user.supitemgroups() if ug[1]]
-#            graph_groups = graph_groups.filter(
-#                SUPITEM_GROUP_TABLE.c.idgroup.in_(user_groups))
-#
-#        groups = []
-#        for group in graph_groups.all():
-#            #if group.has_children() or len(group.graphs)>0:
-#            groups.append({
-#                'id'   : group.idgroup,
-#                'name' : group.name,
-#            })
-#
-#        return dict(groups = groups, graphs=[])
-
     def getListIndicators(self, host, graph):
         """
         Liste d indicateurs associes a un graphe
@@ -733,4 +680,3 @@ class RpcController(BaseController):
                 ).filter(Host.name == host
                 ).all()
         return indicators
-
