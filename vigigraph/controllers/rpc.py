@@ -17,7 +17,7 @@ from tg import expose, request, redirect, tmpl_context, \
 from tg.decorators import paginate
 from repoze.what.predicates import not_anonymous, has_permission, \
                                     in_group, Any, All
-from formencode import validators, schema
+from formencode import validators, schema, foreach
 from sqlalchemy import or_
 from sqlalchemy.sql.expression import literal_column
 
@@ -180,7 +180,7 @@ class RpcController(BaseController):
     def graphsList(self, nocache=None, **kwargs):
         """
         Generation document avec url des graphes affiches
-        (pour l impression )
+        (pour impression)
 
         @param kwargs : arguments nommes
         @type kwargs  : dict
@@ -188,6 +188,10 @@ class RpcController(BaseController):
         @return: url de graphes
         @rtype: document html
         """
+        # @TODO: le must serait de hot-patcher mootools pour que son serializer
+        # d'URL utilise directement le format attendu par TurboGears
+        # (notation pointée plutôt qu'avec des crochets)
+
         if not kwargs:
             return dict(graphslist=[])
 
@@ -195,23 +199,35 @@ class RpcController(BaseController):
         # n'accepte pas les chaînes Unicode en entrée.
         # TRANSLATORS: Format Python de date/heure, lisible par un humain.
         format = _("%a, %d %b %Y %H:%M:%S").encode('utf8')
+        i = 0
         graphslist = []
-        for url in kwargs.itervalues():
-            parts = urlparse.urlparse(url)
-            params = dict(parse_qsl(parts.query))
 
-            graph = {}
-            start = int(params.get('start', time.time() - 86400))
-            duration = int(params.get('duration', 86400))
+        while True:
+            try:
+                host = kwargs['graphs[%d][host]' % i]
+                graph = kwargs['graphs[%d][graph]' % i]
+                start = int(kwargs.get('graphs[%d][start]' % i, time.time() - 86400))
+                duration = int(kwargs.get('graphs[%d][duration]' % i))
+                nocache = kwargs['graphs[%d][nocache]' % i]
+            except KeyError:
+                break
 
-            graph['graph'] = params.get('graphtemplate')
-            graph['start_date'] = time.strftime(format,
-                time.localtime(start)).decode('utf8')
-            graph['end_date'] = time.strftime(format,
-                time.localtime(start + duration)).decode('utf8')
-            graph['img_src'] = url
-            graph['host'] = params['host']
-            graphslist.append(graph)
+            if not (host and graph and duration and nocache):
+                break
+
+            graphslist.append({
+                'host': host,
+                'graph': graph,
+                'start': start,
+                'duration': duration,
+                'nocache': nocache,
+                'start_date': time.strftime(format,
+                    time.localtime(start)).decode('utf8'),
+                'end_date': time.strftime(format,
+                    time.localtime(start + duration)).decode('utf8')
+            })
+            i += 1
+
         return dict(graphslist=graphslist)
 
     @expose('json')
@@ -725,4 +741,3 @@ class RpcController(BaseController):
                 ).filter(Host.name == host
                 ).all()
         return indicators
-

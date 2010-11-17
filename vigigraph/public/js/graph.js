@@ -85,7 +85,7 @@ var Graph = new Class({
 
         this.refresh_button = new Jx.Button({
             image: app_path + 'images/refresh.png',
-            tooltip: _("Reload the graph"),
+            tooltip: _("Automatically refresh the graph"),
             toggle: true,
             onDown: function() {
                 // On s'assure qu'il n'y a pas déjà un timer lancé.
@@ -230,17 +230,18 @@ var Graph = new Class({
         uri.go();
     },
 
+    getStartTime: function () {
+        if (this.options.start == null)
+            // @TODO: cette heure est en localtime a priori.
+            return (new Date() / 1000).toInt() - this.options.duration;
+        return this.options.start;
+    },
+
     exportCSV: function (menuItem) {
         var uri = new URI(app_path + 'vigirrd/' +
             encodeURIComponent(this.host) + '/export');
 
-        var start = this.options.start;
-        if (start == null) {
-            // @TODO: cette heure est en localtime a priori.
-            start =
-                (new Date() / 1000).toInt() -
-                this.options.duration;
-        }
+        var start = this.getStartTime();
 
         uri.setData({
             host: this.host,
@@ -256,10 +257,24 @@ var Graph = new Class({
         window.open(uri.toString());
     },
 
+    // Cette fonction est aussi utilisée dans print.js
+    // pour gérer l'impression globale.
+    getPrintParams: function () {
+        var img = this.graph_window.content.getElement('img');
+        var img_uri = new URI(img.src);
+        var params = img_uri.getData();
+        return {
+            host: params.host,
+            start: params.start,
+            duration: params.duration,
+            graph: params.graphtemplate,
+            nocache: params.nocache
+        }
+    },
+
     print: function () {
         var uri = new URI(app_path + 'rpc/graphsList');
-        var img = this.graph_window.content.getElement('img');
-        uri.setData({graphs: [img.src]});
+        uri.setData({graphs: [this.getPrintParams()]});
         var print_window = window.open(uri.toString());
         print_window.print();
     },
@@ -268,13 +283,7 @@ var Graph = new Class({
         var uri = new URI(app_path + 'vigirrd/' +
             encodeURIComponent(this.host) + '/graph.png');
 
-        var start = this.options.start;
-        if (start == null) {
-            // @TODO: cette heure est en localtime a priori.
-            start =
-                (new Date() / 1000).toInt() -
-                this.options.duration;
-        }
+        var start = this.getStartTime();
 
         uri.setData({
             host: this.host,
