@@ -414,7 +414,7 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph1' pour l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_host=%s' %
+        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
             (str(host1.name), str(graph1.name)), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
@@ -430,7 +430,7 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph3' pour l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_host=%s' %
+        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
             (str(host3.name), str(graph3.name)), {
             }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
@@ -492,7 +492,7 @@ class TestSearchForm(TestController):
         # sur le graphe 'graph1' pour un utilisateur anonyme :
         # le contrôleur doit retourner une erreur 401
         self.app.post(
-            '/rpc/searchHostAndGraph?search_form_host=%s&search_form_host=%s' %
+            '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
             (str(host1.name), str(graph1.name)), {
             }, status=401)
 
@@ -508,9 +508,8 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur un graphe inexistant pour l'utilisateur 'manager'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s'
-            '&search_form_graph=graphe_totalement_inexistant' %
-            (str(host1.name), ), {
+        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
+            (str(host1.name), 'graphe_totalement_inexistant'), {
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
