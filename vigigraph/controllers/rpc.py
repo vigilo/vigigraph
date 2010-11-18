@@ -503,7 +503,6 @@ class RpcController(BaseController):
                 SupItemGroup.idgroup.in_(id_list))
         groups = []
         for group in db_groups.all():
-            #if group.has_children() or len(group.hosts)>0:
             groups.append({
                 'id'   : group.idgroup,
                 'name' : group.name,
@@ -655,13 +654,12 @@ class RpcController(BaseController):
         user = get_current_user()
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
-            user_groups = [ug[0] for ug in user.supitemgroups() if ug[1]]
+            user_groups = [ug[0] for ug in user.supitemgroups()]
             root_groups = root_groups.filter(
                 SupItemGroup.idgroup.in_(user_groups))
 
         groups = []
         for group in root_groups.all():
-            #if group.has_children() or len(group.hosts)>0:
             groups.append({
                 'id'   : group.idgroup,
                 'name' : group.name,

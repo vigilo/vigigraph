@@ -210,6 +210,10 @@ class TestHostTree(TestController):
         hostgroup2 = DBSession.query(SupItemGroup).filter(
             SupItemGroup.name == u'hg2').first()
 
+        # Récupération de l'hôte 'host1' dans la base de données
+        host1 = DBSession.query(Host).filter(
+            Host.name == u'host1').first()
+
         # Récupération des groupes d'hôtes
         # accessibles à l'utilisateur 'manager'
         response = self.app.post(
@@ -220,11 +224,15 @@ class TestHostTree(TestController):
         # On s'assure que la liste de groupes d'hôtes retournée
         # contient bien 'No subgroup', 'hg1', et 'hg2'
         self.assertEqual(
-            json, {"items": [
-                ['No subgroup', unicode(mainhostgroup.idgroup)],
-                [hostgroup1.name, unicode(hostgroup1.idgroup)],
-                [hostgroup2.name, unicode(hostgroup2.idgroup)],
-            ]}
+            json, {
+                'leaves': [
+                    {'id': host1.idhost, 'name': host1.name}
+                ],
+                'groups': [
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
+                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name},
+                ]
+            }
         )
 
         # Récupération des groupes d'hôtes
@@ -237,11 +245,15 @@ class TestHostTree(TestController):
         # On s'assure que la liste de groupes d'hôtes retournée
         # contient bien 'No subgroup', 'hg1', et 'hg2'
         self.assertEqual(
-            json, {"items": [
-                ['No subgroup', unicode(mainhostgroup.idgroup)],
-                [hostgroup1.name, unicode(hostgroup1.idgroup)],
-                [hostgroup2.name, unicode(hostgroup2.idgroup)],
-            ]}
+            json, {
+                'leaves': [
+                    {'id': host1.idhost, 'name': host1.name}
+                ],
+                'groups': [
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
+                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name},
+                ]
+            }
         )
 
         # Récupération des groupes d'hôtes
@@ -254,9 +266,12 @@ class TestHostTree(TestController):
         # On s'assure que la liste de groupes
         # d'hôtes retournée contient bien 'hg1'
         self.assertEqual(
-            json, {"items": [
-                [hostgroup1.name, unicode(hostgroup1.idgroup)]
-            ]}
+            json, {
+                'leaves': [],
+                'groups': [
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
+                ]
+            }
         )
 
     def test_get_host_groups_when_not_allowed(self):
@@ -308,10 +323,9 @@ class TestHostTree(TestController):
             }, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
-        # On s'assure que la liste de groupes d'hôtes
-        # retournée contient uniquement 'No subgroups'
+        # On s'assure que la liste de groupes d'hôtes retournée est bien vide
         self.assertEqual(
-            json, {"items": [['No subgroup', '6666666']]}
+            json, {'leaves': [], 'groups': []}
         )
 
 ##### Troisième onglet déroulant du formulaire #####
@@ -387,6 +401,7 @@ class TestHostTree(TestController):
                 'leaves': [{'id': host1.idhost, 'name': host1.name}],
                 'groups': [
                     {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
+                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name},
                 ]
             }
         )
