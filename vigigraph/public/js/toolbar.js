@@ -12,10 +12,10 @@ Jx.Button.SelectorFlyout = new Class({
         this.tree.addEvent('select', this.selectItem.bind(this));
    },
 
-    setItem: function (id, label) {
-        this.idselection = id;
+    setItem: function (idselection, label) {
+        this.idselection = idselection;
         this.setLabel(label);
-        this.fireEvent("select");
+        this.fireEvent("select", [idselection, label]);
     },
 
     selectItem: function (item) {
@@ -67,16 +67,17 @@ var Toolbar = new Class({
             if (this.graph_picker.tree.options.hostid != idselection) {
                 this.graph_picker.tree.options.hostid = idselection;
                 this.graph_picker.tree.redraw();
-                this.graph_picker.setItem(0, this.graph_picker.options.label);
+                this.graph_picker.setItem(null, this.graph_picker.options.label);
             }
+            this.show_nagios.setEnabled(1);
             this.graph_picker.setEnabled(1);
-            this.show_graph.setEnabled(1);
         }.bind(this));
 
         this.show_nagios = new Jx.Button({
             label: _('Nagios page'),
             tooltip: _('Display Nagios page for the selected host'),
             toggle: false,
+            enabled: false,
             onClick: function () {
                 var uri = new URI(
                     app_path + 'nagios/' +
@@ -109,6 +110,11 @@ var Toolbar = new Class({
             app_path + 'rpc/graphtree',
             null
         );
+
+        this.graph_picker.addEvent("select", function (idselection, label) {
+            if (idselection !== null)
+                this.show_graph.setEnabled(1);
+        }.bind(this));
 
         this.show_graph = new Jx.Button({
             label: _('Graph'),
