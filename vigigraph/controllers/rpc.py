@@ -444,6 +444,13 @@ class RpcController(BaseController):
 
     @expose('json')
     def hosttree(self, parent_id=None):
+        """
+        Affiche un étage de l'arbre de
+        sélection des hôtes et groupes d'hôtes.
+
+        @param parent_id: identifiant du groupe d'hôte parent
+        @type  parent_id: C{int} or None
+        """
 
         # Si l'identifiant du groupe parent n'est pas
         # spécifié, on retourne la liste des groupes racines,
@@ -498,7 +505,8 @@ class RpcController(BaseController):
         ).filter(GroupHierarchy.idparent == parent_id
         ).order_by(SupItemGroup.name.asc())
         if not is_manager and not direct_access:
-            id_list = [ug for ug in user_groups.keys() if not user_groups[ug]]
+            id_list = [ug for ug in user_groups.keys()]
+
             db_groups = db_groups.filter(
                 SupItemGroup.idgroup.in_(id_list))
         groups = []
@@ -532,6 +540,13 @@ class RpcController(BaseController):
 
     @expose('json')
     def graphtree(self, host_id=None, parent_id=None):
+        """
+        Affiche un étage de l'arbre de sélection
+        des graphes et groupes de graphes.
+
+        @param parent_id: identifiant du groupe de graphes parent
+        @type  parent_id: C{int} or None
+        """
 
         # Si l'identifiant de l'hôte n'est pas spécifié, on
         # retourne un dictionnaire contenant deux listes vides

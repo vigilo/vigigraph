@@ -464,7 +464,10 @@ class TestHostTree(TestController):
 
         # On s'assure que la liste d'hôtes retournée est vide
         self.assertEqual(
-            json, {'leaves': [], 'groups': []}
+            json, {
+                'leaves': [],
+                'groups': [{'name': hostgroup1.name, 'id': hostgroup1.idgroup}]
+            }
         )
 
         # Récupération des hôtes du groupe 'hg2'
