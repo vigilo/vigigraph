@@ -57,7 +57,7 @@ var Graph = new Class({
         this.indicators = new Jx.Menu({
             label: _("Export to CSV"),
             image: app_path + 'images/document-export.png',
-            tooltip: _("Export the content of this graph to CSV"),
+            tooltip: _("Export the content of this graph to CSV")
         })
 
         new Request.JSON({
