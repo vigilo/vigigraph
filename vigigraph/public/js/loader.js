@@ -21,7 +21,7 @@ var Loader = new Class({
 
     show: function() {
         this.clients += 1;
-        if (this.element.getStyle("display") == "block") {
+        if (!$chk(this.element) || this.element.getStyle("display") == "block") {
             return this;
         }
         this.logger.log("Showing spinner");
@@ -31,7 +31,8 @@ var Loader = new Class({
 
     hide: function() {
         this.clients -= 1;
-        if (this.clients > 0) return this; // Encore des demandes d'affichage en attente
+        // Encore des demandes d'affichage en attente
+        if (!$chk(this.element) || this.clients > 0) return this;
         if (this.element.getStyle("display") == "none") return this;
         this.logger.log("Hiding spinner");
         this.element.setStyle("display", "none");
