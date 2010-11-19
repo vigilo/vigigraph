@@ -48,6 +48,7 @@ var Graph = new Class({
             });
             menuItem.options.period = period[1] * 60 * 60;
             menuItem.addEvent('click', function () {
+                this[0].options.start = null;
                 this[0].options.duration = this[1].options.period;
                 this[0].updateGraph();
             }.bind([this, menuItem]));

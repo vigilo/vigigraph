@@ -67,7 +67,7 @@ msgstr "Les %d derniers mois"
 
 #: vigigraph/controllers/rpc.py:68 vigigraph/public/js/graph.js:36
 msgid "Last year"
-msgstr "L'an dernier"
+msgstr "Depuis l'an dernier"
 
 #. TRANSLATORS: Format Python de date/heure, lisible par un humain.
 #: vigigraph/controllers/rpc.py:200
