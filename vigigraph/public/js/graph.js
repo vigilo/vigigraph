@@ -276,7 +276,9 @@ var Graph = new Class({
         var uri = new URI(app_path + 'rpc/graphsList');
         uri.setData({graphs: [this.getPrintParams()]});
         var print_window = window.open(uri.toString());
-        print_window.print();
+        print_window.onload = function () {
+            this.print();
+        }.bind(print_window);
     },
 
     updateGraph: function () {
