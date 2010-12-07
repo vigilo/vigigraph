@@ -106,6 +106,22 @@ var Graph = new Class({
             }.bind(this)
         });
 
+        this.zoom_in = new Jx.Button({
+            image: app_path + 'images/zoom-in.png',
+            tooltip: _("Zoom in"),
+            onClick: function() {
+                this.updateZoom(0.5);
+            }.bind(this)
+        });
+
+        this.zoom_out = new Jx.Button({
+            image: app_path + 'images/zoom-out.png',
+            tooltip: _("Zoom out"),
+            onClick: function() {
+                this.updateZoom(2);
+            }.bind(this)
+        });
+
         toolbar.add(
             this.refresh_button,
             timeframe,
@@ -141,24 +157,8 @@ var Graph = new Class({
                     this.updateGraph();
                 }.bind(this)
             }),
-            new Jx.Button({
-                image: app_path + 'images/zoom-in.png',
-                tooltip: _("Zoom in"),
-                onClick: function() {
-                    if (this.options.duration > 1) {
-                        this.options.duration /= 2;
-                        this.updateGraph();
-                    }
-                }.bind(this)
-            }),
-            new Jx.Button({
-                image: app_path + 'images/zoom-out.png',
-                tooltip: _("Zoom out"),
-                onClick: function() {
-                    this.options.duration *= 2;
-                    this.updateGraph();
-                }.bind(this)
-            }),
+            this.zoom_in,
+            this.zoom_out,
             this.indicators,
             new Jx.Button({
                 image: app_path + 'images/document-print-small.png',
@@ -215,6 +215,16 @@ var Graph = new Class({
         this.updateURI();
     },
 
+    updateZoom: function (factor) {
+        this.options.duration = parseInt(this.options.duration * factor);
+        // Période minimale d'affichage : 1 minute.
+        if (this.options.duration < 60)
+            this.options.duration = 60;
+        // On (dés)active le bouton de zoom en avant au besoin.
+        this.zoom_in.setEnabled(this.options.duration != 60);
+        this.updateGraph();
+    },
+
     updateURI: function () {
         var graphs = [];
         var uri = new URI();
@@ -231,10 +241,13 @@ var Graph = new Class({
     },
 
     getStartTime: function () {
-        if (this.options.start == null)
+        var start = this.options.start;
+        if (start == null)
             // @TODO: cette heure est en localtime a priori.
-            return (new Date() / 1000).toInt() - this.options.duration;
-        return this.options.start;
+            start = (new Date() / 1000).toInt() - this.options.duration;
+        if (start < 0)
+            return 0;
+        return start;
     },
 
     exportCSV: function (menuItem) {
