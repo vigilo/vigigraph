@@ -10,6 +10,7 @@ from paste.cascade import Cascade
 from paste.urlparser import StaticURLParser
 from repoze.who.plugins.testutil import make_middleware_with_config \
                                     as make_who_with_config
+from logging import getLogger
 
 __all__ = ['make_app']
 
