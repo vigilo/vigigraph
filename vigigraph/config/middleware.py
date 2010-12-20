@@ -53,8 +53,11 @@ def make_app(global_conf, full_stack=True, **app_conf):
     app = make_who_with_config(
         app, global_conf,
         app_conf.get('auth.config', 'who.ini'),
-        app_conf.get('auth.log_file', None),
-        app_conf.get('auth.log_level', 'debug'),
+        None,
+        None,
         app_conf.get('skip_authentication')
     )
+    # On force l'utilisation d'un logger nommé "auth"
+    # pour la compatibilité avec TurboGears.
+    app.logger = getLogger('auth')
     return app
