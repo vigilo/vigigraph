@@ -15,14 +15,15 @@ var TreeGroup = new Class({
         this.setOptions(options);
 
         /* L'objet tree se réfère à un élément div*/
-        var container = new Element('div')
-        this.tree = new Jx.Tree({parent: container});
+        this.container = new Element('div')
+        this.container.setStyle("padding", "0 10px 10px 10px");
+        this.tree = new Jx.Tree({parent: this.container});
 
         this.dlg = new Jx.Dialog({
             label: this.options.title,
             modal: true,
             resize: true,
-            content: container
+            content: this.container
         });
 
         this.redraw();
@@ -47,6 +48,7 @@ var TreeGroup = new Class({
                         this.addLeaf(item, parent_node);
                     }, this);
                 }
+                this.fireEvent("branchloaded");
             }.bind(this)
         });
 
@@ -70,6 +72,7 @@ var TreeGroup = new Class({
         });
 
         node.addEvent("disclosed", function(node) {
+            this.fireEvent("nodedisclosed", node);
             if (!node.options.open || node.nodes.length > 0)
                 return;
             this.retrieve_tree_items(node);

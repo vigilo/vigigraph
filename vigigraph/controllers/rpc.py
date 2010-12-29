@@ -31,6 +31,7 @@ from vigilo.models.tables import SupItemGroup
 from vigilo.models.tables import PerfDataSource
 from vigilo.models.tables import Graph, GraphGroup
 from vigilo.models.tables.grouphierarchy import GroupHierarchy
+from vigilo.models.tables import Change
 
 from vigilo.models.tables.secondary_tables import SUPITEM_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
@@ -724,3 +725,12 @@ class RpcController(BaseController):
                 ).filter(Host.name == host
                 ).all()
         return indicators
+
+    @expose('json')
+    def dbmtime(self):
+        change = Change.by_table_name(u"Graph")
+        if change is None:
+            return {"mtime": None}
+        mtime = change.last_modified.replace(microsecond=0)
+        return {"mtime": mtime}
+
