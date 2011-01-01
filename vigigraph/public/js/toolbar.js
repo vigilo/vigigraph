@@ -28,7 +28,7 @@ Jx.Button.SelectorFlyout = new Class({
         };
         this.tree.addEvent("branchloaded", adaptPopup.bind(this));
         this.tree.addEvent("nodedisclosed", adaptPopup.bind(this));
-        
+
    },
 
     setItem: function (idselection, label) {
