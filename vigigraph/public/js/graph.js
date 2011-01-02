@@ -320,6 +320,7 @@ var Graph = new Class({
             );
         }.bind([this, img]));
         img.addEvent('error', function () {
+            if (this.refreshTimer) clearInterval(this.refreshTimer);
             var msg = _(
                 'Could not load the graph for "%(graph)s" on "%(host)s".\n' +
                 'Make sure VigiRRD is running and receives performance data.'
