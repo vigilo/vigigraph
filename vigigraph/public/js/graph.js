@@ -66,7 +66,8 @@ var Graph = new Class({
             onSuccess: function (data) {
                 data.items.each(function (item) {
                     this.indicators.add(new Jx.Menu.Item({
-                        label: item,
+                        name: item[0],
+                        label: item[1],
                         onClick: this.exportCSV.bind(this),
                         indicator: true
                     }));
@@ -265,7 +266,7 @@ var Graph = new Class({
         })
 
         if (menuItem.options.indicator)
-            uri.setData({ds: menuItem.options.label}, true);
+            uri.setData({ds: menuItem.options.name}, true);
 
         window.open(uri.toString());
     },

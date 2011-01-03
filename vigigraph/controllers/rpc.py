@@ -273,7 +273,7 @@ class RpcController(BaseController):
         """
 
         indicators = self.getListIndicators(host, graph)
-        indicators = [ind.name for ind in indicators]
+        indicators = [(ind.name, ind.label) for ind in indicators]
         return dict(items=indicators)
 
     class StartTimeSchema(schema.Schema):
@@ -712,7 +712,7 @@ class RpcController(BaseController):
         indicators = []
         if graph is not None:
             indicators = DBSession.query(
-                    PerfDataSource.name
+                    PerfDataSource.name, PerfDataSource.label
                 ).distinct(
                 ).join(
                     (GRAPH_PERFDATASOURCE_TABLE, \
