@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vigigraph 2.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-11-19 14:52+0100\n"
-"PO-Revision-Date: 2010-11-19 14:52+0100\n"
+"PO-Revision-Date: 2011-01-06 13:07+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Generated-By: Babel 0.9.4\n"
 
 #: vigigraph/controllers/root.py:30 vigigraph/controllers/root.py:32
-#: vigigraph/controllers/root.py:37 vigigraph/controllers/rpc.py:53
+#: vigigraph/controllers/root.py:37 vigigraph/controllers/rpc.py:54
 msgid "You need to be authenticated"
 msgstr "Sie müssen sich authentifizieren"
 
-#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:57
+#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:58
 msgid "You don't have access to VigiGraph"
 msgstr "Sie haben keinen Zugriff auf VigiGraph"
 
@@ -49,71 +49,64 @@ msgstr "Ein Benutzer (aus %(IP)s) hat sich abgemeldet"
 msgid "We hope to see you soon!"
 msgstr "Bis bald!"
 
-#: vigigraph/controllers/rpc.py:62 vigigraph/controllers/rpc.py:63
+#: vigigraph/controllers/rpc.py:63 vigigraph/controllers/rpc.py:64
 #, python-format
 msgid "Last %d hours"
 msgstr "Letzte %d Studen"
 
-#: vigigraph/controllers/rpc.py:64 vigigraph/controllers/rpc.py:65
-#: vigigraph/controllers/rpc.py:66
+#: vigigraph/controllers/rpc.py:65 vigigraph/controllers/rpc.py:66
+#: vigigraph/controllers/rpc.py:67
 #, python-format
 msgid "Last %d days"
 msgstr "Letzte %d Tage"
 
-#: vigigraph/controllers/rpc.py:67 vigigraph/controllers/rpc.py:68
+#: vigigraph/controllers/rpc.py:68 vigigraph/controllers/rpc.py:69
 #, python-format
 msgid "Last %d months"
 msgstr "Letzte %d Monate"
 
-#: vigigraph/controllers/rpc.py:69 vigigraph/public/js/graph.js:36
+#: vigigraph/controllers/rpc.py:70 vigigraph/public/js/graph.js:36
 msgid "Last year"
 msgstr "Letztes Jahr"
 
 #. TRANSLATORS: Format Python de date/heure, lisible par un humain.
-#: vigigraph/controllers/rpc.py:205
+#: vigigraph/controllers/rpc.py:206
 #, python-format
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #: vigigraph/public/js/graph.js:29
-#, fuzzy, python-format
-#| msgid "Last %d hours"
+#, fuzzy
 msgid "Last 12 hours"
 msgstr "Letzte %d Studen"
 
 #: vigigraph/public/js/graph.js:30
-#, fuzzy, python-format
-#| msgid "Last %d hours"
+#, fuzzy
 msgid "Last 24 hours"
 msgstr "Letzte %d Studen"
 
 #: vigigraph/public/js/graph.js:31
-#, fuzzy, python-format
-#| msgid "Last %d hours"
+#, fuzzy
 msgid "Last 48 hours"
 msgstr "Letzte %d Studen"
 
 #: vigigraph/public/js/graph.js:32
-#, fuzzy, python-format
-#| msgid "Last %d days"
+#, fuzzy
 msgid "Last 7 days"
 msgstr "Letzte %d Tage"
 
 #: vigigraph/public/js/graph.js:33
-#, fuzzy, python-format
-#| msgid "Last %d days"
+#, fuzzy
 msgid "Last 14 days"
 msgstr "Letzte %d Tage"
 
 #: vigigraph/public/js/graph.js:34
-#, fuzzy, python-format
-#| msgid "Last %d months"
+#, fuzzy
 msgid "Last 3 months"
 msgstr "Letzte %d Monate"
 
 #: vigigraph/public/js/graph.js:35
-#, fuzzy, python-format
-#| msgid "Last %d months"
+#, fuzzy
 msgid "Last 6 months"
 msgstr "Letzte %d Monate"
 
@@ -133,252 +126,147 @@ msgstr ""
 msgid "Export the content of this graph to CSV"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:76
+#: vigigraph/public/js/graph.js:77
 msgid "All"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:88
+#: vigigraph/public/js/graph.js:89
 msgid "Automatically refresh the graph"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:114
-msgid "Graph start"
-msgstr ""
-
-#: vigigraph/public/js/graph.js:122
-msgid "Previous section"
-msgstr ""
-
-#: vigigraph/public/js/graph.js:130
-msgid "Next section"
-msgstr ""
-
-#: vigigraph/public/js/graph.js:138
-msgid "Graph end"
-msgstr ""
-
-#: vigigraph/public/js/graph.js:146
+#: vigigraph/public/js/graph.js:112
 msgid "Zoom in"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:156
+#: vigigraph/public/js/graph.js:120
 msgid "Zoom out"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:165
+#: vigigraph/public/js/graph.js:131
+msgid "Graph start"
+msgstr ""
+
+#: vigigraph/public/js/graph.js:139
+msgid "Previous section"
+msgstr ""
+
+#: vigigraph/public/js/graph.js:147
+msgid "Next section"
+msgstr ""
+
+#: vigigraph/public/js/graph.js:155
+msgid "Graph end"
+msgstr ""
+
+#: vigigraph/public/js/graph.js:166
 msgid "Print graph"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:170
+#: vigigraph/public/js/graph.js:171
 #, python-format
 msgid "Graph for \"%(graph)s\" on \"%(host)s\""
 msgstr ""
 
-#: vigigraph/public/js/graph.js:308
+#: vigigraph/public/js/graph.js:325
 #, python-format
 msgid ""
 "Could not load the graph for \"%(graph)s\" on \"%(host)s\".\n"
 "Make sure VigiRRD is running and receives performance data."
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:39
-msgid "Globally change auto-refresh setting"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:55
-msgid "Host:"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:58
-msgid "Select a host"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:59
-msgid "Click me to select another host"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:77
-msgid "Nagios page"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:78
-msgid "Display Nagios page for the selected host"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:103
-msgid "Graph:"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:106
-msgid "Select a graph"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:107
-msgid "Click me to select another graph"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:120
-msgid "Graph"
-msgstr ""
-
-#: vigigraph/public/js/toolbar.js:121
-msgid "Display the contents of the selected graph"
-msgstr ""
-
-#~ msgid "No subgroup"
-#~ msgstr "Keine Untergruppe"
-
-#: source/class/vigigraph/Application.js:90
-msgid "Host Picker"
-msgstr "Hostauswahl"
-
-#: source/class/vigigraph/Application.js:118
-msgid "Main Group"
-msgstr "Hauptgruppe"
-
-#: source/class/vigigraph/Application.js:119
-msgid "Host Group"
-msgstr "Hostgruppe"
-
-#: source/class/vigigraph/Application.js:120
-msgid "Host Name"
-msgstr "Hostname"
-
-#: source/class/vigigraph/Application.js:121
-msgid "Graph Group"
-msgstr "Grafikgruppe"
-
-#: source/class/vigigraph/Application.js:122
-msgid "Graph Name"
-msgstr "Grafikname"
-
-#: source/class/vigigraph/Application.js:131
-#: source/class/vigigraph/Application.js:133
-#: source/class/vigigraph/Application.js:135
-#: source/class/vigigraph/Application.js:137
-#: source/class/vigigraph/Application.js:139
+#: vigigraph/public/js/toolbar.js:63
 msgid "Refresh"
 msgstr "Aktualisieren"
 
-#: source/class/vigigraph/Application.js:142
-#: source/class/vigigraph/Application.js:235
-msgid "Search"
-msgstr "Suchen"
+#: vigigraph/public/js/toolbar.js:64
+msgid "Globally change auto-refresh setting"
+msgstr ""
 
-#: source/class/vigigraph/Application.js:144
-msgid "Show Nagios page"
-msgstr "Nagios-Seite anzeigen"
-
-#: source/class/vigigraph/Application.js:147
-msgid "Show graph"
-msgstr "Grafik anzeigen"
-
-#: source/class/vigigraph/Application.js:252
+#: vigigraph/public/js/toolbar.js:80
 msgid "Host:"
-msgstr "Host:"
+msgstr ""
 
-#: source/class/vigigraph/Application.js:258
-msgid "Search for a host (\"*\" for all, 100 max)"
-msgstr "Host suchen (\"*\" for all, 100 max)"
+#: vigigraph/public/js/toolbar.js:83
+msgid "Select a host"
+msgstr ""
 
-#: source/class/vigigraph/Application.js:259
+#: vigigraph/public/js/toolbar.js:84
+msgid "Click me to select another host"
+msgstr ""
+
+#: vigigraph/public/js/toolbar.js:102
+msgid "Nagios page"
+msgstr ""
+
+#: vigigraph/public/js/toolbar.js:103
+msgid "Display Nagios page for the selected host"
+msgstr ""
+
+#: vigigraph/public/js/toolbar.js:122
 msgid "Graph:"
-msgstr "Grafik:"
+msgstr ""
 
-#: source/class/vigigraph/Application.js:265
-msgid "Search for a graph (\"*\" for all, 100 max)"
-msgstr "Grafik suchen (\"*\" for all, 100 max)"
+#: vigigraph/public/js/toolbar.js:125
+msgid "Select a graph"
+msgstr ""
 
-#: source/class/vigigraph/Application.js:271
+#: vigigraph/public/js/toolbar.js:126
+msgid "Click me to select another graph"
+msgstr ""
+
+#: vigigraph/public/js/toolbar.js:145
 msgid "Graph"
-msgstr "Grafik"
+msgstr ""
 
-#: source/class/vigigraph/Application.js:271
-msgid "Host"
-msgstr "Host"
+#: vigigraph/public/js/toolbar.js:146
+msgid "Display the contents of the selected graph"
+msgstr ""
 
-#: source/class/vigigraph/Application.js:605
-msgid "Graph for \"%1\" on \"%2\""
-msgstr "Grafik für \"%1\" auf \"%2\""
+#~ msgid "Host Picker"
+#~ msgstr "Hostauswahl"
 
-#: source/class/vigigraph/Application.js:611
-msgid "Reload graph"
-msgstr "Grafik erneut laden"
+#~ msgid "Main Group"
+#~ msgstr "Hauptgruppe"
 
-#: source/class/vigigraph/Application.js:616
-msgid "Last 12 hours"
-msgstr "Letzte 12 Stunden"
+#~ msgid "Host Group"
+#~ msgstr "Hostgruppe"
 
-#: source/class/vigigraph/Application.js:617
-msgid "Last 24 hours"
-msgstr "Letzte 24 Stunden"
+#~ msgid "Host Name"
+#~ msgstr "Hostname"
 
-#: source/class/vigigraph/Application.js:618
-msgid "Last 48 hours"
-msgstr "Letzte 48 Stunden"
+#~ msgid "Graph Group"
+#~ msgstr "Grafikgruppe"
 
-#: source/class/vigigraph/Application.js:619
-msgid "Last 7 days"
-msgstr "Letzte 7 Tage"
+#~ msgid "Graph Name"
+#~ msgstr "Grafikname"
 
-#: source/class/vigigraph/Application.js:620
-msgid "Last 14 days"
-msgstr "Letzte 14 Tage"
+#~ msgid "Search"
+#~ msgstr "Suchen"
 
-#: source/class/vigigraph/Application.js:621
-msgid "Last 3 months"
-msgstr "Letzte 3 Monate"
+#~ msgid "Show Nagios page"
+#~ msgstr "Nagios-Seite anzeigen"
 
-#: source/class/vigigraph/Application.js:622
-msgid "Last 6 months"
-msgstr "Letzte 6 Monate"
+#~ msgid "Show graph"
+#~ msgstr "Grafik anzeigen"
 
-#: source/class/vigigraph/Application.js:623
-msgid "Last year"
-msgstr "Letztes Jahr"
+#~ msgid "Search for a host (\"*\" for all, 100 max)"
+#~ msgstr "Host suchen (\"*\" for all, 100 max)"
 
-#: source/class/vigigraph/Application.js:632
-msgid "Timeframe"
-msgstr "Zeitrahmen"
+#~ msgid "Search for a graph (\"*\" for all, 100 max)"
+#~ msgstr "Grafik suchen (\"*\" for all, 100 max)"
 
-#: source/class/vigigraph/Application.js:633
-msgid "Timeframe menu"
-msgstr "Zeitrahmen-Menü"
+#~ msgid "Host"
+#~ msgstr "Host"
 
-#: source/class/vigigraph/Application.js:636
-msgid "Graph start"
-msgstr "Grafik starten"
+#~ msgid "Graph for \"%1\" on \"%2\""
+#~ msgstr "Grafik für \"%1\" auf \"%2\""
 
-#: source/class/vigigraph/Application.js:638
-msgid "Previous section"
-msgstr "Vorheriger Abschnitt"
+#~ msgid "Reload graph"
+#~ msgstr "Grafik erneut laden"
 
-#: source/class/vigigraph/Application.js:640
-msgid "Next section"
-msgstr "Nächster Abschnitt"
+#~ msgid "Print Graph"
+#~ msgstr "Grafik drucken"
 
-#: source/class/vigigraph/Application.js:642
-msgid "Graph end"
-msgstr "Grafik beenden"
-
-#: source/class/vigigraph/Application.js:644
-msgid "Zoom in"
-msgstr "Vergrößern"
-
-#: source/class/vigigraph/Application.js:646
-msgid "Zoom out"
-msgstr "Verkleinern"
-
-#: source/class/vigigraph/Application.js:648
-msgid "Print Graph"
-msgstr "Grafik drucken"
-
-#: source/class/vigigraph/Application.js:654
-#: source/class/vigigraph/Application.js:655
-msgid "Export CSV"
-msgstr "CSV exportieren"
-
-#: source/class/vigigraph/Application.js:778
-msgid "All"
-msgstr "Alle"
+#~ msgid "Export CSV"
+#~ msgstr "CSV exportieren"
 

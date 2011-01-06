@@ -60,6 +60,7 @@ var Toolbar = new Class({
         });
 
         this.global_refresh = new Jx.Button({
+            label: _('Refresh'),
             tooltip: _('Globally change auto-refresh setting'),
             //image: app_path + 'images/refresh-all.png',
             image: app_path + 'images/refresh.png',
@@ -98,7 +99,7 @@ var Toolbar = new Class({
         }.bind(this));
 
         this.show_nagios = new Jx.Button({
-            //label: _('Nagios page'),
+            label: _('Nagios page'),
             tooltip: _('Display Nagios page for the selected host'),
             image: app_path + 'images/nagios-16.png',
             toggle: false,

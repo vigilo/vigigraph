@@ -1,14 +1,14 @@
 # Translations template for vigigraph.
-# Copyright (C) 2010 ORGANIZATION
+# Copyright (C) 2011 ORGANIZATION
 # This file is distributed under the same license as the vigigraph project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: vigigraph 2.0.0\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2010-11-19 14:48+0100\n"
+"POT-Creation-Date: 2011-01-06 13:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Generated-By: Babel 0.9.4\n"
 
 #: vigigraph/controllers/root.py:30 vigigraph/controllers/root.py:32
-#: vigigraph/controllers/root.py:37 vigigraph/controllers/rpc.py:53
+#: vigigraph/controllers/root.py:37 vigigraph/controllers/rpc.py:54
 msgid "You need to be authenticated"
 msgstr ""
 
-#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:57
+#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:58
 msgid "You don't have access to VigiGraph"
 msgstr ""
 
@@ -49,28 +49,28 @@ msgstr ""
 msgid "We hope to see you soon!"
 msgstr ""
 
-#: vigigraph/controllers/rpc.py:62 vigigraph/controllers/rpc.py:63
+#: vigigraph/controllers/rpc.py:63 vigigraph/controllers/rpc.py:64
 #, python-format
 msgid "Last %d hours"
 msgstr ""
 
-#: vigigraph/controllers/rpc.py:64 vigigraph/controllers/rpc.py:65
-#: vigigraph/controllers/rpc.py:66
+#: vigigraph/controllers/rpc.py:65 vigigraph/controllers/rpc.py:66
+#: vigigraph/controllers/rpc.py:67
 #, python-format
 msgid "Last %d days"
 msgstr ""
 
-#: vigigraph/controllers/rpc.py:67 vigigraph/controllers/rpc.py:68
+#: vigigraph/controllers/rpc.py:68 vigigraph/controllers/rpc.py:69
 #, python-format
 msgid "Last %d months"
 msgstr ""
 
-#: vigigraph/controllers/rpc.py:69 vigigraph/public/js/graph.js:36
+#: vigigraph/controllers/rpc.py:70 vigigraph/public/js/graph.js:36
 msgid "Last year"
 msgstr ""
 
 #. TRANSLATORS: Format Python de date/heure, lisible par un humain.
-#: vigigraph/controllers/rpc.py:205
+#: vigigraph/controllers/rpc.py:206
 #, python-format
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
@@ -119,95 +119,99 @@ msgstr ""
 msgid "Export the content of this graph to CSV"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:76
+#: vigigraph/public/js/graph.js:77
 msgid "All"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:88
+#: vigigraph/public/js/graph.js:89
 msgid "Automatically refresh the graph"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:114
-msgid "Graph start"
-msgstr ""
-
-#: vigigraph/public/js/graph.js:122
-msgid "Previous section"
-msgstr ""
-
-#: vigigraph/public/js/graph.js:130
-msgid "Next section"
-msgstr ""
-
-#: vigigraph/public/js/graph.js:138
-msgid "Graph end"
-msgstr ""
-
-#: vigigraph/public/js/graph.js:146
+#: vigigraph/public/js/graph.js:112
 msgid "Zoom in"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:156
+#: vigigraph/public/js/graph.js:120
 msgid "Zoom out"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:165
+#: vigigraph/public/js/graph.js:131
+msgid "Graph start"
+msgstr ""
+
+#: vigigraph/public/js/graph.js:139
+msgid "Previous section"
+msgstr ""
+
+#: vigigraph/public/js/graph.js:147
+msgid "Next section"
+msgstr ""
+
+#: vigigraph/public/js/graph.js:155
+msgid "Graph end"
+msgstr ""
+
+#: vigigraph/public/js/graph.js:166
 msgid "Print graph"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:170
+#: vigigraph/public/js/graph.js:171
 #, python-format
 msgid "Graph for \"%(graph)s\" on \"%(host)s\""
 msgstr ""
 
-#: vigigraph/public/js/graph.js:308
+#: vigigraph/public/js/graph.js:325
 #, python-format
 msgid ""
 "Could not load the graph for \"%(graph)s\" on \"%(host)s\".\n"
 "Make sure VigiRRD is running and receives performance data."
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:39
+#: vigigraph/public/js/toolbar.js:63
+msgid "Refresh"
+msgstr ""
+
+#: vigigraph/public/js/toolbar.js:64
 msgid "Globally change auto-refresh setting"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:55
+#: vigigraph/public/js/toolbar.js:80
 msgid "Host:"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:58
+#: vigigraph/public/js/toolbar.js:83
 msgid "Select a host"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:59
+#: vigigraph/public/js/toolbar.js:84
 msgid "Click me to select another host"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:77
+#: vigigraph/public/js/toolbar.js:102
 msgid "Nagios page"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:78
+#: vigigraph/public/js/toolbar.js:103
 msgid "Display Nagios page for the selected host"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:103
+#: vigigraph/public/js/toolbar.js:122
 msgid "Graph:"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:106
+#: vigigraph/public/js/toolbar.js:125
 msgid "Select a graph"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:107
+#: vigigraph/public/js/toolbar.js:126
 msgid "Click me to select another graph"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:120
+#: vigigraph/public/js/toolbar.js:145
 msgid "Graph"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:121
+#: vigigraph/public/js/toolbar.js:146
 msgid "Display the contents of the selected graph"
 msgstr ""
 
