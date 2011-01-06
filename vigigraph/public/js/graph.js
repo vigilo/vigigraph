@@ -138,7 +138,9 @@ var Graph = new Class({
                 image: app_path + 'images/previous.png',
                 tooltip: _("Previous section"),
                 onClick: function() {
-                    this.options.start -= this.options.duration;
+                    this.options.start =
+                        this.getStartTime() -
+                        this.options.duration;
                     this.updateGraph();
                 }.bind(this)
             }),
@@ -146,7 +148,9 @@ var Graph = new Class({
                 image: app_path + 'images/next.png',
                 tooltip: _("Next section"),
                 onClick: function() {
-                    this.options.start += this.options.duration;
+                    this.options.start =
+                        this.getStartTime() +
+                        this.options.duration;
                     this.updateGraph();
                 }.bind(this)
             }),
