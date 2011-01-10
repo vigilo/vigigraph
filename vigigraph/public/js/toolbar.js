@@ -81,7 +81,7 @@ var Toolbar = new Class({
 
         this.host_picker = new Jx.Button.SelectorFlyout({
                 label: _('Select a host'),
-                tooltip: _('Click me to select another host'),
+                tooltip: _('Click me to select another host')
             },
             app_path + 'rpc/hosttree',
             null
