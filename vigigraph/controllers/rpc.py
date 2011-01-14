@@ -353,8 +353,10 @@ class RpcController(BaseController):
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-            graphs = graphs.filter(
-                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
+            graphs = graphs.join(
+                    (GroupHierarchy, GroupHierarchy.idchild == \
+                        SUPITEM_GROUP_TABLE.c.idgroup)
+                ).filter(GroupHierarchy.idparent.in_(supitemgroups))
 
         graphs = graphs.all()
         return dict(host=host, start=start, duration=duration,
@@ -442,8 +444,10 @@ class RpcController(BaseController):
         is_manager = in_group('managers').is_met(request.environ)
         if not is_manager:
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-            hosts = hosts.filter(
-                SUPITEM_GROUP_TABLE.c.idgroup.in_(supitemgroups))
+            hosts = hosts.join(
+                    (GroupHierarchy, GroupHierarchy.idchild == \
+                        SUPITEM_GROUP_TABLE.c.idgroup)
+                ).filter(GroupHierarchy.idparent.in_(supitemgroups))
 
         return dict(hosts=hosts)
 
@@ -733,4 +737,3 @@ class RpcController(BaseController):
             return {"mtime": None}
         mtime = change.last_modified.replace(microsecond=0)
         return {"mtime": mtime}
-

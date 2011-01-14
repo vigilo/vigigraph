@@ -99,11 +99,14 @@ class TestHostTree(TestController):
 
 ##### Premier onglet déroulant du formulaire #####
 
-    def test_get_main_host_groups_when_allowed(self):
+    def test_get_root_host_groups_as_manager(self):
         """
-        Récupération des groupes d'hôtes principaux avec les bons droits
-        """
+        Récupération des groupes d'hôtes racines en tant que manager
 
+        L'utilisateur "manager" appartient au groupe "managers",
+        qui a accès à tout et doit donc pouvoir lister tous
+        les groupes racines.
+        """
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
         mainhostgroup = DBSession.query(SupItemGroup).filter(
             SupItemGroup.name == u'mhg').first()
@@ -126,6 +129,17 @@ class TestHostTree(TestController):
             }
         )
 
+    def test_get_main_host_groups_when_directly_allowed(self):
+        """
+        Récupération des groupes d'hôtes racines avec permissions directes
+
+        L'utilisateur "poweruser" a les permissions sur le
+        groupe racine "mhg" et peut donc le lister.
+        """
+        # Récupération du groupe d'hôtes 'mhg' dans la base de données
+        mainhostgroup = DBSession.query(SupItemGroup).filter(
+            SupItemGroup.name == u'mhg').first()
+
         # Récupération des groupes d'hôtes principaux
         # accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
@@ -143,6 +157,18 @@ class TestHostTree(TestController):
                 }]
             }
         )
+
+    def test_get_root_host_groups_for_children(self):
+        """
+        Récupération des groupes d'hôtes racines pour un sous-groupe
+
+        L'utilisateur "user" n'a pas les permissions sur "mhg",
+        mais il a accès au sous-groupe "hg1". Il doit pouvoir
+        lister le groupe racine "mhg" pour pouvoir accéder à "hg1".
+        """
+        # Récupération du groupe d'hôtes 'mhg' dans la base de données
+        mainhostgroup = DBSession.query(SupItemGroup).filter(
+            SupItemGroup.name == u'mhg').first()
 
         # Récupération des groupes d'hôtes principaux
         # accessibles à l'utilisateur 'user'
@@ -165,6 +191,9 @@ class TestHostTree(TestController):
     def test_get_main_host_groups_when_not_allowed(self):
         """
         Récupération des groupes d'hôtes principaux sans les bons droits
+
+        L'utilisateur "visitor" n'a accès à rien et ne doit donc
+        pas pouvoir lister le groupe racine "mhg".
         """
 
         # Récupération des groupes d'hôtes principaux
@@ -182,6 +211,10 @@ class TestHostTree(TestController):
     def test_get_main_host_groups_as_anonymous(self):
         """
         Récupération des groupes d'hôtes principaux en tant qu'anonyme
+
+        Une tentative de récupération des groupes racines
+        sans être authentifié doit demander à l'utilisateur
+        de s'authentifier.
         """
 
         # Récupération des groupes d'hôtes principaux
@@ -508,7 +541,7 @@ class TestHostTree(TestController):
 
     def test_get_hosts_as_anonymous(self):
         """
-        Récupération des d'hôtes en tant qu'anonyme
+        Récupération des hôtes en tant qu'anonyme
         """
 
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
