@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vigigraph 2.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-11-19 14:52+0100\n"
-"PO-Revision-Date: 2011-01-06 13:07+0100\n"
+"PO-Revision-Date: 2011-01-19 17:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -150,24 +150,24 @@ msgstr ""
 msgid "Previous section"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:147
+#: vigigraph/public/js/graph.js:149
 msgid "Next section"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:155
+#: vigigraph/public/js/graph.js:159
 msgid "Graph end"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:166
+#: vigigraph/public/js/graph.js:170
 msgid "Print graph"
 msgstr ""
 
-#: vigigraph/public/js/graph.js:171
+#: vigigraph/public/js/graph.js:175
 #, python-format
 msgid "Graph for \"%(graph)s\" on \"%(host)s\""
 msgstr ""
 
-#: vigigraph/public/js/graph.js:325
+#: vigigraph/public/js/graph.js:330
 #, python-format
 msgid ""
 "Could not load the graph for \"%(graph)s\" on \"%(host)s\".\n"
@@ -194,79 +194,39 @@ msgstr ""
 msgid "Click me to select another host"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:102
+#: vigigraph/public/js/toolbar.js:103
 msgid "Nagios page"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:103
+#: vigigraph/public/js/toolbar.js:104
 msgid "Display Nagios page for the selected host"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:122
-msgid "Graph:"
+#: vigigraph/public/js/toolbar.js:124
+msgid "Metrology page"
 msgstr ""
 
 #: vigigraph/public/js/toolbar.js:125
+msgid "Display a page with all the graphs for the selected host"
+msgstr ""
+
+#: vigigraph/public/js/toolbar.js:138
+msgid "Graph:"
+msgstr ""
+
+#: vigigraph/public/js/toolbar.js:141
 msgid "Select a graph"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:126
+#: vigigraph/public/js/toolbar.js:142
 msgid "Click me to select another graph"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:145
+#: vigigraph/public/js/toolbar.js:161
 msgid "Graph"
 msgstr ""
 
-#: vigigraph/public/js/toolbar.js:146
+#: vigigraph/public/js/toolbar.js:162
 msgid "Display the contents of the selected graph"
 msgstr ""
-
-#~ msgid "Host Picker"
-#~ msgstr "Hostauswahl"
-
-#~ msgid "Main Group"
-#~ msgstr "Hauptgruppe"
-
-#~ msgid "Host Group"
-#~ msgstr "Hostgruppe"
-
-#~ msgid "Host Name"
-#~ msgstr "Hostname"
-
-#~ msgid "Graph Group"
-#~ msgstr "Grafikgruppe"
-
-#~ msgid "Graph Name"
-#~ msgstr "Grafikname"
-
-#~ msgid "Search"
-#~ msgstr "Suchen"
-
-#~ msgid "Show Nagios page"
-#~ msgstr "Nagios-Seite anzeigen"
-
-#~ msgid "Show graph"
-#~ msgstr "Grafik anzeigen"
-
-#~ msgid "Search for a host (\"*\" for all, 100 max)"
-#~ msgstr "Host suchen (\"*\" for all, 100 max)"
-
-#~ msgid "Search for a graph (\"*\" for all, 100 max)"
-#~ msgstr "Grafik suchen (\"*\" for all, 100 max)"
-
-#~ msgid "Host"
-#~ msgstr "Host"
-
-#~ msgid "Graph for \"%1\" on \"%2\""
-#~ msgstr "Grafik für \"%1\" auf \"%2\""
-
-#~ msgid "Reload graph"
-#~ msgstr "Grafik erneut laden"
-
-#~ msgid "Print Graph"
-#~ msgstr "Grafik drucken"
-
-#~ msgid "Export CSV"
-#~ msgstr "CSV exportieren"
 
