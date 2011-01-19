@@ -95,6 +95,7 @@ var Toolbar = new Class({
                 this.graph_picker.setItem(null, this.graph_picker.options.label);
             }
             this.show_nagios.setEnabled(1);
+            this.show_metrology.setEnabled(1);
             this.graph_picker.setEnabled(1);
         }.bind(this));
 
@@ -114,6 +115,21 @@ var Toolbar = new Class({
                     host: this.host_picker.getLabel(),
                     style: 'detail',
                     supNav: 1
+                });
+                window.open(uri.toString());
+            }.bind(this)
+        })
+
+        this.show_metrology = new Jx.Button({
+            label: _('Metrology page'),
+            tooltip: _('Display a page with all the graphs for the selected host'),
+            image: app_path + 'images/preferences-system-windows.png',
+            toggle: false,
+            enabled: false,
+            onClick: function () {
+                var uri = new URI(app_path + 'rpc/fullHostPage');
+                uri.setData({
+                    host: this.host_picker.getLabel()
                 });
                 window.open(uri.toString());
             }.bind(this)
@@ -158,6 +174,7 @@ var Toolbar = new Class({
         // Remplissage de la barre d'outils
         this.jxtoolbar.add(this.global_refresh);
         this.jxtoolbar.add(this.show_nagios);
+        this.jxtoolbar.add(this.show_metrology);
         this.jxtoolbar.add(new Jx.Toolbar.Separator());
         this.jxtoolbar.add(this.host_label); // à supprimer ?
         this.jxtoolbar.add(this.host_picker);
