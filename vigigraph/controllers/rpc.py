@@ -299,6 +299,8 @@ class RpcController(BaseController):
         duration = validators.Int(if_missing=86400)
 
     # VIGILO_EXIG_VIGILO_PERF_0010:Visualisation globale des graphes
+    # VIGILO_EXIG_VIGILO_PERF_0020:Visualisation unitaire des graphes
+    # On utilise la même page pour les 2 fonctionalités.
     @validate(
         validators = FullHostPageSchema(),
         error_handler = process_form_errors)
@@ -362,48 +364,6 @@ class RpcController(BaseController):
         return dict(host=host, start=start, duration=duration,
                     presets=self.presets, graphs=graphs)
 
-
-    class SingleGraphSchema(schema.Schema):
-        """Schéma de validation pour la méthode L{singleGraph}."""
-        host = validators.String(not_empty=True)
-        graph = validators.String(not_empty=True)
-        start = validators.Int(if_missing=None)
-        duration = validators.Int(if_missing=86400)
-
-    # VIGILO_EXIG_VIGILO_PERF_0020:Visualisation unitaire des graphes
-    @validate(
-        validators = SingleGraphSchema(),
-        error_handler = process_form_errors)
-    @expose('singlegraph.html')
-    def singleGraph(self, host, graph, start, duration):
-        """
-        Affichage d un graphe associe a un hote et un graphe
-        * d apres les donnees RRD
-        * avec une date-heure de debut
-        * pour une plage de temps
-
-        @param host : hôte
-        @type host : C{str}
-        @param graph : graphe
-        @type graph  : C{str}
-        @param start : date-heure de debut des donnees
-        @type start : C{str}
-        @param duration : plage de temps des données
-        @type duration : C{str}
-                         (parametre optionnel, initialise a 86400 = plage de 1 jour)
-
-        @return: page avec l image du graphe et boutons de deplacement dans le temps
-        @rtype: page html
-        """
-
-        if start is None:
-            start = int(time.time()) - int(duration)
-
-        start = int(start)
-        duration = int(duration)
-
-        return dict(host=host, graph=graph, start=start, duration=duration, \
-                    presets=self.presets)
 
     @expose('searchhost.html')
     @paginate('hosts', items_per_page=10)
