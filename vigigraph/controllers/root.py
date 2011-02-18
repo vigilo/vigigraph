@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# vim:set expandtab tabstop=4 shiftwidth=4: 
+# vim:set expandtab tabstop=4 shiftwidth=4:
 """Vigigraph Controller"""
 
 import logging
@@ -7,6 +7,7 @@ from tg import expose, flash, require, request, redirect
 from pylons.i18n import ugettext as _, lazy_ugettext as l_, get_lang
 from repoze.what.predicates import Any, All, not_anonymous, \
                                     has_permission, in_group
+from pkg_resources import resource_filename
 
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.controllers.error import ErrorController
@@ -59,15 +60,27 @@ class RootController(BaseController):
             rootdir = conf['pylons.paths'].get('root_path')
         localedir = os.path.join(rootdir, 'i18n')
 
+        lang = get_lang()
+
         # Localise le fichier *.mo actuellement chargé
         # et génère le chemin jusqu'au *.js correspondant.
         filename = gettext.find(conf['pylons.package'], localedir,
-            languages=get_lang())
+            languages=lang)
         js = filename[:-3] + '.js'
+
+        themes_filename = gettext.find(
+            'vigilo-themes',
+            resource_filename('vigilo.themes.i18n', ''),
+            languages=lang)
+        themes_js = themes_filename[:-3] + '.js'
 
         # Récupère et envoie le contenu du fichier de traduction *.js.
         fhandle = open(js, 'r')
         translations = fhandle.read()
+        fhandle.close()
+
+        fhandle = open(themes_js, 'r')
+        translations += fhandle.read()
         fhandle.close()
         return translations
 
@@ -79,13 +92,13 @@ class RootController(BaseController):
             flash(_('Wrong credentials'), 'warning')
         return dict(page='login', login_counter=str(login_counter),
                     came_from=came_from)
-    
+
     @expose()
     def post_login(self, came_from='/'):
         """
         Redirect the user to the initially requested page on successful
         authentication or redirect her back to the login page if login failed.
-        
+
         """
         if not request.identity:
             login_counter = request.environ['repoze.who.logins'] + 1
@@ -103,11 +116,10 @@ class RootController(BaseController):
         """
         Redirect the user to the initially requested page on logout and say
         goodbye as well.
-        
+
         """
         LOGGER.info(_('Some user logged out (from %(IP)s)') % {
                 'IP': request.remote_addr,
             })
         flash(_('We hope to see you soon!'))
         redirect(came_from)
-
