@@ -697,3 +697,24 @@ class RpcController(BaseController):
             return {"mtime": None}
         mtime = change.last_modified.replace(microsecond=0)
         return {"mtime": mtime}
+
+    @expose('json')
+    def selectHostAndGraph(self, host, graph):
+        # @TODO: vérifier les permissions
+        ids = DBSession.query(
+                Host.idhost, Graph.idgraph
+            ).join(
+                (PerfDataSource, PerfDataSource.idhost == Host.idhost),
+                (GRAPH_PERFDATASOURCE_TABLE, \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource == \
+                    PerfDataSource.idperfdatasource),
+                (Graph, Graph.idgraph == \
+                    GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
+            ).filter(Graph.name == unicode(graph)
+            ).filter(Host.name == unicode(host)
+            ).first()
+
+        return {
+            'idhost': ids and ids.idhost or None,
+            'idgraph': ids and ids.idgraph or None,
+        }

@@ -1,3 +1,10 @@
+var refresh_delay = 30;
+var graphs = [];
+
+var old_fragment = '';
+var skip_detection = 0;
+
+
 var Graph = new Class({
     Implements: [Events, Options],
 
@@ -16,6 +23,7 @@ var Graph = new Class({
         this.host = host;
         this.graph = graph;
         this.refreshTimer = null;
+        this.destroyed = false;
 
         new Request.JSON({
             url: app_path + 'rpc/startTime',
@@ -98,12 +106,12 @@ var Graph = new Class({
                 this.refreshTimer =
                     this.updateGraph.periodical(delay * 1000, this);
                 this.options.autoRefresh = 1;
-                this.updateURI();
+                window.updateURI();
             }.bind(this),
             onUp: function() {
                 clearInterval(this.refreshTimer);
                 this.options.autoRefresh = 0;
-                this.updateURI();
+                window.updateURI();
             }.bind(this)
         });
 
@@ -192,18 +200,20 @@ var Graph = new Class({
             toolbars: [toolbar]
         });
 
-        function removeDialog() {
-            window.graphs.erase(this);
-            this.updateURI();
-        }
-
         this.updateGraph();
         this.graph_window.open();
-        window.graphs.push(this);
 
         this.refresh_button.setActive(parseInt(this.options.autoRefresh));
 
-        this.graph_window.addEvent('close', removeDialog.bind(this));
+        var onClose = function () {
+            if (this.destroyed) return;
+            this.destroyed = true;
+            this.graph_window.domObj.dispose();
+            window.graphs.erase(this);
+            window.updateURI();
+        };
+
+        this.graph_window.addEvent('close', onClose.bind(this));
         // sizeChange est déclenché à la fois après un redimensionnement
         // et après un déplacement. Ce cas est mal documenté dans JxLib.
         this.graph_window.addEvent('sizeChange', this.dialogMoved.bind(this));
@@ -211,13 +221,19 @@ var Graph = new Class({
         // Simule un déplacement de la fenêtre,
         // pour mettre à jour les coordonnées.
         this.dialogMoved();
+        window.graphs.push(this);
+        return this;
+    },
+
+    destroy: function () {
+        this.graph_window.close();
     },
 
     dialogMoved: function () {
         // Repris de l'API interne de JxLib (création du Drag).
         this.options.left = parseInt(this.graph_window.domObj.style.left, 10);
         this.options.top = parseInt(this.graph_window.domObj.style.top, 10);
-        this.updateURI();
+        window.updateURI();
     },
 
     updateZoom: function (factor) {
@@ -228,21 +244,6 @@ var Graph = new Class({
         // On (dés)active le bouton de zoom en avant au besoin.
         this.zoom_in.setEnabled(this.options.duration != 60);
         this.updateGraph();
-    },
-
-    updateURI: function () {
-        var graphs = [];
-        var uri = new URI();
-        uri.set('fragment', '');
-
-        window.graphs.each(function (graph) {
-            var props = new Hash(graph.options);
-            props.extend({host: graph.host, graph: graph.graph});
-            this.push(props.toQueryString());
-        }, graphs);
-
-        uri.setData({'graphs': graphs, safety: 1}, false, 'fragment');
-        uri.go();
     },
 
     getStartTime: function () {
@@ -342,25 +343,44 @@ var Graph = new Class({
     }
 });
 
-var refresh_delay = 30;
-var graphs = [];
-window.addEvent('load', function () {
-    new Request.JSON({
-        url: app_path + 'rpc/tempoDelayRefresh',
-        onSuccess: function (data) {
-            window.refresh_delay = data.delay;
-        }
-    }).get();
-
-    // On réouvre les graphes précédemment chargés.
-    var graphs = [];
+var updateURI = function () {
+    var graphs_uri = [];
     var uri = new URI();
-    var qs = new Hash(uri.get('fragment').parseQueryString());
+
+    // Section critique.
+    window.skip_detection++;
+    uri.set('fragment', '');
+
+    window.graphs.each(function (graph) {
+        var props = new Hash(graph.options);
+        props.extend({host: graph.host, graph: graph.graph});
+        this.push(props.toQueryString());
+    }, graphs_uri);
+
+    uri.setData({'graphs': graphs_uri, safety: 1}, false, 'fragment');
+    uri.go();
+    window.old_fragment = uri.toString();
+
+    // Fin de section critique.
+    window.skip_detection--;
+};
+
+var update_visible_graphs = function (new_fragment) {
+    // On réouvre les graphes précédemment chargés.
+    var new_graphs = [];
+    var qs = new Hash(new_fragment.get('fragment').parseQueryString());
     if (qs.has('graphs')) {
-        graphs = (new Hash(qs.get('graphs'))).getValues();
+        new_graphs = (new Hash(qs.get('graphs'))).getValues();
     }
 
-    graphs.each(function (graph) {
+    // Section critique.
+    window.skip_detection++;
+
+    var prev_graphs = window.graphs;
+    window.graphs = [];
+    prev_graphs.each(function (graph) { graph.destroy(); });
+
+    new_graphs.each(function (graph) {
         var uri = new URI('?' + graph);
         var qs = new Hash(uri.getData());
         if (qs.has('host') && qs.has('graph')) {
@@ -387,8 +407,62 @@ window.addEvent('load', function () {
         }
     });
 
-    // Nécessaire car le constructeur de Graph ajoute les graphes à l'URI.
-    // On restaure donc l'ancienne URI ici, pour éviter les doublons.
-    if (graphs.length)
-        uri.go();
+    window.updateURI();
+
+    // Fin de section critique.
+    window.skip_detection--;
+
+    if (window.graphs.length == 1) {
+        new Request.JSON({
+            url: app_path + 'rpc/selectHostAndGraph',
+            onSuccess: function (results) {
+                window.toolbar.host_picker.setItem(results.idhost, this[0]);
+                window.toolbar.graph_picker.idselection = results.idgraph;
+                window.toolbar.graph_picker.setLabel(this[1]);
+            }.bind([
+                window.graphs[0].host,
+                window.graphs[0].graph
+            ])
+        }).get({
+            host: window.graphs[0].host,
+            graph: window.graphs[0].graph
+        });
+    }
+}
+
+var hash_change_detector = function() {
+    var new_fragment;
+
+    // Pour les moments où on a besoin de mettre à jour
+    // volontairement l'URI (à l'ouverture d'un graphe).
+    if (window.skip_detection) return;
+
+    // Force mootools à analyser l'URL courante de nouveau,
+    // ce qui mettra à jour la partie "fragment" de l'URI.
+    URI.base = new URI(
+        document.getElements('base[href]', true).getLast(),
+        {base: document.location}
+    );
+
+    new_fragment = new URI();
+    if (old_fragment.toString() != new_fragment.toString()) {
+        update_visible_graphs(new_fragment, old_fragment);
+    }
+};
+
+if ('onhashchange' in window) {
+    window.onhashchange = hash_change_detector;
+} else {
+    hash_change_detector.periodical(100);
+}
+
+window.addEvent('load', function () {
+    new Request.JSON({
+        url: app_path + 'rpc/tempoDelayRefresh',
+        onSuccess: function (data) {
+            window.refresh_delay = data.delay;
+        }
+    }).get();
+
+    hash_change_detector();
 });

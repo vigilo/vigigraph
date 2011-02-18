@@ -28,7 +28,6 @@ Jx.Button.SelectorFlyout = new Class({
         };
         this.tree.addEvent("branchloaded", adaptPopup.bind(this));
         this.tree.addEvent("nodedisclosed", adaptPopup.bind(this));
-
    },
 
     setItem: function (idselection, label) {
@@ -118,7 +117,7 @@ var Toolbar = new Class({
                 });
                 window.open(uri.toString());
             }.bind(this)
-        })
+        });
 
         this.show_metrology = new Jx.Button({
             label: _('Metrology page'),
@@ -133,7 +132,7 @@ var Toolbar = new Class({
                 });
                 window.open(uri.toString());
             }.bind(this)
-        })
+        });
 
         this.graph_label = new Jx.Toolbar.Item(this.createLabel(_('Graph:')));
 
@@ -163,7 +162,7 @@ var Toolbar = new Class({
             toggle: false,
             enabled: false,
             onClick: function () {
-                 new Graph(
+                new Graph(
                     {autoRefresh: this.global_refresh.isActive() ? 1 : 0},
                     this.host_picker.getLabel(),
                     this.graph_picker.getLabel()
