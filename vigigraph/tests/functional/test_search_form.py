@@ -38,6 +38,7 @@ class TestSearchForm(TestController):
         """
         Résultats de la recherche sur un hôte avec les bons droits
         """
+
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
         mainhostgroup = DBSession.query(SupItemGroup).filter(
             SupItemGroup.name == u'mhg').first()
@@ -95,7 +96,6 @@ class TestSearchForm(TestController):
 
         # On s'assure que les deux listes retournées contiennent
         # respectivement le nom de l'hôte et son identifiant
-        print repr(DBSession.query(SupItemGroup.name, SupItemGroup.left, SupItemGroup.right, SupItemGroup.depth).all())
         self.assertEqual(
             json, {
                 'labels': [[host2.name, None]],

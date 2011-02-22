@@ -7,7 +7,10 @@ import transaction
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, Graph, GraphGroup
-from vigilo.models.demo.functions import *
+from vigilo.models.demo.functions import \
+    add_graph, add_graphgroup, add_graph2group, \
+    add_perfdatasource, add_perfdatasource2graph, \
+    add_vigiloserver, add_application
 
 from vigigraph.tests.functional.test_host_selection_form import populateDB
 
@@ -235,7 +238,7 @@ class TestGraphTree(TestController):
         # de graphes retournée est vide
         self.assertEqual(
             json, {
-                'leaves': [],
+                'graphs': [],
                 'groups': []
             }
         )
@@ -251,7 +254,7 @@ class TestGraphTree(TestController):
         # de graphes retournée est vide
         self.assertEqual(
             json, {
-                'leaves': [],
+                'graphs': [],
                 'groups': []
             }
         )
@@ -267,7 +270,7 @@ class TestGraphTree(TestController):
         # de graphes retournée est vide
         self.assertEqual(
             json, {
-                'leaves': [],
+                'graphs': [],
                 'groups': []
             }
         )
@@ -304,7 +307,7 @@ class TestGraphTree(TestController):
         # de graphes retournée est vide
         self.assertEqual(
             json, {
-                'leaves': [],
+                'graphs': [],
                 'groups': []
             }
         )
@@ -495,7 +498,7 @@ class TestGraphTree(TestController):
         # de graphes retournée est vide
         self.assertEqual(
             json, {
-                'leaves': [],
+                'graphs': [],
                 'groups': []
             }
         )
@@ -512,7 +515,7 @@ class TestGraphTree(TestController):
         # de graphes retournée est vide
         self.assertEqual(
             json, {
-                'leaves': [],
+                'graphs': [],
                 'groups': []
             }
         )
@@ -529,7 +532,7 @@ class TestGraphTree(TestController):
         # de graphes retournée est vide
         self.assertEqual(
             json, {
-                'leaves': [],
+                'graphs': [],
                 'groups': []
             }
         )
@@ -572,7 +575,7 @@ class TestGraphTree(TestController):
         # graphes retournée est vide
         self.assertEqual(
             json, {
-                'leaves': [],
+                'graphs': [],
                 'groups': []
             }
         )

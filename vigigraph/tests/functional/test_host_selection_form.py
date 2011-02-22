@@ -7,7 +7,9 @@ import transaction
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, SupItemGroup, Permission
-from vigilo.models.demo.functions import *
+from vigilo.models.demo.functions import add_supitemgroup, \
+    add_host, add_host2group, add_usergroup, add_user, \
+    add_supitemgrouppermission, add_usergroup_permission
 
 
 def populateDB():
@@ -24,7 +26,7 @@ def populateDB():
     """
 
     # Ajout d'un groupe d'hôtes principal
-    mainhostgroup = add_supitemgroup(u'mhg')
+    mainhostgroup = add_supitemgroup(u'mhg', None)
 
     # Ajout d'un premier groupe d'hôtes de second niveau
     hostgroup1 = add_supitemgroup(u'hg1', mainhostgroup)
@@ -257,7 +259,7 @@ class TestHostTree(TestController):
         self.assertEqual(
             json, {
                 'leaves': [
-                    {'id': host1.idhost, 'name': host1.name},
+                    {'id': host1.idhost, 'name': host1.name}
                 ],
                 'groups': [
                     {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
@@ -269,8 +271,8 @@ class TestHostTree(TestController):
         # Récupération des groupes d'hôtes
         # accessibles à l'utilisateur 'poweruser'
         response = self.app.post(
-            '/rpc/hosttree?parent_id=%d' % mainhostgroup.idgroup, {},
-            extra_environ={'REMOTE_USER': 'poweruser'})
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
         # On s'assure que la liste de groupes d'hôtes retournée
@@ -278,7 +280,7 @@ class TestHostTree(TestController):
         self.assertEqual(
             json, {
                 'leaves': [
-                    {'id': host1.idhost, 'name': host1.name},
+                    {'id': host1.idhost, 'name': host1.name}
                 ],
                 'groups': [
                     {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
@@ -504,8 +506,8 @@ class TestHostTree(TestController):
         # Récupération des hôtes du groupe 'hg2'
         # accessibles à l'utilisateur 'user'
         response = self.app.post(
-            '/rpc/hosttree?parent_id=%s' % hostgroup2.idgroup, {},
-            extra_environ={'REMOTE_USER': 'user'})
+            '/rpc/hosttree?parent_id=%s' % (hostgroup2.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée est vide
@@ -516,8 +518,8 @@ class TestHostTree(TestController):
         # Récupération des hôtes du groupe 'mhg'
         # accessibles à l'utilisateur 'visitor'
         response = self.app.post(
-            '/rpc/hosttree?parent_id=%s' % mainhostgroup.idgroup, {},
-            extra_environ={'REMOTE_USER': 'visitor'})
+            '/rpc/hosttree?parent_id=%s' % (mainhostgroup.idgroup, ), {
+            }, extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
 
         # On s'assure que la liste d'hôtes retournée est vide
