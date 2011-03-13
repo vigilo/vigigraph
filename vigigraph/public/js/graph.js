@@ -63,6 +63,22 @@ var Graph = new Class({
             timeframe.add(menuItem);
         }, this);
 
+        // Indicateur d'alerte en cas d'erreur
+        var alert_msg = _(
+            'Could not load the graph for "%(graph)s" on "%(host)s". ' +
+            'Make sure VigiRRD is running and receives performance data.'
+        );
+        // Le pattern donné à substitute permet de garder une syntaxe
+        // cohérente avec Python (facilite le travail des traducteurs).
+        alert_msg = alert_msg.substitute({
+                'graph': this.graph,
+                'host': this.host
+            }, (/\\?%\(([^()]+)\)s/g));
+        this.alert_indicator = new Element("img");
+        this.alert_indicator.addClass("alert-indicator");
+        this.alert_indicator.setProperty("src", app_path + 'images/messagebox_warning.png');
+        this.alert_indicator.setProperty("title", alert_msg);
+
         this.indicators = new Jx.Menu({
             label: _("Export to CSV"),
             image: app_path + 'images/document-export.png',
@@ -200,6 +216,9 @@ var Graph = new Class({
             toolbars: [toolbar]
         });
 
+        this.alert_indicator.inject(this.graph_window.content.parentNode);
+
+        // mise à jour
         this.updateGraph();
         this.graph_window.open();
 
@@ -324,22 +343,24 @@ var Graph = new Class({
                 this[1].width + 25,
                 this[1].height + 88
             );
+            this[0].hideAlert();
         }.bind([this, img]));
         img.addEvent('error', function () {
-            if (this.refreshTimer) clearInterval(this.refreshTimer);
-            var msg = _(
-                'Could not load the graph for "%(graph)s" on "%(host)s".\n' +
-                'Make sure VigiRRD is running and receives performance data.'
-            );
-            // Le pattern donné à substitute permet de garder une syntaxe
-            // cohérente avec Python (facilite le travail des traducteurs).
-            msg = msg.substitute({
-                    'graph': this.graph,
-                    'host': this.host
-                }, (/\\?%\(([^()]+)\)s/g));
-            alert(msg);
-            this.graph_window.close();
+            // if (this.refreshTimer) clearInterval(this.refreshTimer);
+            this.showAlert();
+            //this.graph_window.close();
         }.bind(this));
+    },
+
+    showAlert: function() {
+        this.alert_indicator.setStyle("display", "block");
+        var zindex = parseInt(this.graph_window.domObj.getStyle("z-index")) + 1;
+        this.alert_indicator.setStyle("z-index", zindex);
+        return;
+    },
+
+    hideAlert: function() {
+        this.alert_indicator.setStyle("display", "none");
     }
 });
 
