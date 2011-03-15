@@ -53,15 +53,20 @@ var TreeGroup = new Class({
         });
 
         // Envoi de la requête
-        if (!$chk(top_node))
-            if (!$defined(this.options.hostid))
+        if (!$chk(top_node)) {
+            if (!$defined(this.options.hostid)) {
                 req.get({parent_id: parent_node.options.data});
-            else
+            }
+            else {
                 req.get({parent_id: parent_node.options.data, host_id: this.options.hostid});
-        else if (!$defined(this.options.hostid))
+            }
+        }
+        else if (!$defined(this.options.hostid)) {
             req.get();
-        else
+        }
+        else {
             req.get({host_id: this.options.hostid});
+        }
     },
 
     /* Ajout d'un noeud à l'arbre */

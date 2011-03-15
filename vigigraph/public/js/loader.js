@@ -51,4 +51,4 @@ Request = Class.refactor(Request, {
             this.addEvent(event, loader.hide.bind(loader));
         }, this);
     }
-})
+});

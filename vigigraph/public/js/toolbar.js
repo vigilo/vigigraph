@@ -168,7 +168,7 @@ var Toolbar = new Class({
                     this.graph_picker.getLabel()
                 );
             }.bind(this)
-        })
+        });
 
         // Remplissage de la barre d'outils
         this.jxtoolbar.add(this.global_refresh);

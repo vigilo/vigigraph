@@ -83,7 +83,7 @@ var Graph = new Class({
             label: _("Export to CSV"),
             image: app_path + 'images/document-export.png',
             tooltip: _("Export the content of this graph to CSV")
-        })
+        });
 
         new Request.JSON({
             url: app_path + 'rpc/getIndicators',
@@ -222,7 +222,7 @@ var Graph = new Class({
         this.updateGraph();
         this.graph_window.open();
 
-        this.refresh_button.setActive(parseInt(this.options.autoRefresh));
+        this.refresh_button.setActive(parseInt(this.options.autoRefresh, 10));
 
         var onClose = function () {
             if (this.destroyed) return;
@@ -256,7 +256,7 @@ var Graph = new Class({
     },
 
     updateZoom: function (factor) {
-        this.options.duration = parseInt(this.options.duration * factor);
+        this.options.duration = parseInt(this.options.duration, 10) * factor;
         // Période minimale d'affichage : 1 minute.
         if (this.options.duration < 60)
             this.options.duration = 60;
@@ -287,7 +287,7 @@ var Graph = new Class({
             start: start,
             end: start + this.options.duration,
             nocache: (new Date() / 1)
-        })
+        });
 
         if (menuItem.options.indicator)
             uri.setData({ds: menuItem.options.name}, true);
@@ -307,7 +307,7 @@ var Graph = new Class({
             duration: params.duration,
             graph: params.graphtemplate,
             nocache: params.nocache
-        }
+        };
     },
 
     print: function () {
@@ -354,7 +354,7 @@ var Graph = new Class({
 
     showAlert: function() {
         this.alert_indicator.setStyle("display", "block");
-        var zindex = parseInt(this.graph_window.domObj.getStyle("z-index")) + 1;
+        var zindex = parseInt(this.graph_window.domObj.getStyle("z-index"), 10) + 1;
         this.alert_indicator.setStyle("z-index", zindex);
         return;
     },
@@ -449,7 +449,7 @@ var update_visible_graphs = function (new_fragment) {
             graph: window.graphs[0].graph
         });
     }
-}
+};
 
 var hash_change_detector = function() {
     var new_fragment;
