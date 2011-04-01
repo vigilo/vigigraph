@@ -287,9 +287,13 @@ class RpcController(BaseController):
         error_handler = process_form_errors)
     @expose('json')
     def startTime(self, host, nocache):
+        # urllib2.quote() ne fonctionne pas sur le type unicode.
+        # On transcode d'abord le nom d'hôte en UTF-8.
+        quote_host = isinstance(host, unicode) and \
+                        host.encode('utf-8') or host
         return get_through_proxy(
             'vigirrd', host,
-            '/starttime?host=%s' % urllib2.quote(host, '')
+            '/starttime?host=%s' % urllib2.quote(quote_host, '')
         )
 
     class FullHostPageSchema(schema.Schema):
