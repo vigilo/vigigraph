@@ -29,11 +29,12 @@ tests_require = [
 setup(
     name='vigigraph',
     version='2.0.0',
-    description='',
     author='Vigilo Team',
     author_email='contact@projet-vigilo.org',
-    #url='',
+    url='http://www.projet-vigilo.org',
     license='http://www.gnu.org/licenses/gpl-2.0.html',
+    description="Vigilo metrology interface",
+    long_description="Vigilo metrology interface",
     install_requires=[
         "vigilo-turbogears",
         ],
