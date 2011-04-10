@@ -97,10 +97,6 @@ class RpcController(BaseController):
         Un critere peut correspondre a un intitule complet hote ou graphe
         ou a un extrait.
 
-        @param kwargs : arguments nommes
-        @type kwargs : dict
-                         ( arguments nommes -> host et graphe )
-
         @return: couples hote-graphe
         @rtype: document json (sous forme de dict)
         """
@@ -374,13 +370,13 @@ class RpcController(BaseController):
     def searchHost(self, *args, **kwargs):
         """
         Affiche les résultats de la recherche par nom d'hôte.
-        La requête de recherche (L{query}) correspond à un préfixe
+        La requête de recherche (C{query}) correspond à un préfixe
         qui sera recherché dans le nom d'hôte. Ce préfixe peut
         contenir les caractères '*' et '?' qui agissent comme des
         "jokers".
 
-        @param query: Prefixe de recherche sur les noms d'hôtes
-        @type query: C{unicode}
+        @keyword query: Prefixe de recherche sur les noms d'hôtes
+        @type    query: C{unicode}
         """
         query = kwargs.get('query')
         if not query:

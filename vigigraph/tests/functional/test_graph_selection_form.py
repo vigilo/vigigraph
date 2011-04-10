@@ -20,11 +20,11 @@ def addGraphs(host1, host2, host3):
     Ajout d'un graphe pour chacun des trois hôtes passés en paramètres.
 
     @param host1: Premier hôte.
-    @type  host1: L{vigilo.models.Host}
+    @type  host1: C{vigilo.models.tables.Host}
     @param host2: Deuxième hôte.
-    @type  host2: L{vigilo.models.Host}
+    @type  host2: C{vigilo.models.tables.Host}
     @param host3: Troisième hôte.
-    @type  host3: L{vigilo.models.Host}
+    @type  host3: C{vigilo.models.tables.Host}
     """
 
     # Ajout d'un serveur de supervision

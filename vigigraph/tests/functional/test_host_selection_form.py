@@ -15,14 +15,14 @@ from vigilo.models.demo.functions import add_supitemgroup, \
 def populateDB():
     """
     Peuple la base de données en ajoutant :
-    - 3 groupes d'hôtes ;
-    - 3 hôtes ;
-    - 3 utilisateurs.
+     - 3 groupes d'hôtes ;
+     - 3 hôtes ;
+     - 3 utilisateurs.
     Affecte les permissions nécessaires aux utilisateurs en vue des tests.
     Retourne les 3 hôtes créés.
 
     @return: Tuple contenant les trois hôtes.
-    @rtype:  C{tuple} of L{vigilo.models.Host}
+    @rtype:  C{tuple} of C{vigilo.models.tables.Host}
     """
 
     # Ajout d'un groupe d'hôtes principal
