@@ -267,7 +267,7 @@ var Graph = new Class({
 
     getStartTime: function () {
         var start = this.options.start;
-        if (start == null)
+        if (start === null)
             // @TODO: cette heure est en localtime a priori.
             start = (new Date() / 1000).toInt() - this.options.duration;
         if (start < 0)
