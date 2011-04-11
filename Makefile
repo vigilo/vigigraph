@@ -4,7 +4,6 @@ QOOXDOO_VER := 0.7.3
 all: build
 
 include buildenv/Makefile.common
-PKGNAME := $(NAME)
 MODULE := $(NAME)
 CODEPATH := $(NAME)
 EPYDOC_PARSE := vigigraph\.controllers
