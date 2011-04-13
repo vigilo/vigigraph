@@ -1,3 +1,4 @@
 recursive-include vigigraph/public *
 recursive-include vigigraph/i18n *
-recursive-include buildenv Makefile.common buildout.*.cfg
+include buildenv/Makefile.common
+include buildenv/buildout.*.cfg
