@@ -1,4 +1,16 @@
-recursive-include vigigraph/public *
-recursive-include vigigraph/i18n *
 include buildenv/Makefile.common
 include buildenv/buildout.*.cfg
+include buildout.cfg
+include Makefile
+include COPYING.txt
+
+graft doc
+graft pkg
+recursive-include vigigraph/i18n *.pot *.po
+
+graft deployment
+graft ez_setup
+graft vigigraph/public
+include *.ini
+include jsl.cfg
+include babeljs.py
