@@ -1,52 +1,48 @@
-This file is for you to describe the vigigraph application. Typically
-you would include information such as the information below:
+VigiGraph
+=========
 
-Installation and Setup
-======================
+VigiBoard est l'interface web de Vigilo_ orientée métrologie. On peut y
+visualiser les graphes de performance des différents indicateurs collectés
+sur le parc supervisé.
 
-Install ``vigigraph`` using the setup.py script::
-
-    $ cd vigigraph
-    $ python setup.py install
-
-Create the project database for any model classes defined::
-
-    $ paster setup-app development.ini
-
-Start the paste http server::
-
-    $ paster serve development.ini
-
-While developing you may want the server to reload after changes in package files (or its dependencies) are saved. This can be achieved easily by adding the --reload option::
-
-    $ paster serve --reload development.ini
-
-Then you are ready to go.
+Pour les détails du fonctionnement de VigiGraph, se reporter à la
+`documentation officielle`_.
 
 
-*****************
-* Attention !!! *
-*****************
+Dépendances
+-----------
+Vigilo nécessite une version de Python supérieure ou égale à 2.5. Le chemin de
+l'exécutable python peut être passé en paramètre du ``make install`` de la
+façon suivante::
 
-vigilo2
+    make install PYTHON=/usr/bin/python2.6
 
-- accès aux données nagios:
-  * l'authentification a été modifiée dans les fichiers de configuration suivants
-    (par rapport à ce qui a été décrit par Vincent sur nagios dans le Wiki)
-    - /etc/nagios/cgi.cfg
-      * modification de use_authentication -> 0
-    - /etc/httpd/conf/webapps.d/nagios.conf
-      * suppression des lignes Auth* et Require valid-user dans <Directory /usr/lib/nagios/cgi>
+VigiGraph a besoin des modules Python suivants :
 
-- rafraichissement graphes
-  * la réalisation des IHM en javascript s'effectue avec qooxdoo. La version utilisée correspond
-    à celle utilisée sur Vigilo1, soit la version 0.7. Dans cette version, les ToggleButton n'existent pas.
-    De plus, il n'est pas prévu de migrer sur une version ultérieure de qooxdoo (mais même au contraire de 
-    migrer vers motools)
-    -> utilisation de setBorder avec paramètre inset ou outset pour le rafraichissement des graphes
-       pour indiquer l'état courant: bouton enfoncé ou relaché !
+- setuptools (ou distribute)
+- vigilo-turbogears
 
-- search et select
-  * dans selectHostAndService de rpc.py  
-    - service : positionné à None 
-    - données renvoyées -> première occurence
+
+Installation
+------------
+L'installation se fait par la commande ``make install`` (à exécuter en
+``root``).
+
+Après avoir configuré VigiGraph dans le fichier
+``/etc/vigilo/vigigraph/settings.ini``, il faut initialiser la base de données
+par la commande ``vigilo-updatedb``. Enfin, il faut redémarrer Apache pour
+qu'il prenne en compte le nouveau fichier de configuration de VigiGraph.
+
+
+License
+-------
+VigiGraph est sous licence `GPL v2`_.
+
+
+.. _documentation officielle: Vigilo_
+.. _Vigilo: http://www.projet-vigilo.org
+.. _GPL v2: http://www.gnu.org/licenses/gpl-2.0.html
+
+.. vim: set syntax=rst fileencoding=utf-8 tw=78 :
+
+
