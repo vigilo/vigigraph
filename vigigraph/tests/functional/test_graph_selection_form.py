@@ -129,8 +129,10 @@ class TestGraphTree(TestController):
         # de graphes retournée contient bien 'graphgroup1'
         self.assertEqual(
             json, {
-                'leaves': [],
-                'groups': [{'id': graphgroup1.idgroup, 'name': graphgroup1.name}]
+                'items': [],
+                'groups': [{'id': graphgroup1.idgroup,
+                            'name': graphgroup1.name,
+                            'type': 'group'}]
             }
         )
 
@@ -145,8 +147,10 @@ class TestGraphTree(TestController):
         # de graphes retournée contient bien 'graphgroup2'
         self.assertEqual(
             json, {
-                'leaves': [],
-                'groups': [{'id': graphgroup2.idgroup, 'name': graphgroup2.name}]
+                'items': [],
+                'groups': [{'id': graphgroup2.idgroup,
+                            'name': graphgroup2.name,
+                            'type': 'group'}]
             }
         )
 
@@ -161,8 +165,10 @@ class TestGraphTree(TestController):
         # de graphes retournée contient bien 'graphgroup1'
         self.assertEqual(
             json, {
-                'leaves': [],
-                'groups': [{'id': graphgroup1.idgroup, 'name': graphgroup1.name}]
+                'items': [],
+                'groups': [{'id': graphgroup1.idgroup,
+                            'name': graphgroup1.name,
+                            'type': 'group'}]
             }
         )
 
@@ -177,8 +183,10 @@ class TestGraphTree(TestController):
         # de graphes retournée contient bien 'graphgroup2'
         self.assertEqual(
             json, {
-                'leaves': [],
-                'groups': [{'id': graphgroup2.idgroup, 'name': graphgroup2.name}]
+                'items': [],
+                'groups': [{'id': graphgroup2.idgroup,
+                            'name': graphgroup2.name,
+                            'type': 'group'}]
             }
         )
 
@@ -193,8 +201,10 @@ class TestGraphTree(TestController):
         # de graphes retournée contient bien 'graphgroup2'
         self.assertEqual(
             json, {
-                'leaves': [],
-                'groups': [{'id': graphgroup2.idgroup, 'name': graphgroup2.name}]
+                'items': [],
+                'groups': [{'id': graphgroup2.idgroup,
+                            'name': graphgroup2.name,
+                            'type': 'group'}]
             }
         )
 
@@ -209,8 +219,10 @@ class TestGraphTree(TestController):
         # de graphes retournée contient bien 'graphgroup3'
         self.assertEqual(
             json, {
-                'leaves': [],
-                'groups': [{'id': graphgroup3.idgroup, 'name': graphgroup3.name}]
+                'items': [],
+                'groups': [{'id': graphgroup3.idgroup,
+                            'name': graphgroup3.name,
+                            'type': 'group'}]
             }
         )
 
@@ -373,7 +385,9 @@ class TestGraphTree(TestController):
         # graphes retournée contient 'graph1'
         self.assertEqual(
             json, {
-                'leaves': [{'id': graph1.idgraph, 'name': graph1.name}],
+                'items': [{'id': graph1.idgraph,
+                           'name': graph1.name,
+                           'type': 'item'}],
                 'groups': []
             }
         )
@@ -390,7 +404,9 @@ class TestGraphTree(TestController):
         # graphes retournée contient 'graph2'
         self.assertEqual(
             json, {
-                'leaves': [{'id': graph2.idgraph, 'name': graph2.name}],
+                'items': [{'id': graph2.idgraph,
+                           'name': graph2.name,
+                           'type': 'item'}],
                 'groups': []
             }
         )
@@ -407,7 +423,9 @@ class TestGraphTree(TestController):
         # graphes retournée contient 'graph1'
         self.assertEqual(
             json, {
-                'leaves': [{'id': graph1.idgraph, 'name': graph1.name}],
+                'items': [{'id': graph1.idgraph,
+                           'name': graph1.name,
+                           'type': 'item'}],
                 'groups': []
             }
         )
@@ -424,7 +442,9 @@ class TestGraphTree(TestController):
         # graphes retournée contient 'graph2'
         self.assertEqual(
             json, {
-                'leaves': [{'id': graph2.idgraph, 'name': graph2.name}],
+                'items': [{'id': graph2.idgraph,
+                           'name': graph2.name,
+                           'type': 'item'}],
                 'groups': []
             }
         )
@@ -441,7 +461,9 @@ class TestGraphTree(TestController):
         # graphes retournée contient 'graph2'
         self.assertEqual(
             json, {
-                'leaves': [{'id': graph2.idgraph, 'name': graph2.name}],
+                'items': [{'id': graph2.idgraph,
+                           'name': graph2.name,
+                           'type': 'item'}],
                 'groups': []
             }
         )
@@ -458,7 +480,9 @@ class TestGraphTree(TestController):
         # graphes retournée contient 'graph3'
         self.assertEqual(
             json, {
-                'leaves': [{'id': graph3.idgraph, 'name': graph3.name}],
+                'items': [{'id': graph3.idgraph,
+                           'name': graph3.name,
+                           'type': 'item'}],
                 'groups': []
             }
         )

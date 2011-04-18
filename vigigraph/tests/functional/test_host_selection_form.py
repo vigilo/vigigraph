@@ -122,9 +122,10 @@ class TestHostTree(TestController):
         # d'hôtes retournée contient bien 'mhg'
         self.assertEqual(
             json, {
-                'leaves': [], 'groups': [{
+                'items': [], 'groups': [{
                     'id': mainhostgroup.idgroup,
-                    'name': mainhostgroup.name
+                    'name': mainhostgroup.name,
+                    'type': 'group',
                 }]
             }
         )
@@ -151,9 +152,10 @@ class TestHostTree(TestController):
         # d'hôtes retournée contient bien 'mhg'
         self.assertEqual(
             json, {
-                'leaves': [], 'groups': [{
+                'items': [], 'groups': [{
                     'id': mainhostgroup.idgroup,
-                    'name': mainhostgroup.name
+                    'name': mainhostgroup.name,
+                    'type': 'group',
                 }]
             }
         )
@@ -181,9 +183,10 @@ class TestHostTree(TestController):
         # d'hôtes retournée contient bien 'mhg'
         self.assertEqual(
             json, {
-                'leaves': [], 'groups': [{
+                'items': [], 'groups': [{
                     'id': mainhostgroup.idgroup,
-                    'name': mainhostgroup.name
+                    'name': mainhostgroup.name,
+                    'type': 'group',
                 }]
             }
         )
@@ -205,7 +208,7 @@ class TestHostTree(TestController):
 
         # On s'assure que la liste de groupes d'hôtes retournée est bien vide
         self.assertEqual(
-            json, {'leaves': [], 'groups': []}
+            json, {'items': [], 'groups': []}
         )
 
     def test_get_main_host_groups_as_anonymous(self):
@@ -258,12 +261,12 @@ class TestHostTree(TestController):
         # contient bien 'No subgroup', 'hg1', et 'hg2'
         self.assertEqual(
             json, {
-                'leaves': [
-                    {'id': host1.idhost, 'name': host1.name}
+                'items': [
+                    {'id': host1.idhost, 'name': host1.name, 'type': 'item'}
                 ],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
-                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name},
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
+                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name, 'type': 'group'},
                 ]
             }
         )
@@ -279,12 +282,12 @@ class TestHostTree(TestController):
         # contient bien 'No subgroup', 'hg1', et 'hg2'
         self.assertEqual(
             json, {
-                'leaves': [
-                    {'id': host1.idhost, 'name': host1.name}
+                'items': [
+                    {'id': host1.idhost, 'name': host1.name, 'type': 'item'}
                 ],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
-                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name},
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
+                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name, 'type': 'group'},
                 ]
             }
         )
@@ -300,9 +303,9 @@ class TestHostTree(TestController):
         # d'hôtes retournée contient bien 'hg1'
         self.assertEqual(
             json, {
-                'leaves': [],
+                'items': [],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
                 ]
             }
         )
@@ -325,7 +328,7 @@ class TestHostTree(TestController):
 
         # On s'assure que la liste de groupes d'hôtes retournée est bien vide
         self.assertEqual(
-            json, {'leaves': [], 'groups': []}
+            json, {'items': [], 'groups': []}
         )
 
     def test_get_host_groups_as_anonymous(self):
@@ -358,7 +361,7 @@ class TestHostTree(TestController):
 
         # On s'assure que la liste de groupes d'hôtes retournée est bien vide
         self.assertEqual(
-            json, {'leaves': [], 'groups': []}
+            json, {'items': [], 'groups': []}
         )
 
 ##### Troisième onglet déroulant du formulaire #####
@@ -398,10 +401,10 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hôtes retournée contient bien 'host1'
         self.assertEqual(
             json, {
-                'leaves': [{'id': host1.idhost, 'name': host1.name}],
+                'items': [{'id': host1.idhost, 'name': host1.name, 'type': 'item'}],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
-                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name}
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
+                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name, 'type': 'group'}
                 ]
             }
         )
@@ -416,7 +419,7 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hotes retournée contient bien 'host2'
         self.assertEqual(
             json, {
-                'leaves': [{'id': host2.idhost, 'name': host2.name}],
+                'items': [{'id': host2.idhost, 'name': host2.name, 'type': 'item'}],
                 'groups': []
             }
         )
@@ -431,10 +434,10 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hôtes retournée contient bien 'host1'
         self.assertEqual(
             json, {
-                'leaves': [{'id': host1.idhost, 'name': host1.name}],
+                'items': [{'id': host1.idhost, 'name': host1.name, 'type': 'item'}],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name},
-                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name},
+                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
+                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name, 'type': 'group'},
                 ]
             }
         )
@@ -449,7 +452,7 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hotes retournée contient bien 'host2'
         self.assertEqual(
             json, {
-                'leaves': [{'id': host2.idhost, 'name': host2.name}],
+                'items': [{'id': host2.idhost, 'name': host2.name, 'type': 'item'}],
                 'groups': []
             }
         )
@@ -464,7 +467,7 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hôtes retournée contient bien 'host2'
         self.assertEqual(
             json, {
-                'leaves': [{'id': host2.idhost, 'name': host2.name}],
+                'items': [{'id': host2.idhost, 'name': host2.name, 'type': 'item'}],
                 'groups': []
             }
         )
@@ -498,8 +501,8 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hôtes retournée est vide
         self.assertEqual(
             json, {
-                'leaves': [],
-                'groups': [{'name': hostgroup1.name, 'id': hostgroup1.idgroup}]
+                'items': [],
+                'groups': [{'name': hostgroup1.name, 'id': hostgroup1.idgroup, 'type': 'group'}]
             }
         )
 
@@ -512,7 +515,7 @@ class TestHostTree(TestController):
 
         # On s'assure que la liste d'hôtes retournée est vide
         self.assertEqual(
-            json, {'leaves': [], 'groups': []}
+            json, {'items': [], 'groups': []}
         )
 
         # Récupération des hôtes du groupe 'mhg'
@@ -524,7 +527,7 @@ class TestHostTree(TestController):
 
         # On s'assure que la liste d'hôtes retournée est vide
         self.assertEqual(
-            json, {'leaves': [], 'groups': []}
+            json, {'items': [], 'groups': []}
         )
 
         # Récupération des hôtes du groupe 'hg1'
@@ -536,7 +539,7 @@ class TestHostTree(TestController):
 
         # On s'assure que la liste d'hôtes retournée est vide
         self.assertEqual(
-            json, {'leaves': [], 'groups': []}
+            json, {'items': [], 'groups': []}
         )
 
     def test_get_hosts_as_anonymous(self):
@@ -569,5 +572,5 @@ class TestHostTree(TestController):
 
         # On s'assure que la liste retournée est vide
         self.assertEqual(
-            json, {'leaves': [], 'groups': []}
+            json, {'items': [], 'groups': []}
         )

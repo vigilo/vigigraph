@@ -473,7 +473,7 @@ class RpcController(BaseController):
                         break
                 # Sinon, l'utilisateur n'a pas accès à ce groupe
                 else:
-                    return dict(groups = [], leaves = [])
+                    return dict(groups = [], items = [])
 
         limit = int(config.get("max_menu_entries", 20))
         result = {"groups": [], "items": []}
@@ -695,7 +695,7 @@ class RpcController(BaseController):
                 'type' : "group",
             })
 
-        return dict(groups=groups, leaves=[])
+        return dict(groups=groups, items=[])
 
     def getListIndicators(self, host, graph):
         """
