@@ -1,14 +1,31 @@
 Jx.Button.SelectorFlyout = new Class({
     Extends: Jx.Button.Flyout,
 
-    initialize: function (options, url, hostid) {
+    initialize: function (options, url, itemImage) {
         this.idselection = null;
-        this.tree = new TreeGroup({
+        this.hostid = null;
+        var tree_container = new Element("div");
+        tree_container.setStyle("padding", "0 10px 10px 10px");
+        this.tree = new GroupTree({
+            parent: tree_container,
+            url: url,
+            itemName: "item",
+            itemImage: "images/" + itemImage,
+            onItemClick: this.selectItem.bind(this)
+        });
+        /*
+        this.tree = new GroupTree({
             title: this.options.label,
             url: url,
             hostid: hostid
         });
-        options.content = this.tree.container;
+        */
+        options.content = tree_container;
+        options.onOpen = function() {
+            if (! this.tree.isLoaded) {
+                this.tree.load();
+            }
+        }.bind(this);
         this.parent(options);
         this.tree.addEvent('select', this.selectItem.bind(this));
 
@@ -26,8 +43,10 @@ Jx.Button.SelectorFlyout = new Class({
             this.contentContainer.setContentBoxSize(
                     $(this.content).getMarginBoxSize());
         };
+        this.tree.addEvent("load", adaptPopup.bind(this));
         this.tree.addEvent("branchloaded", adaptPopup.bind(this));
         this.tree.addEvent("nodedisclosed", adaptPopup.bind(this));
+        this.tree.addEvent("groupClick", adaptPopup.bind(this));
    },
 
     setItem: function (idselection, label) {
@@ -37,8 +56,13 @@ Jx.Button.SelectorFlyout = new Class({
     },
 
     selectItem: function (item) {
-        this.setItem(item.options.data, item.options.label);
+        this.setItem(item.id, item.name);
         this.hide();
+    },
+
+    setHostId: function(hostid) {
+        this.tree.options.requestOptions = {"host_id": hostid};
+        this.hostid = hostid;
     },
 
     //clicked: function (e) {
@@ -48,7 +72,8 @@ Jx.Button.SelectorFlyout = new Class({
     //},
 
     redraw: function() {
-        this.tree.redraw();
+        this.tree.clear();
+        this.tree.load();
     }
 });
 
@@ -83,14 +108,14 @@ var Toolbar = new Class({
                 tooltip: _('Click me to select another host')
             },
             app_path + 'rpc/hosttree',
-            null
+            "drive-harddisk.png"
         );
 
         this.host_picker.addEvent("select", function() {
             var idselection = this.host_picker.idselection;
-            if (this.graph_picker.tree.options.hostid != idselection) {
-                this.graph_picker.tree.options.hostid = idselection;
-                this.graph_picker.tree.redraw();
+            if (this.graph_picker.hostid !== idselection) {
+                this.graph_picker.setHostId(idselection);
+                this.graph_picker.redraw();
                 this.graph_picker.setItem(null, this.graph_picker.options.label);
             }
             this.show_nagios.setEnabled(1);
@@ -142,7 +167,7 @@ var Toolbar = new Class({
                 enabled: false
             },
             app_path + 'rpc/graphtree',
-            null
+            "utilities-system-monitor.png"
         );
 
         this.graph_picker.addEvent("select", function (idselection, label) {
@@ -185,24 +210,7 @@ var Toolbar = new Class({
         // Vérification de la date de dernière modification en base, et
         // rechargement des arbres le cas échéant
         this.loadtime = new Date();
-        this.req_expiration = new Request.JSON({
-            method: "get",
-            url: app_path + "rpc/dbmtime",
-            onSuccess: function(result){
-                if (!result) return;
-                var mtime = Date.parse(result.mtime);
-                if ((toolbar.loadtime - mtime) >= 0) return;
-                // la base a changé, on recharge les arbres
-                toolbar.host_picker.tree.redraw();
-                toolbar.graph_picker.tree.redraw();
-                // @todo: En théorie on devrait aussi vérifier que l'élément
-                // sélectionné existe dans l'arbre, mais c'est un peu compliqué
-                // avec le chargement dynamique. Il faudrait faire une requête
-                // spécifique
-                toolbar.loadtime = new Date();
-            }
-        });
-        this.req_expiration.send.periodical(30 * 1000, this.req_expiration);
+        this.checkExpiration.periodical(30 * 1000, this);
     },
 
     // Retourne un objet opaque qui possède un label,
@@ -236,10 +244,10 @@ var Toolbar = new Class({
                     if ((toolbar.loadtime - mtime) >= 0) return;
                     // la base a changé, on recharge les arbres
                     if (toolbar.host_picker.idselection) {
-                        toolbar.host_picker.tree.redraw();
+                        toolbar.host_picker.redraw();
                     }
                     if (toolbar.graph_picker.idselection) {
-                        toolbar.graph_picker.tree.redraw();
+                        toolbar.graph_picker.redraw();
                     }
                     // @todo: En théorie on devrait aussi vérifier que
                     // l'élément sélectionné existe dans l'arbre, mais c'est un

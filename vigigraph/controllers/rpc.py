@@ -423,7 +423,7 @@ class RpcController(BaseController):
         return dict()
 
     @expose('json')
-    def hosttree(self, parent_id=None):
+    def hosttree(self, parent_id=None, onlytype="", offset=0, noCache=None):
         """
         Affiche un étage de l'arbre de
         sélection des hôtes et groupes d'hôtes.
@@ -440,6 +440,7 @@ class RpcController(BaseController):
 
         # TODO: Utiliser un schéma de validation
         parent_id = int(parent_id)
+        offset = int(offset)
 
         # On vérifie si le groupe parent fait partie des
         # groupes auxquel l'utilisateur a accès, et on
@@ -474,32 +475,49 @@ class RpcController(BaseController):
                 else:
                     return dict(groups = [], leaves = [])
 
-        # On récupère la liste des groupes dont
-        # l'identifiant du parent est passé en paramètre
-        db_groups = DBSession.query(
-            SupItemGroup
-        ).join(
-            (GroupHierarchy, GroupHierarchy.idchild == \
-                SupItemGroup.idgroup),
-        ).filter(GroupHierarchy.hops == 1
-        ).filter(GroupHierarchy.idparent == parent_id
-        ).order_by(SupItemGroup.name.asc())
-        if not is_manager and not direct_access:
-            id_list = [ug for ug in user_groups.keys()]
+        limit = int(config.get("max_menu_entries", 20))
+        result = {"groups": [], "items": []}
 
-            db_groups = db_groups.filter(
-                SupItemGroup.idgroup.in_(id_list))
-        groups = []
-        for group in db_groups.all():
-            groups.append({
-                'id'   : group.idgroup,
-                'name' : group.name,
-            })
+        if not onlytype or onlytype == "group":
+            # On récupère la liste des groupes dont
+            # l'identifiant du parent est passé en paramètre
+            db_groups = DBSession.query(
+                SupItemGroup
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idchild == \
+                    SupItemGroup.idgroup),
+            ).filter(GroupHierarchy.hops == 1
+            ).filter(GroupHierarchy.idparent == parent_id
+            ).order_by(SupItemGroup.name.asc())
+            if not is_manager and not direct_access:
+                id_list = [ug for ug in user_groups.keys()]
+
+                db_groups = db_groups.filter(
+                    SupItemGroup.idgroup.in_(id_list))
+            num_children_left = db_groups.count() - offset
+            if offset:
+                result["continued_from"] = offset
+                result["continued_type"] = "group"
+            all_groups = db_groups.limit(limit).offset(offset).all()
+            for group in all_groups:
+                result["groups"].append({
+                    'id'   : group.idgroup,
+                    'name' : group.name,
+                    'type' : "group",
+                })
+            if num_children_left > limit:
+                result["groups"].append({
+                    'name': _("Next %(limit)s") % {"limit": limit},
+                    'offset': offset + limit,
+                    'parent_id': parent_id,
+                    'type': 'continued',
+                    'for_type': 'group',
+                })
 
         # On récupère la liste des hôtes appartenant au
         # groupe dont l'identifiant est passé en paramètre
-        hosts = []
-        if is_manager or direct_access:
+        if ((not onlytype or onlytype == "item")
+                and (is_manager or direct_access)):
             db_hosts = DBSession.query(
                 Host.idhost,
                 Host.name,
@@ -509,17 +527,30 @@ class RpcController(BaseController):
                     ),
             ).filter(SUPITEM_GROUP_TABLE.c.idgroup == parent_id
             ).order_by(Host.name.asc())
-            hosts = []
-            for host in db_hosts.all():
-                hosts.append({
+            num_children_left = db_hosts.count() - offset
+            if offset:
+                result["continued_from"] = offset
+                result["continued_type"] = "item"
+            all_hosts = db_hosts.limit(limit).offset(offset).all()
+            for host in all_hosts:
+                result["items"].append({
                     'id'   : host.idhost,
                     'name' : host.name,
+                    'type' : "item",
+                })
+            if num_children_left > limit:
+                result["items"].append({
+                    'name': _("Next %(limit)s") % {"limit": limit},
+                    'offset': offset + limit,
+                    'parent_id': parent_id,
+                    'type': 'continued',
+                    'for_type': 'item',
                 })
 
-        return dict(groups = groups, leaves = hosts)
+        return result
 
     @expose('json')
-    def graphtree(self, host_id=None, parent_id=None):
+    def graphtree(self, host_id=None, parent_id=None, offset=0, noCache=None):
         """
         Affiche un étage de l'arbre de sélection
         des graphes et groupes de graphes.
@@ -533,6 +564,7 @@ class RpcController(BaseController):
         if host_id is None:
             return dict(groups = [], graphs=[])
 
+        limit = int(config.get("max_menu_entries", 20))
         # On vérifie les permissions sur l'hôte
         # TODO: Utiliser un schéma de validation
         host_id = int(host_id)
@@ -590,6 +622,7 @@ class RpcController(BaseController):
                 groups.append({
                     'id'   : gg.idgroup,
                     'name' : gg.name,
+                    'type' : "group",
                 })
 
         # On récupère la liste des graphes appartenant au
@@ -615,9 +648,10 @@ class RpcController(BaseController):
                 graphs.append({
                     'id'   : graph.idgraph,
                     'name' : graph.name,
+                    'type' : "item",
                 })
 
-        return dict(groups = groups, leaves = graphs)
+        return dict(groups=groups, items=graphs)
 
     def get_root_host_groups(self):
         """
@@ -658,9 +692,10 @@ class RpcController(BaseController):
             groups.append({
                 'id'   : group.idgroup,
                 'name' : group.name,
+                'type' : "group",
             })
 
-        return dict(groups = groups, leaves=[])
+        return dict(groups=groups, leaves=[])
 
     def getListIndicators(self, host, graph):
         """
