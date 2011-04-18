@@ -766,6 +766,11 @@ Jx.AutoPosition = new Class({
         var hor = $splat(options.horizontal || ['center center']);
         var ver = $splat(options.vertical || ['center center']);
         var offsets = $merge({top:0,right:0,bottom:0,left:0}, options.offsets || {});
+        var hor_overflow = $defined(options.horizontal_overflow) ?
+                                options.horizontal_overflow : false;
+        var ver_overflow = $defined(options.vertical_overflow) ?
+                                options.vertical_overflow : false;
+
         
         var coords = relative.getCoordinates(); //top, left, width, height
         var page;
@@ -850,7 +855,11 @@ Jx.AutoPosition = new Class({
                         break;
                 }                
             }
-            return (left >= scroll.x && right <= scroll.x + page.width);
+            if (left < scroll.y)
+                return false;
+            if (right > scroll.x + page.width && !hor_overflow)
+                return false;
+            return true;
         })) {
             // all failed, snap the last position onto the page as best
             // we can - can't do anything if the element is wider than the
@@ -912,7 +921,11 @@ Jx.AutoPosition = new Class({
                             break;
                     }                    
                 }
-                return (top >= scroll.y && bottom <= scroll.y + page.height);
+                if (top < scroll.y)
+                    return false;
+                if (bottom > scroll.y + page.height && !ver_overflow)
+                    return false;
+                return true;
             })) {
                 // all failed, snap the last position onto the page as best
                 // we can - can't do anything if the element is higher than the
