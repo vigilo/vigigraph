@@ -1,6 +1,6 @@
 /*
  * VigiGraph, composant de Vigilo.
- * (c) CSSI 2009-2010 <contact@projet-vigilo.org>
+ * Copyright (C) 2009-2011 CS-SI
  * Licence : GNU GPL v2 ou superieure
  *
  */
