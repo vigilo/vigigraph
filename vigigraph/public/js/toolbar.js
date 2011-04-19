@@ -13,13 +13,6 @@ Jx.Button.SelectorFlyout = new Class({
             itemImage: "images/" + itemImage,
             onItemClick: this.selectItem.bind(this)
         });
-        /*
-        this.tree = new GroupTree({
-            title: this.options.label,
-            url: url,
-            hostid: hostid
-        });
-        */
         options.content = tree_container;
         options.onOpen = function() {
             if (! this.tree.isLoaded) {
