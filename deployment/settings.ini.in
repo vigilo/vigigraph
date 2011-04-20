@@ -123,7 +123,8 @@ app_path.nagios = /nagios/
 ;app_scheme.nagios = http
 ; c) Port de connexion au serveur distant hébergeant
 ;    l'application.
-;    Par défaut : 80
+;    Par défaut : 80 si app_schema.nagios vaut "http"
+;                 ou 443 si app_schema.nagios vaut "https"
 ;app_port.nagios = 80
 ; d) Le proxy agit-il comme un simple redirecteur ?
 ;    Les valeurs autorisées sont "true" (mode redirection) ou "false"
@@ -149,7 +150,7 @@ app_path.vigirrd = /vigilo/vigirrd/
 ;
 
 ; Le nom du dossier dans lequel les fichiers de sessions sont conservés.
-cache_dir = /tmp/vigilo/vigigraph/data
+cache_dir = @LOCALSTATEDIR@/cache/vigilo/sessions
 
 ; Le nom du cookie de session qui sera créé sur le navigateur
 ; du client.
@@ -221,26 +222,26 @@ formatter = generic
 
 [handler_sql_log]
 class = handlers.TimedRotatingFileHandler
-args = ('/var/log/vigilo/vigigraph/sql.log', 'D', 30, 12)
-level = DEBUG
+args = ('@LOCALSTATEDIR@/log/vigilo/vigigraph/sql.log', 'D', 30, 12)
+level = NOTSET
 formatter = generic
 
 [handler_root_log]
 class = handlers.TimedRotatingFileHandler
-args = ('/var/log/vigilo/vigigraph/root.log', 'D', 30, 12)
-level = DEBUG
+args = ('@LOCALSTATEDIR@/log/vigilo/vigigraph/root.log', 'D', 30, 12)
+level = NOTSET
 formatter = generic
 
 [handler_vigigraph_log]
 class = handlers.TimedRotatingFileHandler
-args = ('/var/log/vigilo/vigigraph/vigigraph.log', 'D', 30, 12)
-level = DEBUG
+args = ('@LOCALSTATEDIR@/log/vigilo/vigigraph/vigigraph.log', 'D', 30, 12)
+level = NOTSET
 formatter = generic
 
 [handler_auth_log]
 class = handlers.TimedRotatingFileHandler
-args = ('/var/log/vigilo/vigigraph/auth.log', 'D', 30, 12)
-level = DEBUG
+args = ('@LOCALSTATEDIR@/log/vigilo/vigigraph/auth.log', 'D', 30, 12)
+level = NOTSET
 formatter = generic
 
 ; If you create additional formatters, add them as a key to [formatters]

@@ -1,4 +1,4 @@
-/var/log/vigilo/vigigraph/*.log {
+@LOCALSTATEDIR@/log/vigilo/vigigraph/*.log {
     missingok
     notifempty
     sharedscripts

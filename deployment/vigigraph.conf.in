@@ -7,11 +7,11 @@ LoadModule wsgi_module modules/mod_wsgi.so
 WSGIRestrictStdout off
 WSGIPassAuthorization on
 WSGIDaemonProcess vigigraph user=apache group=apache threads=2
-WSGIScriptAlias /vigilo/vigigraph "/etc/vigilo/vigigraph/vigigraph.wsgi"
+WSGIScriptAlias /vigilo/vigigraph "@SYSCONFDIR@/vigilo/vigigraph/vigigraph.wsgi"
 
 KeepAlive Off
 
-<Directory "/etc/vigilo/vigigraph/">
+<Directory "@SYSCONFDIR@/vigilo/vigigraph/">
     <Files "vigigraph.wsgi">
         WSGIProcessGroup vigigraph
         WSGIApplicationGroup %{GLOBAL}
