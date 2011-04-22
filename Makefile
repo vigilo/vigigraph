@@ -13,13 +13,13 @@ EPYDOC_PARSE := vigigraph\.controllers
 
 deployment/%: deployment/%.in
 	sed -e 's,@SYSCONFDIR@,$(SYSCONFDIR),g' \
-        -e 's,@LOCALSTATEDIR@,$(LOCALSTATEDIR),g' $^ > $@
+	    -e 's,@LOCALSTATEDIR@,$(LOCALSTATEDIR),g' $^ > $@
 
 install: build install_python install_data
 install_pkg: build install_python_pkg install_data
 
 install_python: $(PYTHON) $(SUBST_FILES)
-	$(PYTHON) setup.py install --record=INSTALLED_FILES
+	$(PYTHON) setup.py install --single-version-externally-managed --record=INSTALLED_FILES
 install_python_pkg: $(PYTHON)
 	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR) --record=INSTALLED_FILES
 
