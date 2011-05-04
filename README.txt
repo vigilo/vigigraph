@@ -33,6 +33,11 @@ Après avoir configuré VigiGraph dans le fichier
 par la commande ``vigilo-updatedb``. Enfin, il faut redémarrer Apache pour
 qu'il prenne en compte le nouveau fichier de configuration de VigiGraph.
 
+L'accès à l'interface se fait avec les identifiants suivants :
+
+ - login : ``manager``
+ - mot de passe : ``iddad``
+
 
 License
 -------
