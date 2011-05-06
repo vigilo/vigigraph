@@ -103,8 +103,10 @@ class RpcController(BaseController):
         @return: couples hote-graphe
         @rtype: document json (sous forme de dict)
         """
+        limit = 100
         user = get_current_user()
-        items = []
+        ids = []
+        labels = []
 
         if user is None:
             return dict(items=[])
@@ -170,15 +172,19 @@ class RpcController(BaseController):
                     SUPITEM_GROUP_TABLE.c.idgroup)
             ).filter(GroupHierarchy.idparent.in_(supitemgroups))
 
-        items = items.limit(100).all() # pylint: disable-msg=E1103
-        if not search_form_graph:
-            ids = [(item.idhost, None) for item in items]
-            labels = [(item.hostname, None) for item in items]
-        else:
-            ids = [(item.idhost, item.idgraph) for item in items]
-            labels = [(item.hostname, item.graphname) for item in items]
+        items = items.limit(limit + 1).all() # pylint: disable-msg=E1103
+        more_results = len(items) > limit
 
-        return dict(labels=labels, ids=ids)
+        if not search_form_graph:
+            for i in xrange(min(limit, len(items))):
+                ids.append((items[i].idhost, None))
+                labels.append((items[i].hostname, None))
+        else:
+            for i in xrange(min(limit, len(items))):
+                ids.append((items[i].idhost, items[i].idgraph))
+                labels.append((items[i].hostname, items[i].graphname))
+
+        return dict(labels=labels, ids=ids, more=more_results)
 
     @expose('graphslist.html')
     def graphsList(self, nocache=None, **kwargs):
