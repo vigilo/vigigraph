@@ -70,7 +70,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [['host1', None]],
-                'ids': [[1, None]]
+                'ids': [[1, None]],
+                'more': False,
             }
         )
 
@@ -86,7 +87,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [[host1.name, None]],
-                'ids': [[host1.idhost, None]]
+                'ids': [[host1.idhost, None]],
+                'more': False,
             }
         )
 
@@ -102,7 +104,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [[host2.name, None]],
-                'ids': [[host2.idhost, None]]
+                'ids': [[host2.idhost, None]],
+                'more': False,
             }
         )
 
@@ -118,7 +121,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [[host2.name, None]],
-                'ids': [[host2.idhost, None]]
+                'ids': [[host2.idhost, None]],
+                'more': False,
             }
         )
 
@@ -146,7 +150,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -162,7 +167,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -178,7 +184,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -194,7 +201,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -231,7 +239,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -259,7 +268,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [[str(host1.name), str(graph1.name)]],
-                'ids': [[host1.idhost, graph1.idgraph]]
+                'ids': [[host1.idhost, graph1.idgraph]],
+                'more': False,
             }
         )
 
@@ -283,7 +293,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -339,7 +350,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [[host1.name, graph1.name]],
-                'ids': [[host1.idhost, graph1.idgraph]]
+                'ids': [[host1.idhost, graph1.idgraph]],
+                'more': False,
             }
         )
 
@@ -355,7 +367,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [[host1.name, graph1.name]],
-                'ids': [[host1.idhost, graph1.idgraph]]
+                'ids': [[host1.idhost, graph1.idgraph]],
+                'more': False,
             }
         )
 
@@ -372,7 +385,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [[host2.name, graph2.name]],
-                'ids': [[host2.idhost, graph2.idgraph]]
+                'ids': [[host2.idhost, graph2.idgraph]],
+                'more': False,
             }
         )
 
@@ -389,7 +403,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [[host2.name, graph2.name]],
-                'ids': [[host2.idhost, graph2.idgraph]]
+                'ids': [[host2.idhost, graph2.idgraph]],
+                'more': False,
             }
         )
 
@@ -426,7 +441,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -442,7 +458,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -458,7 +475,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -474,7 +492,8 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
 
@@ -520,6 +539,7 @@ class TestSearchForm(TestController):
         self.assertEqual(
             json, {
                 'labels': [],
-                'ids': []
+                'ids': [],
+                'more': False,
             }
         )
