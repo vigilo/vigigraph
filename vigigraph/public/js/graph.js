@@ -42,6 +42,7 @@ var Graph = new Class({
             [_('Last 48 hours'),    48],
             [_('Last 7 days'),      7*24],
             [_('Last 14 days'),     14*24],
+            [_('Last month'),       30*24],
             [_('Last 3 months'),    3*30*24],
             [_('Last 6 months'),    6*30*24],
             [_('Last year'),        365*24]

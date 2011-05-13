@@ -68,6 +68,7 @@ class RpcController(BaseController):
         {"caption" : _("Last %d days") %    2, "duration" : 192800},
         {"caption" : _("Last %d days") %    7, "duration" : 604800},
         {"caption" : _("Last %d days") %   14, "duration" : 1209600},
+        {"caption" : _("Last month")         , "duration" : 86400 * 31},
         {"caption" : _("Last %d months") %  3, "duration" : 86400 * 31 * 3},
         {"caption" : _("Last %d months") %  6, "duration" : 86400 * 183},
         {"caption" : _("Last year"), "duration" : 86400 * 365},
