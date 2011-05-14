@@ -64,5 +64,26 @@ def make_app(global_conf, full_stack=True, **app_conf):
         'vigilo.themes.public', 'common'))
     local_static = StaticURLParser(resource_filename(
         'vigigraph', 'public'))
-    app = Cascade([app_static, common_static, local_static, app])
+    cascade_list = [app_static, common_static, local_static, app]
+
+    LOGGER = getLogger("vigigraph")
+    ## Mise en place du répertoire d'extensions
+    #setup_plugins_path(base_config.get("plugins_dir",
+    #                   "/etc/vigilo/vigigraph/plugins"))
+
+    # Spécifique projets
+    for module in ["turbogears", "vigigraph"]:
+        for entry in working_set.iter_entry_points(
+                                "vigilo.%s.public" % module):
+            if (entry.name != "enterprise" and
+                    entry.name not in base_config.get("extensions", [])):
+                # les points d'entrée "enterprise" sont automatiquement
+                # chargés, il faut lister les autres dans la conf
+                continue
+            new_public_dir = resource_filename(entry.module_name, "public")
+            LOGGER.debug("Adding static files directory for ext %s: %s",
+                         (entry.name, new_public_dir))
+            cascade_list.insert(0, StaticURLParser(new_public_dir))
+
+    app = Cascade(cascade_list)
     return app

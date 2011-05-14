@@ -20,3 +20,6 @@ from vigigraph.lib import app_globals, helpers
 
 base_config = VigiloAppConfig('vigigraph')
 base_config.package = vigigraph
+
+# Extensions (Entreprise ou spécifique projet)
+base_config["extensions"] = ()
