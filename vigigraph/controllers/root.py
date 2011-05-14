@@ -70,21 +70,34 @@ class RootController(BaseController):
         filename = gettext.find(conf['pylons.package'], localedir,
             languages=lang)
         js = filename[:-3] + '.js'
-
-        themes_filename = gettext.find(
-            'vigilo-themes',
-            resource_filename('vigilo.themes.i18n', ''),
-            languages=lang)
-        themes_js = themes_filename[:-3] + '.js'
-
         # Récupère et envoie le contenu du fichier de traduction *.js.
         fhandle = open(js, 'r')
         translations = fhandle.read()
         fhandle.close()
 
+        # Même chose pour les thèmes
+        themes_filename = gettext.find(
+            'vigilo-themes',
+            resource_filename('vigilo.themes.i18n', ''),
+            languages=lang)
+        themes_js = themes_filename[:-3] + '.js'
         fhandle = open(themes_js, 'r')
         translations += fhandle.read()
         fhandle.close()
+
+        # Extensions Enterprise
+        try:
+            ent_filename = gettext.find(
+                'vigilo-vigigraph-enterprise',
+                resource_filename('vigilo.vigigraph_enterprise.i18n', ''),
+                languages=lang)
+        except ImportError:
+            pass
+        else:
+            fhandle = open(ent_filename[:-3] + '.js', 'r')
+            translations += fhandle.read()
+            fhandle.close()
+
         return translations
 
     @expose('login.html')

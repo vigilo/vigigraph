@@ -8,7 +8,7 @@
 from vigigraph.config.app_cfg import base_config
 from vigigraph.config.environment import load_environment
 
-from pkg_resources import resource_filename
+from pkg_resources import resource_filename, working_set
 from paste.cascade import Cascade
 from paste.urlparser import StaticURLParser
 from repoze.who.plugins.testutil import make_middleware_with_config \
