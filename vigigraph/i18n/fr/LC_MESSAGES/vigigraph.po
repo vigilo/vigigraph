@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vigigraph 0.1\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
 "POT-Creation-Date: 2010-02-15 13:41+0100\n"
-"PO-Revision-Date: 2011-05-14 13:57+0200\n"
+"PO-Revision-Date: 2011-05-19 18:24+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: fr_FR <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -26,26 +26,26 @@ msgstr "Vous devez vous authentifier"
 msgid "You don't have access to VigiGraph"
 msgstr "Vous n'avez pas accès à VigiGraph"
 
-#: vigigraph/controllers/root.py:95
+#: vigigraph/controllers/root.py:108
 msgid "Wrong credentials"
 msgstr "Identifiant ou mot de passe incorrect"
 
-#: vigigraph/controllers/root.py:110
+#: vigigraph/controllers/root.py:123
 #, python-format
 msgid "\"%(username)s\" logged in (from %(IP)s)"
 msgstr "\"%(username)s\" s'est connecté (depuis %(IP)s)"
 
-#: vigigraph/controllers/root.py:114
+#: vigigraph/controllers/root.py:127
 #, python-format
 msgid "Welcome back, %s!"
 msgstr "Bienvenue, %s !"
 
-#: vigigraph/controllers/root.py:124
+#: vigigraph/controllers/root.py:137
 #, python-format
 msgid "Some user logged out (from %(IP)s)"
 msgstr "Un utilisateur s'est déconnecté (depuis %(IP)s)"
 
-#: vigigraph/controllers/root.py:127
+#: vigigraph/controllers/root.py:140
 msgid "We hope to see you soon!"
 msgstr "Au plaisir de vous revoir !"
 
@@ -82,7 +82,7 @@ msgstr "%d/%m/%Y à %H:%M:%S"
 #: vigigraph/controllers/rpc.py:520 vigigraph/controllers/rpc.py:553
 #, python-format
 msgid "Next %(limit)s"
-msgstr ""
+msgstr "%(limit)s suivants"
 
 #: vigigraph/public/js/graph.js:40
 msgid "Last 12 hours"

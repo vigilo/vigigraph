@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: vigilo-vigigraph 2.0.0\n"
+"Project-Id-Version: vigilo-vigigraph 2.0.1\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2011-05-14 13:57+0200\n"
+"POT-Creation-Date: 2011-05-19 18:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,26 +27,26 @@ msgstr ""
 msgid "You don't have access to VigiGraph"
 msgstr ""
 
-#: vigigraph/controllers/root.py:95
+#: vigigraph/controllers/root.py:108
 msgid "Wrong credentials"
 msgstr ""
 
-#: vigigraph/controllers/root.py:110
+#: vigigraph/controllers/root.py:123
 #, python-format
 msgid "\"%(username)s\" logged in (from %(IP)s)"
 msgstr ""
 
-#: vigigraph/controllers/root.py:114
+#: vigigraph/controllers/root.py:127
 #, python-format
 msgid "Welcome back, %s!"
 msgstr ""
 
-#: vigigraph/controllers/root.py:124
+#: vigigraph/controllers/root.py:137
 #, python-format
 msgid "Some user logged out (from %(IP)s)"
 msgstr ""
 
-#: vigigraph/controllers/root.py:127
+#: vigigraph/controllers/root.py:140
 msgid "We hope to see you soon!"
 msgstr ""
 

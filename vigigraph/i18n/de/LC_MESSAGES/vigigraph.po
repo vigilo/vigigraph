@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vigigraph 2.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-11-19 14:52+0100\n"
-"PO-Revision-Date: 2011-05-14 13:57+0200\n"
+"PO-Revision-Date: 2011-05-19 18:24+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -26,26 +26,26 @@ msgstr "Sie müssen sich authentifizieren"
 msgid "You don't have access to VigiGraph"
 msgstr "Sie haben keinen Zugriff auf VigiGraph"
 
-#: vigigraph/controllers/root.py:95
+#: vigigraph/controllers/root.py:108
 msgid "Wrong credentials"
 msgstr "Ungültige Anmeldeinformationen"
 
-#: vigigraph/controllers/root.py:110
+#: vigigraph/controllers/root.py:123
 #, python-format
 msgid "\"%(username)s\" logged in (from %(IP)s)"
 msgstr "\"%(username)n\" (aus %(IP)s) angemeldet"
 
-#: vigigraph/controllers/root.py:114
+#: vigigraph/controllers/root.py:127
 #, python-format
 msgid "Welcome back, %s!"
 msgstr "Willkommen  %s!"
 
-#: vigigraph/controllers/root.py:124
+#: vigigraph/controllers/root.py:137
 #, python-format
 msgid "Some user logged out (from %(IP)s)"
 msgstr "Ein Benutzer (aus %(IP)s) hat sich abgemeldet"
 
-#: vigigraph/controllers/root.py:127
+#: vigigraph/controllers/root.py:140
 msgid "We hope to see you soon!"
 msgstr "Bis bald!"
 
@@ -62,7 +62,6 @@ msgstr "Letzte %d Tage"
 
 #: vigigraph/controllers/rpc.py:71 vigigraph/public/js/graph.js:45
 #, fuzzy
-#| msgid "Last 6 months"
 msgid "Last month"
 msgstr "Letzte %d Monate"
 
