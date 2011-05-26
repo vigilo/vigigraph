@@ -21,5 +21,22 @@ from vigigraph.lib import app_globals, helpers
 base_config = VigiloAppConfig('vigigraph')
 base_config.package = vigigraph
 
+base_config["external_links"] = [
+    {
+        'label': 'Nagios page',
+        'image': 'images/nagios-16.png',
+        'tooltip': 'Display Nagios page for the selected host',
+        'uri': 'nagios/{host}/cgi-bin/status.cgi?host={host}&style=detail&supNav=1',
+        'sameWindow': True,
+    },
+    {
+        'label': 'Metrology page',
+        'image': 'images/preferences-system-windows.png',
+        'tooltip': 'Display a page with all the graphs for the selected host',
+        'uri': 'rpc/fullHostPage?host={host}',
+        'sameWindow': True,
+    },
+]
+
 # Extensions (Entreprise ou spécifique projet)
 base_config["extensions"] = ()

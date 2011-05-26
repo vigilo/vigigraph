@@ -73,7 +73,31 @@ Jx.Button.SelectorFlyout = new Class({
     }
 });
 
+Jx.Button.StaticCombo = new Class({
+    Extends: Jx.Button.Combo,
+
+    initialize: function (options) {
+        this.locked = false;
+        this.parent(options);
+        this.setImage(options.image);
+        this.setLabel(options.label);
+        this.locked = true;
+    },
+
+    setLabel: function(label) {
+        if (!this.locked)
+            this.parent(label);
+    },
+
+    setImage: function(path) {
+        if (!this.locked)
+            this.parent(path);
+    }
+});
+
 var Toolbar = new Class({
+    Implements: [Events],
+
     initialize: function () {
         this.jxtoolbar = new Jx.Toolbar({
             parent: $('toolbar')
@@ -114,46 +138,50 @@ var Toolbar = new Class({
                 this.graph_picker.redraw();
                 this.graph_picker.setItem(null, this.graph_picker.options.label);
             }
-            this.show_nagios.setEnabled(1);
-            this.show_metrology.setEnabled(1);
+            this.fireEvent('select-host');
             this.graph_picker.setEnabled(1);
         }.bind(this));
 
-        this.show_nagios = new Jx.Button({
-            label: _('Nagios page'),
-            tooltip: _('Display Nagios page for the selected host'),
-            image: app_path + 'images/nagios-16.png',
-            toggle: false,
-            enabled: false,
-            onClick: function () {
-                var uri = new URI(
-                    app_path + 'nagios/' +
-                    encodeURIComponent(this.host_picker.getLabel()) +
-                    '/cgi-bin/status.cgi'
-                );
-                uri.setData({
-                    host: this.host_picker.getLabel(),
-                    style: 'detail',
-                    supNav: 1
-                });
-                window.open(uri.toString());
-            }.bind(this)
+        this.links = new Jx.Button.StaticCombo({
+            label: _('External links...'),
+            image: app_path + 'images/external-link.png',
+            enabled: false
         });
+        var extlinks = new Request.JSON({
+            url: app_path + "rpc/external_links",
+            method: 'get',
+            onSuccess: function (data) {
+                if (!data.links) return;
+                data.links.each(function (extlink) {
+                    var uri;
+                    extlink = new Hash(extlink);
+                    if (extlink.has('uri')) {
+                        uri = extlink.get('uri');
+                        extlink.erase('uri');
+                        extlink.set('enabled', false);
+                        extlink.set('onClick', function (obj, evt) {
+                            var dest = new URI(uri.substitute({
+                                'host': encodeURIComponent(this.host_picker.getLabel())
+                            }));
+                            if (!obj.options.sameWindow)
+                                window.open(dest.toString());
+                            else dest.go();
+                        }.bind(this));
+                        this.links.add(extlink.getClean());
+                    }
+                }, this);
 
-        this.show_metrology = new Jx.Button({
-            label: _('Metrology page'),
-            tooltip: _('Display a page with all the graphs for the selected host'),
-            image: app_path + 'images/preferences-system-windows.png',
-            toggle: false,
-            enabled: false,
-            onClick: function () {
-                var uri = new URI(app_path + 'rpc/fullHostPage');
-                uri.setData({
-                    host: this.host_picker.getLabel()
-                });
-                window.open(uri.toString());
+                this.links.buttonSet.buttons.each(function (btn) {
+                    this.addEvent('select-host', function () {
+                        btn.setEnabled(1);
+                    });
+                }, this);
+
+                if (this.links.buttonSet.buttons.length)
+                    this.links.setEnabled(1);
             }.bind(this)
         });
+        extlinks.send();
 
         this.graph_label = new Jx.Toolbar.Item(this.createLabel(_('Graph:')));
 
@@ -193,8 +221,7 @@ var Toolbar = new Class({
 
         // Remplissage de la barre d'outils
         this.jxtoolbar.add(this.global_refresh);
-        this.jxtoolbar.add(this.show_nagios);
-        this.jxtoolbar.add(this.show_metrology);
+        this.jxtoolbar.add(this.links);
         this.jxtoolbar.add(new Jx.Toolbar.Separator());
         this.jxtoolbar.add(this.host_label); // à supprimer ?
         this.jxtoolbar.add(this.host_picker);

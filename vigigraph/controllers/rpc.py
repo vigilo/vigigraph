@@ -763,3 +763,8 @@ class RpcController(BaseController):
             'idhost': ids and ids.idhost or None,
             'idgraph': ids and ids.idgraph or None,
         }
+
+    @expose('json')
+    def external_links(self):
+        return dict(links=config['external_links'])
+
