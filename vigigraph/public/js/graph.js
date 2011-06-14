@@ -218,6 +218,7 @@ var Graph = new Class({
             width: 575,
             height: 75,
             vertical_overflow: true,
+            horizontal_overflow: true,
             toolbars: [toolbar]
         });
 
