@@ -16,8 +16,9 @@ except ImportError:
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from webob.exc import HTTPPreconditionFailed
 from tg import expose, request, redirect, tmpl_context, \
-                config, validate, flash
+    config, validate, flash, exceptions as http_exc
 from tg.decorators import paginate
+
 from repoze.what.predicates import not_anonymous, has_permission, \
                                     in_group, Any, All
 from formencode import validators, schema
@@ -336,8 +337,8 @@ class RpcController(BaseController):
 
         if start is None:
             start = int(time.time()) - int(duration)
-
-        start = int(start)
+        else:
+            start = int(start)
         duration = int(duration)
 
         user = get_current_user()
@@ -345,8 +346,20 @@ class RpcController(BaseController):
             return dict(host=host, start=start, duration=duration,
                         presets=self.presets, graphs=[])
 
-        # Récupération de la liste des noms des graphes,
-        # avec vérification des permissions de l'utilisateur.
+        # Vérification des permissions de l'utilisateur sur l'hôte.
+        is_manager = in_group('managers').is_met(request.environ)
+        if not is_manager:
+            # Récupération des groupes auxquels l'utilisateur a accès.
+            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
+            # Si aucun des groupes de l'hôte ne fait partie
+            # de cette liste, on affiche une erreur 403.
+            h = Host.by_host_name(host)
+            if len(set(h.groups).intersection(set(supitemgroups))) < 1:
+                message = _('Access denied to host "%s"') % host
+                LOGGER.warning(message)
+                raise http_exc.HTTPForbidden(message) 
+
+        # Récupération de la liste des noms des graphes associés à l'hôte.
         graphs = DBSession.query(
                 Graph.name
             ).distinct(
@@ -356,21 +369,10 @@ class RpcController(BaseController):
                 (PerfDataSource, PerfDataSource.idperfdatasource ==
                     GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
                 (Host, Host.idhost == PerfDataSource.idhost),
-                (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
-                    Host.idhost),
             ).filter(Host.name == host)
 
-        # Les managers ont accès à tout.
-        # Les autres ont un accès restreint.
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
-            supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-            graphs = graphs.join(
-                    (GroupHierarchy, GroupHierarchy.idchild == \
-                        SUPITEM_GROUP_TABLE.c.idgroup)
-                ).filter(GroupHierarchy.idparent.in_(supitemgroups))
-
         graphs = graphs.all()
+
         return dict(host=host, start=start, duration=duration,
                     presets=self.presets, graphs=graphs)
 
