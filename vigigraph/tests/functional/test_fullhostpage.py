@@ -40,22 +40,22 @@ class TestFullHostPage(TestController):
 
     def _check_results(self, user, hosts):
         for host in hosts:
-            response = self.app.get(
-                '/rpc/fullHostPage?host=%s' % host,
-                extra_environ={"REMOTE_USER": user}
-            )
-            index = int(host[-1:])
             if hosts[host]:
+                response = self.app.get(
+                    '/rpc/fullHostPage?host=%s' % host,
+                    extra_environ={"REMOTE_USER": user}
+                )
+                index = int(host[-1:])
                 self.assertTrue(
                     '/vigirrd/host%d/index?'
                     'graphtemplate=graph%d' % (index, index)
                     in response.body
                 )
             else:
-                self.assertTrue(
-                    '/vigirrd/host%d/index?'
-                    'graphtemplate=graph%d' % (index, index)
-                    not in response.body
+                response = self.app.get(
+                    '/rpc/fullHostPage?host=%s' % host,
+                    extra_environ={"REMOTE_USER": user},
+                    status = 403
                 )
 
     def test_direct_permission(self):

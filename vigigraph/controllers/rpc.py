@@ -351,10 +351,11 @@ class RpcController(BaseController):
         if not is_manager:
             # Récupération des groupes auxquels l'utilisateur a accès.
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
-            # Si aucun des groupes de l'hôte ne fait partie
-            # de cette liste, on affiche une erreur 403.
-            h = Host.by_host_name(host)
-            if len(set(h.groups).intersection(set(supitemgroups))) < 1:
+            # Récupération des groupes dont l'hôte fait partie
+            hostgroups = [g.idgroup for g in Host.by_host_name(host).groups]
+            # Si aucun des groupes de l'hôte ne fait partie des groupes
+            # auxquels l'utilisateur a accès, on affiche une erreur 403.
+            if len(set(hostgroups).intersection(set(supitemgroups))) < 1:
                 message = _('Access denied to host "%s"') % host
                 LOGGER.warning(message)
                 raise http_exc.HTTPForbidden(message) 
