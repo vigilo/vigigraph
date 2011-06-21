@@ -221,7 +221,6 @@ var Toolbar = new Class({
 
         // Remplissage de la barre d'outils
         this.jxtoolbar.add(this.global_refresh);
-        this.jxtoolbar.add(this.links);
         this.jxtoolbar.add(new Jx.Toolbar.Separator());
         this.jxtoolbar.add(this.host_label); // à supprimer ?
         this.jxtoolbar.add(this.host_picker);
@@ -229,6 +228,7 @@ var Toolbar = new Class({
         this.jxtoolbar.add(this.graph_label); // à supprimer ?
         this.jxtoolbar.add(this.graph_picker);
         //this.jxtoolbar.add(this.show_graph);
+        this.jxtoolbar.add(this.links);
 
         // Vérification de la date de dernière modification en base, et
         // rechargement des arbres le cas échéant
