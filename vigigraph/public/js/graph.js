@@ -12,13 +12,13 @@ var Graph = new Class({
     Implements: [Events, Options],
 
     options: {
-        // Les valeurs par défaut sont assignées dans reset().
         duration: 86400,
         start: null,
         autoRefresh: 0,
         refreshDelay: null,
         left: null,
-        top: null
+        top: null,
+        overlay: 10    // Pourcentage de recouvrement (voir #730)
     },
 
     initialize: function (options, host, graph) {
@@ -31,7 +31,7 @@ var Graph = new Class({
         new Request.JSON({
             url: app_path + 'rpc/startTime',
             onSuccess: function (data) {
-                this.startTime = data.starttime;
+                this.startTime = data.starttime.toInt();
             }.bind(this)
         }).get({'host': this.host});
 
@@ -61,7 +61,7 @@ var Graph = new Class({
             menuItem.options.period = period[1] * 60 * 60;
             menuItem.addEvent('click', function () {
                 this[0].options.start = null;
-                this[0].options.duration = this[1].options.period;
+                this[0].options.duration = (this[1].options.period).toInt();
                 this[0].updateGraph();
             }.bind([this, menuItem]));
             timeframe.add(menuItem);
@@ -168,7 +168,8 @@ var Graph = new Class({
                 onClick: function() {
                     this.options.start =
                         this.getStartTime() -
-                        this.options.duration;
+                        this.options.duration +
+                        (this.options.overlay * this.options.duration / 100).toInt();
                     this.updateGraph();
                 }.bind(this)
             }),
@@ -178,7 +179,8 @@ var Graph = new Class({
                 onClick: function() {
                     this.options.start =
                         this.getStartTime() +
-                        this.options.duration;
+                        this.options.duration -
+                        (this.options.overlay * this.options.duration / 100).toInt();
                     this.updateGraph();
                 }.bind(this)
             }),
@@ -423,7 +425,7 @@ var update_visible_graphs = function (new_fragment) {
 
             params.each(function (param) {
                 if (this[0].has(param))
-                    this[1].set(param, this[0].get(param));
+                    this[1].set(param, (this[0].get(param)).toInt());
             }, [qs, options]);
 
             new Graph(
