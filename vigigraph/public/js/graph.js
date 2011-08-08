@@ -18,7 +18,7 @@ var Graph = new Class({
         refreshDelay: null,
         left: null,
         top: null,
-        overlay: 10    // Pourcentage de recouvrement (voir #730)
+        overlap: 10    // Pourcentage de recouvrement (voir #730)
     },
 
     initialize: function (options, host, graph) {
@@ -169,7 +169,7 @@ var Graph = new Class({
                     this.options.start =
                         this.getStartTime() -
                         this.options.duration +
-                        (this.options.overlay * this.options.duration / 100).toInt();
+                        (this.options.overlap * this.options.duration / 100).toInt();
                     this.updateGraph();
                 }.bind(this)
             }),
@@ -180,7 +180,7 @@ var Graph = new Class({
                     this.options.start =
                         this.getStartTime() +
                         this.options.duration -
-                        (this.options.overlay * this.options.duration / 100).toInt();
+                        (this.options.overlap * this.options.duration / 100).toInt();
                     this.updateGraph();
                 }.bind(this)
             }),
