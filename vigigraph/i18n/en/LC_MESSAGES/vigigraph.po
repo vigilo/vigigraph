@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: vigilo-vigigraph 2.0.1\n"
+"Project-Id-Version: vigilo-vigigraph 2.0.5\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2011-05-19 18:24+0200\n"
-"PO-Revision-Date: 2011-05-19 18:24+0200\n"
+"POT-Creation-Date: 2011-09-09 15:27+0200\n"
+"PO-Revision-Date: 2011-09-09 15:27+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Generated-By: Babel 0.9.4\n"
 
 #: vigigraph/controllers/root.py:34 vigigraph/controllers/root.py:36
-#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:57
+#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:58
 msgid "You need to be authenticated"
 msgstr "You need to be authenticated"
 
-#: vigigraph/controllers/root.py:45 vigigraph/controllers/rpc.py:61
+#: vigigraph/controllers/root.py:45 vigigraph/controllers/rpc.py:62
 msgid "You don't have access to VigiGraph"
 msgstr "You don't have access to VigiGraph"
 
@@ -50,78 +50,83 @@ msgstr "Some user logged out (from %(IP)s)"
 msgid "We hope to see you soon!"
 msgstr "We hope to see you soon!"
 
-#: vigigraph/controllers/rpc.py:66 vigigraph/controllers/rpc.py:67
+#: vigigraph/controllers/rpc.py:67 vigigraph/controllers/rpc.py:68
 #, python-format
 msgid "Last %d hours"
 msgstr "Last %d hours"
 
-#: vigigraph/controllers/rpc.py:68 vigigraph/controllers/rpc.py:69
-#: vigigraph/controllers/rpc.py:70
+#: vigigraph/controllers/rpc.py:69 vigigraph/controllers/rpc.py:70
+#: vigigraph/controllers/rpc.py:71
 #, python-format
 msgid "Last %d days"
 msgstr "Last %d days"
 
-#: vigigraph/controllers/rpc.py:71 vigigraph/public/js/graph.js:45
+#: vigigraph/controllers/rpc.py:72 vigigraph/public/js/graph.js:47
 msgid "Last month"
 msgstr "Last month"
 
-#: vigigraph/controllers/rpc.py:72 vigigraph/controllers/rpc.py:73
+#: vigigraph/controllers/rpc.py:73 vigigraph/controllers/rpc.py:74
 #, python-format
 msgid "Last %d months"
 msgstr "Last %d months"
 
-#: vigigraph/controllers/rpc.py:74 vigigraph/public/js/graph.js:48
+#: vigigraph/controllers/rpc.py:75 vigigraph/public/js/graph.js:50
 msgid "Last year"
 msgstr "Last year"
 
 #. TRANSLATORS: Format Python de date/heure, lisible par un humain.
-#: vigigraph/controllers/rpc.py:212
+#: vigigraph/controllers/rpc.py:213
 #, python-format
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
-#: vigigraph/controllers/rpc.py:520 vigigraph/controllers/rpc.py:553
+#: vigigraph/controllers/rpc.py:359
+#, python-format
+msgid "Access denied to host \"%s\""
+msgstr "Access denied to host \"%s\""
+
+#: vigigraph/controllers/rpc.py:523 vigigraph/controllers/rpc.py:556
 #, python-format
 msgid "Next %(limit)s"
 msgstr "Next %(limit)s"
 
-#: vigigraph/public/js/graph.js:40
+#: vigigraph/public/js/graph.js:42
 msgid "Last 12 hours"
 msgstr "Last 12 hours"
 
-#: vigigraph/public/js/graph.js:41
+#: vigigraph/public/js/graph.js:43
 msgid "Last 24 hours"
 msgstr "Last 24 hours"
 
-#: vigigraph/public/js/graph.js:42
+#: vigigraph/public/js/graph.js:44
 msgid "Last 48 hours"
 msgstr "Last 48 hours"
 
-#: vigigraph/public/js/graph.js:43
+#: vigigraph/public/js/graph.js:45
 msgid "Last 7 days"
 msgstr "Last 7 days"
 
-#: vigigraph/public/js/graph.js:44
+#: vigigraph/public/js/graph.js:46
 msgid "Last 14 days"
 msgstr "Last 14 days"
 
-#: vigigraph/public/js/graph.js:46
+#: vigigraph/public/js/graph.js:48
 msgid "Last 3 months"
 msgstr "Last 3 months"
 
-#: vigigraph/public/js/graph.js:47
+#: vigigraph/public/js/graph.js:49
 msgid "Last 6 months"
 msgstr "Last 6 months"
 
-#: vigigraph/public/js/graph.js:52
+#: vigigraph/public/js/graph.js:54
 msgid "Timeframe"
 msgstr "Timeframe"
 
-#: vigigraph/public/js/graph.js:54
+#: vigigraph/public/js/graph.js:56
 msgid "Timeframe menu"
 msgstr "Timeframe menu"
 
-#: vigigraph/public/js/graph.js:71
+#: vigigraph/public/js/graph.js:73
 #, python-format
 msgid ""
 "Could not load the graph for \"%(graph)s\" on \"%(host)s\". Make sure "
@@ -130,108 +135,104 @@ msgstr ""
 "Could not load the graph for \"%(graph)s\" on \"%(host)s\". Make sure "
 "VigiRRD is running and receives performance data."
 
-#: vigigraph/public/js/graph.js:87
+#: vigigraph/public/js/graph.js:89
 msgid "Export to CSV"
 msgstr "Export to CSV"
 
-#: vigigraph/public/js/graph.js:89
+#: vigigraph/public/js/graph.js:91
 msgid "Export the content of this graph to CSV"
 msgstr "Export the content of this graph to CSV"
 
-#: vigigraph/public/js/graph.js:105
+#: vigigraph/public/js/graph.js:107
 msgid "All"
 msgstr "All"
 
-#: vigigraph/public/js/graph.js:117
+#: vigigraph/public/js/graph.js:119
 msgid "Automatically refresh the graph"
 msgstr "Automatically refresh the graph"
 
-#: vigigraph/public/js/graph.js:140
+#: vigigraph/public/js/graph.js:131
+msgid "Auto-refresh enabled on graph \"{graph}\" for host \"{host}\""
+msgstr "Auto-refresh enabled on graph \"{graph}\" for host \"{host}\""
+
+#: vigigraph/public/js/graph.js:145
+msgid "Auto-refresh disabled on graph \"{graph}\" for host \"{host}\""
+msgstr "Auto-refresh disabled on graph \"{graph}\" for host \"{host}\""
+
+#: vigigraph/public/js/graph.js:157
 msgid "Zoom in"
 msgstr "Zoom in"
 
-#: vigigraph/public/js/graph.js:148
+#: vigigraph/public/js/graph.js:165
 msgid "Zoom out"
 msgstr "Zoom out"
 
-#: vigigraph/public/js/graph.js:159
+#: vigigraph/public/js/graph.js:176
 msgid "Graph start"
 msgstr "Graph start"
 
-#: vigigraph/public/js/graph.js:167
+#: vigigraph/public/js/graph.js:184
 msgid "Previous section"
 msgstr "Previous section"
 
-#: vigigraph/public/js/graph.js:177
+#: vigigraph/public/js/graph.js:195
 msgid "Next section"
 msgstr "Next section"
 
-#: vigigraph/public/js/graph.js:187
+#: vigigraph/public/js/graph.js:206
 msgid "Graph end"
 msgstr "Graph end"
 
-#: vigigraph/public/js/graph.js:198
+#: vigigraph/public/js/graph.js:217
 msgid "Print graph"
 msgstr "Print graph"
 
-#: vigigraph/public/js/graph.js:203
+#: vigigraph/public/js/graph.js:222
 #, python-format
 msgid "Graph for \"%(graph)s\" on \"%(host)s\""
 msgstr "Graph for \"%(graph)s\" on \"%(host)s\""
 
-#: vigigraph/public/js/toolbar.js:83
+#: vigigraph/public/js/toolbar.js:107
 msgid "Refresh"
 msgstr "Refresh"
 
-#: vigigraph/public/js/toolbar.js:84
+#: vigigraph/public/js/toolbar.js:108
 msgid "Globally change auto-refresh setting"
 msgstr "Globally change auto-refresh setting"
 
-#: vigigraph/public/js/toolbar.js:100
+#: vigigraph/public/js/toolbar.js:124
 msgid "Host:"
 msgstr "Host:"
 
-#: vigigraph/public/js/toolbar.js:103
+#: vigigraph/public/js/toolbar.js:127
 msgid "Select a host"
 msgstr "Select a host"
 
-#: vigigraph/public/js/toolbar.js:104
+#: vigigraph/public/js/toolbar.js:128
 msgid "Click me to select another host"
 msgstr "Click me to select another host"
 
-#: vigigraph/public/js/toolbar.js:123
-msgid "Nagios page"
-msgstr "Nagios page"
+#: vigigraph/public/js/toolbar.js:146
+msgid "External links..."
+msgstr "External links..."
 
-#: vigigraph/public/js/toolbar.js:124
-msgid "Display Nagios page for the selected host"
-msgstr "Display Nagios page for the selected host"
-
-#: vigigraph/public/js/toolbar.js:144
-msgid "Metrology page"
-msgstr "Metrology page"
-
-#: vigigraph/public/js/toolbar.js:145
-msgid "Display a page with all the graphs for the selected host"
-msgstr "Display a page with all the graphs for the selected host"
-
-#: vigigraph/public/js/toolbar.js:158
+#: vigigraph/public/js/toolbar.js:186
 msgid "Graph:"
 msgstr "Graph:"
 
-#: vigigraph/public/js/toolbar.js:161
+#: vigigraph/public/js/toolbar.js:189
 msgid "Select a graph"
 msgstr "Select a graph"
 
-#: vigigraph/public/js/toolbar.js:162
+#: vigigraph/public/js/toolbar.js:190
 msgid "Click me to select another graph"
 msgstr "Click me to select another graph"
 
-#: vigigraph/public/js/toolbar.js:181
+#: vigigraph/public/js/toolbar.js:209
 msgid "Graph"
 msgstr "Graph"
 
-#: vigigraph/public/js/toolbar.js:182
+#: vigigraph/public/js/toolbar.js:210
 msgid "Display the contents of the selected graph"
 msgstr "Display the contents of the selected graph"
 

@@ -7,6 +7,8 @@ var graphs = [];
 var old_fragment = '';
 var skip_detection = 0;
 
+var logger = new Log;
+logger.enableLog();
 
 var Graph = new Class({
     Implements: [Events, Options],
@@ -126,11 +128,26 @@ var Graph = new Class({
                 this.refreshTimer =
                     this.updateGraph.periodical(delay * 1000, this);
                 this.options.autoRefresh = 1;
+                logger.log((_(
+                    'Auto-refresh enabled on graph "{graph}" for host "{host}"'
+                    )).substitute({
+                        'graph': this.graph,
+                        'host': this.host
+                    }));
                 window.updateURI();
             }.bind(this),
             onUp: function() {
                 clearInterval(this.refreshTimer);
+                // clearInterval arrête le timer, mais n'invalide pas
+                // la référence, ce dont on a besoin (cf. onDown).
+                this.refreshTimer = null;
                 this.options.autoRefresh = 0;
+                logger.log((_(
+                    'Auto-refresh disabled on graph "{graph}" for host "{host}"'
+                    )).substitute({
+                        'graph': this.graph,
+                        'host': this.host
+                    }));
                 window.updateURI();
             }.bind(this)
         });
