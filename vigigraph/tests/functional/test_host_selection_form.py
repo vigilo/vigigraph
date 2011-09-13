@@ -10,76 +10,7 @@ import transaction
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, SupItemGroup, Permission
-from vigilo.models.demo.functions import add_supitemgroup, \
-    add_host, add_host2group, add_usergroup, add_user, \
-    add_supitemgrouppermission, add_usergroup_permission
-
-
-def populateDB():
-    """
-    Peuple la base de données en ajoutant :
-     - 3 groupes d'hôtes ;
-     - 3 hôtes ;
-     - 3 utilisateurs.
-    Affecte les permissions nécessaires aux utilisateurs en vue des tests.
-    Retourne les 3 hôtes créés.
-
-    @return: Tuple contenant les trois hôtes.
-    @rtype:  C{tuple} of C{vigilo.models.tables.Host}
-    """
-
-    # Ajout d'un groupe d'hôtes principal
-    mainhostgroup = add_supitemgroup(u'mhg', None)
-
-    # Ajout d'un premier groupe d'hôtes de second niveau
-    hostgroup1 = add_supitemgroup(u'hg1', mainhostgroup)
-
-    # Ajout d'un second groupe d'hôtes de second niveau
-    hostgroup2 = add_supitemgroup(u'hg2', mainhostgroup)
-
-    # Ajout de trois hôtes
-    host1 = add_host(u'host1')
-    host2 = add_host(u'host2')
-    host3 = add_host(u'host3')
-
-    # Ajout du premier hôte dans le groupe d'hôtes principal.
-    add_host2group(host1, mainhostgroup)
-    # Ajout du deuxième hôte dans le premier
-    # groupe d'hôtes de second niveau.
-    add_host2group(host2, hostgroup1)
-    # Ajout du troisième hôte dans le second
-    # groupe d'hôtes de second niveau.
-    add_host2group(host3, hostgroup2)
-
-    # Ajout de trois groupes d'utilisateurs
-    poweruser_group = add_usergroup(u'powerusers')
-    user_group = add_usergroup(u'users')
-    visitor_group = add_usergroup(u'visitor')
-
-    # Ajout de trois utilisateurs
-    add_user(u'poweruser', u'some.power@us.er',
-        u'Power User', u'poweruserpass', u'powerusers')
-    add_user(u'user', u'some.random@us.er',
-        u'User', u'userpass', u'users')
-    add_user(u'visitor', u'some.visiting@us.er',
-        u'', u'visitorpass', u'visitor')
-
-    # Ajout des permissions sur le groupe d'hôtes
-    # principal pour le premier groupe d'utilisateurs
-    add_supitemgrouppermission(mainhostgroup, poweruser_group)
-
-    # Ajout des permissions sur le premier groupe d'hôtes
-    # secondaire pour le second groupe d'utilisateurs
-    add_supitemgrouppermission(hostgroup1, user_group)
-
-    # Ajout de la permission 'vigigraph-access' aux groupes d'utilisateurs
-    perm = Permission.by_permission_name(u'vigigraph-access')
-    add_usergroup_permission(poweruser_group, perm)
-    add_usergroup_permission(user_group, perm)
-    add_usergroup_permission(visitor_group, perm)
-
-    return (host1, host2, host3)
-
+from helpers import populateDB
 
 class TestHostTree(TestController):
     """
@@ -100,8 +31,6 @@ class TestHostTree(TestController):
         DBSession.flush()
         transaction.commit()
 
-##### Premier onglet déroulant du formulaire #####
-
     def test_get_root_host_groups_as_manager(self):
         """
         Récupération des groupes d'hôtes racines en tant que manager
@@ -115,7 +44,7 @@ class TestHostTree(TestController):
             SupItemGroup.name == u'mhg').first()
 
         # Récupération des groupes d'hôtes principaux
-        # accessibles à l'utilisateur 'manager'
+        # accessibles à l'utilisateur 'manager'.
         response = self.app.post(
             '/rpc/hosttree', {
             }, extra_environ={'REMOTE_USER': 'manager'})
@@ -230,8 +159,6 @@ class TestHostTree(TestController):
             '/rpc/hosttree', {
             }, status=401)
 
-##### Deuxième onglet déroulant du formulaire #####
-
     def test_get_host_groups_when_allowed(self):
         """
         Récupération des groupes d'hôtes secondaires avec les bons droits
@@ -268,9 +195,17 @@ class TestHostTree(TestController):
                     {'id': host1.idhost, 'name': host1.name, 'type': 'item'}
                 ],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
-                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name, 'type': 'group'},
-                ]
+                    {
+                        'id': hostgroup1.idgroup,
+                        'name': hostgroup1.name,
+                        'type': 'group',
+                    },
+                    {
+                        'id': hostgroup2.idgroup,
+                        'name': hostgroup2.name,
+                        'type': 'group',
+                    },
+                ],
             }
         )
 
@@ -289,9 +224,17 @@ class TestHostTree(TestController):
                     {'id': host1.idhost, 'name': host1.name, 'type': 'item'}
                 ],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
-                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name, 'type': 'group'},
-                ]
+                    {
+                        'id': hostgroup1.idgroup,
+                        'name': hostgroup1.name,
+                        'type': 'group',
+                    },
+                    {
+                        'id': hostgroup2.idgroup,
+                        'name': hostgroup2.name,
+                        'type': 'group',
+                    },
+                ],
             }
         )
 
@@ -308,8 +251,12 @@ class TestHostTree(TestController):
             json, {
                 'items': [],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
-                ]
+                    {
+                        'id': hostgroup1.idgroup,
+                        'name': hostgroup1.name,
+                        'type': 'group',
+                    },
+                ],
             }
         )
 
@@ -367,8 +314,6 @@ class TestHostTree(TestController):
             json, {'items': [], 'groups': []}
         )
 
-##### Troisième onglet déroulant du formulaire #####
-
     def test_get_hosts_when_allowed(self):
         """
         Récupération des hôtes avec les bons droits
@@ -404,11 +349,25 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hôtes retournée contient bien 'host1'
         self.assertEqual(
             json, {
-                'items': [{'id': host1.idhost, 'name': host1.name, 'type': 'item'}],
+                'items': [
+                    {
+                        'id': host1.idhost,
+                        'name': host1.name,
+                        'type': 'item',
+                    },
+                ],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
-                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name, 'type': 'group'}
-                ]
+                    {
+                        'id': hostgroup1.idgroup,
+                        'name': hostgroup1.name,
+                        'type': 'group',
+                    },
+                    {
+                        'id': hostgroup2.idgroup,
+                        'name': hostgroup2.name,
+                        'type': 'group',
+                    },
+                ],
             }
         )
 
@@ -422,8 +381,14 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hotes retournée contient bien 'host2'
         self.assertEqual(
             json, {
-                'items': [{'id': host2.idhost, 'name': host2.name, 'type': 'item'}],
-                'groups': []
+                'items': [
+                    {
+                        'id': host2.idhost,
+                        'name': host2.name,
+                        'type': 'item',
+                    },
+                ],
+                'groups': [],
             }
         )
 
@@ -437,11 +402,25 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hôtes retournée contient bien 'host1'
         self.assertEqual(
             json, {
-                'items': [{'id': host1.idhost, 'name': host1.name, 'type': 'item'}],
+                'items': [
+                    {
+                        'id': host1.idhost,
+                        'name': host1.name,
+                        'type': 'item',
+                    },
+                ],
                 'groups': [
-                    {'id': hostgroup1.idgroup, 'name': hostgroup1.name, 'type': 'group'},
-                    {'id': hostgroup2.idgroup, 'name': hostgroup2.name, 'type': 'group'},
-                ]
+                    {
+                        'id': hostgroup1.idgroup,
+                        'name': hostgroup1.name,
+                        'type': 'group',
+                    },
+                    {
+                        'id': hostgroup2.idgroup,
+                        'name': hostgroup2.name,
+                        'type': 'group',
+                    },
+                ],
             }
         )
 
@@ -455,8 +434,14 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hotes retournée contient bien 'host2'
         self.assertEqual(
             json, {
-                'items': [{'id': host2.idhost, 'name': host2.name, 'type': 'item'}],
-                'groups': []
+                'items': [
+                    {
+                        'id': host2.idhost,
+                        'name': host2.name,
+                        'type': 'item',
+                    },
+                ],
+                'groups': [],
             }
         )
 
@@ -470,8 +455,14 @@ class TestHostTree(TestController):
         # On s'assure que la liste d'hôtes retournée contient bien 'host2'
         self.assertEqual(
             json, {
-                'items': [{'id': host2.idhost, 'name': host2.name, 'type': 'item'}],
-                'groups': []
+                'items': [
+                    {
+                        'id': host2.idhost,
+                        'name': host2.name,
+                        'type': 'item',
+                    },
+                ],
+                'groups': [],
             }
         )
 
@@ -505,7 +496,13 @@ class TestHostTree(TestController):
         self.assertEqual(
             json, {
                 'items': [],
-                'groups': [{'name': hostgroup1.name, 'id': hostgroup1.idgroup, 'type': 'group'}]
+                'groups': [
+                    {
+                        'name': hostgroup1.name,
+                        'id': hostgroup1.idgroup,
+                        'type': 'group',
+                    },
+                ],
             }
         )
 

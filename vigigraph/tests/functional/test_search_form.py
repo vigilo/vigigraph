@@ -10,9 +10,7 @@ import transaction
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, SupItemGroup, Graph, GraphGroup
-
-from vigigraph.tests.functional.test_host_selection_form import populateDB
-from vigigraph.tests.functional.test_graph_selection_form import addGraphs
+from helpers import populateDB, addGraphs
 
 
 class TestSearchForm(TestController):
