@@ -24,22 +24,23 @@ from repoze.what.predicates import not_anonymous, has_permission, \
 from formencode import validators, schema
 from sqlalchemy import or_
 from sqlalchemy.sql.expression import literal_column
+from sqlalchemy.orm import aliased, lazyload
 
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
 from vigilo.turbogears.controllers.proxy import get_through_proxy
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import Host
-from vigilo.models.tables import SupItemGroup
-from vigilo.models.tables import PerfDataSource
-from vigilo.models.tables import Graph, GraphGroup
+from vigilo.models.tables import Host, SupItemGroup, PerfDataSource
+from vigilo.models.tables import Graph, GraphGroup, Change, UserGroup
+from vigilo.models.tables import DataPermission
+from vigilo.models.tables.group import Group
 from vigilo.models.tables.grouphierarchy import GroupHierarchy
-from vigilo.models.tables import Change
 
 from vigilo.models.tables.secondary_tables import SUPITEM_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
+from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE
 from vigilo.models.functions import sql_escape_like
 
 LOGGER = logging.getLogger(__name__)
@@ -118,7 +119,7 @@ class RpcController(BaseController):
         # correspondant au motif, quel que soit l'hôte.
         if search_form_graph:
             if not search_form_host:
-                search_form_host = '*'
+                search_form_host = u'*'
 
             search_form_host = sql_escape_like(search_form_host)
             search_form_graph = sql_escape_like(search_form_graph)
@@ -358,7 +359,7 @@ class RpcController(BaseController):
             if len(set(hostgroups).intersection(set(supitemgroups))) < 1:
                 message = _('Access denied to host "%s"') % host
                 LOGGER.warning(message)
-                raise http_exc.HTTPForbidden(message) 
+                raise http_exc.HTTPForbidden(message)
 
         # Récupération de la liste des noms des graphes associés à l'hôte.
         graphs = DBSession.query(
@@ -407,7 +408,7 @@ class RpcController(BaseController):
             ).join(
                 (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                     Host.idhost),
-            ).filter(Host.name.like(query + '%')
+            ).filter(Host.name.like(query + u'%')
             ).order_by(
                 Host.name.asc(),
             )
@@ -462,31 +463,55 @@ class RpcController(BaseController):
         if not is_manager:
             direct_access = False
             user = get_current_user()
-            user_groups = dict(user.supitemgroups())
-            # On regarde d'abord si le groupe fait partie de ceux
-            # auquels l'utilisateur a explicitement accès, ou s'il
-            # est un parent des groupes auxquels l'utilisateur a accès
-            if parent_id in user_groups.keys():
-                direct_access = user_groups[parent_id]
-            # Dans le cas contraire, on vérifie si le groupe est un
-            # sous-groupe des groupes auxquels l'utilisateur a accès
-            else:
-                id_list = [ug for ug in user_groups.keys() if user_groups[ug]]
-                child_groups = DBSession.query(SupItemGroup.idgroup
-                    ).distinct(
+
+            # On calcule la distance de ce groupe par rapport aux groupes
+            # sur lesquels l'utilisateur a explicitement les permissions.
+            #
+            # La distance est définie ainsi :
+            # 0 : l'utilisateur a des droits explicites sur ce groupe.
+            # > 0 : l'utilisateur a accès implicitement au groupe.
+            # < 0 : l'utilisateur n'a pas d'accès (il peut juste parcourir
+            #       ce groupe)
+            #
+            # Il faut 2 étapes pour trouver la distance. La 1ère essaye
+            # de trouver une distance >= 0, la 2ème une distance <= 0.
+
+            # Distance positive.
+            distance = DBSession.query(
+                    GroupHierarchy.hops
+                ).join(
+                    (Group, Group.idgroup == GroupHierarchy.idparent),
+                    (DataPermission, DataPermission.idgroup == Group.idgroup),
+                    (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
+                    (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
+                        UserGroup.idgroup),
+                ).filter(USER_GROUP_TABLE.c.username == user.user_name
+                ).filter(Group._grouptype == u'supitemgroup'
+                ).filter(GroupHierarchy.idchild == parent_id
+                ).order_by(GroupHierarchy.hops.desc()).scalar()
+
+            if distance is None:
+                # Distance négative.
+                distance = DBSession.query(
+                        GroupHierarchy.hops
                     ).join(
-                        (GroupHierarchy,
-                            GroupHierarchy.idchild == SupItemGroup.idgroup),
-                    ).filter(GroupHierarchy.idparent.in_(id_list)
-                    ).filter(GroupHierarchy.hops > 0
-                    ).all()
-                for ucg in child_groups:
-                    if ucg.idgroup == parent_id:
-                        direct_access = True
-                        break
-                # Sinon, l'utilisateur n'a pas accès à ce groupe
-                else:
-                    return dict(groups = [], items = [])
+                        (Group, Group.idgroup == GroupHierarchy.idchild),
+                        (DataPermission, DataPermission.idgroup == Group.idgroup),
+                        (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
+                        (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
+                            UserGroup.idgroup),
+                    ).filter(USER_GROUP_TABLE.c.username == user.user_name
+                    ).filter(Group._grouptype == u'supitemgroup'
+                    ).filter(GroupHierarchy.idparent == parent_id
+                    ).order_by(GroupHierarchy.hops.desc()).scalar()
+                if distance is not None:
+                    distance = -distance
+
+            if distance is None:
+                # Pas d'accès à ce groupe.
+                return dict(groups = [], items = [])
+
+            direct_access = distance >= 0
 
         limit = int(config.get("max_menu_entries", 20))
         result = {"groups": [], "items": []}
@@ -494,19 +519,30 @@ class RpcController(BaseController):
         if not onlytype or onlytype == "group":
             # On récupère la liste des groupes dont
             # l'identifiant du parent est passé en paramètre
+            gh1 = aliased(GroupHierarchy, name='gh1')
+            gh2 = aliased(GroupHierarchy, name='gh2')
+
             db_groups = DBSession.query(
                 SupItemGroup
+            ).options(lazyload('_path_obj')
+            ).distinct(
             ).join(
-                (GroupHierarchy, GroupHierarchy.idchild == \
-                    SupItemGroup.idgroup),
-            ).filter(GroupHierarchy.hops == 1
-            ).filter(GroupHierarchy.idparent == parent_id
+                (gh1, gh1.idchild == SupItemGroup.idgroup),
+            ).filter(gh1.hops == 1
+            ).filter(gh1.idparent == parent_id
             ).order_by(SupItemGroup.name.asc())
-            if not is_manager and not direct_access:
-                id_list = [ug for ug in user_groups.keys()]
 
-                db_groups = db_groups.filter(
-                    SupItemGroup.idgroup.in_(id_list))
+            if not is_manager and not direct_access:
+                # On ne doit afficher que les fils du groupe <parent_id>
+                # tels que l'utilisateur a accès explicitement à l'un
+                # des fils de l'un de ces groupes.
+                db_groups = db_groups.join(
+                        (gh2, gh2.idparent == gh1.idchild),
+                        (DataPermission, DataPermission.idgroup == gh2.idchild),
+                        (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
+                        (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
+                    ).filter(USER_GROUP_TABLE.c.username == user.user_name)
+
             num_children_left = db_groups.count() - offset
             if offset:
                 result["continued_from"] = offset
@@ -770,4 +806,3 @@ class RpcController(BaseController):
     @expose('json')
     def external_links(self):
         return dict(links=config['external_links'])
-
