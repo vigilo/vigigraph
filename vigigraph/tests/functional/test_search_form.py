@@ -5,7 +5,7 @@
 """
 Suite de tests du formulaire de recherche de VigiGraph.
 """
-import transaction
+import transaction, urllib2
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
@@ -50,24 +50,27 @@ class TestSearchForm(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération de l'hôte 'host2' dans la base de données
         host2 = DBSession.query(Host).filter(
-            Host.name == u'host2').first()
+            Host.name == u'host2 éà').first()
 
         # Récupération des résultats obtenus après une recherche
         # sur l'hôte 'host1' pour l'utilisateur 'manager'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s' % (str(host1.name), ), {
-            }, extra_environ={'REMOTE_USER': 'manager'})
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'manager'}
+        )
         json = response.json
 
         # On s'assure que les deux listes retournées contiennent
         # respectivement le nom de l'hôte et son identifiant
         self.assertEqual(
             json, {
-                'labels': [['host1', None]],
+                'labels': [[u'host1 éà', None]],
                 'ids': [[1, None]],
                 'more': False,
             }
@@ -76,8 +79,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur l'hôte 'host1' pour l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s' % (str(host1.name), ), {
-            }, extra_environ={'REMOTE_USER': 'poweruser'})
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'poweruser'}
+        )
         json = response.json
 
         # On s'assure que les deux listes retournées contiennent
@@ -93,8 +99,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur l'hôte 'host2' pour l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s' % (str(host2.name), ), {
-            }, extra_environ={'REMOTE_USER': 'poweruser'})
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(host2.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'poweruser'}
+        )
         json = response.json
 
         # On s'assure que les deux listes retournées contiennent
@@ -110,8 +119,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur l'hôte 'host2' pour l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s' % (str(host2.name), ), {
-            }, extra_environ={'REMOTE_USER': 'user'})
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(host2.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'user'}
+        )
         json = response.json
 
         # On s'assure que les deux listes retournées contiennent
@@ -131,17 +143,20 @@ class TestSearchForm(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération de l'hôte 'host3' dans la base de données
         host3 = DBSession.query(Host).filter(
-            Host.name == u'host3').first()
+            Host.name == u'host3 éà').first()
 
         # Récupération des résultats obtenus après une recherche
         # sur l'hôte 'host1' pour l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s' % (str(host1.name), ), {
-            }, extra_environ={'REMOTE_USER': 'user'})
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'user'}
+        )
         json = response.json
 
         # On s'assure que la liste retournée est vide
@@ -156,8 +171,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur l'hôte 'host3' pour l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s' % (str(host3.name), ), {
-            }, extra_environ={'REMOTE_USER': 'user'})
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(host3.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'user'}
+        )
         json = response.json
 
         # On s'assure que la liste
@@ -173,8 +191,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur l'hôte 'host1' pour l'utilisateur 'visitor'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s' % (str(host1.name), ), {
-            }, extra_environ={'REMOTE_USER': 'visitor'})
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'visitor'}
+        )
         json = response.json
 
         # On s'assure que la liste
@@ -190,8 +211,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur l'hôte 'host3' pour l'utilisateur 'visitor'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s' % (str(host3.name), ), {
-            }, extra_environ={'REMOTE_USER': 'visitor'})
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(host3.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'visitor'}
+        )
         json = response.json
 
         # On s'assure que la liste
@@ -211,15 +235,17 @@ class TestSearchForm(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération des résultats obtenus après une recherche
         # sur l'hôte 'host1' pour un utilisateur anonyme :
         # le contrôleur doit retourner une erreur 401.
         self.app.post(
-            '/rpc/searchHostAndGraph?'
-            'search_form_host=%s' % (str(host1.name), ), {
-            }, status=401)
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+            {},
+            status=401
+        )
 
     def test_select_inexisting_host(self):
         """
@@ -249,23 +275,26 @@ class TestSearchForm(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération du graphe 'graph1' dans la base de données
         graph1 = DBSession.query(Graph).filter(
-            Graph.name == u'graph1').first()
+            Graph.name == u'graph1 éà').first()
 
         # Récupération des résultats obtenus après une recherche sur
         # un graphe sans préciser d'hôte par l'utilisateur 'manager'.
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_graph=%s' % (str(graph1.name), ), {
-            }, extra_environ={'REMOTE_USER': 'manager'})
+            '/rpc/searchHostAndGraph?search_form_graph=%s' %
+                urllib2.quote(graph1.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'manager'}
+        )
         json = response.json
 
         # On s'assure que la liste retournée est conforme à celle attendue
         self.assertEqual(
             json, {
-                'labels': [[str(host1.name), str(graph1.name)]],
+                'labels': [[host1.name, graph1.name]],
                 'ids': [[host1.idhost, graph1.idgraph]],
                 'more': False,
             }
@@ -278,13 +307,16 @@ class TestSearchForm(TestController):
 
         # Récupération du graphe 'graph1' dans la base de données
         graph1 = DBSession.query(Graph).filter(
-            Graph.name == u'graph1').first()
+            Graph.name == u'graph1 éà').first()
 
         # On s'assure qu'une liste vide est retournée lorsque
         # l'on recherche un graphe en précisant un hôte erroné.
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s' % (str(graph1.name), ), {
-            }, extra_environ={'REMOTE_USER': 'manager'})
+            '/rpc/searchHostAndGraph?search_form_host=%s' %
+                urllib2.quote(graph1.name.encode('utf-8'), ''),
+            {},
+            extra_environ={'REMOTE_USER': 'manager'}
+        )
         json = response.json
 
         # On s'assure que la liste retournée est vide
@@ -311,11 +343,11 @@ class TestSearchForm(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération de l'hôte 'host2' dans la base de données
         host2 = DBSession.query(Host).filter(
-            Host.name == u'host2').first()
+            Host.name == u'host2 éà').first()
 
         # Récupération du groupe de graphes
         # 'graphgroup1' dans la base de données
@@ -329,18 +361,19 @@ class TestSearchForm(TestController):
 
         # Récupération du graphe 'graph1' dans la base de données
         graph1 = DBSession.query(Graph).filter(
-            Graph.name == u'graph1').first()
+            Graph.name == u'graph1 éà').first()
 
         # Récupération du graphe 'graph2' dans la base de données
         graph2 = DBSession.query(Graph).filter(
-            Graph.name == u'graph2').first()
+            Graph.name == u'graph2 éà').first()
 
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph1' pour l'utilisateur 'manager'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host1.name), str(graph1.name)), {
-            }, extra_environ={'REMOTE_USER': 'manager'})
+        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' % (
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+                urllib2.quote(graph1.name.encode('utf-8'), ''),
+            ), {}, extra_environ={'REMOTE_USER': 'manager'})
         json = response.json
 
         # On s'assure que la liste retournée
@@ -356,9 +389,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph1' pour l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host1.name), str(graph1.name)), {
-            }, extra_environ={'REMOTE_USER': 'poweruser'})
+            '/rpc/searchHostAndGraph?search_form_host=%s&' \
+            'search_form_graph=%s' % (
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+                urllib2.quote(graph1.name.encode('utf-8'), ''),
+            ), {}, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
         # On s'assure que la liste retournée est conforme à celle attendue
@@ -373,9 +408,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph2' pour l'utilisateur 'poweruser'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host2.name), str(graph2.name)), {
-            }, extra_environ={'REMOTE_USER': 'poweruser'})
+            '/rpc/searchHostAndGraph?search_form_host=%s&' \
+            'search_form_graph=%s' % (
+                urllib2.quote(host2.name.encode('utf-8'), ''),
+                urllib2.quote(graph2.name.encode('utf-8'), ''),
+            ), {}, extra_environ={'REMOTE_USER': 'poweruser'})
         json = response.json
 
         # On s'assure que la liste retournée
@@ -391,9 +428,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph2' pour l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host2.name), str(graph2.name)), {
-            }, extra_environ={'REMOTE_USER': 'user'})
+            '/rpc/searchHostAndGraph?search_form_host=%s&' \
+            'search_form_graph=%s' % (
+                urllib2.quote(host2.name.encode('utf-8'), ''),
+                urllib2.quote(graph2.name.encode('utf-8'), ''),
+            ), {}, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste retournée
@@ -413,26 +452,28 @@ class TestSearchForm(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération de l'hôte 'host3' dans la base de données
         host3 = DBSession.query(Host).filter(
-            Host.name == u'host3').first()
+            Host.name == u'host3 éà').first()
 
         # Récupération du graphe 'graph1' dans la base de données
         graph1 = DBSession.query(Graph).filter(
-            Graph.name == u'graph1').first()
+            Graph.name == u'graph1 éà').first()
 
         # Récupération du graphe 'graph3' dans la base de données
         graph3 = DBSession.query(Graph).filter(
-            Graph.name == u'graph1').first()
+            Graph.name == u'graph3 éà').first()
 
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph1' pour l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host1.name), str(graph1.name)), {
-            }, extra_environ={'REMOTE_USER': 'user'})
+            '/rpc/searchHostAndGraph?search_form_host=%s&' \
+            'search_form_graph=%s' % (
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+                urllib2.quote(graph1.name.encode('utf-8'), ''),
+            ), {}, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste retournée est vide
@@ -447,9 +488,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph3' pour l'utilisateur 'user'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host3.name), str(graph3.name)), {
-            }, extra_environ={'REMOTE_USER': 'user'})
+            '/rpc/searchHostAndGraph?search_form_host=%s&' \
+            'search_form_graph=%s' % (
+                urllib2.quote(host3.name.encode('utf-8'), ''),
+                urllib2.quote(graph3.name.encode('utf-8'), ''),
+            ), {}, extra_environ={'REMOTE_USER': 'user'})
         json = response.json
 
         # On s'assure que la liste retournée est vide
@@ -464,9 +507,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph1' pour l'utilisateur 'visitor'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host1.name), str(graph1.name)), {
-            }, extra_environ={'REMOTE_USER': 'visitor'})
+            '/rpc/searchHostAndGraph?search_form_host=%s&' \
+            'search_form_graph=%s' % (
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+                urllib2.quote(graph1.name.encode('utf-8'), ''),
+            ), {}, extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
 
         # On s'assure que la liste retournée est vide
@@ -481,9 +526,11 @@ class TestSearchForm(TestController):
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph3' pour l'utilisateur 'visitor'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host3.name), str(graph3.name)), {
-            }, extra_environ={'REMOTE_USER': 'visitor'})
+            '/rpc/searchHostAndGraph?search_form_host=%s&' \
+            'search_form_graph=%s' % (
+                urllib2.quote(host3.name.encode('utf-8'), ''),
+                urllib2.quote(graph3.name.encode('utf-8'), ''),
+            ), {}, extra_environ={'REMOTE_USER': 'visitor'})
         json = response.json
 
         # On s'assure que la liste retournée est vide
@@ -502,19 +549,21 @@ class TestSearchForm(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération du graphe 'graph1' dans la base de données
         graph1 = DBSession.query(Graph).filter(
-            Graph.name == u'graph1').first()
+            Graph.name == u'graph1 éà').first()
 
         # Récupération des résultats obtenus après une recherche
         # sur le graphe 'graph1' pour un utilisateur anonyme :
         # le contrôleur doit retourner une erreur 401
         self.app.post(
-            '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host1.name), str(graph1.name)), {
-            }, status=401)
+            '/rpc/searchHostAndGraph?search_form_host=%s&' \
+            'search_form_graph=%s' % (
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+                urllib2.quote(graph1.name.encode('utf-8'), ''),
+            ), {}, status=401)
 
     def test_select_inexisting_graph(self):
         """
@@ -523,14 +572,17 @@ class TestSearchForm(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération des résultats obtenus après une recherche
         # sur un graphe inexistant pour l'utilisateur 'manager'
         response = self.app.post(
-        '/rpc/searchHostAndGraph?search_form_host=%s&search_form_graph=%s' %
-            (str(host1.name), 'graphe_totalement_inexistant'), {
-            }, extra_environ={'REMOTE_USER': 'manager'})
+           '/rpc/searchHostAndGraph?search_form_host=%s&' \
+           'search_form_graph=%s' % (
+                urllib2.quote(host1.name.encode('utf-8'), ''),
+                'graphe_totalement_inexistant',
+            ), {}, extra_environ={'REMOTE_USER': 'manager'}
+        )
         json = response.json
 
         # On s'assure que la liste retournée est vide

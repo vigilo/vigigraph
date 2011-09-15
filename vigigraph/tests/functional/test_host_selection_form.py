@@ -178,7 +178,7 @@ class TestHostTree(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération des groupes d'hôtes
         # accessibles à l'utilisateur 'manager'
@@ -333,11 +333,11 @@ class TestHostTree(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération de l'hôte 'host2' dans la base de données
         host2 = DBSession.query(Host).filter(
-            Host.name == u'host2').first()
+            Host.name == u'host2 éà').first()
 
         # Récupération des hôtes du groupe 'mhg'
         # accessibles à l'utilisateur 'manager'

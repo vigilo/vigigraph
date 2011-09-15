@@ -17,11 +17,11 @@ from pylons.i18n import ugettext as _, lazy_ugettext as l_
 from webob.exc import HTTPPreconditionFailed
 from tg import expose, request, redirect, tmpl_context, \
     config, validate, flash, exceptions as http_exc
-from tg.decorators import paginate
 
 from repoze.what.predicates import not_anonymous, has_permission, \
                                     in_group, Any, All
-from formencode import validators, schema
+from formencode import schema
+from tw.forms import validators
 from sqlalchemy import or_
 from sqlalchemy.sql.expression import literal_column
 from sqlalchemy.orm import aliased, lazyload
@@ -29,6 +29,7 @@ from sqlalchemy.orm import aliased, lazyload
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
 from vigilo.turbogears.controllers.proxy import get_through_proxy
+from vigilo.turbogears.decorators import paginate
 
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, SupItemGroup, PerfDataSource
@@ -87,8 +88,8 @@ class RpcController(BaseController):
 
     class SearchHostAndGraphSchema(schema.Schema):
         """Schéma de validation pour la méthode L{searchHostAndGraph}."""
-        search_form_host = validators.String(if_missing=None)
-        search_form_graph = validators.String(if_missing=None)
+        search_form_host = validators.UnicodeString(if_missing=None)
+        search_form_graph = validators.UnicodeString(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
@@ -260,9 +261,9 @@ class RpcController(BaseController):
 
     class GetIndicatorsSchema(schema.Schema):
         """Schéma de validation pour la méthode L{getIndicators}."""
-        host = validators.String(not_empty=True)
-        graph = validators.String(not_empty=True)
-        nocache = validators.String(if_missing=None)
+        host = validators.UnicodeString(not_empty=True)
+        graph = validators.UnicodeString(not_empty=True)
+        nocache = validators.UnicodeString(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
@@ -286,8 +287,8 @@ class RpcController(BaseController):
 
     class StartTimeSchema(schema.Schema):
         """Schéma de validation pour la méthode L{getIndicators}."""
-        host = validators.String(not_empty=True)
-        nocache = validators.String(if_missing=None)
+        host = validators.UnicodeString(not_empty=True)
+        nocache = validators.UnicodeString(if_missing=None)
 
     # @TODO définir un error_handler différent pour remonter l'erreur via JS.
     @validate(
@@ -306,7 +307,7 @@ class RpcController(BaseController):
 
     class FullHostPageSchema(schema.Schema):
         """Schéma de validation pour la méthode L{fullHostPage}."""
-        host = validators.String(not_empty=True)
+        host = validators.UnicodeString(not_empty=True)
         start = validators.Int(if_missing=None)
         duration = validators.Int(if_missing=86400)
 
@@ -335,7 +336,6 @@ class RpcController(BaseController):
         @return: page avec les images des graphes et boutons de deplacement dans le temps
         @rtype: page html
         """
-
         if start is None:
             start = int(time.time()) - int(duration)
         else:
@@ -352,8 +352,16 @@ class RpcController(BaseController):
         if not is_manager:
             # Récupération des groupes auxquels l'utilisateur a accès.
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
+
+            # On vérifie que l'hôte en question existe bel et bien.
+            host_obj = Host.by_host_name(host)
+            if not host_obj:
+                message = _('No such host "%s"') % host
+                LOGGER.warning(message)
+                raise http_exc.HTTPNotFound(message)
+
             # Récupération des groupes dont l'hôte fait partie
-            hostgroups = [g.idgroup for g in Host.by_host_name(host).groups]
+            hostgroups = [g.idgroup for g in host_obj.groups]
             # Si aucun des groupes de l'hôte ne fait partie des groupes
             # auxquels l'utilisateur a accès, on affiche une erreur 403.
             if len(set(hostgroups).intersection(set(supitemgroups))) < 1:
@@ -374,14 +382,22 @@ class RpcController(BaseController):
             ).filter(Host.name == host)
 
         graphs = graphs.all()
-
         return dict(host=host, start=start, duration=duration,
                     presets=self.presets, graphs=graphs)
 
 
+    class SearchHostSchema(schema.Schema):
+        """Schéma de validation pour la méthode L{getIndicators}."""
+        allow_extra_fields = True
+        filter_extra_fields = True
+        query = validators.UnicodeString(not_empty=True)
+
     @expose('searchhost.html')
+    @validate(
+        validators = SearchHostSchema(),
+        error_handler = process_form_errors)
     @paginate('hosts', items_per_page=10)
-    def searchHost(self, *args, **kwargs):
+    def searchHost(self, query):
         """
         Affiche les résultats de la recherche par nom d'hôte.
         La requête de recherche (C{query}) correspond à un préfixe
@@ -392,9 +408,9 @@ class RpcController(BaseController):
         @keyword query: Prefixe de recherche sur les noms d'hôtes
         @type    query: C{unicode}
         """
-        query = kwargs.get('query')
         if not query:
             redirect("searchHostForm")
+            return
 
         query = sql_escape_like(query.strip())
         user = get_current_user()
@@ -409,9 +425,7 @@ class RpcController(BaseController):
                 (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                     Host.idhost),
             ).filter(Host.name.like(query + u'%')
-            ).order_by(
-                Host.name.asc(),
-            )
+            ).order_by(Host.name.asc(),)
 
         # Les managers ont accès à tout.
         # Les autres ont un accès restreint.
@@ -423,7 +437,7 @@ class RpcController(BaseController):
                         SUPITEM_GROUP_TABLE.c.idgroup)
                 ).filter(GroupHierarchy.idparent.in_(supitemgroups))
 
-        return dict(hosts=hosts)
+        return dict(hosts=[h.name for h in hosts])
 
     # VIGILO_EXIG_VIGILO_PERF_0030:Moteur de recherche des graphes
     @expose('getopensearch.xml', content_type='text/xml')

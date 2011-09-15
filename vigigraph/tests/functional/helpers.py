@@ -57,9 +57,11 @@ def populateDB():
     hostgroup2 = add_supitemgroup(u'hg2', mainhostgroup)
 
     # Ajout de trois hôtes
-    host1 = add_host(u'host1')
-    host2 = add_host(u'host2')
-    host3 = add_host(u'host3')
+    # On ajoute des caractères spéciaux pour détecter les
+    # conversions implicites Unicode <-> ASCII (et leurs erreurs).
+    host1 = add_host(u'host1 éà')
+    host2 = add_host(u'host2 éà')
+    host3 = add_host(u'host3 éà')
 
     # Ajout du premier hôte dans le groupe d'hôtes principal.
     add_host2group(host1, mainhostgroup)
@@ -119,9 +121,11 @@ def addGraphs(host1, host2, host3):
     add_application(u"vigirrd")
 
     # Ajout de trois graphes
-    graph1 = add_graph("graph1")
-    graph2 = add_graph("graph2")
-    graph3 = add_graph("graph3")
+    # On ajoute des caractères spéciaux pour détecter les
+    # conversions implicites Unicode <-> ASCII (et leurs erreurs).
+    graph1 = add_graph(u"graph1 éà")
+    graph2 = add_graph(u"graph2 éà")
+    graph3 = add_graph(u"graph3 éà")
 
     # Ajout d'une perfdatasource pour chaque hôte
     datasource1 = add_perfdatasource(

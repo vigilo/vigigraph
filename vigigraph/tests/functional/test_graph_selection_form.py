@@ -44,15 +44,15 @@ class TestGraphTree(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération de l'hôte 'host2' dans la base de données
         host2 = DBSession.query(Host).filter(
-            Host.name == u'host2').first()
+            Host.name == u'host2 éà').first()
 
         # Récupération de l'hôte 'host3' dans la base de données
         host3 = DBSession.query(Host).filter(
-            Host.name == u'host3').first()
+            Host.name == u'host3 éà').first()
 
         # Récupération du groupe de graphes
         # 'graphgroup1' dans la base de données
@@ -184,11 +184,11 @@ class TestGraphTree(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération de l'hôte 'host3' dans la base de données
         host3 = DBSession.query(Host).filter(
-            Host.name == u'host3').first()
+            Host.name == u'host3 éà').first()
 
         # Récupération des groupes de graphes de l'hôte
         # host1 accessibles à l'utilisateur 'user'
@@ -245,7 +245,7 @@ class TestGraphTree(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération des groupes de graphes de l'hôte
         # 'host1' par un utilisateur anonyme : le contrôleur
@@ -284,15 +284,15 @@ class TestGraphTree(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération de l'hôte 'host2' dans la base de données
         host2 = DBSession.query(Host).filter(
-            Host.name == u'host2').first()
+            Host.name == u'host2 éà').first()
 
         # Récupération de l'hôte 'host3' dans la base de données
         host3 = DBSession.query(Host).filter(
-            Host.name == u'host3').first()
+            Host.name == u'host3 éà').first()
 
         # Récupération du groupe de graphes
         # 'graphgroup1' dans la base de données
@@ -312,17 +312,17 @@ class TestGraphTree(TestController):
         # Récupération du graphe 'graph1'
         # dans la base de données
         graph1 = DBSession.query(Graph).filter(
-            Graph.name == u'graph1').first()
+            Graph.name == u'graph1 éà').first()
 
         # Récupération du graphe 'graph2'
         # dans la base de données
         graph2 = DBSession.query(Graph).filter(
-            Graph.name == u'graph2').first()
+            Graph.name == u'graph2 éà').first()
 
         # Récupération du graphe 'graph3'
         # dans la base de données
         graph3 = DBSession.query(Graph).filter(
-            Graph.name == u'graph3').first()
+            Graph.name == u'graph3 éà').first()
 
         # Récupération des graphes du groupe de graphes
         # 'graphgroup1' accessibles à l'utilisateur 'manager'
@@ -445,11 +445,11 @@ class TestGraphTree(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération de l'hôte 'host3' dans la base de données
         host3 = DBSession.query(Host).filter(
-            Host.name == u'host3').first()
+            Host.name == u'host3 éà').first()
 
         # Récupération du groupe de graphes
         # 'graphgroup1' dans la base de données
@@ -519,7 +519,7 @@ class TestGraphTree(TestController):
 
         # Récupération de l'hôte 'host1' dans la base de données
         host1 = DBSession.query(Host).filter(
-            Host.name == u'host1').first()
+            Host.name == u'host1 éà').first()
 
         # Récupération du groupe de graphes
         # 'graphgroup1' dans la base de données

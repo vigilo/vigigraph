@@ -6,14 +6,12 @@
 Teste l'utilisation du module de recherche
 OpenSearch intégré au navigateur.
 """
-import transaction
+import transaction, urllib2
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, SupItemGroup, Graph, GraphGroup
-
-from vigigraph.tests.functional.test_host_selection_form import populateDB
-from vigigraph.tests.functional.test_graph_selection_form import addGraphs
+from helpers import populateDB, addGraphs
 
 
 class TestOpenSearch(TestController):
@@ -42,58 +40,62 @@ class TestOpenSearch(TestController):
             '/rpc/searchHost?query=host*',
             extra_environ={"REMOTE_USER": user}
         )
+        print repr(response.body)
         for host in hosts:
             if hosts[host]:
                 self.assertTrue(
-                    '/rpc/fullHostPage?host=%s' % host
-                    in response.body
+                    u'/rpc/fullHostPage?host=%s' %
+                        urllib2.quote(host.encode('utf-8'))
+                    in response.unicode_body
                 )
             else:
                 self.assertTrue(
-                    '/rpc/fullHostPage?host=%s' % host
-                    not in response.body
+                    u'/rpc/fullHostPage?host=%s' %
+                        urllib2.quote(host.encode('utf-8'))
+                    not in response.unicode_body
                 )
 
     def test_direct_permission(self):
         """OpenSearch avec permission sur le groupe"""
         hosts = {
-            'host1': False,
-            'host2': True,
-            'host3': False,
+            u'host1 éà': False,
+            u'host2 éà': True,
+            u'host3 éà': False,
         }
         self._check_results('user', hosts)
 
     def test_permission_on_parent(self):
         """OpenSearch avec permission sur le parent du groupe"""
         hosts = {
-            'host1': True,
-            'host2': True,
-            'host3': True,
+            u'host1 éà': True,
+            u'host2 éà': True,
+            u'host3 éà': True,
         }
         self._check_results('poweruser', hosts)
 
     def test_no_permission(self):
         """OpenSearch sans permissions"""
         hosts = {
-            'host1': False,
-            'host2': False,
-            'host3': False,
+            u'host1 éà': False,
+            u'host2 éà': False,
+            u'host3 éà': False,
         }
         self._check_results('visitor', hosts)
 
     def test_anonymous(self):
         """OpenSearch en anonyme"""
-        for host in ('host1', 'host2', 'host3'):
+        for host in (u'host1 éà', u'host2 éà', u'host3 éà'):
             response = self.app.get(
-                '/rpc/fullHostPage?host=%s' % host,
+                '/rpc/fullHostPage?host=%s' %
+                    urllib2.quote(host.encode('utf-8'), ''),
                 status=401
             )
 
     def test_managers(self):
         """OpenSearch avec le compte manager"""
         hosts = {
-            'host1': True,
-            'host2': True,
-            'host3': True,
+            u'host1 éà': True,
+            u'host2 éà': True,
+            u'host3 éà': True,
         }
         self._check_results('manager', hosts)

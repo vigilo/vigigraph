@@ -7,14 +7,12 @@ Tests les accès à la page rpc/fullHostPage
 permettant d'afficher tous les graphes
 associés à un hôte.
 """
-import transaction
+import transaction, urllib2
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, SupItemGroup, Graph, GraphGroup
-
-from vigigraph.tests.functional.test_host_selection_form import populateDB
-from vigigraph.tests.functional.test_graph_selection_form import addGraphs
+from helpers import populateDB, addGraphs
 
 
 class TestFullHostPage(TestController):
@@ -42,18 +40,21 @@ class TestFullHostPage(TestController):
         for host in hosts:
             if hosts[host]:
                 response = self.app.get(
-                    '/rpc/fullHostPage?host=%s' % host,
+                    '/rpc/fullHostPage?host=%s' %
+                        urllib2.quote(host.encode('utf-8')),
                     extra_environ={"REMOTE_USER": user}
                 )
-                index = int(host[-1:])
+                index = int(host[4])
                 self.assertTrue(
-                    '/vigirrd/host%d/index?'
-                    'graphtemplate=graph%d' % (index, index)
-                    in response.body
+                    '/vigirrd/%s/index?graphtemplate=%s' % (
+                        urllib2.quote((u'host%d éà' % index).encode('utf-8')),
+                        urllib2.quote((u'graph%d éà' % index).encode('utf-8')),
+                    ) in response.unicode_body
                 )
             else:
                 response = self.app.get(
-                    '/rpc/fullHostPage?host=%s' % host,
+                    '/rpc/fullHostPage?host=%s' %
+                        urllib2.quote(host.encode('utf-8')),
                     extra_environ={"REMOTE_USER": user},
                     status = 403
                 )
@@ -61,43 +62,44 @@ class TestFullHostPage(TestController):
     def test_direct_permission(self):
         """Accès à rpc/fullHostPage avec permission sur le groupe"""
         hosts = {
-            'host1': False,
-            'host2': True,
-            'host3': False,
+            u'host1 éà': False,
+            u'host2 éà': True,
+            u'host3 éà': False,
         }
         self._check_results('user', hosts)
 
     def test_permission_on_parent(self):
         """Accès à rpc/fullHostPage avec permission sur le parent du groupe"""
         hosts = {
-            'host1': True,
-            'host2': True,
-            'host3': True,
+            u'host1 éà': True,
+            u'host2 éà': True,
+            u'host3 éà': True,
         }
         self._check_results('poweruser', hosts)
 
     def test_no_permission(self):
         """Accès à rpc/fullHostPage sans permissions"""
         hosts = {
-            'host1': False,
-            'host2': False,
-            'host3': False,
+            u'host1 éà': False,
+            u'host2 éà': False,
+            u'host3 éà': False,
         }
         self._check_results('visitor', hosts)
 
     def test_anonymous(self):
         """Accès à rpc/fullHostPage en anonyme"""
-        for host in ('host1', 'host2', 'host3'):
+        for host in (u'host1 éà', u'host2 éà', u'host3 éà'):
             response = self.app.get(
-                '/rpc/fullHostPage?host=%s' % host,
+                '/rpc/fullHostPage?host=%s' %
+                    urllib2.quote(host.encode('utf-8'), ''),
                 status=401
             )
 
     def test_managers(self):
         """Accès à rpc/fullHostPage depuis le compte manager"""
         hosts = {
-            'host1': True,
-            'host2': True,
-            'host3': True,
+            u'host1 éà': True,
+            u'host2 éà': True,
+            u'host3 éà': True,
         }
         self._check_results('manager', hosts)
