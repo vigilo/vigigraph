@@ -156,7 +156,7 @@ var Graph = new Class({
             image: app_path + 'images/zoom-in.png',
             tooltip: _("Zoom in"),
             onClick: function() {
-                this.updateZoom(0.5);
+                this.updateZoom(true);
             }.bind(this)
         });
 
@@ -164,7 +164,7 @@ var Graph = new Class({
             image: app_path + 'images/zoom-out.png',
             tooltip: _("Zoom out"),
             onClick: function() {
-                this.updateZoom(2);
+                this.updateZoom(false);
             }.bind(this)
         });
 
@@ -283,8 +283,18 @@ var Graph = new Class({
         window.updateURI();
     },
 
-    updateZoom: function (factor) {
-        this.options.duration = parseInt(this.options.duration, 10) * factor;
+    updateZoom: function (zoom_in) {
+        var start = this.options.start;
+        var factor = zoom_in ? 0.5 : 2;
+        this.options.duration = parseInt(this.options.duration, 10);
+        if (start !== null) {
+            // On zoom sur la partie centrale du graphe.
+            if (zoom_in) start += this.options.duration * 0.25;
+            // On dézoome "par les 2 côtés".
+            else start -= this.options.duration * 0.5;
+            this.options.start = start;
+        }
+        this.options.duration *= factor;
         // Période minimale d'affichage : 1 minute.
         if (this.options.duration < 60)
             this.options.duration = 60;
