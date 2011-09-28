@@ -240,6 +240,9 @@ var Graph = new Class({
             horizontal_overflow: true,
             toolbars: [toolbar]
         });
+        // Empêche l'affichage d'une barre de défilement vertical
+        // désactivée sous Chromium.
+        this.graph_window.content.setStyle('overflow', 'hidden');
 
         this.alert_indicator.inject(this.graph_window.content.parentNode);
 
@@ -366,7 +369,7 @@ var Graph = new Class({
         img.addEvent('load', function () {
             this[0].graph_window.resize(
                 this[1].width + 25,
-                this[1].height + 88
+                this[1].height + 73
             );
             this[0].hideAlert();
         }.bind([this, img]));
