@@ -413,7 +413,11 @@ var updateURI = function () {
     window.graphs.each(function (graph) {
         var props = new Hash(graph.options);
         props.extend({host: graph.host, graph: graph.graph});
-        this.push(props.toQueryString());
+        // Sous Firefox, l'apostrophe n'est pas échappée via JavaScript,
+        // alors qu'elle l'est par le navigateur dans l'URL.
+        // Afin d'éviter une boucle de rechargement infinie, on échappe
+        // manuellement l'apostrophe.
+        this.push(props.toQueryString().replace(/'/, '%27'));
     }, graphs_uri);
 
     uri.setData({'graphs': graphs_uri, safety: 1}, false, 'fragment');
