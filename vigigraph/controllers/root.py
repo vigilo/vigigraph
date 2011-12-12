@@ -94,8 +94,11 @@ class RootController(AuthController):
         except ImportError:
             pass
         else:
-            fhandle = open(ent_filename[:-3] + '.js', 'r')
-            translations += fhandle.read()
-            fhandle.close()
+            # Le nom du fichier sera None s'il n'existe pas
+            # de traductions dans la langue demandée.
+            if ent_filename is not None:
+                fhandle = open(ent_filename[:-3] + '.js', 'r')
+                translations += fhandle.read()
+                fhandle.close()
 
         return translations
