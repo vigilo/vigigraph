@@ -30,7 +30,7 @@ tests_require = [
 
 setup(
     name='vigilo-vigigraph',
-    version='2.0.15',
+    version='2.1.0',
     author='Vigilo Team',
     author_email='contact@projet-vigilo.org',
     url='http://www.projet-vigilo.org',
