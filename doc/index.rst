@@ -10,6 +10,7 @@ Documentation disponible :
 .. toctree::
    :maxdepth: 2
 
+   admin
    util
 
 
