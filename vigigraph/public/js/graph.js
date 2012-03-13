@@ -306,7 +306,8 @@ var Graph = new Class({
     getStartTime: function () {
         var start = this.options.start;
         if (start === null)
-            // @TODO: cette heure est en localtime a priori.
+            // On génère un horodatage UNIX correspondant
+            // à l'heure courante en UTC.
             start = (new Date() / 1000).toInt() - this.options.duration;
         if (start < 0)
             return 0;
@@ -324,6 +325,8 @@ var Graph = new Class({
             graphtemplate: this.graph,
             start: start,
             end: start + this.options.duration,
+            // Décalage par rapport à UTC, ex: 60 = UTC+01:00.
+            timezone: (new Date()).getTimezoneOffset(),
             nocache: (new Date() / 1)
         });
 
