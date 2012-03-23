@@ -22,7 +22,7 @@ VigiGraph accède aux données suivantes :
 - des données de configuration	:	dans les fichiers de configuration,
 - des données de métrologie	:	dans les fichiers RRD,
 - des données de supervision	:	Nagios,
-- des données diverses		:	en Base de Données (Groupes, Serveurs, Graphes, 						Utilisateurs, …).
+- des données diverses		:	en Base de Données (Groupes, Serveurs, Graphes, Utilisateurs, …).
 
 
 Services annexes
