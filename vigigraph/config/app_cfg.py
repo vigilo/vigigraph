@@ -14,8 +14,12 @@ convert them into boolean, for example, you should use the
 
 """
 
+# pylint: disable-msg=W0611
+# W0611: 19: Unused import 'app_globals', 'helpers'
+
 import vigigraph
 from vigilo.turbogears import VigiloAppConfig
+from vigigraph.lib import app_globals, helpers
 
 base_config = VigiloAppConfig('vigigraph')
 base_config.package = vigigraph
