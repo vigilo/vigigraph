@@ -9,8 +9,8 @@ import transaction
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
-from vigilo.models.tables import Host, SupItemGroup, Permission
-from helpers import populateDB
+from vigilo.models.tables import Host, SupItemGroup
+from vigigraph.tests.functional.helpers import populateDB
 
 class TestHostTree(TestController):
     """

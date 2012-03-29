@@ -16,7 +16,6 @@ convert them into boolean, for example, you should use the
 
 import vigigraph
 from vigilo.turbogears import VigiloAppConfig
-from vigigraph.lib import app_globals, helpers
 
 base_config = VigiloAppConfig('vigigraph')
 base_config.package = vigigraph

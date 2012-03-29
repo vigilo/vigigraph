@@ -10,7 +10,7 @@ import transaction, urllib2
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, SupItemGroup, Graph, GraphGroup
-from helpers import populateDB, addGraphs
+from vigigraph.tests.functional.helpers import populateDB, addGraphs
 
 
 class TestSearchForm(TestController):
@@ -41,11 +41,11 @@ class TestSearchForm(TestController):
         """
 
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
-        mainhostgroup = DBSession.query(SupItemGroup).filter(
+        DBSession.query(SupItemGroup).filter(
             SupItemGroup.name == u'mhg').first()
 
         # Récupération du groupe d'hôtes 'hg1' dans la base de données
-        hostgroup1 = DBSession.query(SupItemGroup).filter(
+        DBSession.query(SupItemGroup).filter(
             SupItemGroup.name == u'hg1').first()
 
         # Récupération de l'hôte 'host1' dans la base de données
@@ -334,11 +334,11 @@ class TestSearchForm(TestController):
         """
 
         # Récupération du groupe d'hôtes 'mhg' dans la base de données
-        mainhostgroup = DBSession.query(SupItemGroup).filter(
+        DBSession.query(SupItemGroup).filter(
             SupItemGroup.name == u'mhg').first()
 
         # Récupération du groupe d'hôtes 'hg1' dans la base de données
-        hostgroup1 = DBSession.query(SupItemGroup).filter(
+        DBSession.query(SupItemGroup).filter(
             SupItemGroup.name == u'hg1').first()
 
         # Récupération de l'hôte 'host1' dans la base de données
@@ -351,12 +351,12 @@ class TestSearchForm(TestController):
 
         # Récupération du groupe de graphes
         # 'graphgroup1' dans la base de données
-        graphgroup1 = DBSession.query(GraphGroup).filter(
+        DBSession.query(GraphGroup).filter(
             GraphGroup.name == u'graphgroup1').first()
 
         # Récupération du groupe de graphes
         # 'graphgroup2' dans la base de données
-        graphgroup2 = DBSession.query(GraphGroup).filter(
+        DBSession.query(GraphGroup).filter(
             GraphGroup.name == u'graphgroup2').first()
 
         # Récupération du graphe 'graph1' dans la base de données

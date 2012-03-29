@@ -11,8 +11,7 @@ import transaction, urllib2
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
-from vigilo.models.tables import Host, SupItemGroup, Graph, GraphGroup
-from helpers import populateDB, addGraphs
+from vigigraph.tests.functional.helpers import populateDB, addGraphs
 
 
 class TestFullHostPage(TestController):
@@ -89,7 +88,7 @@ class TestFullHostPage(TestController):
     def test_anonymous(self):
         """Accès à rpc/fullHostPage en anonyme"""
         for host in (u'host1 éà', u'host2 éà', u'host3 éà'):
-            response = self.app.get(
+            self.app.get(
                 '/rpc/fullHostPage?host=%s' %
                     urllib2.quote(host.encode('utf-8'), ''),
                 status=401

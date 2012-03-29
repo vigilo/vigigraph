@@ -4,17 +4,22 @@
 
 """RPC controller for the combobox of vigigraph"""
 
-import time, urlparse, urllib2
+# pylint: disable-msg=W0613
+# W0613: Unused argument : les arguments des contrôleurs sont les composants
+#        de la query-string de l'URL
+
+
+import time
+import urllib2
 import logging
 
-# La fonction parse_qsl a été déplacée dans Python 2.6.
-try:
-    from urlparse import parse_qsl
-except ImportError:
-    from cgi import parse_qsl
+## La fonction parse_qsl a été déplacée dans Python 2.6.
+#try:
+#    from urlparse import parse_qsl
+#except ImportError:
+#    from cgi import parse_qsl
 
 from pylons.i18n import ugettext as _, lazy_ugettext as l_
-from webob.exc import HTTPPreconditionFailed
 from tg import expose, request, redirect, tmpl_context, \
     config, validate, flash, exceptions as http_exc
 
@@ -22,8 +27,6 @@ from repoze.what.predicates import not_anonymous, has_permission, \
                                     in_group, Any, All
 from formencode import schema
 from tw.forms import validators
-from sqlalchemy import or_
-from sqlalchemy.sql.expression import literal_column
 from sqlalchemy.orm import aliased, lazyload
 
 from vigilo.turbogears.controllers import BaseController
@@ -77,7 +80,7 @@ class RpcController(BaseController):
         {"caption" : _("Last year"), "duration" : 86400 * 365},
     ]
 
-    def process_form_errors(self, *argv, **kwargv):
+    def process_form_errors(self, *args, **kwargs):
         """
         Gestion des erreurs de validation : On affiche les erreurs
         puis on redirige vers la dernière page accédée.
@@ -220,7 +223,8 @@ class RpcController(BaseController):
             try:
                 host = kwargs['graphs[%d][host]' % i]
                 graph = kwargs['graphs[%d][graph]' % i]
-                start = int(kwargs.get('graphs[%d][start]' % i, time.time() - 86400))
+                start = int(kwargs.get('graphs[%d][start]' % i,
+                            time.time() - 86400))
                 duration = int(kwargs.get('graphs[%d][duration]' % i))
                 nocache = kwargs['graphs[%d][nocache]' % i]
             except KeyError:
@@ -329,11 +333,12 @@ class RpcController(BaseController):
         @type host : C{str}
         @param start : date-heure de debut des donnees
         @type start : C{str}
-        @param duration : plage de temps des données
+        @param duration : plage de temps des données. Parametre optionnel,
+            initialisé a 86400 = plage de 1 jour.
         @type duration : C{str}
-                         (parametre optionnel, initialise a 86400 = plage de 1 jour)
 
-        @return: page avec les images des graphes et boutons de deplacement dans le temps
+        @return: page avec les images des graphes et boutons de deplacement
+            dans le temps
         @rtype: page html
         """
         if start is None:
@@ -477,6 +482,8 @@ class RpcController(BaseController):
         if not is_manager:
             direct_access = False
             user = get_current_user()
+            # pylint: disable-msg=W0212
+            # W0212: Access to a protected member _grouptype of a client class
 
             # On calcule la distance de ce groupe par rapport aux groupes
             # sur lesquels l'utilisateur a explicitement les permissions.
@@ -495,8 +502,10 @@ class RpcController(BaseController):
                     GroupHierarchy.hops
                 ).join(
                     (Group, Group.idgroup == GroupHierarchy.idparent),
-                    (DataPermission, DataPermission.idgroup == Group.idgroup),
-                    (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
+                    (DataPermission,
+                        DataPermission.idgroup == Group.idgroup),
+                    (UserGroup,
+                        UserGroup.idgroup == DataPermission.idusergroup),
                     (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                         UserGroup.idgroup),
                 ).filter(USER_GROUP_TABLE.c.username == user.user_name
@@ -510,8 +519,10 @@ class RpcController(BaseController):
                         GroupHierarchy.hops
                     ).join(
                         (Group, Group.idgroup == GroupHierarchy.idchild),
-                        (DataPermission, DataPermission.idgroup == Group.idgroup),
-                        (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
+                        (DataPermission,
+                            DataPermission.idgroup == Group.idgroup),
+                        (UserGroup,
+                            UserGroup.idgroup == DataPermission.idusergroup),
                         (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                             UserGroup.idgroup),
                     ).filter(USER_GROUP_TABLE.c.username == user.user_name
@@ -552,9 +563,12 @@ class RpcController(BaseController):
                 # des fils de l'un de ces groupes.
                 db_groups = db_groups.join(
                         (gh2, gh2.idparent == gh1.idchild),
-                        (DataPermission, DataPermission.idgroup == gh2.idchild),
-                        (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
-                        (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
+                        (DataPermission,
+                            DataPermission.idgroup == gh2.idchild),
+                        (UserGroup,
+                            UserGroup.idgroup == DataPermission.idusergroup),
+                        (USER_GROUP_TABLE,
+                            USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
                     ).filter(USER_GROUP_TABLE.c.username == user.user_name)
 
             num_children_left = db_groups.count() - offset
@@ -627,7 +641,6 @@ class RpcController(BaseController):
         if host_id is None:
             return dict(groups = [], graphs=[])
 
-        limit = int(config.get("max_menu_entries", 20))
         # On vérifie les permissions sur l'hôte
         # TODO: Utiliser un schéma de validation
         host_id = int(host_id)

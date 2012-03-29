@@ -5,9 +5,14 @@
 
 """Vigigraph Controller"""
 
+# pylint: disable-msg=W0613
+# W0613: Unused argument : les arguments des contrôleurs sont les composants
+#        de la query-string de l'URL
+
+
 import logging
-from tg import expose, flash, require, request, redirect
-from pylons.i18n import ugettext as _, lazy_ugettext as l_, get_lang
+from tg import expose, require
+from pylons.i18n import lazy_ugettext as l_, get_lang
 from repoze.what.predicates import Any, All, not_anonymous, \
                                     has_permission, in_group
 from pkg_resources import resource_filename

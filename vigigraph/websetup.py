@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """Setup the vigigraph application"""
 
+# pylint: disable-msg=W0613
+# W0613: Unused argument
+
 __all__ = ['setup_app', 'populate_db']
 
 def setup_app(command, conf, variables):

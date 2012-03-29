@@ -10,7 +10,7 @@ import transaction
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, Graph, GraphGroup
-from helpers import populateDB, addGraphs
+from vigigraph.tests.functional.helpers import populateDB, addGraphs
 
 
 class TestGraphTree(TestController):
