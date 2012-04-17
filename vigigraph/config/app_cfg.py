@@ -23,7 +23,7 @@ from vigilo.turbogears import VigiloAppConfig
 from vigigraph.lib import app_globals, helpers # pylint: disable-msg=W0611
 # W0611: Unused import: imports nécessaires pour le fonctionnement
 
-base_config = VigiloAppConfig('vigigraph')
+base_config = VigiloAppConfig('VigiGraph')
 base_config.package = vigigraph
 
 base_config["external_links"] = [
