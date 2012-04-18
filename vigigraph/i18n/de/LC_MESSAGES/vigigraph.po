@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vigigraph 2.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-11-19 14:52+0100\n"
-"PO-Revision-Date: 2011-09-09 15:27+0200\n"
+"PO-Revision-Date: 2012-04-18 17:37+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -18,74 +18,56 @@ msgstr ""
 "Generated-By: Babel 0.9.4\n"
 
 #: vigigraph/controllers/root.py:34 vigigraph/controllers/root.py:36
-#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:58
+#: vigigraph/controllers/root.py:41 vigigraph/controllers/rpc.py:60
 msgid "You need to be authenticated"
 msgstr "Sie müssen sich authentifizieren"
 
-#: vigigraph/controllers/root.py:45 vigigraph/controllers/rpc.py:62
+#: vigigraph/controllers/root.py:45 vigigraph/controllers/rpc.py:64
 msgid "You don't have access to VigiGraph"
 msgstr "Sie haben keinen Zugriff auf VigiGraph"
 
-#: vigigraph/controllers/root.py:108
-msgid "Wrong credentials"
-msgstr "Ungültige Anmeldeinformationen"
-
-#: vigigraph/controllers/root.py:123
-#, python-format
-msgid "\"%(username)s\" logged in (from %(IP)s)"
-msgstr "\"%(username)n\" (aus %(IP)s) angemeldet"
-
-#: vigigraph/controllers/root.py:127
-#, python-format
-msgid "Welcome back, %s!"
-msgstr "Willkommen  %s!"
-
-#: vigigraph/controllers/root.py:137
-#, python-format
-msgid "Some user logged out (from %(IP)s)"
-msgstr "Ein Benutzer (aus %(IP)s) hat sich abgemeldet"
-
-#: vigigraph/controllers/root.py:140
-msgid "We hope to see you soon!"
-msgstr "Bis bald!"
-
-#: vigigraph/controllers/rpc.py:67 vigigraph/controllers/rpc.py:68
+#: vigigraph/controllers/rpc.py:69 vigigraph/controllers/rpc.py:70
 #, python-format
 msgid "Last %d hours"
 msgstr "Letzte %d Studen"
 
-#: vigigraph/controllers/rpc.py:69 vigigraph/controllers/rpc.py:70
-#: vigigraph/controllers/rpc.py:71
+#: vigigraph/controllers/rpc.py:71 vigigraph/controllers/rpc.py:72
+#: vigigraph/controllers/rpc.py:73
 #, python-format
 msgid "Last %d days"
 msgstr "Letzte %d Tage"
 
-#: vigigraph/controllers/rpc.py:72 vigigraph/public/js/graph.js:47
+#: vigigraph/controllers/rpc.py:74 vigigraph/public/js/graph.js:47
 #, fuzzy
 msgid "Last month"
 msgstr "Letzte %d Monate"
 
-#: vigigraph/controllers/rpc.py:73 vigigraph/controllers/rpc.py:74
+#: vigigraph/controllers/rpc.py:75 vigigraph/controllers/rpc.py:76
 #, python-format
 msgid "Last %d months"
 msgstr "Letzte %d Monate"
 
-#: vigigraph/controllers/rpc.py:75 vigigraph/public/js/graph.js:50
+#: vigigraph/controllers/rpc.py:77 vigigraph/public/js/graph.js:50
 msgid "Last year"
 msgstr "Letztes Jahr"
 
 #. TRANSLATORS: Format Python de date/heure, lisible par un humain.
-#: vigigraph/controllers/rpc.py:213
+#: vigigraph/controllers/rpc.py:215
 #, python-format
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #: vigigraph/controllers/rpc.py:359
 #, python-format
+msgid "No such host \"%s\""
+msgstr ""
+
+#: vigigraph/controllers/rpc.py:368
+#, python-format
 msgid "Access denied to host \"%s\""
 msgstr ""
 
-#: vigigraph/controllers/rpc.py:523 vigigraph/controllers/rpc.py:556
+#: vigigraph/controllers/rpc.py:573 vigigraph/controllers/rpc.py:606
 #, python-format
 msgid "Next %(limit)s"
 msgstr ""
