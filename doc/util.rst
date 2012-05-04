@@ -3,10 +3,10 @@ Guide d'utilisation
 ********************
 
 Description générale de l'application
-#####################################
+=====================================
 
 Présentation
-============
+------------
 L'objectif de VigiGraph est de fournir une interface unifiée d'accès à
 l'ensemble des applications web de supervision et de métrologie (Nagios,
 VigiRRD), alors même que ces interfaces sont réparties sur plusieurs serveurs.
@@ -16,7 +16,7 @@ Cette interface permet, en quelques clics, d'afficher les données de supervisio
 Pour les graphiques, l'impression et l'export (sous forme de fichier CSV) sont de plus possibles.
 
 Principales données accessibles
-===============================
+-------------------------------
 VigiGraph accède aux données suivantes :
 
 - des données de configuration	:	dans les fichiers de configuration,
@@ -26,26 +26,26 @@ VigiGraph accède aux données suivantes :
 
 
 Services annexes
-================
+----------------
 Néant.
 
 Utilisateurs
-============
+------------
 
 Authentification d'un utilisateur
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Un utilisateur s'authentifie à l'aide de deux informations : un identifiant et un mot de passe.
 
 Utilisation de l'application
-############################
+============================
 
 Configuration pré-requise
-=========================
+-------------------------
 L'application s'utilise via un navigateur web, au travers d'une adresse internet (URL). Cette adresse vous a été transmise par votre administrateur.
 Le reste de ce document présente des captures d'écran réalisées sous Mozilla Firefox 3.6. D'autres navigateurs ou d'autres versions du navigateur Mozilla Firefox peuvent également être utilisés. Certaines fonctionnalités font appel à des outils intégrés au navigateur (marque-pages, moteurs de recherche, …) et peuvent ne pas être disponibles sur votre navigateur ou nécessiter une légère adaptation.
 
 Procédure de connexion
-======================
+----------------------
 
 - Sur le Poste Client, lancer le navigateur web
   → la page d'accueil du navigateur s'affiche
@@ -94,7 +94,7 @@ Cette page comporte en particulier un formulaire de saisie : la fenêtre de sé
 
 
 Procédure de déconnexion
-========================
+------------------------
 Cliquer sur le bouton « Déconnexion »
 .. image:: img/logout_button.png
 
@@ -104,7 +104,7 @@ et un message s'affiche vous indiquant que vous avez bien été déconnecté
 de l'application.
 
 Fonctionnalités
-###############
+===============
 Les fonctionnalités suivantes sont supportées :
 
 - Recherche
@@ -118,7 +118,7 @@ Les fonctionnalités suivantes sont supportées :
 
 
 Sélection d'un hôte / graphe
-============================
+----------------------------
 L'accès à certaines des fonctionnalités de VigiGraph nécessite que les champs de la barre de sélection soient renseignés. Les champs pouvant être modifiés sont ceux qui disposent d'une flèche pointant vers le bas
 .. image:: img/100000000000000E000000106713413D.png
 
@@ -151,7 +151,7 @@ Lorsque ce second champ est rempli, le graphe sélectionné est alors automatiqu
 Le renseignement de chacun des champs constitutifs de cette fenêtre s'effectue par choix dans une liste établie d'après les valeurs présentes en base de données.
 
 Recherche
-=========
+---------
 Cette fenêtre permet l'affichage de la liste des couples Hôtes - Graphes.
 L'activation s'effectue par un clic sur l'icône en forme de loupe
 .. image:: img/100002010000001800000018D51A653F.png
@@ -205,7 +205,7 @@ Un clic sur le bouton
  en haut à droite de la fenêtre de recherche provoque la fermeture de cette fenêtre.
 
 Consultation d'un graphe
-========================
+------------------------
 Cette fonctionnalité permet de consulter un graphe. Elle se rapporte au serveur et au graphe sélectionnés dans la barre de sélection (voir chapitre ). Les données exploitées sont extraites des fichiers RRD.
 L'affichage s'effectue dans une boîte de dialogue distincte, comme présenté dans l'illustration .
 
@@ -263,7 +263,7 @@ Un clic sur le bouton
  en haut à droite de la fenêtre du graphe provoque la fermeture de cette fenêtre.
 
 Consultation d'une page de supervision
-======================================
+--------------------------------------
 Cette fonctionnalité permet de consulter les données Nagios. Elle se rapporte à l'hôte actuellement sélectionné (voir chapitre ).
 L'activation s'effectue par un clic sur le bouton « Page Nagios » dans la barre de sélection d'un hôte, cerclé de rouge sur l'illustration  qui suit. L'intitulé de l'info-bulle d'aide est « Affiche la page Nagios de l'hôte sélectionné ».
 Cette visualisation n'est possible qu'après renseignement des trois premiers champs de la fenêtre.
@@ -280,7 +280,7 @@ L'affichage s'effectue dans une page distincte. Un exemple de ce type de page es
 
 
 Consultation de l'ensemble des graphes de métrologie d'un hôte
-==============================================================
+--------------------------------------------------------------
 Cette fonctionnalité permet de consulter l'ensemble des graphes de métrologie
 d'un hôte. Elle se rapporte à l'hôte actuellement sélectionné (voir chapitre ).
 L'activation s'effectue par un clic sur le bouton « Page de métrologie » dans
@@ -303,7 +303,7 @@ L'affichage s'effectue dans une page distincte. Un exemple de ce type de page es
 
 
 Impression d'un graphe
-======================
+----------------------
 Cette fonctionnalité permet d'imprimer le graphe courant tel qu'il est présenté à l'écran.
 L'activation de l'impression s'effectue par un clic dans la fenêtre du graphe sur le bouton
 .. image:: img/100002010000001000000010DAA1BEF7.png
@@ -325,7 +325,7 @@ Une fenêtre d'impression s'affiche alors.
 Après renseignement des paramètres d'impression et validation, cette fenêtre se referme et l'impression commence.
 
 Export d'un graphe
-==================
+------------------
 Cette fonctionnalité permet d'exporter le graphe courant.
 L'activation de l'export s'effectue par un clic dans la fenêtre du graphe sur le bouton « 
 .. image:: img/1000020100000010000000103A35F438.png
@@ -361,7 +361,7 @@ La colonne « Timestamp » correspond à un horodatage UNIX (temps écoulé de
 Les données sont triées par horodatage croissant dans le fichier exporté.
 
 Rafraîchissement automatique d'un graphe
-========================================
+----------------------------------------
 Cette fonctionnalité permet de réactualiser un graphe périodiquement.
 La période figure dans un fichier de configuration ; elle est exprimée en secondes. Par défaut, elle est initialisée à 30 secondes. Cette donnée n'est pas modifiable via l'application. Elle est gérée par l'administrateur système.
 L'activation s'effectue par un clic sur le bouton
@@ -385,7 +385,7 @@ Un bouton global
  permet également d'activer ou de désactiver le rafraîchissement automatique sur l'ensemble des graphes visibles à l'écran. Le comportement de ce bouton est similaire à celui du bouton positionné sur chaque fenêtre de graphe : un clic permet d'activer le rafraîchissement (le bouton apparaît alors enfoncé), un nouveau clic désactive le rafraîchissement (le bouton apparaît alors relâché).
 
 Impression de l'ensemble des graphes
-====================================
+------------------------------------
 Cette fonctionnalité permet l'impression de tous les graphes affichés à l'écran.
 L'activation s'effectue par un clic sur le bouton
 .. image:: img/100002010000001000000010DAA1BEF7.png
@@ -404,7 +404,7 @@ Une fenêtre d'impression s'affiche alors, comme sur l'illustration .
 Après renseignement des paramètres d'impression et validation, cette fenêtre se referme et l'impression s'effectue.
 
 Sauvegarde de l'affichage
-=========================
+-------------------------
 Cette fonctionnalité permet de sauvegarder un ensemble de graphes affichés à l'écran pour des opérations ultérieures.
 La constitution de la sélection s'effectue via le navigateur, en ajoutant un marque-page, à l'aide des étapes suivantes :
 
@@ -423,7 +423,7 @@ Le rappel de la sélection s'effectue également via le navigateur, en utilisant
 
 
 Moteur de recherche
-===================
+-------------------
 La phase de recherche nécessite au préalable l'enregistrement du moteur de recherche de VigiGraph au sein du navigateur. Cette déclaration ne doit être effectuée qu'une seule fois.
 Pour enregistrer le moteur de recherche :
 
@@ -460,11 +460,12 @@ Dans cette page, sur chaque ligne, figurent :
 Un clic sur l'un de ces liens remplace la page courante par la page demandée.
 Le lien intitulé « Page de métrologie » permet de consulter l'ensemble des graphes de l'hôte concerné. Le lien intitulé « Page de supervision » donne accès à la page de supervision de l'hôte concerné dans Nagios.
 
+
 Description de l'interface
-##########################
+==========================
 
 Architecture statique d'un écran
-================================
+--------------------------------
 Un écran comporte :
 
 - une barre de titre
@@ -474,7 +475,7 @@ Un écran comporte :
 
 
 Dynamique des écrans
-====================
+--------------------
 On distingue deux types d'écran:
 
 - page	:	ressource web (associée à une URL)
@@ -484,10 +485,10 @@ L'activation d'une URL dans le navigateur, d'un lien dans une page ou d'un bouto
 Le positionnement de la souris sur un bouton provoque l'affichage de l'intitulé d'aide associé (s'il y a lieu).
 
 Écrans
-======
+------
 
 Formulaire d'authentification
------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Ce formulaire permet la saisie des informations d'authentification.
 Il s'affiche au lancement.
 
@@ -496,7 +497,7 @@ Il s'affiche au lancement.
 
 
 Page VigiGraph
---------------
+^^^^^^^^^^^^^^
 Cette page autorise les opérations de visualisation (graphes et pages), d'impression (graphes) et de recherche (hôtes et graphes).
 Elle s'affiche une fois l'authentification effectuée.
 
@@ -506,7 +507,7 @@ Elle s'affiche une fois l'authentification effectuée.
 La visualisation s'effectue via la barre de sélection d'un hôte / graphe.
 
 Barre de sélection d'un hôte / graphe
--------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Cette barre se présente comme suit :
 
 ..  figure:: img/selection_bar.png
@@ -516,7 +517,7 @@ Dans cette barre, les champs suivis d'une flèche pointant vers le bas permetten
 Une fois l'hôte sélectionné, les boutons d'affichage de la page Nagios, de la page de métrologie et de sélection du graphe s'activent. Une fois le nom du graphe à afficher sélectionné, celui-ci apparaît à l'écran.
 
 Graphe
-------
+^^^^^^
 Cette fenêtre permet la visualisation d'un graphe.
 
 ..  figure:: img/graph_window.png
@@ -588,7 +589,7 @@ La fermeture de cette fenêtre s'effectue par un clic sur le bouton système
 .
 
 Page de supervision
--------------------
+^^^^^^^^^^^^^^^^^^^
 Cette page permet la visualisation des données Nagios pour un hôte.
 
 ..  figure:: img/nagios_page.png
@@ -596,7 +597,7 @@ Cette page permet la visualisation des données Nagios pour un hôte.
 
 
 Impression
-----------
+^^^^^^^^^^
 Cette fenêtre est destinée à saisir les paramètres d'impression. Elle s'affiche après déclenchement d'une demande d'impression.
 
 ..  figure:: img/print_dialog.png
@@ -604,7 +605,7 @@ Cette fenêtre est destinée à saisir les paramètres d'impression. Elle s'affi
 
 
 Export CSV
-----------
+^^^^^^^^^^
 Cette fenêtre est destinée à saisir les paramètres d'export.
 Elle s'affiche après activation d'un export.
 
@@ -632,7 +633,7 @@ Champ             Correspondance    Détail
 
 
 Recherche
----------
+^^^^^^^^^
 Cette fenêtre permet l'affichage de la liste des couples Hôtes-Graphes.
 Elle se présente comme suit :
 
@@ -664,7 +665,7 @@ Si seule la zone de saisie « Hôte » a été renseignée, alors les résulta
 Un clic dans la zone d'affichage des résultats sur le nom d'un graphe déclenche l'ouverture de ce graphe. Un clic sur le nom d'un hôte pré-sélectionne cet hôte dans la barre de sélection.
 
 Format des sorties
-##################
+==================
 VigiGraph permet des sorties :
 
 - écran	:	affichage des graphes et des pages de supervision
@@ -684,7 +685,7 @@ L'administrateur peut choisir de paramétrer différemment l'export (notamment l
 
 
 Annexes
-#######
+=======
 
 .. include:: ../../turbogears/doc/glossaire.rst
 
