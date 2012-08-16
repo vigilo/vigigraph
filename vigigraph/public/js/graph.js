@@ -7,7 +7,7 @@ var graphs = [];
 var old_fragment = '';
 var skip_detection = 0;
 
-var logger = new Log;
+var logger = new Log();
 logger.enableLog();
 
 var Graph = new Class({

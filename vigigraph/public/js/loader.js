@@ -16,7 +16,7 @@ var Loader = new Class({
         window.addEvent('domready', function () {
             this.element = $("loading");
         }.bind(this));
-        this.logger = (new Log).enableLog();
+        this.logger = (new Log()).enableLog();
     },
 
     show: function() {
