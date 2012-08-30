@@ -38,16 +38,29 @@ var Graph = new Class({
         }).get({'host': this.host});
 
         var toolbar = new Jx.Toolbar({position:'top'});
+        var ngettext = function (singular, plural, n) {
+            // Retourne une version pluralisée de la période de temps,
+            // tout en supportant les substitutions au format de Python.
+            // En particulier, "%(qtty)d" est remplacé par le nombre d'unités.
+            return window.ngettext(singular, plural, n).substitute(
+                {
+                    'qtty': n
+                },
+                /%\(([a-z]+)\)[dui]/g
+            );
+        }
+        // Périodes de temps disponibles.
+        // Voir aussi RpcController.presets pour l'équivalent côté Python.
         var periods = [
-            [_('Last 12 hours'),    12],
-            [_('Last 24 hours'),    24],
-            [_('Last 48 hours'),    48],
-            [_('Last 7 days'),      7*24],
-            [_('Last 14 days'),     14*24],
-            [_('Last month'),       30*24],
-            [_('Last 3 months'),    3*30*24],
-            [_('Last 6 months'),    6*30*24],
-            [_('Last year'),        365*24]
+            [ngettext('Last %(qtty)d hour',  'Last %(qtty)d hours', 12),        12],
+            [ngettext('Last %(qtty)d hour',  'Last %(qtty)d hours', 24),        24],
+            [ngettext('Last %(qtty)d hour',  'Last %(qtty)d hours', 48),        48],
+            [ngettext('Last %(qtty)d day',   'Last %(qtty)d days',   7),      7*24],
+            [ngettext('Last %(qtty)d day',   'Last %(qtty)d days',  14),     14*24],
+            [ngettext('Last %(qtty)d month', 'Last %(qtty)d months', 1),     30*24],
+            [ngettext('Last %(qtty)d month', 'Last %(qtty)d months', 3),   3*30*24],
+            [ngettext('Last %(qtty)d month', 'Last %(qtty)d months', 6),   6*30*24],
+            [ngettext('Last %(qtty)d year',  'Last %(qtty)d years',  1),    365*24]
         ];
 
         var timeframe = new Jx.Menu({

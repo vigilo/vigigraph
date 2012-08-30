@@ -19,7 +19,8 @@ import logging
 #except ImportError:
 #    from cgi import parse_qsl
 
-from pylons.i18n import ugettext as _, lazy_ugettext as l_
+from pylons.i18n import ugettext as _, lazy_ugettext as l_, \
+                        lazy_ungettext as ln_
 from tg import expose, request, redirect, tmpl_context, \
     config, validate, flash, exceptions as http_exc
 
@@ -51,6 +52,10 @@ LOGGER = logging.getLogger(__name__)
 
 __all__ = ['RpcController']
 
+def ungettext(singular, plural, n):
+    return ln_(singular, plural, n) % {
+        'qtty': n,
+    }
 
 # pylint: disable-msg=R0201
 class RpcController(BaseController):
@@ -68,16 +73,55 @@ class RpcController(BaseController):
         ),
     )
 
+    # Plages de temps affichées sur la page de métrologie complète
+    # d'un hôte avec la durée associée (en secondes).
+    # Voir aussi graph.js pour l'équivalent côté JavaScript sur un graphe.
     presets = [
-        {"caption" : _("Last %d hours") %  12, "duration" : 43200},
-        {"caption" : _("Last %d hours") %  24, "duration" : 86400},
-        {"caption" : _("Last %d days") %    2, "duration" : 192800},
-        {"caption" : _("Last %d days") %    7, "duration" : 604800},
-        {"caption" : _("Last %d days") %   14, "duration" : 1209600},
-        {"caption" : _("Last month")         , "duration" : 86400 * 31},
-        {"caption" : _("Last %d months") %  3, "duration" : 86400 * 31 * 3},
-        {"caption" : _("Last %d months") %  6, "duration" : 86400 * 183},
-        {"caption" : _("Last year"), "duration" : 86400 * 365},
+        {
+            "caption" :
+                ungettext("Last %(qtty)d hour", "Last %(qtty)d hours", 12),
+            "duration" : 43200,
+        },
+        {
+            "caption" :
+                ungettext("Last %(qtty)d hour", "Last %(qtty)d hours", 24),
+            "duration" : 86400,
+        },
+        {
+            "caption" :
+                ungettext("Last %(qtty)d day", "Last %(qtty)d days", 2),
+            "duration" : 192800,
+        },
+        {
+            "caption" :
+                ungettext("Last %(qtty)d day", "Last %(qtty)d days", 7),
+            "duration" : 604800,
+        },
+        {
+            "caption" :
+                ungettext("Last %(qtty)d day", "Last %(qtty)d days", 14),
+            "duration" : 1209600,
+        },
+        {
+            "caption" :
+                ungettext("Last %(qtty)d month", "Last %(qtty)d months", 1),
+            "duration" : 86400 * 30,
+        },
+        {
+            "caption" :
+                ungettext("Last %(qtty)d month", "Last %(qtty)d months", 3),
+            "duration" : 86400 * 30 * 3,
+        },
+        {
+            "caption" :
+                ungettext("Last %(qtty)d month", "Last %(qtty)d months", 6),
+            "duration" : 86400 * 30 * 6,
+        },
+        {
+            "caption" :
+                ungettext("Last %(qtty)d year", "Last %(qtty)d years", 1),
+            "duration" : 86400 * 365,
+        },
     ]
 
     def process_form_errors(self, *args, **kwargs):
