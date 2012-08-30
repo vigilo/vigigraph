@@ -15,7 +15,6 @@ except ImportError:
 
 from pylons.i18n import ugettext as _, lazy_ugettext as l_, \
                         lazy_ungettext as ln_
-from webob.exc import HTTPPreconditionFailed
 from tg import expose, request, redirect, tmpl_context, \
     config, validate, flash, exceptions as http_exc
 
