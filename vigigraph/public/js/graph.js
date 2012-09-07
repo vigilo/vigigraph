@@ -48,7 +48,8 @@ var Graph = new Class({
                 },
                 /%\(([a-z]+)\)[dui]/g
             );
-        }
+        };
+
         // Périodes de temps disponibles.
         // Voir aussi RpcController.presets pour l'équivalent côté Python.
         var periods = [
@@ -141,12 +142,13 @@ var Graph = new Class({
                 this.refreshTimer =
                     this.updateGraph.periodical(delay * 1000, this);
                 this.options.autoRefresh = 1;
-                logger.log((_(
+                logger.log(
                     'Auto-refresh enabled on graph "{graph}" for host "{host}"'
-                    )).substitute({
+                    .substitute({
                         'graph': this.graph,
                         'host': this.host
-                    }));
+                    })
+                );
                 window.updateURI();
             }.bind(this),
             onUp: function() {
@@ -155,12 +157,13 @@ var Graph = new Class({
                 // la référence, ce dont on a besoin (cf. onDown).
                 this.refreshTimer = null;
                 this.options.autoRefresh = 0;
-                logger.log((_(
+                logger.log(
                     'Auto-refresh disabled on graph "{graph}" for host "{host}"'
-                    )).substitute({
+                    .substitute({
                         'graph': this.graph,
                         'host': this.host
-                    }));
+                    })
+                );
                 window.updateURI();
             }.bind(this)
         });
@@ -374,6 +377,9 @@ var Graph = new Class({
     },
 
     updateGraph: function () {
+        logger.log("Updating graph for '" + this.graph +
+                   "' on '" + this.host + "'");
+
         var uri = new URI(app_path + 'vigirrd/' +
             encodeURIComponent(this.host) + '/graph.png');
 
@@ -388,21 +394,33 @@ var Graph = new Class({
             // Nécessaire car le graphe évolue dynamiquement au fil de l'eau.
             nocache: (new Date() / 1)
         });
+
+        // Si possible, on remplace la précédente image.
+        var img = this.graph_window.content.getElement('img');
+        if (img !== null) {
+            img.set('src', uri.toString());
+            return;
+        }
+
         // On génère dynamiquement une balise "img" pour charger le graphe.
         this.graph_window.setContent(
             '<img src="' + uri.toString() + '"/' + '>');
-        var img = this.graph_window.content.getElement('img');
+        img = this.graph_window.content.getElement('img');
+
         img.addEvent('load', function () {
-            this[0].graph_window.resize(
-                this[1].width + 25,
-                this[1].height + 73
+            // On ne peut pas réutiliser "img" directement ici,
+            // car on génère une boucle dans les références JS
+            // (ce qui donne lieu à une fuite mémoire).
+            var content_img = this.graph_window.content.getElement('img');
+            this.graph_window.resize(
+                content_img.width + 25,
+                content_img.height + 73
             );
-            this[0].hideAlert();
-        }.bind([this, img]));
+            this.hideAlert();
+        }.bind(this));
+
         img.addEvent('error', function () {
-            // if (this.refreshTimer) clearInterval(this.refreshTimer);
             this.showAlert();
-            //this.graph_window.close();
         }.bind(this));
     },
 
@@ -419,6 +437,8 @@ var Graph = new Class({
 });
 
 var updateURI = function () {
+    logger.log("Updating the current window's URI");
+
     var graphs_uri = [];
     var uri = new URI();
 
@@ -445,6 +465,8 @@ var updateURI = function () {
 };
 
 var update_visible_graphs = function (new_fragment) {
+    logger.log("Updating visible graphs");
+
     // On réouvre les graphes précédemment chargés.
     var new_graphs = [];
     var qs = new Hash(new_fragment.get('fragment').parseQueryString());
