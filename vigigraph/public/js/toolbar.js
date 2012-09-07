@@ -61,12 +61,6 @@ Jx.Button.SelectorFlyout = new Class({
         this.hostid = hostid;
     },
 
-    //clicked: function (e) {
-    //    if (!this.options.enabled)
-    //        return;
-    //    this.tree.selectGroup();
-    //},
-
     redraw: function() {
         this.tree.clear();
         this.tree.load();
@@ -106,7 +100,6 @@ var Toolbar = new Class({
         this.global_refresh = new Jx.Button({
             label: _('Refresh'),
             tooltip: _('Globally change auto-refresh setting'),
-            //image: app_path + 'images/refresh-all.png',
             image: app_path + 'images/refresh.png',
             toggle: true,
             onDown: function () {
