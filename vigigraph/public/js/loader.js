@@ -43,7 +43,7 @@ var Loader = new Class({
 loader = new Loader();
 
 // Affichage du loader pour chaque requete
-Request = Class.refactor(Request, {
+window.Request = Class.refactor(Request, {
     initialize: function(options){
         this.previous(options);
         this.addEvent("onRequest", loader.show.bind(loader));
