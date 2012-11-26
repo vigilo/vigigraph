@@ -1,7 +1,10 @@
 NAME := vigigraph
 
-SUBST_FILES := deployment/logrotate.conf deployment/settings.ini \
-               deployment/vigigraph.conf deployment/vigigraph.wsgi
+SUBST_FILES := \
+	deployment/logrotate.conf \
+	deployment/settings.ini   \
+	deployment/vigigraph.conf \
+	deployment/vigigraph.wsgi
 
 all: build
 build: $(SUBST_FILES)
@@ -13,6 +16,7 @@ JSFILES = vigigraph/public/js
 
 deployment/%: deployment/%.in
 	sed -e 's,@SYSCONFDIR@,$(SYSCONFDIR),g' \
+	    -e 's,@HTTPD_USER@,$(HTTPD_USER),g' \
 	    -e 's,@LOCALSTATEDIR@,$(LOCALSTATEDIR),g' $^ > $@
 
 install: build install_python install_data
