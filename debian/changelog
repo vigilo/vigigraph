@@ -1,0 +1,11 @@
+vigilo-vigigraph (3.0.0.dev-g3e987b6-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Francois Poirotte <francois.poirotte@c-s.fr>  Sat, 24 Nov 2012 13:06:43 +0100
+
+vigilo-vigigraph (2.1.2.dev-g0d9fe29-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Francois Poirotte <francois.poirotte@c-s.fr>  Sat, 10 Nov 2012 21:16:32 +0100

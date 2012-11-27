@@ -1,0 +1,2 @@
+/etc/vigilo/vigigraph/vigigraph.conf            /etc/apache2/sites-available/vigilo-vigigraph.conf
+/usr/share/pyshared/vigigraph/config/app_cfg.py /etc/vigilo/vigigraph/app_cfg.py
