@@ -18,6 +18,7 @@ from repoze.what.predicates import Any, All, not_anonymous, \
 from pkg_resources import resource_filename
 
 from vigilo.turbogears.controllers.auth import AuthController
+from vigilo.turbogears.controllers.custom import CustomController
 from vigilo.turbogears.controllers.error import ErrorController
 from vigilo.turbogears.controllers.proxy import ProxyController
 from vigilo.turbogears.controllers.api.root import ApiRootController
@@ -40,6 +41,7 @@ class RootController(AuthController):
     vigirrd = ProxyController('vigirrd', '/vigirrd/',
         not_anonymous(l_('You need to be authenticated')))
     api = ApiRootController("/api")
+    custom = CustomController()
 
     @expose('index.html')
     @require(All(
