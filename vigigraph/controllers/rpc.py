@@ -526,8 +526,6 @@ class RpcController(BaseController):
         if not is_manager:
             direct_access = False
             user = get_current_user()
-            # pylint: disable-msg=W0212
-            # W0212: Access to a protected member _grouptype of a client class
 
             # On calcule la distance de ce groupe par rapport aux groupes
             # sur lesquels l'utilisateur a explicitement les permissions.
@@ -553,7 +551,7 @@ class RpcController(BaseController):
                     (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                         UserGroup.idgroup),
                 ).filter(USER_GROUP_TABLE.c.username == user.user_name
-                ).filter(Group._grouptype == u'supitemgroup'
+                ).filter(Group.grouptype == u'supitemgroup'
                 ).filter(GroupHierarchy.idchild == parent_id
                 ).order_by(GroupHierarchy.hops.desc()).scalar()
 
@@ -570,7 +568,7 @@ class RpcController(BaseController):
                         (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                             UserGroup.idgroup),
                     ).filter(USER_GROUP_TABLE.c.username == user.user_name
-                    ).filter(Group._grouptype == u'supitemgroup'
+                    ).filter(Group.grouptype == u'supitemgroup'
                     ).filter(GroupHierarchy.idparent == parent_id
                     ).order_by(GroupHierarchy.hops.desc()).scalar()
                 if distance is not None:
