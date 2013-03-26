@@ -40,7 +40,7 @@ class RootController(AuthController):
         not_anonymous(l_('You need to be authenticated')))
     vigirrd = ProxyController('vigirrd', '/vigirrd/',
         not_anonymous(l_('You need to be authenticated')))
-    api = ApiRootController("/api")
+    api = ApiRootController()
     custom = CustomController()
 
     @expose('index.html')
