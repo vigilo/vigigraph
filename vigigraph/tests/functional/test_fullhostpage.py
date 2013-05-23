@@ -7,7 +7,7 @@ Tests les accès à la page rpc/fullHostPage
 permettant d'afficher tous les graphes
 associés à un hôte.
 """
-import transaction, urllib
+import transaction, urllib2
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
@@ -40,20 +40,20 @@ class TestFullHostPage(TestController):
             if hosts[host]:
                 response = self.app.get(
                     '/rpc/fullHostPage?host=%s' %
-                        urllib.quote_plus(host.encode('utf-8')),
+                        urllib2.quote(host.encode('utf-8')),
                     extra_environ={"REMOTE_USER": user}
                 )
                 index = int(host[4])
                 self.assertTrue(
                     '/vigirrd/%s/index?graphtemplate=%s' % (
-                        urllib.quote((u'host%d éà' % index).encode('utf-8'), ''),
-                        urllib.quote_plus((u'graph%d éà' % index).encode('utf-8')),
+                        urllib2.quote((u'host%d éà' % index).encode('utf-8')),
+                        urllib2.quote((u'graph%d éà' % index).encode('utf-8')),
                     ) in response.unicode_body
                 )
             else:
                 response = self.app.get(
                     '/rpc/fullHostPage?host=%s' %
-                        urllib.quote_plus(host.encode('utf-8')),
+                        urllib2.quote(host.encode('utf-8')),
                     extra_environ={"REMOTE_USER": user},
                     status = 403
                 )
@@ -90,7 +90,7 @@ class TestFullHostPage(TestController):
         for host in (u'host1 éà', u'host2 éà', u'host3 éà'):
             self.app.get(
                 '/rpc/fullHostPage?host=%s' %
-                    urllib.quote_plus(host.encode('utf-8')),
+                    urllib2.quote(host.encode('utf-8'), ''),
                 status=401
             )
 
