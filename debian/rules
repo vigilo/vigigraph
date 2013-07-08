@@ -37,6 +37,7 @@ ifneq "$(shell dh_listpackages | grep -- -doc)" ""
 	PYTHONPATH=src/ /usr/bin/sphinx-build -b html -d doc/_build/doctrees \
 	                    -D version=$(VERSION) -D release=$(VERSION) \
 	                    doc/ debian/$(PKGNAME)-doc/usr/share/doc/$(PKGNAME)-doc/html/
+	cp -f COPYING.txt README.txt debian/$(PKGNAME)-doc/usr/share/doc/$(PKGNAME)-doc/
 endif
 
 override_dh_sphinxdoc:
