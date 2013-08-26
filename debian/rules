@@ -31,12 +31,10 @@ override_dh_auto_build:
 	        deployment/vigigraph.conf deployment/vigigraph.wsgi
 
 override_dh_auto_install:
-	/usr/bin/python setup.py install --root=debian/$(PKGNAME) \
-	    --single-version-externally-managed \
-	    --install-layout=deb
-	mkdir -p debian/$(PKGNAME)/var/log/vigilo/vigigraph/
-	mkdir -p debian/$(PKGNAME)/var/cache/vigilo/sessions/
-	find vigigraph/i18n/ -name '*.mo' -o -name '*.js' -exec \
+	$(MAKE) install_pkg \
+	    DESTDIR=$(CURDIR)/debian/$(PKGNAME)/ \
+	    PYTHON=/usr/bin/python
+	/usr/bin/find vigigraph/i18n/ -name '*.mo' -o -name '*.js' -exec \
 	    'mv' '{}' "debian/$(PKGNAME)/usr/share/pyshared/{}" ';'
 
 override_dh_auto_test:
