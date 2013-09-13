@@ -29,6 +29,7 @@ from repoze.what.predicates import not_anonymous, has_permission, \
 from formencode import schema
 from tw.forms import validators
 from sqlalchemy.orm import aliased, lazyload
+from sqlalchemy.sql import functions
 
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
@@ -541,7 +542,7 @@ class RpcController(BaseController):
 
             # Distance positive.
             distance = DBSession.query(
-                    GroupHierarchy.hops
+                    functions.max(GroupHierarchy.hops)
                 ).join(
                     (Group, Group.idgroup == GroupHierarchy.idparent),
                     (DataPermission,
@@ -553,12 +554,12 @@ class RpcController(BaseController):
                 ).filter(USER_GROUP_TABLE.c.username == user.user_name
                 ).filter(Group.grouptype == u'supitemgroup'
                 ).filter(GroupHierarchy.idchild == parent_id
-                ).order_by(GroupHierarchy.hops.desc()).scalar()
+                ).scalar()
 
             if distance is None:
                 # Distance négative.
                 distance = DBSession.query(
-                        GroupHierarchy.hops
+                        functions.max(GroupHierarchy.hops)
                     ).join(
                         (Group, Group.idgroup == GroupHierarchy.idchild),
                         (DataPermission,
@@ -570,7 +571,7 @@ class RpcController(BaseController):
                     ).filter(USER_GROUP_TABLE.c.username == user.user_name
                     ).filter(Group.grouptype == u'supitemgroup'
                     ).filter(GroupHierarchy.idparent == parent_id
-                    ).order_by(GroupHierarchy.hops.desc()).scalar()
+                    ).scalar()
                 if distance is not None:
                     distance = -distance
 
