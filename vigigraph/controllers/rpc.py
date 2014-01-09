@@ -68,7 +68,7 @@ class RpcController(BaseController):
     allow_only = All(
         not_anonymous(msg=l_("You need to be authenticated")),
         Any(
-            in_group('managers'),
+            config.is_manager,
             has_permission('vigigraph-access',
                 msg=l_("You don't have access to VigiGraph")),
         ),
@@ -215,8 +215,7 @@ class RpcController(BaseController):
 
         # Les managers ont accès à tout.
         # Les autres ont un accès restreint.
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
+        if not config.is_manager.is_met(request.environ):
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             # pylint: disable-msg=E1103
             items = items.join(
@@ -398,8 +397,7 @@ class RpcController(BaseController):
                         presets=self.presets, graphs=[])
 
         # Vérification des permissions de l'utilisateur sur l'hôte.
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
+        if not config.is_manager.is_met(request.environ):
             # Récupération des groupes auxquels l'utilisateur a accès.
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
 
@@ -479,8 +477,7 @@ class RpcController(BaseController):
 
         # Les managers ont accès à tout.
         # Les autres ont un accès restreint.
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
+        if not config.is_manager.is_met(request.environ):
             supitemgroups = [sig[0] for sig in user.supitemgroups() if sig[1]]
             hosts = hosts.join(
                     (GroupHierarchy, GroupHierarchy.idchild == \
@@ -523,7 +520,7 @@ class RpcController(BaseController):
         # On vérifie si le groupe parent fait partie des
         # groupes auxquel l'utilisateur a accès, et on
         # retourne une liste vide dans le cas contraire
-        is_manager = in_group('managers').is_met(request.environ)
+        is_manager = config.is_manager.is_met(request.environ)
         if not is_manager:
             direct_access = False
             user = get_current_user()
@@ -800,8 +797,7 @@ class RpcController(BaseController):
         # On filtre ces groupes racines afin de ne
         # retourner que ceux auquels l'utilisateur a accès
         user = get_current_user()
-        is_manager = in_group('managers').is_met(request.environ)
-        if not is_manager:
+        if not config.is_manager.is_met(request.environ):
             user_groups = [ug[0] for ug in user.supitemgroups()]
             root_groups = root_groups.filter(
                 SupItemGroup.idgroup.in_(user_groups))
