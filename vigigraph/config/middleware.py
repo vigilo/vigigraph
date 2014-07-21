@@ -40,6 +40,9 @@ def make_app(global_conf, full_stack=True, **app_conf):
     """
     app = make_base_app(global_conf, full_stack=full_stack, **app_conf)
 
+    # Personalisation des fichiers statiques via /etc/vigilo/vigigraph/public/.
+    custom_static = StaticURLParser('/etc/vigilo/vigigraph/public/')
+
     # On définit 2 middlewares pour fichiers statiques qui cherchent
     # les fichiers dans le thème actuellement chargé.
     # Le premier va les chercher dans le dossier des fichiers spécifiques
@@ -50,7 +53,7 @@ def make_app(global_conf, full_stack=True, **app_conf):
         'vigilo.themes.public', 'common'))
     local_static = StaticURLParser(resource_filename(
         'vigigraph', 'public'))
-    cascade_list = [app_static, common_static, local_static, app]
+    cascade_list = [custom_static, app_static, common_static, local_static, app]
 
     LOGGER = getLogger("vigigraph")
     ## Mise en place du répertoire d'extensions
