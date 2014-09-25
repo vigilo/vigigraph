@@ -40,19 +40,29 @@ def make_app(global_conf, full_stack=True, **app_conf):
     """
     app = make_base_app(global_conf, full_stack=full_stack, **app_conf)
 
+    max_age = app_conf.get("cache_max_age")
+    try:
+        max_age = int(max_age)
+    except (ValueError, TypeError):
+        max_age = None
+
     # Personalisation des fichiers statiques via /etc/vigilo/vigigraph/public/.
-    custom_static = StaticURLParser('/etc/vigilo/vigigraph/public/')
+    custom_static = StaticURLParser('/etc/vigilo/vigigraph/public/',
+                                    cache_max_age=max_age)
 
     # On définit 2 middlewares pour fichiers statiques qui cherchent
     # les fichiers dans le thème actuellement chargé.
     # Le premier va les chercher dans le dossier des fichiers spécifiques
     # à l'application, le second cherche dans les fichiers communs.
-    app_static = StaticURLParser(resource_filename(
-        'vigilo.themes.public', 'vigigraph'))
-    common_static = StaticURLParser(resource_filename(
-        'vigilo.themes.public', 'common'))
-    local_static = StaticURLParser(resource_filename(
-        'vigigraph', 'public'))
+    app_static = StaticURLParser(
+        resource_filename('vigilo.themes.public', 'vigigraph'),
+        cache_max_age=max_age)
+    common_static = StaticURLParser(
+        resource_filename('vigilo.themes.public', 'common'),
+        cache_max_age=max_age)
+    local_static = StaticURLParser(
+        resource_filename('vigigraph', 'public'),
+        cache_max_age=max_age)
     cascade_list = [custom_static, app_static, common_static, local_static, app]
 
     LOGGER = getLogger("vigigraph")
@@ -72,7 +82,8 @@ def make_app(global_conf, full_stack=True, **app_conf):
             new_public_dir = resource_filename(entry.module_name, "public")
             LOGGER.debug("Adding static files directory for ext %s: %s",
                          (entry.name, new_public_dir))
-            cascade_list.insert(0, StaticURLParser(new_public_dir))
+            cascade_list.insert(0, StaticURLParser(new_public_dir,
+                                                   cache_max_age=max_age))
 
     app = Cascade(cascade_list)
     return app
