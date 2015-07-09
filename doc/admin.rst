@@ -299,12 +299,12 @@ en secondes, entre deux rafraîchissements automatiques d'un graphe.
 
 Configuration du lien d'accueil
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Vous avez la possibilité de rediriger l'utilisateur vers une page de votre
-choix lorsque celui-ci clique sur le logo en forme de maison |imghome|
-dans l'interface graphique de VigiGraph.
-Ceci se fait en modifiant l'URL associée à l'option ``home_link``.
+Vous avez la possibilité de rediriger l'utilisateur vers une page
+de votre choix lorsque celui-ci clique sur le logo de Vigilo
+.. image:: img/vigilo.png
 
-.. |imghome| image:: img/home.png
+dans l'interface graphique de VigiGraph.
+Ceci se fait en modifiant l'URL donnée par l'option « logo_link ».
 
 Configuration des serveurs mandataires
 --------------------------------------

@@ -121,12 +121,8 @@ lang = fr
 ; par exemple).
 help_link = http://help.example.com/vigilo
 
-; URL vers laquelle l'icône "Maison" redirige.
-; Les URLs partielles sont relatives à l'application
-; (ex : "/" redirige vers la page principale de l'application).
-; Utiliser une URL absolue pour pointer vers une autre application
-; (ex : "http://example.com/").
-home_link = /
+; URL vers laquelle le logo de Vigilo redirige.
+logo_link = /
 
 ; Délai de rafraîchissement automatique (en secondes).
 refresh_delay = 30
