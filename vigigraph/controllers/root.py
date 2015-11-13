@@ -11,7 +11,7 @@
 
 
 import logging
-from tg import expose, require
+from tg import expose, require, config
 from pylons.i18n import lazy_ugettext as l_, get_lang
 from repoze.what.predicates import Any, All, not_anonymous, \
                                     has_permission, in_group
@@ -47,7 +47,7 @@ class RootController(AuthController):
     @require(All(
         not_anonymous(msg=l_("You need to be authenticated")),
         Any(
-            in_group('managers'),
+            config.is_manager,
             has_permission('vigigraph-access',
                 msg=l_("You don't have access to VigiGraph")),
         )
