@@ -5,19 +5,14 @@
 
 """WSGI middleware initialization for the vigigraph application."""
 
-from vigigraph.config.app_cfg import base_config
-from vigigraph.config.environment import load_environment
-
+import imp
+import os.path
 from pkg_resources import resource_filename, working_set
 from paste.cascade import Cascade
 from paste.urlparser import StaticURLParser
 from logging import getLogger
 
 __all__ = ['make_app']
-
-# Use base_config to setup the necessary PasteDeploy application factory.
-# make_base_app will wrap the TG2 app with all the middleware it needs.
-make_base_app = base_config.setup_tg_wsgi_app(load_environment)
 
 
 def make_app(global_conf, full_stack=True, **app_conf):
@@ -38,7 +33,15 @@ def make_app(global_conf, full_stack=True, **app_conf):
     @return: The vigigraph application with all the relevant middleware
         loaded.
     """
-    app = make_base_app(global_conf, full_stack=full_stack, **app_conf)
+    # Charge le fichier "app_cfg.py" se trouvant aux côtés de "settings.ini".
+    mod_info = imp.find_module('app_cfg', [ global_conf['here'] ])
+    app_cfg = imp.load_module('vigigraph.config.app_cfg', *mod_info)
+    base_config = app_cfg.base_config
+
+    # Initialisation de l'application et de son environnement d'exécution.
+    load_environment = base_config.make_load_environment()
+    make_base_app = base_config.setup_tg_wsgi_app(load_environment)
+    app = make_base_app(global_conf, full_stack=True, **app_conf)
 
     max_age = app_conf.get("cache_max_age")
     try:
@@ -46,8 +49,9 @@ def make_app(global_conf, full_stack=True, **app_conf):
     except (ValueError, TypeError):
         max_age = None
 
-    # Personalisation des fichiers statiques via /etc/vigilo/vigigraph/public/.
-    custom_static = StaticURLParser('/etc/vigilo/vigigraph/public/',
+    # Personalisation des fichiers statiques via un dossier public/
+    # dans le répertoire contenant le fichier settings.ini chargé.
+    custom_static = StaticURLParser(os.path.join(global_conf['here'], 'public'),
                                     cache_max_age=max_age)
 
     # On définit 2 middlewares pour fichiers statiques qui cherchent
