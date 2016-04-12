@@ -36,8 +36,6 @@ make install_pkg \
     LOCALSTATEDIR=%{_localstatedir} \
     PYTHON=%{__python}
 
-# %find_lang %{name} # ne fonctionne qu'avec les fichiers dans /usr/share/locale/
-
 
 %post
 /sbin/service httpd condrestart > /dev/null 2>&1 || :
