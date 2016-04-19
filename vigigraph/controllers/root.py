@@ -9,9 +9,13 @@
 # W0613: Unused argument : les arguments des contrôleurs sont les composants
 #        de la query-string de l'URL
 
-
+import gettext
+import os.path
 import logging
-from tg import expose, require, config
+
+import pylons
+from tg import expose, require, config, response
+from tg.controllers import CUSTOM_CONTENT_TYPE
 from pylons.i18n import lazy_ugettext as l_, get_lang
 from repoze.what.predicates import Any, All, not_anonymous, \
                                     has_permission, in_group
@@ -58,10 +62,6 @@ class RootController(AuthController):
 
     @expose()
     def i18n(self):
-        import gettext
-        import pylons
-        import os.path
-
         # Repris de pylons.i18n.translation:_get_translator.
         conf = pylons.config.current_conf()
         try:
@@ -108,4 +108,5 @@ class RootController(AuthController):
                 translations += fhandle.read()
                 fhandle.close()
 
+        response.headers['Content-Type'] = 'text/javascript; charset=utf-8'
         return translations
