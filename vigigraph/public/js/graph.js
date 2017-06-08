@@ -471,7 +471,7 @@ var update_visible_graphs = function (new_fragment) {
     var new_graphs = [];
     var qs = new Hash(new_fragment.get('fragment').parseQueryString());
     if (qs.has('graphs')) {
-        new_graphs = (new Hash(qs.get('graphs'))).getValues();
+        new_graphs = $splat(qs.get('graphs'));
     }
 
     // Section critique.
