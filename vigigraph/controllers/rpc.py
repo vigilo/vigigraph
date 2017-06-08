@@ -13,12 +13,6 @@ import time
 import urllib2
 import logging
 
-## La fonction parse_qsl a été déplacée dans Python 2.6.
-#try:
-#    from urlparse import parse_qsl
-#except ImportError:
-#    from cgi import parse_qsl
-
 from pylons.i18n import ugettext as _, lazy_ugettext as l_, \
                         lazy_ungettext as ln_
 from tg import expose, request, redirect, tmpl_context, \
