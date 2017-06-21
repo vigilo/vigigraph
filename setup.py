@@ -26,6 +26,7 @@ tests_require = [
     'WebTest',
     'BeautifulSoup',
     'coverage',
+    'gearbox',
 ]
 
 setup(
