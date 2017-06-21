@@ -13,8 +13,7 @@ import time
 import urllib2
 import logging
 
-from pylons.i18n import ugettext as _, lazy_ugettext as l_, \
-                        lazy_ungettext as ln_
+from tg.i18n import ugettext as _, lazy_ugettext as l_, lazy_ungettext as ln_
 from tg import expose, request, redirect, tmpl_context, \
     config, validate, flash, exceptions as http_exc
 
@@ -28,7 +27,7 @@ from sqlalchemy.sql import functions
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
 from vigilo.turbogears.controllers.proxy import get_through_proxy
-from vigilo.turbogears.decorators import paginate
+from tg.decorators import paginate
 
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, SupItemGroup, PerfDataSource
@@ -138,7 +137,7 @@ class RpcController(BaseController):
         validators = SearchHostAndGraphSchema(),
         error_handler = process_form_errors)
     @expose('json')
-    def searchHostAndGraph(self, search_form_host, search_form_graph):
+    def searchHostAndGraph(self, search_form_host=None, search_form_graph=None):
         """
         Determination des couples (hote-graphe) repondant aux criteres de
         recherche sur hote et/ou graphe.
@@ -312,7 +311,7 @@ class RpcController(BaseController):
         validators = GetIndicatorsSchema(),
         error_handler = process_form_errors)
     @expose('json')
-    def getIndicators(self, host, graph, nocache):
+    def getIndicators(self, host, graph, nocache=None):
         """
         Liste d indicateurs associes a un graphe
 
@@ -337,7 +336,7 @@ class RpcController(BaseController):
         validators = StartTimeSchema(),
         error_handler = process_form_errors)
     @expose('json')
-    def startTime(self, host, nocache):
+    def startTime(self, host, nocache=None):
         # urllib2.quote() ne fonctionne pas sur le type unicode.
         # On transcode d'abord le nom d'hôte en UTF-8.
         quote_host = isinstance(host, unicode) and \

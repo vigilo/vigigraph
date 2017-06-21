@@ -6,7 +6,8 @@
 Teste l'utilisation du module de recherche
 OpenSearch intégré au navigateur.
 """
-import transaction, urllib2
+import transaction
+import urllib
 
 from vigigraph.tests import TestController
 from vigilo.models.session import DBSession
@@ -39,18 +40,17 @@ class TestOpenSearch(TestController):
             '/rpc/searchHost?query=host*',
             extra_environ={"REMOTE_USER": user}
         )
-        print repr(response.body)
         for host in hosts:
             if hosts[host]:
                 self.assertTrue(
                     u'/rpc/fullHostPage?host=%s' %
-                        urllib2.quote(host.encode('utf-8'))
+                        urllib.quote_plus(host.encode('utf-8'))
                     in response.unicode_body
                 )
             else:
                 self.assertTrue(
                     u'/rpc/fullHostPage?host=%s' %
-                        urllib2.quote(host.encode('utf-8'))
+                        urllib.quote_plus(host.encode('utf-8'))
                     not in response.unicode_body
                 )
 
@@ -86,7 +86,7 @@ class TestOpenSearch(TestController):
         for host in (u'host1 éà', u'host2 éà', u'host3 éà'):
             self.app.get(
                 '/rpc/fullHostPage?host=%s' %
-                    urllib2.quote(host.encode('utf-8'), ''),
+                    urllib.quote_plus(host.encode('utf-8'), ''),
                 status=401
             )
 

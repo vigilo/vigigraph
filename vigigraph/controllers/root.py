@@ -13,10 +13,8 @@ import gettext
 import os.path
 import logging
 
-import pylons
 from tg import expose, require, config, response
-from tg.controllers import CUSTOM_CONTENT_TYPE
-from pylons.i18n import lazy_ugettext as l_, get_lang
+from tg.i18n import lazy_ugettext as l_, get_lang
 from repoze.what.predicates import Any, All, not_anonymous, \
                                     has_permission, in_group
 from pkg_resources import resource_filename
@@ -62,19 +60,18 @@ class RootController(AuthController):
 
     @expose()
     def i18n(self):
-        # Repris de pylons.i18n.translation:_get_translator.
-        conf = pylons.config.current_conf()
+        # Repris de tg.i18n.translation:_get_translator.
+        conf = config.current_conf()
         try:
-            rootdir = conf['pylons.paths']['root']
+            localedir = conf['localedir']
         except KeyError:
-            rootdir = conf['pylons.paths'].get('root_path')
-        localedir = os.path.join(rootdir, 'i18n')
+            localedir = os.path.join(conf['paths']['root'], 'i18n')
 
         lang = get_lang()
 
         # Localise le fichier *.mo actuellement chargé
         # et génère le chemin jusqu'au *.js correspondant.
-        filename = gettext.find(conf['pylons.package'], localedir,
+        filename = gettext.find(conf['package'].__name__, localedir,
             languages=lang)
         js = filename[:-3] + '.js'
         # Récupère et envoie le contenu du fichier de traduction *.js.

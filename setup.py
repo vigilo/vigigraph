@@ -42,7 +42,6 @@ setup(
         "vigilo-turbogears",
         ],
     zip_safe=False, # pour pouvoir déplacer app_cfg.py
-    paster_plugins=['PasteScript', 'Pylons', 'TurboGears2', 'tg.devtools'],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
     test_suite='nose.collector',
@@ -68,9 +67,6 @@ setup(
     entry_points={
         'paste.app_factory': [
             'main = vigigraph.config.middleware:make_app',
-        ],
-        'paste.app_install': [
-            'main = pylons.util:PylonsInstaller',
         ],
         'vigilo.models': [
             'populate_db = vigigraph.websetup:populate_db',
