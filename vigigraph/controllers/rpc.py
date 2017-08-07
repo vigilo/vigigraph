@@ -16,9 +16,8 @@ import logging
 from tg.i18n import ugettext as _, lazy_ugettext as l_, lazy_ungettext as ln_
 from tg import expose, request, redirect, tmpl_context, \
     config, validate, flash, exceptions as http_exc
+from tg.predicates import not_anonymous, has_permission, in_group, Any, All
 
-from repoze.what.predicates import not_anonymous, has_permission, \
-                                    in_group, Any, All
 from formencode import schema
 from tw.forms import validators
 from sqlalchemy.orm import aliased, lazyload

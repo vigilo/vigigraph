@@ -15,8 +15,7 @@ import logging
 
 from tg import expose, require, config, response
 from tg.i18n import lazy_ugettext as l_, get_lang
-from repoze.what.predicates import Any, All, not_anonymous, \
-                                    has_permission, in_group
+from tg.predicates import Any, All, not_anonymous, has_permission, in_group
 from pkg_resources import resource_filename
 
 from vigilo.turbogears.controllers.auth import AuthController
