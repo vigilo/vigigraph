@@ -23,7 +23,6 @@ BuildRequires:   python26-babel
 
 Requires:   python26-distribute
 Requires:   vigilo-turbogears
-Requires:   python26-mod_wsgi
 
 
 %description

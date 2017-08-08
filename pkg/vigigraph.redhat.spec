@@ -16,7 +16,6 @@ BuildRequires:   python-babel
 
 Requires:   python-distribute
 Requires:   vigilo-turbogears
-Requires:   mod_wsgi
 
 
 %description
