@@ -11,6 +11,7 @@
 
 import time
 import urllib2
+import urlparse
 import logging
 
 from tg.i18n import ugettext as _, lazy_ugettext as l_, lazy_ungettext as ln_
@@ -230,40 +231,42 @@ class RpcController(BaseController):
         return dict(labels=labels, ids=ids, more=more_results)
 
     @expose('graphslist.html')
-    def graphsList(self, nocache=None, **kwargs):
+    def graphsList(self, graphs=None, **kwargs):
         """
-        Generation document avec url des graphes affiches
-        (pour l impression )
+        Génération d'une page d'impression avec les graphes sélectionnés.
 
-        @param kwargs : arguments nommes
-        @type kwargs  : dict
+        @param graphs : Liste des graphes à imprimer
+        @type graphs  : C{list}
+        @param kwargs : arguments supplémentaires (inutilisés)
+        @type kwargs  : c{dict}
 
-        @return: url de graphes
-        @rtype: document html
+        @return: Paramètres pour la génération de la page d'impression
+        @rtype: dict
         """
         # @TODO: le must serait de hot-patcher mootools pour que son serializer
         # d'URL utilise directement le format attendu par TurboGears
         # (notation pointée plutôt qu'avec des crochets)
 
-        if not kwargs:
+        if not graphs:
             return dict(graphslist=[])
+
+        if not isinstance(graphs, list):
+            graphs = [graphs]
 
         # On est obligé de convertir le format en UTF-8 car strftime
         # n'accepte pas les chaînes Unicode en entrée.
         # TRANSLATORS: Format Python de date/heure, lisible par un humain.
         format = _("%a, %d %b %Y %H:%M:%S").encode('utf8')
-        i = 0
         graphslist = []
-
-        while True:
+        for graph in graphs:
+            params = urlparse.parse_qs(graph, True, True)
             try:
-                host = kwargs['graphs[%d][host]' % i]
-                graph = kwargs['graphs[%d][graph]' % i]
-                start = int(kwargs.get('graphs[%d][start]' % i,
-                            time.time() - 86400))
-                duration = int(kwargs.get('graphs[%d][duration]' % i))
-                nocache = kwargs['graphs[%d][nocache]' % i]
-            except KeyError:
+                host = params['host'][0]
+                graph = params['graph'][0]
+                start = int(params['start'][0] or time.time() - 86400)
+                duration = int(params['duration'][0])
+                nocache = params['nocache'][0]
+            except (KeyError, TypeError, ValueError):
                 break
 
             if not (host and graph and duration and nocache):
@@ -280,7 +283,6 @@ class RpcController(BaseController):
                 'end_date': time.strftime(format,
                     time.localtime(start + duration)).decode('utf8')
             })
-            i += 1
         return dict(graphslist=graphslist)
 
     @expose('json')

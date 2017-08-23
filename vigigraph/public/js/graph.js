@@ -358,13 +358,14 @@ var Graph = new Class({
         var img = this.graph_window.content.getElement('img');
         var img_uri = new URI(img.src);
         var params = img_uri.getData();
-        return {
+        var res = $H({
             host: params.host,
             start: params.start,
             duration: params.duration,
             graph: params.graphtemplate,
-            nocache: params.nocache
-        };
+            nocache: params. nocache,
+        });
+        return res.toQueryString();
     },
 
     print: function () {
