@@ -67,42 +67,28 @@ class RootController(AuthController):
             localedir = os.path.join(conf['paths']['root'], 'i18n')
 
         lang = get_lang()
+        modules = (
+            (conf['package'].__name__, localedir),
+            ('vigilo-themes', resource_filename('vigilo.themes.i18n', '')),
+            ('vigilo-vigigraph-enterprise',
+             resource_filename('vigilo.vigigraph_enterprise.i18n', '')),
+        )
 
-        # Localise le fichier *.mo actuellement chargé
-        # et génère le chemin jusqu'au *.js correspondant.
-        filename = gettext.find(conf['package'].__name__, localedir,
-            languages=lang)
-        js = filename[:-3] + '.js'
-        # Récupère et envoie le contenu du fichier de traduction *.js.
-        fhandle = open(js, 'r')
-        translations = fhandle.read()
-        fhandle.close()
+        # Charge et installe le fichier JS de traduction de chaque module
+        translations = "babel.Translations.load("
+        for domain, directory in modules:
+            try:
+                mofile = gettext.find(domain, directory, languages=lang)
+                if mofile is None:
+                    continue
 
-        # Même chose pour les thèmes
-        themes_filename = gettext.find(
-            'vigilo-themes',
-            resource_filename('vigilo.themes.i18n', ''),
-            languages=lang)
-        themes_js = themes_filename[:-3] + '.js'
-        fhandle = open(themes_js, 'r')
-        translations += fhandle.read()
-        fhandle.close()
-
-        # Extensions Enterprise
-        try:
-            ent_filename = gettext.find(
-                'vigilo-vigigraph-enterprise',
-                resource_filename('vigilo.vigigraph_enterprise.i18n', ''),
-                languages=lang)
-        except ImportError:
-            pass
-        else:
-            # Le nom du fichier sera None s'il n'existe pas
-            # de traductions dans la langue demandée.
-            if ent_filename is not None:
-                fhandle = open(ent_filename[:-3] + '.js', 'r')
+                fhandle = open(mofile[:-3] + '.js', 'r')
                 translations += fhandle.read()
                 fhandle.close()
+                translations += ").load("
+            except ImportError:
+                pass
+        translations += "{}).install()"
 
         response.headers['Content-Type'] = 'text/javascript; charset=utf-8'
         return translations

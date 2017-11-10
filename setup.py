@@ -14,7 +14,7 @@ except ImportError:
 
 cmdclass = {}
 try:
-    from babeljs import compile_catalog_plusjs
+    from buildenv.babeljs import compile_catalog_plusjs
 except ImportError:
     pass
 else:
