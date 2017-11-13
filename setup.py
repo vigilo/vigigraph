@@ -71,6 +71,9 @@ setup(
         'vigilo.models': [
             'populate_db = vigigraph.websetup:populate_db',
         ],
+        'vigilo.turbogears.i18n': [
+            'vigigraph = vigigraph.i18n:100',
+        ],
     },
 
     cmdclass=cmdclass,

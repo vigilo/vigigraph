@@ -22,6 +22,7 @@ from vigilo.turbogears.controllers.auth import AuthController
 from vigilo.turbogears.controllers.custom import CustomController
 from vigilo.turbogears.controllers.error import ErrorController
 from vigilo.turbogears.controllers.proxy import ProxyController
+from vigilo.turbogears.controllers.i18n import I18nController
 from vigilo.turbogears.controllers.api.root import ApiRootController
 
 from vigigraph.controllers.rpc import RpcController
@@ -31,7 +32,7 @@ __all__ = ['RootController']
 LOGGER = logging.getLogger(__name__)
 
 # pylint: disable-msg=R0201
-class RootController(AuthController):
+class RootController(AuthController, I18nController):
     """
     The root controller for the vigigraph application.
     """
@@ -56,39 +57,3 @@ class RootController(AuthController):
     def index(self):
         """Handle the front-page."""
         return dict(page='index')
-
-    @expose()
-    def i18n(self):
-        # Repris de tg.i18n.translation:_get_translator.
-        conf = config.current_conf()
-        try:
-            localedir = conf['localedir']
-        except KeyError:
-            localedir = os.path.join(conf['paths']['root'], 'i18n')
-
-        lang = get_lang()
-        modules = (
-            (conf['package'].__name__, localedir),
-            ('vigilo-themes', resource_filename('vigilo.themes.i18n', '')),
-            ('vigilo-vigigraph-enterprise',
-             resource_filename('vigilo.vigigraph_enterprise.i18n', '')),
-        )
-
-        # Charge et installe le fichier JS de traduction de chaque module
-        translations = "babel.Translations.load("
-        for domain, directory in modules:
-            try:
-                mofile = gettext.find(domain, directory, languages=lang)
-                if mofile is None:
-                    continue
-
-                fhandle = open(mofile[:-3] + '.js', 'r')
-                translations += fhandle.read()
-                fhandle.close()
-                translations += ").load("
-            except ImportError:
-                pass
-        translations += "{}).install()"
-
-        response.headers['Content-Type'] = 'text/javascript; charset=utf-8'
-        return translations
