@@ -70,7 +70,7 @@ class TestSearchForm(TestController):
         # respectivement le nom de l'hôte et son identifiant
         self.assertEqual(
             json, {
-                'labels': [[u'host1 éà', None]],
+                'labels': [[u'host1 éà', u'127.0.0.1', None]],
                 'ids': [[1, None]],
                 'more': False,
             }
@@ -89,7 +89,7 @@ class TestSearchForm(TestController):
         # respectivement le nom de l'hôte et son identifiant
         self.assertEqual(
             json, {
-                'labels': [[host1.name, None]],
+                'labels': [[host1.name, u'127.0.0.1', None]],
                 'ids': [[host1.idhost, None]],
                 'more': False,
             }
@@ -108,7 +108,7 @@ class TestSearchForm(TestController):
         # respectivement le nom de l'hôte et son identifiant
         self.assertEqual(
             json, {
-                'labels': [[host2.name, None]],
+                'labels': [[host2.name, u'127.0.0.1', None]],
                 'ids': [[host2.idhost, None]],
                 'more': False,
             }
@@ -127,7 +127,7 @@ class TestSearchForm(TestController):
         # respectivement le nom de l'hôte et son identifiant
         self.assertEqual(
             json, {
-                'labels': [[host2.name, None]],
+                'labels': [[host2.name, u'127.0.0.1', None]],
                 'ids': [[host2.idhost, None]],
                 'more': False,
             }
@@ -287,7 +287,7 @@ class TestSearchForm(TestController):
         # On s'assure que la liste retournée est conforme à celle attendue
         self.assertEqual(
             json, {
-                'labels': [[host1.name, graph1.name]],
+                'labels': [[host1.name, u'127.0.0.1', graph1.name]],
                 'ids': [[host1.idhost, graph1.idgraph]],
                 'more': False,
             }
@@ -372,7 +372,7 @@ class TestSearchForm(TestController):
         # est conforme à celle attendue
         self.assertEqual(
             json, {
-                'labels': [[host1.name, graph1.name]],
+                'labels': [[host1.name, u'127.0.0.1', graph1.name]],
                 'ids': [[host1.idhost, graph1.idgraph]],
                 'more': False,
             }
@@ -390,7 +390,7 @@ class TestSearchForm(TestController):
         # On s'assure que la liste retournée est conforme à celle attendue
         self.assertEqual(
             json, {
-                'labels': [[host1.name, graph1.name]],
+                'labels': [[host1.name, u'127.0.0.1', graph1.name]],
                 'ids': [[host1.idhost, graph1.idgraph]],
                 'more': False,
             }
@@ -409,7 +409,7 @@ class TestSearchForm(TestController):
         # est conforme à celle attendue
         self.assertEqual(
             json, {
-                'labels': [[host2.name, graph2.name]],
+                'labels': [[host2.name, u'127.0.0.1', graph2.name]],
                 'ids': [[host2.idhost, graph2.idgraph]],
                 'more': False,
             }
@@ -428,7 +428,7 @@ class TestSearchForm(TestController):
         # est conforme à celle attendue
         self.assertEqual(
             json, {
-                'labels': [[host2.name, graph2.name]],
+                'labels': [[host2.name, u'127.0.0.1', graph2.name]],
                 'ids': [[host2.idhost, graph2.idgraph]],
                 'more': False,
             }

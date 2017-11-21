@@ -23,6 +23,7 @@ from formencode import schema
 from tw.forms import validators
 from sqlalchemy.orm import aliased, lazyload
 from sqlalchemy.sql import functions
+from sqlalchemy import or_
 
 from vigilo.turbogears.controllers import BaseController
 from vigilo.turbogears.helpers import get_current_user
@@ -169,6 +170,7 @@ class RpcController(BaseController):
             items = DBSession.query(
                     Host.idhost.label('idhost'),
                     Host.name.label('hostname'),
+                    Host.address.label('address'),
                     Graph.idgraph.label('idgraph'),
                     Graph.name.label('graphname'),
                 ).distinct().join(
@@ -180,8 +182,10 @@ class RpcController(BaseController):
                         GRAPH_PERFDATASOURCE_TABLE.c.idgraph),
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                         Host.idhost),
-                ).filter(Host.name.ilike(search_form_host)
-                ).filter(Graph.name.ilike(search_form_graph)
+                ).filter(or_(
+                    Host.name.ilike(search_form_host),
+                    Host.address.ilike(search_form_host),
+                )).filter(Graph.name.ilike(search_form_graph)
                 ).order_by(
                     Host.name.asc(),
                     Graph.name.asc(),
@@ -200,11 +204,14 @@ class RpcController(BaseController):
             items = DBSession.query(
                     Host.idhost.label('idhost'),
                     Host.name.label('hostname'),
+                    Host.address.label('address'),
                 ).distinct().join(
                     (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                         Host.idhost),
-                ).filter(Host.name.ilike(search_form_host)
-                ).order_by(Host.name.asc())
+                ).filter(or_(
+                    Host.name.ilike(search_form_host),
+                    Host.address.ilike(search_form_host),
+                )).order_by(Host.name.asc())
 
         # Les managers ont accès à tout.
         # Les autres ont un accès restreint.
@@ -222,11 +229,15 @@ class RpcController(BaseController):
         if not search_form_graph:
             for i in xrange(min(limit, len(items))):
                 ids.append((items[i].idhost, None))
-                labels.append((items[i].hostname, None))
+                labels.append((items[i].hostname, items[i].address, None))
         else:
             for i in xrange(min(limit, len(items))):
                 ids.append((items[i].idhost, items[i].idgraph))
-                labels.append((items[i].hostname, items[i].graphname))
+                labels.append((
+                    items[i].hostname,
+                    items[i].address,
+                    items[i].graphname
+                ))
 
         return dict(labels=labels, ids=ids, more=more_results)
 
@@ -429,7 +440,7 @@ class RpcController(BaseController):
 
 
     class SearchHostSchema(schema.Schema):
-        """Schéma de validation pour la méthode L{getIndicators}."""
+        """Schéma de validation pour la méthode L{searchHost}."""
         allow_extra_fields = True
         filter_extra_fields = True
         query = validators.UnicodeString(not_empty=True)
@@ -462,12 +473,15 @@ class RpcController(BaseController):
         # Récupère les hôtes auxquels l'utilisateur a réellement accès.
         hosts = DBSession.query(
                 Host.name,
+                Host.address,
             ).distinct(
             ).join(
                 (SUPITEM_GROUP_TABLE, SUPITEM_GROUP_TABLE.c.idsupitem == \
                     Host.idhost),
-            ).filter(Host.name.like(query + u'%')
-            ).order_by(Host.name.asc(),)
+            ).filter(or_(
+                Host.name.like(query + u'%'),
+                Host.address.like(query + u'%')
+            )).order_by(Host.name.asc(),)
 
         # Les managers ont accès à tout.
         # Les autres ont un accès restreint.
@@ -478,7 +492,7 @@ class RpcController(BaseController):
                         SUPITEM_GROUP_TABLE.c.idgroup)
                 ).filter(GroupHierarchy.idparent.in_(supitemgroups))
 
-        return dict(hosts=[h.name for h in hosts])
+        return dict(hosts=[(h.name, h.address) for h in hosts])
 
     # VIGILO_EXIG_VIGILO_PERF_0030:Moteur de recherche des graphes
     @expose('getopensearch.xml', content_type='text/xml')
