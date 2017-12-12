@@ -42,7 +42,7 @@ setup(
         "vigilo-turbogears",
         ],
     zip_safe=False, # pour pouvoir déplacer app_cfg.py
-    packages=find_packages(exclude=['ez_setup']),
+    packages=find_packages(exclude=['ez_setup', 'buildenv']),
     include_package_data=True,
     test_suite='nose.collector',
     tests_require=tests_require,
