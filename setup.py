@@ -31,7 +31,7 @@ tests_require = [
 
 setup(
     name='vigilo-vigigraph',
-    version='4.1.0',
+    version='5.0.0',
     author='Vigilo Team',
     author_email='contact.vigilo@c-s.fr',
     url='https://www.vigilo-nms.com',
