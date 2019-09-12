@@ -28,6 +28,13 @@ base_config.package = vigigraph
 
 base_config["external_links"] = [
     {
+        'label': 'Alarms',
+        'image': 'images/preferences-system-windows.png',
+        'tooltip': 'Display alarms for the selected host',
+        'uri': '../vigiboard/?host={host}',
+        'sameWindow': True,
+    },
+    {
         'label': 'Nagios page',
         'image': 'images/nagios-16.png',
         'tooltip': 'Display Nagios page for the selected host',
