@@ -4,15 +4,16 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 import os
-
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from ez_setup import use_setuptools
-    use_setuptools()
-    from setuptools import setup, find_packages
+from setuptools import setup, find_packages
 
 cmdclass = {}
+try:
+    from vigilo.common.commands import install_data
+except ImportError:
+    pass
+else:
+    cmdclass['install_data'] = install_data
+
 try:
     from buildenv.babeljs import compile_catalog_plusjs
 except ImportError:
@@ -20,11 +21,14 @@ except ImportError:
 else:
     cmdclass['compile_catalog'] = compile_catalog_plusjs
 
-sysconfdir = os.getenv("SYSCONFDIR", "/etc")
+os.environ.setdefault('HTTPD_USER', 'apache')
+os.environ.setdefault('SYSCONFDIR', '/etc')
+os.environ.setdefault('LOCALSTATEDIR', '/var')
+os.environ.setdefault('LOGROTATEDIR',
+    os.path.join(os.environ['SYSCONFDIR'], 'logrotate.d'))
 
 tests_require = [
     'WebTest',
-    'BeautifulSoup',
     'coverage',
     'gearbox',
 ]
@@ -42,7 +46,7 @@ setup(
         "vigilo-turbogears",
         ],
     zip_safe=False, # pour pouvoir déplacer app_cfg.py
-    packages=find_packages(exclude=['ez_setup', 'buildenv']),
+    packages=find_packages(),
     include_package_data=True,
     test_suite='nose.collector',
     tests_require=tests_require,
@@ -78,11 +82,15 @@ setup(
 
     cmdclass=cmdclass,
     data_files=[
-        (os.path.join(sysconfdir, 'vigilo/vigigraph/'), [
-            'deployment/vigigraph.conf',
-            'deployment/vigigraph.wsgi',
-            'deployment/settings.ini',
+        ('@LOGROTATEDIR@', ['deployment/vigilo-vigigraph.in']),
+        (os.path.join('@SYSCONFDIR@', 'vigilo', 'vigigraph'), [
+            'deployment/vigigraph.wsgi.in',
+            'deployment/vigigraph.conf.in',
+            'deployment/settings.ini.in',
             'deployment/who.ini',
+            'app_cfg.py',
         ]),
+        (os.path.join("@LOCALSTATEDIR@", "log", "vigilo", "vigigraph"), []),
+        (os.path.join("@LOCALSTATEDIR@", "cache", "vigilo", "sessions"), []),
     ],
 )
