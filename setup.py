@@ -6,26 +6,14 @@
 import os
 from setuptools import setup, find_packages
 
+setup_requires = ['vigilo-common'] if not os.environ.get('CI') else []
+
 cmdclass = {}
 try:
-    from vigilo.common.commands import install_data
-except ImportError:
-    pass
-else:
-    cmdclass['install_data'] = install_data
-
-try:
-    from buildenv.babeljs import compile_catalog_plusjs
-except ImportError:
-    pass
-else:
+    from vigilo.common.commands import compile_catalog_plusjs
     cmdclass['compile_catalog'] = compile_catalog_plusjs
-
-os.environ.setdefault('HTTPD_USER', 'apache')
-os.environ.setdefault('SYSCONFDIR', '/etc')
-os.environ.setdefault('LOCALSTATEDIR', '/var')
-os.environ.setdefault('LOGROTATEDIR',
-    os.path.join(os.environ['SYSCONFDIR'], 'logrotate.d'))
+except ImportError:
+    pass
 
 tests_require = [
     'WebTest',
@@ -42,6 +30,7 @@ setup(
     license='http://www.gnu.org/licenses/gpl-2.0.html',
     description="Vigilo metrology interface",
     long_description="Vigilo metrology interface",
+    setup_requires=setup_requires,
     install_requires=[
         "vigilo-turbogears",
         ],
@@ -67,7 +56,6 @@ setup(
             ('**/public/js/*.js', 'javascript', None),
         ],
     },
-
     entry_points={
         'paste.app_factory': [
             'main = vigigraph.config.middleware:make_app',
@@ -79,18 +67,31 @@ setup(
             'vigigraph = vigigraph.i18n:100',
         ],
     },
-
     cmdclass=cmdclass,
+    vigilo_build_vars={
+        'nagios': {
+            'default': '/nagios/',
+            'description': "URL to Nagios' UI relative to the webserver's root",
+        },
+        'sysconfdir': {
+            'default': '/etc',
+            'description': "installation directory for configuration files",
+        },
+        'localstatedir': {
+            'default': '/var',
+            'description': "local state directory",
+        },
+    },
     data_files=[
-        ('@LOGROTATEDIR@', ['deployment/vigilo-vigigraph.in']),
-        (os.path.join('@SYSCONFDIR@', 'vigilo', 'vigigraph'), [
+        ('@sysconfdir@/logrotate.d', ['deployment/vigilo-vigigraph.in']),
+        (os.path.join('@sysconfdir@', 'vigilo', 'vigigraph'), [
             'deployment/vigigraph.wsgi.in',
             'deployment/vigigraph.conf.in',
             'deployment/settings.ini.in',
             'deployment/who.ini',
             'app_cfg.py',
         ]),
-        (os.path.join("@LOCALSTATEDIR@", "log", "vigilo", "vigigraph"), []),
-        (os.path.join("@LOCALSTATEDIR@", "cache", "vigilo", "sessions"), []),
+        (os.path.join("@localstatedir@", "log", "vigilo", "vigigraph"), []),
+        (os.path.join("@localstatedir@", "cache", "vigilo", "sessions"), []),
     ],
 )
