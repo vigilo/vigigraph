@@ -19,8 +19,7 @@ from tg import expose, request, redirect, tmpl_context, \
     config, validate, flash, exceptions as http_exc
 from tg.predicates import not_anonymous, has_permission, in_group, Any, All
 
-from formencode import schema
-from tw.forms import validators
+from formencode import schema, validators
 from sqlalchemy.orm import aliased, lazyload
 from sqlalchemy.sql import functions
 from sqlalchemy import or_
