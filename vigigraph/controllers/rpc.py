@@ -123,8 +123,8 @@ class RpcController(BaseController):
         Gestion des erreurs de validation : On affiche les erreurs
         puis on redirige vers la dernière page accédée.
         """
-        for k in tmpl_context.form_errors:
-            flash("'%s': %s" % (k, tmpl_context.form_errors[k]), 'error')
+        for err in request.validation.errors.items():
+            flash("'%s': %s" % err, 'error')
         redirect(request.environ.get('HTTP_REFERER', '/'))
 
     class SearchHostAndGraphSchema(schema.Schema):

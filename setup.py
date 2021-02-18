@@ -58,7 +58,7 @@ setup(
     },
     entry_points={
         'paste.app_factory': [
-            'main = vigigraph.config.middleware:make_app',
+            'main = vigigraph.config.application:make_app',
         ],
         'vigilo.models': [
             'populate_db = vigigraph.websetup:populate_db',
